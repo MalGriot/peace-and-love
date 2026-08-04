@@ -331,7 +331,11 @@ function initMiniPlayerDrag(miniPlayer) {
   const ANCHORS = ['bottom-center', 'top-center', 'top-left', 'top-right', 'bottom-left', 'bottom-right'];
 
   function place(anchor) {
-    miniPlayer.style.left = miniPlayer.style.right = miniPlayer.style.top = miniPlayer.style.bottom = '';
+    // Explicitly "auto" (not "") every offset that this anchor doesn't use —
+    // clearing to "" falls back to the stylesheet's own left/bottom defaults,
+    // which left both an inline and a stylesheet offset active on the same
+    // axis at once and stretched the pill across the gap between them.
+    miniPlayer.style.left = miniPlayer.style.right = miniPlayer.style.top = miniPlayer.style.bottom = 'auto';
     miniPlayer.style.translate = '0 0';
     if (anchor === 'bottom-center') {
       miniPlayer.style.left = '50%'; miniPlayer.style.bottom = EDGE + 'px'; miniPlayer.style.translate = '-50% 0';
@@ -377,7 +381,7 @@ function initMiniPlayerDrag(miniPlayer) {
     if (!moved) return;
     miniPlayer.style.left = (originLeft + dx) + 'px';
     miniPlayer.style.top = (originTop + dy) + 'px';
-    miniPlayer.style.right = miniPlayer.style.bottom = '';
+    miniPlayer.style.right = miniPlayer.style.bottom = 'auto';
     miniPlayer.style.translate = '0 0';
   });
 
