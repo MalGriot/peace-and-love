@@ -13,7 +13,7 @@ function renderChrome(active) {
 
   const navHtml = `
     <nav class="site-nav">
-      <a href="index.html" class="site-nav__mark">Mal Griot</a>
+      <a href="index.html" class="site-nav__mark"><img src="img/brand/nav-mark-gold.png" alt="" class="site-nav__mark-icon" width="22" height="22">Mal Griot</a>
       <ul class="site-nav__links">${linkHtml}</ul>
       <button type="button" class="site-nav__toggle" aria-label="Menu" aria-expanded="false">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
@@ -89,10 +89,13 @@ const playerHtml = `
     </button>
     <img class="mini-player__art" id="miniArt" alt="">
     <div class="mini-player__info">
-      <div class="mini-player__title-mask">
-        <div class="mini-player__title-track" id="miniTitleTrack">
-          <span id="miniTitle">breathe love d e e p</span>
-          <span aria-hidden="true" id="miniTitleDup">breathe love d e e p</span>
+      <div class="mini-player__title-stack">
+        <div class="mini-player__title-plain" id="miniTitlePlain">breathe love d e e p</div>
+        <div class="mini-player__title-mask">
+          <div class="mini-player__title-track" id="miniTitleTrack">
+            <span id="miniTitle">breathe love d e e p</span>
+            <span aria-hidden="true" id="miniTitleDup">breathe love d e e p</span>
+          </div>
         </div>
       </div>
       <div class="mini-player__artist">Mal Griot</div>
@@ -118,6 +121,7 @@ function initMiniPlayer() {
   const miniTitle = document.getElementById('miniTitle');
   const miniTitleDup = document.getElementById('miniTitleDup');
   const miniTitleTrack = document.getElementById('miniTitleTrack');
+  const miniTitlePlain = document.getElementById('miniTitlePlain');
   const miniArt = document.getElementById('miniArt');
   const miniIconPlay = document.getElementById('miniIconPlay');
   const miniIconPause = document.getElementById('miniIconPause');
@@ -134,7 +138,7 @@ function initMiniPlayer() {
   let currentlyPlaying = false;
   let albumArtFallback = null;
 
-  const ALBUM_NAME = 'breathe love d e e p';
+  let currentReleaseName = 'breathe love d e e p';
   const sampleCanvas = document.createElement('canvas');
   const sampleCtx = sampleCanvas.getContext('2d');
 
@@ -175,22 +179,29 @@ function initMiniPlayer() {
     currentIndex = index;
     const s = sounds[index];
     if (!s) return;
-    const title = s.title || ALBUM_NAME;
+    const title = s.title || currentReleaseName;
     // "breathe love d e e p" is always one phrase — never let "d e e p" split
     // across a wrap or marquee boundary, so it's wrapped in a no-wrap span.
-    const marqueeHtml = `${title}  —  <span class="nb">${ALBUM_NAME}</span>`;
+    const marqueeHtml = `${title}  —  <span class="nb">${currentReleaseName}</span>`;
     miniTitle.innerHTML = marqueeHtml;
     if (miniTitleDup) miniTitleDup.innerHTML = marqueeHtml;
+    if (miniTitlePlain) miniTitlePlain.textContent = title;
     if (miniTitleTrack) {
       // Only run the marquee if the text actually overflows its box — a
       // short title just sits still instead of scrolling for no reason.
       miniTitleTrack.classList.remove('is-scrolling');
-      requestAnimationFrame(() => {
+      const checkOverflow = () => {
         const mask = miniTitleTrack.parentElement;
         const firstSpan = miniTitleTrack.firstElementChild;
         const overflowing = firstSpan.scrollWidth > mask.clientWidth;
         miniTitleTrack.classList.toggle('is-scrolling', overflowing);
-      });
+      };
+      requestAnimationFrame(checkOverflow);
+      // The web font can finish loading (and reflow the text wider) after that
+      // first check runs, so re-check once fonts are actually ready too.
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(checkOverflow);
+      }
     }
     const art = s.artwork_url || (s.user && s.user.avatar_url) || albumArtFallback;
     const bigArt = art ? art.replace('-large', '-t500x500') : null;
@@ -255,24 +266,30 @@ function initMiniPlayer() {
       });
     }
 
-    widget.bind(SC.Widget.Events.READY, () => {
-      // The widget can return artwork_url/avatar as null for tracks further
-      // down the playlist on early getSounds() calls, before their metadata
-      // has fully hydrated — poll a few times, spaced out, until every sound
-      // has art (or we give up and just keep the album-cover fallback).
+    // The widget can return artwork_url/avatar as null for tracks further
+    // down the playlist on early getSounds() calls, before their metadata
+    // has fully hydrated — poll a few times, spaced out, until every sound
+    // has art (or give up and keep the album-cover fallback). Hoisted out of
+    // the READY binding so it can also run as the callback of widget.load()
+    // (READY only fires once, on the widget's first boot — it does not
+    // re-fire when a different release is loaded into the same widget).
+    function refreshTracks() {
       let attempts = 0;
-      function refresh() {
+      function attempt() {
         widget.getSounds((list) => {
           sounds = list || [];
           buildTracks(widget);
           activate(currentIndex);
+          window.dispatchEvent(new CustomEvent('griot:release-ready', { detail: { sounds } }));
           attempts++;
           const allHydrated = sounds.length && sounds.every((s) => s.artwork_url || (s.user && s.user.avatar_url));
-          if (!allHydrated && attempts < 5) setTimeout(refresh, 1500);
+          if (!allHydrated && attempts < 5) setTimeout(attempt, 1500);
         });
       }
-      refresh();
-    });
+      attempt();
+    }
+
+    widget.bind(SC.Widget.Events.READY, refreshTracks);
     widget.bind(SC.Widget.Events.PLAY, () => {
       setPlaying(true);
       try { localStorage.setItem('griotPlayerActivated', '1'); } catch (e) {}
@@ -281,6 +298,23 @@ function initMiniPlayer() {
     widget.bind(SC.Widget.Events.FINISH, () => setPlaying(false));
     widget.bind(SC.Widget.Events.PLAY_PROGRESS, () => {
       widget.getCurrentSoundIndex((i) => { if (i !== currentIndex) activate(i); });
+    });
+
+    // Hooks for external code (the Discography section's release panels) to
+    // drive this same shared widget without reaching into this closure.
+    window.addEventListener('griot:pause-mini-player', () => {
+      widget.pause();
+    });
+    window.addEventListener('griot:load-release', (e) => {
+      if (!e.detail || !e.detail.url) return;
+      currentReleaseName = e.detail.title || currentReleaseName;
+      currentIndex = 0;
+      widget.load(e.detail.url, { show_artwork: true, callback: refreshTracks });
+    });
+    window.addEventListener('griot:play-track-index', (e) => {
+      if (!e.detail || typeof e.detail.index !== 'number') return;
+      widget.skip(e.detail.index);
+      widget.play();
     });
 
     miniToggle.addEventListener('click', togglePlay);
@@ -434,4 +468,46 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   initMiniPlayer();
+  initAnimatedFavicon();
 });
+
+// Spins the gold mark in the browser tab by redrawing it to a canvas each
+// frame and swapping the favicon <link> href for the resulting data URL.
+function initAnimatedFavicon() {
+  const link = document.querySelector('link[rel="icon"]');
+  if (!link) return;
+
+  const size = 32;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+
+  const mark = new Image();
+  mark.src = 'img/brand/favicon-256.png';
+
+  let angle = 0;
+  let lastDraw = 0;
+  const degreesPerSecond = 60;
+  const frameInterval = 1000 / 24;
+
+  function draw(now) {
+    if (!document.hidden && now - lastDraw >= frameInterval) {
+      const delta = lastDraw ? now - lastDraw : 0;
+      angle = (angle + (degreesPerSecond * delta) / 1000) % 360;
+      lastDraw = now;
+
+      ctx.clearRect(0, 0, size, size);
+      ctx.save();
+      ctx.translate(size / 2, size / 2);
+      ctx.rotate((angle * Math.PI) / 180);
+      ctx.drawImage(mark, -size / 2, -size / 2, size, size);
+      ctx.restore();
+
+      link.href = canvas.toDataURL('image/png');
+    }
+    requestAnimationFrame(draw);
+  }
+
+  mark.onload = () => requestAnimationFrame(draw);
+}
