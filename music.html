@@ -23,7 +23,7 @@
     --accent-ember:#9A6044;
     --accent-rose:#BA9B93;
   }
-  body{background:var(--asphalt)}
+  body{background-color:var(--asphalt);background-image:var(--stars-svg);background-repeat:repeat;background-attachment:fixed}
 
   /* ---- hero ---- */
   .m-hero{
@@ -1106,7 +1106,8 @@
   // panel beneath it with a tracklist/player, instead of leaving the site.
   // SoundCloud releases play through the same shared mini-player widget
   // that drives the "breathe love d e e p" stage above (see shared.js).
-  // Spotify support is added in a later pass.
+  // Spotify releases embed Spotify's own player instead — there's no
+  // public, no-auth way to pull individual tracks into a custom UI.
 
   var activePanel = null;          // currently open .release__panel, or null
   var activeAnchor = null;         // its trigger <a class="release">
