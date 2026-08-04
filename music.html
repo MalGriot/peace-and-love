@@ -152,9 +152,18 @@
 
   .listen__cta{margin-top:6px}
 
+  /* desktop: one unbroken row, however many tracks there are.
+     mobile: fixed 5-wide grid so rows split evenly (5+5 for a 10-track
+     album) instead of wrapping wherever the flex box happens to run out
+     of width. */
   .listen__tracks{
-    display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:520px;
+    display:flex;gap:10px;justify-content:center;flex-wrap:nowrap;
     margin-top:48px;padding-top:36px;
+  }
+  @media (max-width:700px){
+    .listen__tracks{
+      display:grid;grid-template-columns:repeat(5,56px);justify-content:center;
+    }
   }
   .listen__track{
     width:56px;height:56px;border-radius:6px;position:relative;cursor:pointer;
@@ -557,6 +566,7 @@
       <div>
         <h3 class="release__title">Helicopter Man</h3>
         <span class="release__type">EP · Spotify</span>
+        <span class="release__credits">Mal Griot &amp; Deep Dawn — Hangar 18 Studio</span>
       </div>
     </div>
     <span class="release__play">
