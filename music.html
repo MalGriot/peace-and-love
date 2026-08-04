@@ -1116,6 +1116,10 @@
     if(href.indexOf('soundcloud.com') !== -1){
       return { platform: 'soundcloud', url: href };
     }
+    var sp = href.match(/open\.spotify\.com\/(track|album)\/([a-zA-Z0-9]+)/);
+    if(sp){
+      return { platform: 'spotify', kind: sp[1], id: sp[2], url: href };
+    }
     return null;
   }
 
@@ -1127,6 +1131,8 @@
       window.removeEventListener('griot:release-ready', releaseReadyHandler);
       releaseReadyHandler = null;
     }
+    var iframe = activePanel.querySelector('.release__panel-embed');
+    if(iframe) iframe.src = 'about:blank';
     activePanel = null;
     activeAnchor = null;
   }
@@ -1170,6 +1176,17 @@
     window.addEventListener('griot:release-ready', releaseReadyHandler);
   }
 
+  function buildSpotifyPanel(panel, info){
+    var height = info.kind === 'track' ? 152 : 400;
+    panel.innerHTML =
+      '<div class="release__panel-inner">' +
+        '<iframe class="release__panel-embed" style="height:' + height + 'px" ' +
+          'src="https://open.spotify.com/embed/' + info.kind + '/' + info.id + '?utm_source=generator&theme=0" ' +
+          'frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>' +
+        '<a class="btn btn-outline release__panel-fallback" href="' + info.url + '" target="_blank" rel="noopener">Open on Spotify &#8599;</a>' +
+      '</div>';
+  }
+
   function openPanel(anchor, panel, info){
     var accent = getComputedStyle(anchor).getPropertyValue('--release-accent').trim();
     if(accent) panel.style.setProperty('--release-accent', accent);
@@ -1177,6 +1194,9 @@
     if(info.platform === 'soundcloud'){
       var titleEl = anchor.querySelector('.release__title');
       buildSoundCloudPanel(panel, info.url, titleEl ? titleEl.textContent.trim() : '');
+    } else if(info.platform === 'spotify'){
+      window.dispatchEvent(new CustomEvent('griot:pause-mini-player'));
+      buildSpotifyPanel(panel, info);
     }
 
     panel.classList.add('is-open');
