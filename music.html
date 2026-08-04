@@ -56,10 +56,10 @@
   .m-hero__desc{font-size:16px;line-height:1.6;color:var(--paper-dim);max-width:46ch;margin:0 0 34px}
   .m-hero.align-center .m-hero__desc{margin-left:auto;margin-right:auto}
   .m-hero.align-right .m-hero__desc{margin-left:auto;margin-right:0}
-  /* dots stay fixed, centered, and docked above the mini-player (which lives
-     at bottom-center by default) regardless of which way the slide copy aligns */
+  /* dots are docked to the carousel itself (absolute within .m-hero) so they
+     scroll away with it, rather than floating fixed over the whole page */
   .m-hero__dots{
-    position:fixed;left:50%;bottom:96px;translate:-50% 0;z-index:140;
+    position:absolute;left:50%;bottom:96px;translate:-50% 0;z-index:140;
     display:flex;gap:9px;
   }
   .m-hero__dot{
@@ -408,6 +408,35 @@
     border-top:1px solid rgba(239,230,216,.08);
   }
   .m-cta h2{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,4vw,44px);margin:0 0 24px}
+
+  /* ---- discography track popups (accordion, one open at a time) ---- */
+  .release__panel{
+    max-height:0;opacity:0;overflow:hidden;margin-top:0;
+    transition:max-height .4s ease,opacity .3s ease,margin-top .4s ease;
+  }
+  .release__panel.is-open{max-height:600px;opacity:1;margin-top:26px}
+  .release__panel-inner{
+    border-top:2px solid var(--release-accent, var(--brass));
+    background:rgba(74,31,34,.18);border-radius:8px;
+    padding:22px clamp(16px,3vw,28px);
+  }
+  .release__tracks{list-style:none;margin:0;padding:0}
+  .release__track-row{
+    display:flex;align-items:center;gap:14px;padding:10px 4px;width:100%;
+    border:none;border-bottom:1px solid rgba(239,230,216,.08);
+    background:none;text-align:left;cursor:pointer;
+    color:var(--paper);font-family:var(--font-body);
+    transition:color .2s ease;
+  }
+  .release__track-row:last-child{border-bottom:none}
+  .release__track-row:hover,
+  .release__track-row.is-active{color:var(--release-accent, var(--brass))}
+  .release__track-row .num{font-size:11px;color:var(--paper-dim);width:22px;flex:none}
+  .release__track-row .title{flex:1;font-size:14px;min-width:0}
+  .release__track-row .play-ico{flex:none;width:20px;height:20px;display:flex;align-items:center;justify-content:center}
+  .release__panel-loading{font-size:13px;color:var(--paper-dim);padding:8px 4px}
+  .release__panel-embed{width:100%;border:none;border-radius:6px;display:block}
+  .release__panel-fallback{margin-top:16px}
 </style>
 </head>
 <body>
@@ -426,8 +455,8 @@
       <button type="button" class="btn btn-light" id="heroCta">Book a Show</button>
     </div>
   </div>
+  <div class="m-hero__dots" id="heroDots"></div>
 </header>
-<div class="m-hero__dots" id="heroDots"></div>
 
 <section class="listen" id="listen">
   <span class="listen__eyebrow">New Album</span>
@@ -1069,6 +1098,111 @@
       track.addEventListener('scroll', updateNav);
     })
     .catch(function(){});
+})();
+</script>
+<script>
+(function(){
+  // Discography track popups: click a release row to expand an inline
+  // panel beneath it with a tracklist/player, instead of leaving the site.
+  // SoundCloud releases play through the same shared mini-player widget
+  // that drives the "breathe love d e e p" stage above (see shared.js).
+  // Spotify support is added in a later pass.
+
+  var activePanel = null;          // currently open .release__panel, or null
+  var activeAnchor = null;         // its trigger <a class="release">
+  var releaseReadyHandler = null;  // bound only while a SoundCloud panel is open
+
+  function parseRelease(href){
+    if(href.indexOf('soundcloud.com') !== -1){
+      return { platform: 'soundcloud', url: href };
+    }
+    return null;
+  }
+
+  function closeActivePanel(){
+    if(!activePanel) return;
+    activePanel.classList.remove('is-open');
+    activeAnchor.setAttribute('aria-expanded', 'false');
+    if(releaseReadyHandler){
+      window.removeEventListener('griot:release-ready', releaseReadyHandler);
+      releaseReadyHandler = null;
+    }
+    activePanel = null;
+    activeAnchor = null;
+  }
+
+  function buildSoundCloudPanel(panel, releaseUrl, releaseTitle){
+    panel.innerHTML =
+      '<div class="release__panel-inner">' +
+        '<div class="release__panel-loading">Loading tracklist…</div>' +
+        '<ul class="release__tracks" hidden></ul>' +
+        '<a class="btn btn-outline release__panel-fallback" href="' + releaseUrl + '" target="_blank" rel="noopener">Open on SoundCloud &#8599;</a>' +
+      '</div>';
+
+    window.dispatchEvent(new CustomEvent('griot:pause-mini-player'));
+    window.dispatchEvent(new CustomEvent('griot:load-release', { detail: { url: releaseUrl, title: releaseTitle } }));
+
+    var loading = panel.querySelector('.release__panel-loading');
+    var list = panel.querySelector('.release__tracks');
+
+    releaseReadyHandler = function(e){
+      var sounds = (e.detail && e.detail.sounds) || [];
+      if(!sounds.length) return;
+      loading.hidden = true;
+      list.hidden = false;
+      list.innerHTML = '';
+      sounds.forEach(function(s, i){
+        var li = document.createElement('li');
+        var row = document.createElement('button');
+        row.type = 'button';
+        row.className = 'release__track-row';
+        row.innerHTML =
+          '<span class="num">' + String(i + 1).padStart(2, '0') + '</span>' +
+          '<span class="title">' + (s.title || 'Track ' + (i + 1)) + '</span>' +
+          '<span class="play-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>';
+        row.addEventListener('click', function(){
+          window.dispatchEvent(new CustomEvent('griot:play-track-index', { detail: { index: i } }));
+        });
+        li.appendChild(row);
+        list.appendChild(li);
+      });
+    };
+    window.addEventListener('griot:release-ready', releaseReadyHandler);
+  }
+
+  function openPanel(anchor, panel, info){
+    var accent = getComputedStyle(anchor).getPropertyValue('--release-accent').trim();
+    if(accent) panel.style.setProperty('--release-accent', accent);
+
+    if(info.platform === 'soundcloud'){
+      var titleEl = anchor.querySelector('.release__title');
+      buildSoundCloudPanel(panel, info.url, titleEl ? titleEl.textContent.trim() : '');
+    }
+
+    panel.classList.add('is-open');
+    anchor.setAttribute('aria-expanded', 'true');
+    activePanel = panel;
+    activeAnchor = anchor;
+  }
+
+  document.querySelectorAll('.release').forEach(function(anchor, idx){
+    var info = parseRelease(anchor.getAttribute('href'));
+    if(!info) return; // not a recognized platform yet — leave it as a normal link
+
+    var panel = document.createElement('div');
+    panel.className = 'release__panel';
+    panel.id = 'release-panel-' + idx;
+    anchor.insertAdjacentElement('afterend', panel);
+    anchor.setAttribute('aria-expanded', 'false');
+    anchor.setAttribute('aria-controls', panel.id);
+
+    anchor.addEventListener('click', function(e){
+      e.preventDefault();
+      var wasOpen = activePanel === panel;
+      closeActivePanel();
+      if(!wasOpen) openPanel(anchor, panel, info);
+    });
+  });
 })();
 </script>
 <script src="shared.js"></script>
