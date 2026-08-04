@@ -1,0 +1,240 @@
+/* MAL GRIOT — shared shell: nav, footer, chat widget, buttons, base resets.
+   Each satellite page layers its own signature-texture styles on top of this.
+   Palette/type: "Candlelit Velvet" brand kit (see MAL GRIOT BRAND KIT/). */
+
+@import url('https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&family=Inter:wght@400;500;600&display=swap');
+
+:root{
+  --ink: #12100f;
+  --paper: #efe6d8;
+  --paper-dim: rgba(239,230,216,.68);
+  --paper-faint: rgba(239,230,216,.4);
+  --brass: #c98a45;
+  --gold: #e0b26a;
+  --font-display: 'Philosopher', Georgia, serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:var(--font-body);
+  background:var(--ink);
+  color:var(--paper);
+  -webkit-font-smoothing:antialiased;
+}
+img,video{max-width:100%;display:block}
+a{color:inherit}
+::selection{background:var(--brass);color:#12100f}
+
+/* ---------- shared nav ---------- */
+.site-nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px clamp(20px,4vw,56px);
+  background:linear-gradient(to bottom, rgba(10,9,8,.65), rgba(10,9,8,0));
+  transition:background .35s ease, backdrop-filter .35s ease;
+}
+.site-nav.is-scrolled{
+  background:rgba(10,9,8,.86);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(239,230,216,.08);
+}
+.site-nav__mark{
+  font-family:var(--font-display);
+  font-size:16px;
+  letter-spacing:-.03em;
+  text-transform:uppercase;
+  text-decoration:none;
+  color:var(--paper);
+  font-weight:500;
+  display:inline-block;
+  transition:transform .3s cubic-bezier(.22,.9,.3,1),letter-spacing .3s ease;
+}
+.site-nav__mark:hover{transform:scale(1.1);letter-spacing:-.01em}
+.site-nav__links{
+  display:flex;align-items:center;gap:clamp(18px,2.6vw,40px);
+  list-style:none;margin:0;padding:0;
+}
+.site-nav__links a{
+  font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;
+  text-decoration:none;color:var(--paper-dim);
+  padding-bottom:3px;border-bottom:1px solid transparent;
+  transition:color .25s ease,border-color .25s ease;
+}
+.site-nav__links a:hover,.site-nav__links a.is-active{color:var(--paper);border-color:var(--brass)}
+.site-nav__toggle{display:none;background:none;border:none;color:var(--paper);cursor:pointer;padding:4px}
+
+@media (max-width:760px){
+  .site-nav__links{
+    position:fixed;inset:0;top:0;
+    background:rgba(8,7,6,.98);
+    flex-direction:column;justify-content:center;gap:28px;
+    transform:translateY(-100%);opacity:0;pointer-events:none;
+    will-change:transform;
+    transition:transform .22s cubic-bezier(.4,0,.2,1),opacity .18s ease;
+  }
+  .site-nav__links.is-open{transform:translateY(0);opacity:1;pointer-events:auto}
+  .site-nav__links a{font-size:16px}
+  .site-nav__toggle{display:block;z-index:101}
+}
+
+/* ---------- shared footer ---------- */
+.site-footer{
+  background:var(--ink);
+  border-top:1px solid rgba(239,230,216,.1);
+  padding:56px clamp(20px,4vw,56px) 32px;
+}
+.site-footer__top{
+  display:flex;flex-wrap:wrap;gap:32px;justify-content:space-between;align-items:flex-start;
+  padding-bottom:32px;
+}
+.site-footer__mark{font-family:var(--font-display);font-size:20px;letter-spacing:-.03em;text-transform:uppercase}
+.site-footer__tagline{font-size:13px;color:var(--paper-dim);margin-top:6px;max-width:32ch}
+.site-footer__links{display:flex;gap:28px;list-style:none;margin:0;padding:0}
+.site-footer__links a{font-size:12px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--paper-dim);transition:color .2s}
+.site-footer__links a:hover{color:var(--paper)}
+.site-footer__social{display:flex;gap:14px}
+.site-footer__social a{
+  width:34px;height:34px;border-radius:999px;border:1px solid rgba(239,230,216,.2);
+  display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--paper-dim);
+  transition:border-color .2s,color .2s;
+}
+.site-footer__social a:hover{border-color:var(--brass);color:var(--brass)}
+.site-footer__bottom{
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  padding-top:20px;border-top:1px solid rgba(239,230,216,.08);
+  font-size:11px;color:var(--paper-faint);letter-spacing:.04em;
+}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--font-body);font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:500;
+  padding:14px 26px;text-decoration:none;border-radius:999px;cursor:pointer;border:1px solid transparent;
+  transition:transform .25s ease, background .25s ease, color .25s ease, border-color .25s ease;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn-light{background:var(--paper);color:var(--ink)}
+.btn-light:hover{background:#fff}
+.btn-outline{background:transparent;color:var(--paper);border-color:rgba(239,230,216,.4)}
+.btn-outline:hover{border-color:var(--paper)}
+
+/* ---------- persistent chat widget (shell only — Phase 2 wires logic) ---------- */
+.chat-widget{position:fixed;right:clamp(16px,3vw,32px);bottom:clamp(16px,3vw,32px);z-index:200}
+.chat-widget__btn{
+  width:56px;height:56px;border-radius:999px;border:none;cursor:pointer;
+  background:var(--brass);color:#12100f;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 24px rgba(0,0,0,.35);
+  transition:transform .25s ease;
+}
+.chat-widget__btn:hover{transform:scale(1.06)}
+.chat-widget__panel{
+  position:absolute;bottom:70px;right:0;width:300px;
+  background:#1c1815;border:1px solid rgba(239,230,216,.12);border-radius:16px;
+  padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.5);
+  opacity:0;transform:translateY(8px) scale(.98);pointer-events:none;
+  transition:opacity .2s ease,transform .2s ease;
+}
+.chat-widget.is-open .chat-widget__panel{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+.chat-widget__title{font-family:var(--font-display);font-size:15px;margin:0 0 6px}
+.chat-widget__body{font-size:12.5px;color:var(--paper-dim);line-height:1.5;margin:0}
+
+/* ---------- page transition mark (used on satellite hero entries) ---------- */
+.eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--paper-dim)}
+
+/* "breathe love d e e p" is a single title — never let it break mid-phrase
+   (in particular "d e e p" must never split across a wrap/marquee boundary). */
+.nb{white-space:nowrap}
+
+/* ---------- persistent mini-player (site-wide — plays the current album on any page) ----------
+   Draggable: the visitor can drag it anywhere and it snaps to the nearest of six docks
+   (top/bottom × left/center/right). Docks are kept clear of the site nav (top) and the
+   chat widget (bottom-right) — see the clearance constants in initMiniPlayerDrag(). */
+.mini-player{
+  position:fixed;left:50%;bottom:22px;translate:-50% 0;z-index:150;
+  display:flex;align-items:center;gap:14px;padding:10px 18px 10px 10px;border-radius:999px;
+  background:rgba(17,16,19,.7);backdrop-filter:blur(16px) saturate(1.3);
+  border:1px solid rgba(239,230,216,.14);box-shadow:0 20px 50px rgba(0,0,0,.5);
+  opacity:0;transform:scale(.92);pointer-events:none;cursor:grab;touch-action:none;
+  transition:opacity .4s ease, transform .4s ease, left .4s ease, right .4s ease, top .4s ease, bottom .4s ease, translate .4s ease;
+}
+.mini-player.is-visible{opacity:1;transform:scale(1);pointer-events:auto}
+.mini-player.is-dragging{transition:none;cursor:grabbing}
+.mini-player__toggle{
+  position:relative;width:40px;height:40px;border-radius:999px;background:var(--brass);color:#12100f;border:none;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;
+  transition:transform .45s cubic-bezier(.22,.9,.3,1);
+}
+.mini-player__toggle:hover{transform:scale(1.18) rotate(360deg)}
+.mini-player.is-pulsing .mini-player__toggle::after{
+  content:"";position:absolute;inset:-6px;border-radius:999px;border:2px solid var(--brass);
+  opacity:.7;animation:mp-pulse 1.8s ease-out infinite;
+}
+@keyframes mp-pulse{
+  0%{transform:scale(.85);opacity:.7}
+  70%{transform:scale(1.55);opacity:0}
+  100%{transform:scale(1.55);opacity:0}
+}
+.mini-player__art{width:34px;height:34px;border-radius:6px;object-fit:cover;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.mini-player__info{min-width:0}
+.mini-player__title-mask{max-width:160px;overflow:hidden}
+.mini-player__title-track{display:inline-flex;white-space:nowrap}
+.mini-player__title-track span{font-size:12.5px;color:var(--paper);padding-right:36px;display:inline-block}
+.mini-player__title-track span:last-child{display:none}
+.mini-player__title-track.is-scrolling{animation:mini-marquee 11s linear infinite}
+.mini-player__title-track.is-scrolling span:last-child{display:inline-block}
+@keyframes mini-marquee{to{transform:translateX(-50%)}}
+.mini-player__artist{font-size:11px;color:var(--paper-faint);letter-spacing:.04em;margin-top:1px}
+.mini-player__skip{
+  width:28px;height:28px;border-radius:999px;background:none;border:none;color:var(--paper-dim);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;transition:color .2s ease;
+}
+.mini-player__skip:hover{color:var(--brass)}
+@media (max-width:560px){.mini-player__info{display:none}}
+
+.mini-player__hint{
+  position:absolute;bottom:calc(100% + 12px);left:50%;transform:translateX(-50%) translateY(6px);
+  white-space:nowrap;padding:8px 14px;border-radius:999px;
+  background:var(--paper);color:var(--ink);font-size:11.5px;font-weight:500;letter-spacing:.02em;
+  opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s ease;
+  box-shadow:0 10px 24px rgba(0,0,0,.35);
+}
+.mini-player__hint::after{
+  content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:5px solid transparent;border-top-color:var(--paper);
+}
+.mini-player__hint.is-visible{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.sc-widget{width:0;height:0;opacity:0;position:absolute;pointer-events:none}
+
+/* Desktop: collapse the mini-player down to just the (wrapped, non-scrolling) song
+   title, and extend it back to its full current size on hover/focus/drag. */
+@media (min-width:761px){
+  .mini-player__art,.mini-player__toggle,.mini-player__skip{
+    max-width:0;opacity:0;margin:0;pointer-events:none;overflow:hidden;
+    transition:max-width .35s ease,opacity .25s ease,margin .35s ease;
+  }
+  .mini-player:hover .mini-player__art,.mini-player.is-dragging .mini-player__art,
+  .mini-player:focus-within .mini-player__art{max-width:34px}
+  .mini-player:hover .mini-player__toggle,.mini-player.is-dragging .mini-player__toggle,
+  .mini-player:focus-within .mini-player__toggle{max-width:40px}
+  .mini-player:hover .mini-player__skip,.mini-player.is-dragging .mini-player__skip,
+  .mini-player:focus-within .mini-player__skip{max-width:28px}
+  .mini-player:hover .mini-player__art,.mini-player:hover .mini-player__toggle,.mini-player:hover .mini-player__skip,
+  .mini-player.is-dragging .mini-player__art,.mini-player.is-dragging .mini-player__toggle,.mini-player.is-dragging .mini-player__skip,
+  .mini-player:focus-within .mini-player__art,.mini-player:focus-within .mini-player__toggle,.mini-player:focus-within .mini-player__skip{
+    opacity:1;pointer-events:auto;
+  }
+  .mini-player__title-mask{max-width:220px}
+  .mini-player__title-track{white-space:normal}
+  .mini-player:not(:hover):not(.is-dragging):not(:focus-within) .mini-player__title-track.is-scrolling{
+    animation:none;transform:none;white-space:normal;
+  }
+  .mini-player:not(:hover):not(.is-dragging):not(:focus-within) .mini-player__title-track.is-scrolling span:last-child{
+    display:none;
+  }
+  .mini-player:hover .mini-player__title-track,.mini-player.is-dragging .mini-player__title-track,
+  .mini-player:focus-within .mini-player__title-track{white-space:nowrap}
+}

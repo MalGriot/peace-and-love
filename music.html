@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Music — Mal Griot</title>
+<link rel="icon" href="img/brand/favicon.ico">
+<link rel="apple-touch-icon" href="img/brand/apple-touch-icon.png">
+<link rel="stylesheet" href="shared.css">
+<style>
+  :root{
+    --velvet-deep:#1c060c;
+    --velvet-wine:#3a0f1c;
+    --asphalt:#111013;
+    /* Discography hover accents — built only from Candlelit Velvet brand-kit
+       tokens (Wine #4A1F22, Wine-lit #6B2A2B, Amber #C98A45, Gold #E0B26A,
+       Parchment #EFE6D8), never a hue outside that family. --accent-gold and
+       --accent-amber are the tokens as-is; --accent-ember and --accent-rose
+       are Wine-lit blended toward Gold / Parchment so there's a readable
+       warm-red option too, without inventing a new color. */
+    --accent-gold:#E0B26A;
+    --accent-amber:#C98A45;
+    --accent-ember:#9A6044;
+    --accent-rose:#BA9B93;
+  }
+  body{background:var(--asphalt)}
+
+  /* ---- hero ---- */
+  .m-hero{
+    position:relative;min-height:100vh;min-height:100dvh;display:flex;align-items:flex-end;
+    overflow:hidden;
+    background:
+      radial-gradient(120% 90% at 15% 0%, var(--velvet-wine) 0%, var(--velvet-deep) 45%, var(--asphalt) 100%);
+  }
+  .m-hero__grain{position:absolute;inset:0;opacity:.35;mix-blend-mode:overlay;pointer-events:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  .m-hero__slides{position:absolute;inset:0;overflow:hidden}
+  .m-hero__slide{position:absolute;inset:0;opacity:0;transition:opacity 2.8s ease}
+  .m-hero__slide.is-active{opacity:1}
+  .m-hero__slide img{
+    width:100%;height:100%;object-fit:cover;opacity:.5;mix-blend-mode:luminosity;
+    transform:scale(1);transition:transform 7s ease;
+  }
+  .m-hero.is-paused .m-hero__slide.is-active img{transform:scale(1.08)}
+  .m-hero__scrim{position:absolute;inset:0;background:linear-gradient(to top, var(--asphalt) 0%, rgba(17,16,19,.2) 45%, rgba(17,16,19,.55) 100%)}
+  .m-hero{justify-content:flex-start;transition:justify-content .4s ease}
+  .m-hero.align-center{justify-content:center}
+  .m-hero.align-right{justify-content:flex-end}
+  /* extra bottom padding keeps the CTA button clear of the fixed dots + mini-player dock */
+  .m-hero__inner{position:relative;z-index:2;padding:160px clamp(20px,5vw,64px) 150px;max-width:1100px;text-align:left}
+  .m-hero.align-center .m-hero__inner{text-align:center}
+  .m-hero.align-right .m-hero__inner{text-align:right}
+  .m-hero__eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);margin-bottom:18px}
+  .m-hero__title{font-family:var(--font-display);font-weight:400;font-size:clamp(48px,8vw,108px);line-height:.94;margin:0 0 22px;color:var(--paper)}
+  .m-hero__copy{transition:opacity .28s ease}
+  .m-hero__desc{font-size:16px;line-height:1.6;color:var(--paper-dim);max-width:46ch;margin:0 0 34px}
+  .m-hero.align-center .m-hero__desc{margin-left:auto;margin-right:auto}
+  .m-hero.align-right .m-hero__desc{margin-left:auto;margin-right:0}
+  /* dots stay fixed, centered, and docked above the mini-player (which lives
+     at bottom-center by default) regardless of which way the slide copy aligns */
+  .m-hero__dots{
+    position:fixed;left:50%;bottom:96px;translate:-50% 0;z-index:140;
+    display:flex;gap:9px;
+  }
+  .m-hero__dot{
+    width:8px;height:8px;padding:0;border-radius:999px;border:none;
+    background:rgba(239,230,216,.28);cursor:pointer;transition:background .3s ease,transform .3s ease;
+  }
+  .m-hero__dot.is-active{background:var(--brass);transform:scale(1.3)}
+  @media (max-width:760px){
+    .m-hero,.m-hero.align-center,.m-hero.align-right{justify-content:flex-start}
+    .m-hero__inner,.m-hero.align-center .m-hero__inner,.m-hero.align-right .m-hero__inner{text-align:left}
+    .m-hero.align-right .m-hero__desc{margin-left:0;margin-right:auto}
+  }
+
+  /* ---- listening stage ---- */
+  .listen{
+    padding:110px clamp(20px,5vw,64px) 100px;background:var(--asphalt);
+    border-bottom:1px solid rgba(239,230,216,.08);
+    display:flex;flex-direction:column;align-items:center;text-align:center;gap:40px;
+  }
+  .listen__eyebrow{color:var(--brass);font-size:12px;letter-spacing:.2em;text-transform:uppercase}
+  .listen__title{font-family:var(--font-display);font-weight:400;font-size:clamp(30px,4vw,46px);margin:10px 0 14px}
+  .listen__desc{font-size:14.5px;line-height:1.7;color:var(--paper-dim);max-width:44ch;margin:0 auto 8px}
+
+  .listen__stage{
+    position:relative;width:min(360px,80vw);aspect-ratio:1;cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .listen__stage:focus-visible{outline:2px solid var(--brass);outline-offset:6px}
+
+  /* inactive: static cover, only scales on hover (no tilt/move).
+     click swaps it out for the spinning record — see .is-playing below. */
+  .listen__sleeve{
+    position:absolute;inset:0;z-index:2;border-radius:6px;overflow:hidden;
+    box-shadow:0 30px 70px rgba(0,0,0,.6),0 0 0 1px rgba(239,230,216,.08);
+    transition:transform .3s ease, opacity .4s ease;
+  }
+  .listen__stage:hover .listen__sleeve,
+  .listen__stage:focus-visible .listen__sleeve{transform:scale(1.04)}
+  .listen__stage.is-playing .listen__sleeve{opacity:0;transform:scale(1);pointer-events:none}
+  .listen__sleeve img{width:100%;height:100%;object-fit:cover;display:block}
+  .listen__sleeve-play{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    background:rgba(17,16,19,.28);opacity:0;transition:opacity .25s ease;
+  }
+  .listen__stage:hover .listen__sleeve-play,
+  .listen__stage:focus-visible .listen__sleeve-play{opacity:1}
+  .listen__sleeve-play span{
+    width:64px;height:64px;border-radius:999px;background:var(--brass);color:#12100f;
+    display:flex;align-items:center;justify-content:center;
+  }
+
+  /* active: the record takes the sleeve's exact footprint (same inset:0
+     box) so the crossfade reads as one swapping for the other in place */
+  .listen__vinyl{
+    --disc-a:#0f3535;--disc-b:#1f5555;
+    position:absolute;inset:0;border-radius:999px;
+    box-shadow:0 20px 60px rgba(0,0,0,.55);
+    opacity:0;transform:scale(.92);pointer-events:none;
+    transition:opacity .4s ease, transform .4s ease;
+  }
+  .listen__stage.is-playing .listen__vinyl{opacity:1;transform:scale(1);pointer-events:auto}
+  /* the spin layer rotates independently of the outer disc's fade/scale
+     transition, same motif as the discography's release__disc-spin */
+  .listen__vinyl-spin{
+    position:absolute;inset:0;border-radius:999px;
+    background:radial-gradient(circle at 34% 30%, var(--disc-b) 0%, var(--disc-a) 78%);
+    transition:background .3s ease;
+  }
+  .listen__stage.is-playing .listen__vinyl-spin{animation:release-disc-spin 2.6s linear infinite}
+  .listen__vinyl-label{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:36%;height:36%;border-radius:999px;object-fit:cover;z-index:2;
+    box-shadow:0 0 0 1px rgba(0,0,0,.35);
+  }
+  .listen__vinyl-hole{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:9%;height:9%;border-radius:999px;background:var(--asphalt);z-index:3;
+  }
+  .listen__vinyl-pause{
+    position:absolute;inset:0;border-radius:999px;z-index:4;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(17,16,19,.28);opacity:0;transition:opacity .25s ease;
+  }
+  .listen__stage:hover .listen__vinyl-pause,
+  .listen__stage:focus-visible .listen__vinyl-pause{opacity:1}
+  .listen__vinyl-pause span{
+    width:64px;height:64px;border-radius:999px;background:var(--brass);color:#12100f;
+    display:flex;align-items:center;justify-content:center;
+  }
+
+  .listen__cta{margin-top:6px}
+
+  .listen__tracks{
+    display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:520px;
+    margin-top:48px;padding-top:36px;
+  }
+  .listen__track{
+    width:56px;height:56px;border-radius:6px;position:relative;cursor:pointer;
+    background:var(--velvet-deep);border:1px solid rgba(239,230,216,.12);
+    transition:border-color .2s ease,transform .2s ease;
+    --disc-a:#0f3535;--disc-b:#1f5555;
+  }
+  .listen__track:hover{border-color:var(--brass);transform:translateY(-2px) scale(1.08);z-index:5}
+  .listen__track.is-active{border-color:var(--brass);box-shadow:0 0 0 1px var(--brass);z-index:4}
+
+  .listen__track-art{
+    position:relative;z-index:2;width:100%;height:100%;object-fit:cover;border-radius:5px;
+    display:block;opacity:.75;transition:transform .3s ease,opacity .3s ease;
+  }
+  .listen__track:hover .listen__track-art{transform:scale(1.08);opacity:.9}
+  .listen__track.is-active .listen__track-art{opacity:1}
+
+  .listen__track-disc{
+    position:absolute;left:0;bottom:0;width:100%;height:100%;border-radius:999px;z-index:1;
+    opacity:0;transform:translateY(6%) scale(.7);
+    transition:transform .35s cubic-bezier(.22,.9,.3,1),opacity .35s ease;
+    box-shadow:0 10px 22px rgba(0,0,0,.5);
+  }
+  .listen__track.is-active .listen__track-disc{
+    opacity:1;transform:translateY(-62%) scale(.92);
+  }
+  .listen__track-disc-spin{
+    position:absolute;inset:0;border-radius:999px;
+    background:radial-gradient(circle at 34% 30%, var(--disc-b) 0%, var(--disc-a) 78%);
+  }
+  .listen__track.is-active.is-playing .listen__track-disc-spin{
+    animation:release-disc-spin 2.6s linear infinite;
+  }
+  .listen__track-disc-label{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:36%;height:36%;border-radius:999px;object-fit:cover;z-index:2;
+    box-shadow:0 0 0 1px rgba(0,0,0,.35);
+  }
+  .listen__track-disc-hole{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:12%;height:12%;border-radius:999px;background:var(--asphalt);z-index:3;
+  }
+
+  .listen__track .num{position:absolute;top:3px;left:4px;font-size:9px;color:var(--paper-dim);z-index:3}
+
+  .listen__track-tip{
+    position:absolute;bottom:calc(100% + 10px);left:50%;z-index:6;
+    transform:translateX(-50%) translateY(4px);white-space:nowrap;
+    padding:6px 10px;border-radius:8px;background:var(--paper);color:var(--ink);
+    font-size:11px;font-weight:500;opacity:0;pointer-events:none;
+    transition:opacity .2s ease,transform .2s ease;
+  }
+  .listen__track-tip::after{
+    content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
+    border:5px solid transparent;border-top-color:var(--paper);
+  }
+  .listen__track:hover .listen__track-tip,
+  .listen__track:focus-visible .listen__track-tip{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* ---- editorial release timeline (allagi.music-style) ---- */
+  .releases{padding:20px clamp(20px,5vw,64px) 120px}
+  .releases__head{padding:60px 0 40px;border-bottom:1px solid rgba(239,230,216,.1)}
+  .releases__head h2{font-family:var(--font-display);font-weight:400;font-size:clamp(24px,2.6vw,32px);margin:0}
+  .release{
+    display:grid;grid-template-columns:110px 1fr auto;gap:clamp(20px,4vw,48px);align-items:center;
+    padding:38px 0;border-bottom:1px solid rgba(239,230,216,.08);
+    transition:background .3s ease;
+  }
+  .release:hover{background:rgba(239,230,216,.03)}
+  .release__year{font-family:var(--font-display);font-size:14px;color:var(--paper-dim);letter-spacing:.05em}
+
+  /* album art stage — a vinyl record (albums) or CD (EPs) slides out from
+     behind the cover on hover, same motif as the hero listening stage.
+     The stage reserves extra width to its right so the disc has room to
+     slide into without ever reaching the title/type text beside it. */
+  .release__art-stage{position:relative;width:165px;height:112px;flex:none;--disc-a:#0f3535;--disc-b:#1f5555}
+  .release__art{
+    position:absolute;left:0;top:0;z-index:2;width:112px;height:112px;object-fit:cover;border-radius:5px;
+    box-shadow:0 8px 18px rgba(0,0,0,.4);transition:transform .35s ease;
+  }
+  .release:hover .release__art{transform:translateX(-8px) rotate(-3deg) scale(1.06)}
+
+  .release__disc{
+    position:absolute;left:0;top:0;width:112px;height:112px;border-radius:999px;
+    opacity:0;transform:translateX(0) scale(.9);
+    transition:transform .4s cubic-bezier(.22,.9,.3,1),opacity .4s ease;
+    box-shadow:0 14px 30px rgba(0,0,0,.5);
+  }
+  .release:hover .release__disc{opacity:1;transform:translateX(48px) scale(1.12)}
+
+  /* the spin layer rotates independently of the outer disc's slide/scale
+     transition, so it can spin continuously without fighting that transform */
+  .release__disc-spin{
+    position:absolute;inset:0;border-radius:999px;
+  }
+  .release:hover .release__disc-spin{animation:release-disc-spin 2.6s linear infinite}
+  @keyframes release-disc-spin{to{transform:rotate(360deg)}}
+
+  .release__disc--vinyl .release__disc-spin{
+    background:radial-gradient(circle at 34% 30%, var(--disc-b) 0%, var(--disc-a) 78%);
+  }
+
+  .release__disc--cd .release__disc-spin{
+    background:
+      radial-gradient(circle at 32% 28%, rgba(255,255,255,.95) 0%, rgba(255,255,255,0) 32%),
+      conic-gradient(from 200deg at 50% 50%, #f3d1ff, #c1e8ff, #c8ffe0, #fff3b0, #ffd1dc, #d1c4ff, #f3d1ff);
+  }
+  .release__disc--cd .release__disc-spin::before{
+    content:"";position:absolute;inset:0;border-radius:999px;mix-blend-mode:overlay;
+    background:repeating-radial-gradient(circle at center, rgba(255,255,255,.16) 0 1px, transparent 1px 3px);
+  }
+  .release__disc--cd .release__disc-spin::after{
+    content:"";position:absolute;inset:0;border-radius:999px;
+    background:radial-gradient(circle at 68% 72%, rgba(160,170,190,.35), transparent 45%);
+  }
+
+  .release__disc__label{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:36%;height:36%;border-radius:999px;object-fit:cover;z-index:2;
+    box-shadow:0 0 0 1px rgba(0,0,0,.35);
+  }
+  .release__disc__hole{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:9%;height:9%;border-radius:999px;background:var(--asphalt);z-index:3;
+  }
+
+  .release__main{display:flex;gap:22px;align-items:center;min-width:0}
+  .release__title{font-family:var(--font-display);font-weight:400;font-size:clamp(20px,2.4vw,30px);margin:0 0 6px;transition:color .25s ease}
+  .release:hover .release__title{color:var(--release-accent, var(--brass))}
+  .release__type{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-dim)}
+  .release__credits{
+    display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--release-accent, var(--brass));
+    max-height:0;opacity:0;overflow:hidden;margin-top:0;
+    transition:max-height .35s ease,opacity .3s ease,margin-top .35s ease;
+  }
+  .release:hover .release__credits{max-height:40px;opacity:1;margin-top:5px}
+  .release__play{
+    width:46px;height:46px;border-radius:999px;border:1px solid rgba(239,230,216,.25);
+    display:flex;align-items:center;justify-content:center;color:var(--paper);flex:none;
+    transition:background .2s,border-color .2s;
+  }
+  .release:hover .release__play{background:var(--release-accent, var(--brass));border-color:var(--release-accent, var(--brass));color:#12100f}
+  @media (max-width:700px){
+    .release{grid-template-columns:1fr auto;grid-template-areas:"main play" "year year"}
+    .release__year{grid-area:year;padding-top:10px}
+    .release__main{grid-area:main}
+    .release__play{grid-area:play}
+    .release__art-stage{width:118px;height:80px;flex:none}
+    .release__art,.release__disc{width:80px;height:80px}
+    .release:hover .release__disc{transform:translateX(35px) scale(1.12)}
+  }
+
+  /* ---- about: bio, EPK, socials ---- */
+  .about{
+    padding:20px clamp(20px,5vw,64px) 120px;
+    display:flex;gap:clamp(36px,6vw,80px);align-items:flex-start;flex-wrap:wrap;
+  }
+  .about__photo{
+    width:min(320px,100%);aspect-ratio:4/5;flex:none;border-radius:6px;overflow:hidden;
+    box-shadow:0 30px 70px rgba(0,0,0,.5);
+  }
+  .about__photo img{width:100%;height:100%;object-fit:cover}
+  .about__body{flex:1;min-width:260px;padding-top:6px}
+  .about__eyebrow{color:var(--brass);font-size:12px;letter-spacing:.2em;text-transform:uppercase;display:block;margin-bottom:14px}
+  .about__bio{font-size:16px;line-height:1.7;color:var(--paper-dim);max-width:62ch;margin:0 0 28px}
+  .about__row{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:28px}
+  .about__epk-note{font-size:12px;color:var(--paper-faint);margin:10px 0 0}
+  .about__socials{display:flex;gap:12px}
+  .about__socials a{
+    width:44px;height:44px;border-radius:999px;border:1px solid rgba(239,230,216,.2);
+    display:flex;align-items:center;justify-content:center;color:var(--paper-dim);
+    transition:border-color .2s,color .2s;
+  }
+  .about__socials a:hover{border-color:var(--brass);color:var(--brass)}
+
+  /* ---- follow: instagram card ---- */
+  .follow{
+    padding:20px clamp(20px,5vw,64px) 120px;text-align:center;
+  }
+  .follow__eyebrow{color:var(--brass);font-size:12px;letter-spacing:.2em;text-transform:uppercase}
+  .follow__title{font-family:var(--font-display);font-weight:400;font-size:clamp(26px,3vw,38px);margin:10px 0 14px}
+  .follow__desc{font-size:15px;color:var(--paper-dim);max-width:48ch;margin:0 auto 30px}
+  .follow__card{
+    display:inline-flex;align-items:center;gap:14px;padding:16px 26px;margin:0 auto 24px;
+    border:1px solid rgba(239,230,216,.16);border-radius:999px;color:var(--paper);text-decoration:none;
+    transition:border-color .2s,background .2s;
+  }
+  .follow__card:hover{border-color:var(--brass);background:rgba(201,162,75,.08)}
+  .follow__card__glyph{
+    width:40px;height:40px;border-radius:999px;background:rgba(239,230,216,.08);
+    display:flex;align-items:center;justify-content:center;color:var(--brass);flex:none;
+  }
+  .follow__card__handle{font-family:var(--font-display);font-size:18px}
+
+  /* ---- ytfeed: youtube embedded video carousel ---- */
+  .ytfeed{
+    padding:20px clamp(20px,5vw,64px) 120px;text-align:center;
+  }
+  .ytfeed__eyebrow{color:var(--brass);font-size:12px;letter-spacing:.2em;text-transform:uppercase}
+  .ytfeed__title{font-family:var(--font-display);font-weight:400;font-size:clamp(26px,3vw,38px);margin:10px 0 34px}
+  .ytfeed__carousel{
+    position:relative;max-width:760px;margin:0 auto 18px;display:flex;align-items:center;gap:10px;
+  }
+  .ytfeed__carousel:has(.ytfeed__track:empty){display:none}
+  .ytfeed__track{
+    display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;flex:1;
+    scrollbar-width:none;border-radius:8px;
+  }
+  .ytfeed__track::-webkit-scrollbar{display:none}
+  .ytfeed__slide{
+    flex:0 0 100%;scroll-snap-align:center;aspect-ratio:16/9;border-radius:8px;overflow:hidden;
+    background:rgba(239,230,216,.06);
+  }
+  .ytfeed__slide iframe{width:100%;height:100%;border:0;display:block}
+  .ytfeed__slide__title{
+    text-align:left;font-size:13px;color:var(--paper-dim);margin-top:8px;
+  }
+  .ytfeed__nav{
+    flex:none;width:38px;height:38px;border-radius:999px;border:1px solid rgba(239,230,216,.2);
+    background:transparent;color:var(--paper);font-size:18px;line-height:1;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;transition:border-color .2s,color .2s;
+  }
+  .ytfeed__nav:hover{border-color:var(--brass);color:var(--brass)}
+  .ytfeed__nav:disabled{opacity:.3;cursor:default}
+  .ytfeed__nav:disabled:hover{border-color:rgba(239,230,216,.2);color:var(--paper)}
+  .ytfeed__dots{display:flex;gap:9px;justify-content:center;margin:0 0 28px}
+  .ytfeed__dots:empty{display:none}
+  .ytfeed__dot{
+    width:8px;height:8px;padding:0;border-radius:999px;border:none;
+    background:rgba(239,230,216,.28);cursor:pointer;transition:background .3s ease,transform .3s ease;
+  }
+  .ytfeed__dot.is-active{background:var(--brass);transform:scale(1.3)}
+  @media (max-width:600px){
+    .ytfeed__nav{display:none}
+  }
+
+  /* ---- booking CTA ---- */
+  .m-cta{
+    padding:100px clamp(20px,5vw,64px);text-align:center;
+    background:radial-gradient(80% 120% at 50% 0%, var(--velvet-wine), var(--asphalt) 70%);
+    border-top:1px solid rgba(239,230,216,.08);
+  }
+  .m-cta h2{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,4vw,44px);margin:0 0 24px}
+</style>
+</head>
+<body>
+
+<div id="chrome-nav"></div>
+
+<header class="m-hero" id="mHero">
+  <div class="m-hero__grain"></div>
+  <div class="m-hero__slides" id="heroSlides"></div>
+  <div class="m-hero__scrim"></div>
+  <div class="m-hero__inner">
+    <span class="m-hero__eyebrow">Singer · Songwriter · Poet · MC/Host · Looper · Voice Actor</span>
+    <div class="m-hero__copy" id="heroCopy">
+      <h1 class="m-hero__title" id="heroTitle">The Sound, Live</h1>
+      <p class="m-hero__desc" id="heroDesc">Intimate rooms, full voice, no holding back — catch the next one live.</p>
+      <button type="button" class="btn btn-light" id="heroCta">Book a Show</button>
+    </div>
+  </div>
+</header>
+<div class="m-hero__dots" id="heroDots"></div>
+
+<section class="listen" id="listen">
+  <span class="listen__eyebrow">New Album</span>
+  <h2 class="listen__title"><span class="nb">breathe love d e e p</span></h2>
+  <p class="listen__desc">Ten pieces about stillness, breath, and the space between one thought and the next. Hover the cover, then press play.</p>
+
+  <div class="listen__stage" id="listenStage" role="button" tabindex="0" aria-label="Play breathe love d e e p">
+    <div class="listen__vinyl" id="listenVinyl">
+      <div class="listen__vinyl-spin">
+        <img class="listen__vinyl-label" id="listenVinylLabel" src="" alt="">
+        <span class="listen__vinyl-hole"></span>
+      </div>
+      <div class="listen__vinyl-pause">
+        <span><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></span>
+      </div>
+    </div>
+    <div class="listen__sleeve">
+      <img src="https://images.pexels.com/photos/9257184/pexels-photo-9257184.jpeg?cs=tinysrgb&dpr=2&w=900" alt="breathe love d e e p album cover" id="sleeveArt">
+      <div class="listen__sleeve-play">
+        <span><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+      </div>
+    </div>
+  </div>
+
+  <a href="https://soundcloud.com/mal-griot/sets/breathelovedeep" target="_blank" rel="noopener" class="btn btn-outline listen__cta">Open on SoundCloud</a>
+
+  <div class="listen__tracks" id="listenTracks"></div>
+</section>
+
+<section class="releases" id="releases">
+  <div class="releases__head"><h2>Discography</h2></div>
+
+  <a class="release" href="https://soundcloud.com/mal-griot/sets/breathelovedeep" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+    <span class="release__year">2026</span>
+    <div class="release__main">
+      <div class="release__art-stage">
+        <div class="release__disc release__disc--vinyl">
+          <div class="release__disc-spin">
+            <img class="release__disc__label" src="" alt="">
+            <span class="release__disc__hole"></span>
+          </div>
+        </div>
+        <img class="release__art" src="https://images.pexels.com/photos/9257184/pexels-photo-9257184.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+      </div>
+      <div>
+        <h3 class="release__title"><span class="nb">breathe love d e e p</span></h3>
+        <span class="release__type">Album · SoundCloud</span>
+      </div>
+    </div>
+    <span class="release__play">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </span>
+  </a>
+
+  <a class="release" href="https://open.spotify.com/track/5uvEb58GBUWOo8bfxhCy8v" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+    <span class="release__year">2025</span>
+    <div class="release__main">
+      <div class="release__art-stage">
+        <div class="release__disc release__disc--vinyl">
+          <div class="release__disc-spin">
+            <img class="release__disc__label" src="" alt="">
+            <span class="release__disc__hole"></span>
+          </div>
+        </div>
+        <img class="release__art" src="https://images.pexels.com/photos/13532875/pexels-photo-13532875.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+      </div>
+      <div>
+        <h3 class="release__title">I Tried It</h3>
+        <span class="release__type">Album · Spotify</span>
+        <span class="release__credits">Mal Griot &amp; Unnayanaa — Wind Horse Records</span>
+      </div>
+    </div>
+    <span class="release__play">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </span>
+  </a>
+
+  <a class="release" href="https://open.spotify.com/album/2IHKGSoXq9EUbaomNYdG88" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+    <span class="release__year">2026</span>
+    <div class="release__main">
+      <div class="release__art-stage">
+        <div class="release__disc release__disc--cd">
+          <div class="release__disc-spin">
+            <img class="release__disc__label" src="" alt="">
+            <span class="release__disc__hole"></span>
+          </div>
+        </div>
+        <img class="release__art" src="https://images.pexels.com/photos/13532875/pexels-photo-13532875.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+      </div>
+      <div>
+        <h3 class="release__title">The Call of the Jungle (Overmind)</h3>
+        <span class="release__type">EP · Spotify</span>
+        <span class="release__credits">Mal Griot &amp; Diveakssh Schae — Diveakssh Schae Records</span>
+      </div>
+    </div>
+    <span class="release__play">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </span>
+  </a>
+
+  <a class="release" href="https://open.spotify.com/album/0mG2qACRHS8sHoyiniieFp" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+    <span class="release__year">2026</span>
+    <div class="release__main">
+      <div class="release__art-stage">
+        <div class="release__disc release__disc--cd">
+          <div class="release__disc-spin">
+            <img class="release__disc__label" src="" alt="">
+            <span class="release__disc__hole"></span>
+          </div>
+        </div>
+        <img class="release__art" src="https://images.pexels.com/photos/9258252/pexels-photo-9258252.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+      </div>
+      <div>
+        <h3 class="release__title">Free Fall</h3>
+        <span class="release__type">EP · Spotify</span>
+        <span class="release__credits">Mal Griot &amp; Stalvart John — Dynamite Disco Club</span>
+      </div>
+    </div>
+    <span class="release__play">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </span>
+  </a>
+
+  <a class="release" href="https://open.spotify.com/track/3u1kmOSbXQtWsYg3q8KFMj" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+    <span class="release__year">2026</span>
+    <div class="release__main">
+      <div class="release__art-stage">
+        <div class="release__disc release__disc--cd">
+          <div class="release__disc-spin">
+            <img class="release__disc__label" src="" alt="">
+            <span class="release__disc__hole"></span>
+          </div>
+        </div>
+        <img class="release__art" src="https://images.pexels.com/photos/9257184/pexels-photo-9257184.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+      </div>
+      <div>
+        <h3 class="release__title">Helicopter Man</h3>
+        <span class="release__type">EP · Spotify</span>
+      </div>
+    </div>
+    <span class="release__play">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </span>
+  </a>
+
+  <a class="release" href="https://open.spotify.com/album/6oilUaIrr7oAbkiXLKc00h" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+    <span class="release__year">2026</span>
+    <div class="release__main">
+      <div class="release__art-stage">
+        <div class="release__disc release__disc--vinyl">
+          <div class="release__disc-spin">
+            <img class="release__disc__label" src="" alt="">
+            <span class="release__disc__hole"></span>
+          </div>
+        </div>
+        <img class="release__art" src="https://images.pexels.com/photos/16944874/pexels-photo-16944874/free-photo-of-vinyl-records-collection.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+      </div>
+      <div>
+        <h3 class="release__title">Toxic Baby</h3>
+        <span class="release__type">Album · Spotify</span>
+        <span class="release__credits">Mal Griot &amp; Deep Dawn — Hangar 18 Studio</span>
+      </div>
+    </div>
+    <span class="release__play">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </span>
+  </a>
+
+  <a class="release" href="https://soundcloud.com/mal-griot/sets/truly-higher" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+    <span class="release__year">2025</span>
+    <div class="release__main">
+      <div class="release__art-stage">
+        <div class="release__disc release__disc--cd">
+          <div class="release__disc-spin">
+            <img class="release__disc__label" src="" alt="">
+            <span class="release__disc__hole"></span>
+          </div>
+        </div>
+        <img class="release__art" src="https://images.pexels.com/photos/18430331/pexels-photo-18430331/free-photo-of-close-up-of-a-gramophone-playing-music.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+      </div>
+      <div>
+        <h3 class="release__title">TRULY HIGHER</h3>
+        <span class="release__type">EP · SoundCloud</span>
+      </div>
+    </div>
+    <span class="release__play">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </span>
+  </a>
+
+  <a class="release" href="https://soundcloud.com/mal-griot/sets/sun-burna" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+    <span class="release__year">2026</span>
+    <div class="release__main">
+      <div class="release__art-stage">
+        <div class="release__disc release__disc--cd">
+          <div class="release__disc-spin">
+            <img class="release__disc__label" src="" alt="">
+            <span class="release__disc__hole"></span>
+          </div>
+        </div>
+        <img class="release__art" src="https://images.pexels.com/photos/9258252/pexels-photo-9258252.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+      </div>
+      <div>
+        <h3 class="release__title">Sun Burna</h3>
+        <span class="release__type">EP · SoundCloud</span>
+      </div>
+    </div>
+    <span class="release__play">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </span>
+  </a>
+
+  <a class="release" href="https://soundcloud.com/mal-griot/sets/sumthn" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+    <span class="release__year">2025</span>
+    <div class="release__main">
+      <div class="release__art-stage">
+        <div class="release__disc release__disc--cd">
+          <div class="release__disc-spin">
+            <img class="release__disc__label" src="" alt="">
+            <span class="release__disc__hole"></span>
+          </div>
+        </div>
+        <img class="release__art" src="https://images.pexels.com/photos/9009605/pexels-photo-9009605.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+      </div>
+      <div>
+        <h3 class="release__title">sumthn</h3>
+        <span class="release__type">EP · SoundCloud</span>
+      </div>
+    </div>
+    <span class="release__play">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </span>
+  </a>
+
+  <a class="release" href="https://soundcloud.com/mal-griot/sets/periodyssius" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+    <span class="release__year">2025</span>
+    <div class="release__main">
+      <div class="release__art-stage">
+        <div class="release__disc release__disc--vinyl">
+          <div class="release__disc-spin">
+            <img class="release__disc__label" src="" alt="">
+            <span class="release__disc__hole"></span>
+          </div>
+        </div>
+        <img class="release__art" src="https://images.pexels.com/photos/30042523/pexels-photo-30042523/free-photo-of-vintage-record-player-with-spinning-vinyl.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+      </div>
+      <div>
+        <h3 class="release__title">PeRiOdYsSiUs</h3>
+        <span class="release__type">Album · SoundCloud</span>
+      </div>
+    </div>
+    <span class="release__play">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </span>
+  </a>
+</section>
+
+<section class="about">
+  <div class="about__photo">
+    <img src="img/hero-3.jpg" alt="Mal Griot in the studio" style="object-position:61% 27%">
+  </div>
+  <div class="about__body">
+    <span class="about__eyebrow">About</span>
+    <p class="about__bio">Born and raised in Queens, New York, on soul records and church harmonies. Vocalist, spoken-word artist, and voice actor working across Afro-house, funk, and soul, most recently on the album <em class="nb">breathe love d e e p</em>.</p>
+
+    <div class="about__row">
+      <a href="epk/Mal-Griot-EPK.pdf" class="btn btn-outline" download>Download the EPK</a>
+    </div>
+    <p class="about__epk-note">Press kit (PDF) — bio, photos, and rider.</p>
+
+    <div class="about__row" style="margin-top:28px;margin-bottom:0;flex-direction:column;align-items:flex-start;gap:10px">
+      <span class="about__eyebrow" style="margin-bottom:0">Listen &amp; Follow</span>
+      <div class="about__socials">
+        <a href="https://instagram.com/yep.that.malcolm" target="_blank" rel="noopener" aria-label="Instagram"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+        <a href="https://open.spotify.com/artist/61bgVlMQw2S0t6d8mVPVIS" target="_blank" rel="noopener" aria-label="Spotify"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M7 10.5c3-1 7-.6 9.5.9M7.5 13.6c2.4-.8 5.6-.4 7.6.8M8 16.4c1.9-.6 4.3-.3 5.9.6"/></svg></a>
+        <a href="https://soundcloud.com/mal-griot" target="_blank" rel="noopener" aria-label="SoundCloud"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 15v-3M6 16v-6M9 16.5v-8M12 16.5V7.5a3 3 0 0 1 5-2.2M12 16.5h7a3 3 0 0 0 0-6 4 4 0 0 0-3-1.8"/></svg></a>
+        <a href="https://music.apple.com/us/artist/mal-griot/1773454818" target="_blank" rel="noopener" aria-label="Apple Music"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4.5c.3 1.3-.2 2.6-1 3.5-.8.8-2 1.4-3.2 1.3C9.5 8 10 6.7 10.8 5.8c.9-1 2-1.5 3.2-1.3z"/><path d="M17.5 10.2c-1.7-.1-2.6 1-3.3 1-.7 0-1.7-1-2.9-.9-1.5 0-2.9.9-3.6 2.2-1.5 2.7-.4 6.8 1.1 9 .7 1.1 1.6 2.3 2.7 2.3 1.1 0 1.5-.7 2.8-.7 1.3 0 1.7.7 2.8.7 1.2 0 1.9-1 2.6-2.1.6-.9.9-1.4 1.4-2.4-3.5-1.3-4-6.4-.6-8.1-1-1.3-2.2-1.9-3-2z"/></svg></a>
+        <a href="https://music.youtube.com/channel/UC2ouYdd3qmP9vSvLpKD8-CQ" target="_blank" rel="noopener" aria-label="YouTube Music"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://music.amazon.com/artists/B0DTP5MFVP/mal-griot" target="_blank" rel="noopener" aria-label="Amazon Music"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8l8-4 8 4-8 4-8-4z"/><path d="M4 8v8l8 4 8-4V8"/><path d="M12 12v8"/></svg></a>
+        <a href="https://tidal.com/artist/53475605" target="_blank" rel="noopener" aria-label="TIDAL"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4l4 4-4 4-4-4z"/><path d="M4 12l4 4 4-4-4-4z"/><path d="M20 12l-4 4-4-4 4-4z"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="follow">
+  <span class="follow__eyebrow">On Instagram</span>
+  <h2 class="follow__title">Follow along</h2>
+  <p class="follow__desc">Behind the sessions, live clips, and everything between releases.</p>
+  <a class="follow__card" href="https://instagram.com/yep.that.malcolm" target="_blank" rel="noopener">
+    <span class="follow__card__glyph"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></span>
+    <span class="follow__card__handle">@yep.that.malcolm</span>
+  </a>
+  <br>
+  <a href="https://instagram.com/yep.that.malcolm" target="_blank" rel="noopener" class="btn btn-outline">Follow on Instagram</a>
+</section>
+
+<section class="ytfeed" id="ytfeed">
+  <span class="ytfeed__eyebrow">On YouTube</span>
+  <h2 class="ytfeed__title">Latest videos</h2>
+  <div class="ytfeed__carousel" id="ytCarousel">
+    <button type="button" class="ytfeed__nav ytfeed__nav--prev" id="ytPrev" aria-label="Previous video">&#8249;</button>
+    <div class="ytfeed__track" id="ytTrack"></div>
+    <button type="button" class="ytfeed__nav ytfeed__nav--next" id="ytNext" aria-label="Next video">&#8250;</button>
+  </div>
+  <div class="ytfeed__dots" id="ytDots"></div>
+  <a href="https://www.youtube.com/@MalGriot" target="_blank" rel="noopener" class="btn btn-outline">Watch on YouTube</a>
+</section>
+
+<section class="m-cta">
+  <h2>Book a session or a show.</h2>
+  <a href="contact.html" class="btn btn-light">Get in Touch</a>
+</section>
+
+<div id="chrome-footer"></div>
+<div id="chrome-chat"></div>
+<div id="chrome-player"></div>
+
+<script>
+(function(){
+  var heroSlides = [
+    {
+      img: 'img/hero-1.jpg', alt: 'Mal Griot performing live with the band', pos: '36% 18%',
+      align: 'left', title: 'The Sound, Live',
+      desc: 'Intimate rooms, full voice, no holding back — catch the next one live.',
+      cta: 'Book a Show', action: 'link', target: 'contact.html'
+    },
+    {
+      img: 'img/hero-2.jpg', alt: 'Mal Griot singing into the mic', pos: '50% 18%',
+      align: 'center', title: 'Cuts That Move',
+      desc: 'Kinetic edits, music videos, and behind-the-scenes cuts from the sessions.',
+      cta: 'Watch the Videos', action: 'link', target: 'griot-cuts.html'
+    },
+    {
+      img: 'img/hero-3.jpg', alt: 'Mal Griot in the studio surrounded by pedalboards', pos: '61% 27%',
+      align: 'right', title: 'Ask Anything',
+      desc: 'Curious about the process, the gear, or what’s next? Ask direct.',
+      cta: 'Ask Griot Anything', action: 'chat'
+    }
+  ];
+  var hero = document.getElementById('mHero');
+  var slidesWrap = document.getElementById('heroSlides');
+  var dotsWrap = document.getElementById('heroDots');
+  var heroCopy = document.getElementById('heroCopy');
+  var heroTitle = document.getElementById('heroTitle');
+  var heroDesc = document.getElementById('heroDesc');
+  var ctaBtn = document.getElementById('heroCta');
+  var heroIndex = 0;
+  var heroTimer = null;
+
+  heroSlides.forEach(function(s, i){
+    var el = document.createElement('div');
+    el.className = 'm-hero__slide' + (i === 0 ? ' is-active' : '');
+    el.innerHTML = '<img src="' + s.img + '" alt="' + s.alt + '" style="object-position:' + s.pos + '">';
+    slidesWrap.appendChild(el);
+
+    var dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'm-hero__dot' + (i === 0 ? ' is-active' : '');
+    dot.setAttribute('aria-label', 'Show slide ' + (i + 1));
+    dot.addEventListener('click', function(){ showSlide(i); resetTimer(); });
+    dotsWrap.appendChild(dot);
+  });
+
+  function applySlide(i){
+    heroIndex = i;
+    Array.prototype.forEach.call(slidesWrap.children, function(el, idx){
+      el.classList.toggle('is-active', idx === i);
+    });
+    Array.prototype.forEach.call(dotsWrap.children, function(el, idx){
+      el.classList.toggle('is-active', idx === i);
+    });
+    var s = heroSlides[i];
+    hero.classList.remove('align-left', 'align-center', 'align-right');
+    hero.classList.add('align-' + s.align);
+    heroTitle.textContent = s.title;
+    heroDesc.textContent = s.desc;
+    ctaBtn.textContent = s.cta;
+  }
+
+  function showSlide(i){
+    if(i === heroIndex){ return; }
+    heroCopy.style.opacity = 0;
+    setTimeout(function(){
+      applySlide(i);
+      heroCopy.style.opacity = 1;
+    }, 260);
+  }
+
+  function nextSlide(){
+    showSlide((heroIndex + 1) % heroSlides.length);
+  }
+  function startTimer(){ heroTimer = setInterval(nextSlide, 5000); }
+  function stopTimer(){ clearInterval(heroTimer); }
+  function resetTimer(){ stopTimer(); startTimer(); }
+
+  ctaBtn.addEventListener('click', function(){
+    var s = heroSlides[heroIndex];
+    if(s.action === 'chat'){
+      var chat = document.querySelector('.chat-widget');
+      if(chat) chat.classList.add('is-open');
+    } else {
+      window.location.href = s.target;
+    }
+  });
+
+  hero.addEventListener('mouseenter', function(){
+    hero.classList.add('is-paused');
+    stopTimer();
+  });
+  hero.addEventListener('mouseleave', function(){
+    hero.classList.remove('is-paused');
+    startTimer();
+  });
+
+  showSlide(0);
+  startTimer();
+})();
+</script>
+<script>
+(function(){
+  // Pull real album art for each SoundCloud/Spotify release in the discography
+  // via their public oEmbed endpoints (no API key needed for either). Falls
+  // back to the existing stock image on any failure (offline, CORS, private
+  // track, or — for Spotify — no thumbnail on an artist-only link).
+  //
+  // Every release also gets: the same art mirrored into its disc's center
+  // "label" (release__disc__label), and — for vinyl (album) releases — the
+  // disc's groove color sampled live from the art itself via a hidden
+  // canvas, so each record's color matches its cover instead of a fixed tint.
+
+  var sampleCanvas = document.createElement('canvas');
+  var sampleCtx = sampleCanvas.getContext('2d');
+
+  function tintVinylFromArt(stage, img){
+    try{
+      sampleCanvas.width = 1;
+      sampleCanvas.height = 1;
+      sampleCtx.drawImage(img, 0, 0, 1, 1);
+      var d = sampleCtx.getImageData(0, 0, 1, 1).data;
+      var r = d[0], g = d[1], b = d[2];
+      var dark = 'rgb(' + Math.round(r*0.35) + ',' + Math.round(g*0.35) + ',' + Math.round(b*0.35) + ')';
+      var light = 'rgb(' + Math.round(Math.min(255,r*0.7+40)) + ',' + Math.round(Math.min(255,g*0.7+40)) + ',' + Math.round(Math.min(255,b*0.7+40)) + ')';
+      stage.style.setProperty('--disc-a', dark);
+      stage.style.setProperty('--disc-b', light);
+    }catch(e){
+      // Tainted canvas (CORS) or decode failure — leave the default teal tint.
+    }
+  }
+
+  // Hover accent per release: the brand kit's Candlelit Velvet palette has
+  // only two colors safe as text on a near-black ground (Amber, Gold), so
+  // gold/amber blends with Wine and Parchment (see --accent-* above) fill
+  // out a small warm-red/rose option too — everything still built from the
+  // approved tokens. Each release is matched to whichever of the four sits
+  // closest, in hue/lightness, to its own album art, so the hover state
+  // reads as complementary rather than an arbitrary rotation of colors.
+  var ACCENTS = [
+    { name:'gold',  hex:'#E0B26A' },
+    { name:'amber', hex:'#C98A45' },
+    { name:'ember', hex:'#9A6044' },
+    { name:'rose',  hex:'#BA9B93' }
+  ];
+
+  function hexToRgb(hex){
+    var n = parseInt(hex.slice(1), 16);
+    return { r:(n>>16)&255, g:(n>>8)&255, b:n&255 };
+  }
+  function rgbToHsl(r, g, b){
+    r/=255; g/=255; b/=255;
+    var max=Math.max(r,g,b), min=Math.min(r,g,b);
+    var h=0, s=0, l=(max+min)/2;
+    if(max !== min){
+      var d = max-min;
+      s = l > 0.5 ? d/(2-max-min) : d/(max+min);
+      switch(max){
+        case r: h=(g-b)/d+(g<b?6:0); break;
+        case g: h=(b-r)/d+2; break;
+        case b: h=(r-g)/d+4; break;
+      }
+      h *= 60;
+    }
+    return { h:h, s:s, l:l };
+  }
+  ACCENTS.forEach(function(a){
+    var rgb = hexToRgb(a.hex);
+    a.hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+  });
+
+  function nearestAccent(r, g, b){
+    var sample = rgbToHsl(r, g, b);
+    var best = ACCENTS[0], bestDist = Infinity;
+    ACCENTS.forEach(function(a){
+      var dh = Math.abs(sample.h - a.hsl.h);
+      dh = Math.min(dh, 360 - dh) / 180;
+      var dl = sample.l - a.hsl.l;
+      var ds = sample.s - a.hsl.s;
+      var dist = dh*dh*2 + dl*dl + ds*ds*0.4;
+      if(dist < bestDist){ bestDist = dist; best = a; }
+    });
+    return best.hex;
+  }
+
+  function accentFromArt(link, img){
+    try{
+      sampleCanvas.width = 8;
+      sampleCanvas.height = 8;
+      sampleCtx.drawImage(img, 0, 0, 8, 8);
+      var d = sampleCtx.getImageData(0, 0, 8, 8).data;
+      var r=0, g=0, b=0, n=d.length/4;
+      for(var i=0;i<d.length;i+=4){ r+=d[i]; g+=d[i+1]; b+=d[i+2]; }
+      link.style.setProperty('--release-accent', nearestAccent(r/n, g/n, b/n));
+    }catch(e){
+      // Tainted canvas (CORS) — leave the default brass hover.
+    }
+  }
+
+  function syncDisc(a){
+    var stage = a.querySelector('.release__art-stage');
+    var img = a.querySelector('.release__art');
+    var label = a.querySelector('.release__disc__label');
+    var isVinyl = a.querySelector('.release__disc--vinyl') !== null;
+    if(!stage || !img || !label) return;
+
+    function apply(){
+      label.src = img.src;
+      if(isVinyl) tintVinylFromArt(stage, img);
+      accentFromArt(a, img);
+    }
+    if(img.complete && img.naturalWidth) apply();
+    else img.addEventListener('load', apply, { once: true });
+  }
+
+  document.querySelectorAll('.release__art').forEach(function(img){
+    img.crossOrigin = 'anonymous';
+  });
+  document.querySelectorAll('.release').forEach(syncDisc);
+
+  function pullArt(selector, oembedBase){
+    document.querySelectorAll(selector).forEach(function(a){
+      var img = a.querySelector('.release__art');
+      if(!img) return;
+      fetch(oembedBase + encodeURIComponent(a.href))
+        .then(function(r){ return r.ok ? r.json() : null; })
+        .then(function(data){
+          if(data && data.thumbnail_url){
+            img.src = data.thumbnail_url;
+            syncDisc(a);
+          }
+        })
+        .catch(function(){});
+    });
+  }
+  pullArt('.release[href*="soundcloud.com"]', 'https://soundcloud.com/oembed?format=json&url=');
+  pullArt('.release[href*="open.spotify.com"]', 'https://open.spotify.com/oembed?url=');
+})();
+</script>
+<script>
+(function(){
+  // Pull the latest uploads (videos + Shorts) from the real YouTube channel via
+  // the YouTube Data API v3. Needs a browser API key (free, no OAuth, restrict
+  // it to this site's domain in Google Cloud Console — see README). If the key
+  // isn't set or the fetch fails, the grid just stays empty and the "Watch on
+  // YouTube" button underneath still works.
+  var YOUTUBE_API_KEY = 'YOUR_YOUTUBE_API_KEY';
+  var YOUTUBE_HANDLE = 'MalGriot';
+  var MAX_VIDEOS = 6;
+
+  var track = document.getElementById('ytTrack');
+  var dotsWrap = document.getElementById('ytDots');
+  var prevBtn = document.getElementById('ytPrev');
+  var nextBtn = document.getElementById('ytNext');
+  if(!track || !YOUTUBE_API_KEY || YOUTUBE_API_KEY === 'YOUR_YOUTUBE_API_KEY') return;
+
+  var apiBase = 'https://www.googleapis.com/youtube/v3/';
+
+  fetch(apiBase + 'channels?part=contentDetails&forHandle=' + encodeURIComponent(YOUTUBE_HANDLE) + '&key=' + YOUTUBE_API_KEY)
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      var uploadsId = data && data.items && data.items[0] &&
+        data.items[0].contentDetails.relatedPlaylists.uploads;
+      if(!uploadsId) return null;
+      return fetch(apiBase + 'playlistItems?part=snippet&maxResults=' + MAX_VIDEOS +
+        '&playlistId=' + uploadsId + '&key=' + YOUTUBE_API_KEY).then(function(r){ return r.json(); });
+    })
+    .then(function(data){
+      if(!data || !data.items || !data.items.length) return;
+
+      var slides = [];
+      data.items.forEach(function(item){
+        var s = item.snippet;
+        if(!s || !s.resourceId) return;
+        var videoId = s.resourceId.videoId;
+
+        var slide = document.createElement('div');
+        slide.className = 'ytfeed__slide';
+        slide.innerHTML =
+          '<iframe src="https://www.youtube-nocookie.com/embed/' + videoId +
+          '" title="' + s.title.replace(/"/g, '&quot;') +
+          '" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+        track.appendChild(slide);
+        slides.push(slide);
+
+        var dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'ytfeed__dot' + (slides.length === 1 ? ' is-active' : '');
+        dot.setAttribute('aria-label', 'Show video: ' + s.title);
+        dot.addEventListener('click', function(){ slide.scrollIntoView({ behavior: 'smooth', inline: 'center' }); });
+        dotsWrap.appendChild(dot);
+      });
+      if(!slides.length) return;
+
+      var dots = Array.prototype.slice.call(dotsWrap.children);
+
+      function updateNav(){
+        prevBtn.disabled = track.scrollLeft <= 4;
+        nextBtn.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 4;
+      }
+      updateNav();
+
+      prevBtn.addEventListener('click', function(){
+        track.scrollBy({ left: -track.clientWidth, behavior: 'smooth' });
+      });
+      nextBtn.addEventListener('click', function(){
+        track.scrollBy({ left: track.clientWidth, behavior: 'smooth' });
+      });
+
+      var observer = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if(entry.isIntersecting){
+            var idx = slides.indexOf(entry.target);
+            dots.forEach(function(d, i){ d.classList.toggle('is-active', i === idx); });
+          }
+        });
+      }, { root: track, threshold: 0.6 });
+      slides.forEach(function(s){ observer.observe(s); });
+
+      track.addEventListener('scroll', updateNav);
+    })
+    .catch(function(){});
+})();
+</script>
+<script src="shared.js"></script>
+<script>renderChrome('music');</script>
+</body>
+</html>

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mal Griot — Electronic Press Kit</title>
+<style>
+  @font-face{
+    font-family:'Philosopher';
+    src:url('fonts/Philosopher-Regular.ttf') format('truetype');
+    font-weight:400;
+  }
+  @font-face{
+    font-family:'Philosopher';
+    src:url('fonts/Philosopher-Bold.ttf') format('truetype');
+    font-weight:700;
+  }
+  :root{
+    --void:#12100f;
+    --wine:#4a1f22;
+    --wine-lit:#6b2a2b;
+    --amber:#c98a45;
+    --gold:#e0b26a;
+    --parchment:#efe6d8;
+    --parchment-dim:rgba(239,230,216,.72);
+    --parchment-faint:rgba(239,230,216,.46);
+    --line:rgba(239,230,216,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  @page{size:8.5in 11in;margin:0;}
+  html,body{background:var(--void);}
+  body{
+    font-family:'Philosopher',Georgia,serif;
+    font-weight:400;
+    color:var(--parchment);
+    -webkit-font-smoothing:antialiased;
+  }
+  p,li{font-size:13px;}
+  .wordmark{
+    font-family:'Philosopher',serif;font-weight:700;text-transform:uppercase;
+    letter-spacing:-0.03em;
+  }
+  .eyebrow{
+    font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);
+    display:block;font-weight:400;
+  }
+  .page{
+    width:8.5in;height:11in;
+    position:relative;overflow:hidden;background:var(--void);
+    page-break-after:always;
+  }
+  .page:last-child{page-break-after:auto;}
+  .glow{
+    position:absolute;border-radius:999px;pointer-events:none;
+    background:radial-gradient(circle, rgba(201,138,69,.30) 0%, rgba(74,31,34,.22) 45%, rgba(18,16,15,0) 72%);
+    filter:blur(2px);
+  }
+  .mark{width:34px;height:34px;object-fit:contain;opacity:.9;}
+
+  /* ---------- PAGE 1 — COVER ---------- */
+  .cover{background:#000;}
+  .cover__img{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;
+    filter:saturate(.75) contrast(1.05) brightness(.92);
+  }
+  .cover__scrim{
+    position:absolute;inset:0;
+    background:
+      linear-gradient(to top, var(--void) 0%, rgba(18,16,15,.32) 40%, rgba(18,16,15,.1) 58%, rgba(74,31,34,.5) 100%);
+  }
+  .cover__top{
+    position:absolute;top:.55in;left:.72in;right:.72in;display:flex;justify-content:space-between;align-items:center;
+  }
+  .cover__content{position:absolute;left:0;right:0;bottom:0;padding:0 .72in .62in;}
+  .cover__pre{font-size:10.5px;letter-spacing:.15em;color:var(--parchment-dim);margin-bottom:14px;}
+  .cover__title{font-size:84px;line-height:.88;color:var(--parchment);margin-bottom:18px;}
+  .cover__roles{font-size:13px;color:var(--gold);margin-bottom:32px;letter-spacing:.01em;}
+  .cover__epk{
+    display:inline-block;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--void);background:var(--gold);padding:9px 18px;border-radius:2px;font-weight:700;
+  }
+
+  /* ---------- PAGE 2 — BIO ---------- */
+  .bio{display:flex;flex-direction:column;}
+  .bio__top{display:flex;flex:1;min-height:0;}
+  .bio__photo{width:38%;flex:none;position:relative;overflow:hidden;}
+  .bio__photo img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(1) contrast(1.05);}
+  .bio__photo::after{content:"";position:absolute;inset:0;background:linear-gradient(to right, transparent 70%, var(--void) 100%);}
+  .bio__body{flex:1;padding:.68in .62in .5in .5in;display:flex;flex-direction:column;justify-content:center;position:relative;}
+  .bio__body h2{font-size:34px;font-weight:400;color:var(--parchment);margin:12px 0 22px;line-height:1.2;}
+  .bio__body p{font-size:13.5px;line-height:1.72;color:var(--parchment-dim);margin-bottom:14px;max-width:56ch;}
+  .bio__quote{font-size:16px;font-style:italic;color:var(--gold);margin-top:8px;line-height:1.5;}
+  .bio__facts{background:var(--wine);padding:.4in .72in;display:flex;gap:.5in;border-top:1px solid var(--line);}
+  .bio__fact{flex:1;}
+  .bio__fact h3{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;font-weight:400;}
+  .bio__fact p{font-size:12px;line-height:1.65;color:var(--parchment-dim);}
+
+  /* ---------- PAGE 3 — DISCOGRAPHY ---------- */
+  .disco{padding:.65in .72in;}
+  .disco__head{margin-bottom:.3in;}
+  .disco__head h2{font-size:32px;font-weight:400;color:var(--parchment);margin-top:10px;}
+  .disco__feature{
+    display:flex;gap:24px;align-items:center;padding:20px 22px;margin-bottom:.34in;
+    background:var(--wine);border-radius:4px;
+  }
+  .disco__feature-art{width:100px;height:100px;object-fit:cover;flex:none;box-shadow:0 14px 30px rgba(0,0,0,.5);}
+  .disco__feature .tag{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;display:block;}
+  .disco__feature h3{font-size:19px;font-weight:400;color:var(--parchment);margin-bottom:6px;}
+  .disco__feature p{font-size:12px;color:var(--parchment-dim);line-height:1.6;}
+
+  .disco__row{
+    display:flex;align-items:center;gap:18px;padding:14px 4px;border-bottom:1px solid var(--line);
+  }
+  .disco__row-art{width:52px;height:52px;object-fit:cover;flex:none;border-radius:2px;}
+  .disco__row-year{width:44px;flex:none;font-size:11.5px;color:var(--parchment-faint);}
+  .disco__row-title{flex:1;font-size:15px;color:var(--parchment);}
+  .disco__row-type{font-size:11px;color:var(--parchment-dim);letter-spacing:.02em;text-align:right;}
+  .disco__labelrow{
+    display:flex;align-items:center;gap:18px;padding:0 4px 8px;
+  }
+  .disco__labelrow span{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);}
+  .disco__labelrow .lart{width:52px;flex:none;}
+  .disco__labelrow .lyear{width:44px;flex:none;}
+  .disco__labelrow .ltitle{flex:1;}
+  .disco__labelrow .ltype{text-align:right;}
+
+  /* ---------- PAGE 4 — GALLERY ---------- */
+  .gallery{padding:.55in .55in 0;}
+  .gallery__head{padding:0 .17in .28in;}
+  .gallery__head h2{font-size:30px;font-weight:400;color:var(--parchment);margin-top:10px;}
+  .gallery__grid{display:grid;grid-template-columns:1fr 1fr;gap:.14in;padding:0 .17in;}
+  .gallery__grid img{width:100%;height:4.05in;object-fit:cover;display:block;border-radius:2px;}
+
+  /* ---------- PAGE 5 — LIVE / VOICE ---------- */
+  .split{display:flex;height:100%;}
+  .split__photo{width:46%;flex:none;position:relative;overflow:hidden;}
+  .split__photo img{width:100%;height:100%;object-fit:cover;display:block;}
+  .split__photo::after{content:"";position:absolute;inset:0;background:linear-gradient(to right, transparent 78%, var(--void) 100%);}
+  .split__body{flex:1;padding:.65in .62in .65in .5in;display:flex;flex-direction:column;gap:.42in;justify-content:center;}
+  .split__block h2{font-size:24px;font-weight:400;color:var(--parchment);margin:10px 0 14px;}
+  .split__block p{font-size:12.5px;line-height:1.7;color:var(--parchment-dim);max-width:52ch;margin-bottom:10px;}
+  .split__block ul{list-style:none;margin-top:10px;}
+  .split__block li{font-size:12px;color:var(--parchment-dim);padding-left:16px;position:relative;margin-bottom:7px;}
+  .split__block li::before{content:"—";position:absolute;left:0;color:var(--gold);}
+  .divider{height:1px;background:var(--line);}
+
+  /* ---------- PAGE 6 — CONTACT ---------- */
+  .contact{position:relative;}
+  .contact__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%;filter:grayscale(1) contrast(1.05) brightness(.55);}
+  .contact__scrim{position:absolute;inset:0;background:linear-gradient(180deg, var(--void) 0%, rgba(18,16,15,.72) 30%, rgba(74,31,34,.55) 100%);}
+  .contact__content{
+    position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;height:100%;padding:.72in;
+  }
+  .contact h2{font-size:46px;font-weight:400;color:var(--parchment);margin:18px 0 14px;}
+  .contact p.lede{font-size:13.5px;color:var(--parchment-dim);max-width:44ch;margin-bottom:.55in;line-height:1.7;}
+  .contact__grid{display:flex;gap:.5in;margin-bottom:.6in;}
+  .contact__item{text-align:left;}
+  .contact__item .k{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:7px;}
+  .contact__item .v{font-size:14px;color:var(--parchment);}
+  .contact__socials{display:flex;gap:16px;margin-bottom:.65in;}
+  .contact__socials span{
+    font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--parchment-dim);
+    border:1px solid var(--line);padding:9px 18px;border-radius:999px;
+  }
+  .contact__foot{font-size:10px;color:var(--parchment-faint);letter-spacing:.06em;margin-top:.1in;}
+</style>
+</head>
+<body>
+
+<!-- PAGE 1: COVER -->
+<div class="page cover">
+  <img class="cover__img" src="cover.jpg" alt="Mal Griot performing live">
+  <div class="cover__scrim"></div>
+  <div class="cover__top">
+    <img class="mark" src="logo/river-mark-grayscale-512.png" alt="Mal Griot mark">
+    <span class="cover__pre" style="margin:0;">2026</span>
+  </div>
+  <div class="cover__content">
+    <div class="cover__pre">Queens, New York — based in India</div>
+    <h1 class="cover__title wordmark">Mal<br>Griot</h1>
+    <div class="cover__roles">Singer · Songwriter · Poet · MC/Host · Live Looper · Voice Actor</div>
+    <span class="cover__epk">Press &amp; Booking Kit</span>
+  </div>
+</div>
+
+<!-- PAGE 2: BIO -->
+<div class="page bio">
+  <div class="bio__top">
+    <div class="bio__photo"><img src="bio.jpg" alt="Mal Griot portrait"></div>
+    <div class="bio__body">
+      <span class="eyebrow">About</span>
+      <h2>the sound moves slow, so it lasts.</h2>
+      <p>Born and raised between Brooklyn and Queens, New York, on soul records and church harmonies, Mal Griot is a vocalist, spoken-word artist, and voice actor now based in India. His work moves across Afro-house, funk, and soul — low end that holds you, vocals that get close to the mic and stay there.</p>
+      <p>Most recently heard on <em>breathe love d e e p</em>, ten pieces about stillness, breath, and the space between one thought and the next, and on "I Tried It" alongside producer Unnayanaa on Wind Horse Records — a track Magnetic Magazine called a fusion of "house grooves and poetic storytelling."</p>
+      <p>Every performance is built to feel like an experience rather than a concert: transitions, lighting, atmosphere, and silence all matter as much as the notes.</p>
+      <p class="bio__quote">"Create work that people return to years later."</p>
+    </div>
+  </div>
+  <div class="bio__facts">
+    <div class="bio__fact">
+      <h3>Roles</h3>
+      <p>Singer · Songwriter · Music Producer · Performer · Poet · Live Looper · MC/Host · Voice Actor</p>
+    </div>
+    <div class="bio__fact">
+      <h3>Sound</h3>
+      <p>Afro-House · Funk · Soul · Hip-Hop · Neo-Soul · Jazz · R&amp;B · Spoken Word · Ambient · Cinematic</p>
+    </div>
+    <div class="bio__fact">
+      <h3>Based</h3>
+      <p>Queens, New York (origin) — currently based in India. Available for international bookings.</p>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 3: DISCOGRAPHY -->
+<div class="page disco">
+  <span class="eyebrow">Discography</span>
+  <div class="disco__head"><h2>Selected Releases</h2></div>
+
+  <div class="disco__feature">
+    <img class="disco__feature-art" src="art/breathe.jpg" alt="breathe love d e e p album art">
+    <div>
+      <span class="tag">New Album — 2026</span>
+      <h3>breathe love d e e p</h3>
+      <p>A full-length body of work built on groove and restraint. Ten pieces about stillness, breath, and the space between one thought and the next.</p>
+    </div>
+  </div>
+
+  <div class="disco__labelrow">
+    <span class="lart"></span><span class="lyear">Year</span><span class="ltitle">Title</span><span class="ltype">Type / Label</span>
+  </div>
+  <div class="disco__row">
+    <img class="disco__row-art" src="art/i-tried-it.jpg" alt="">
+    <span class="disco__row-year">2025</span>
+    <span class="disco__row-title">I Tried It</span>
+    <span class="disco__row-type">with Unnayanaa · Wind Horse Records · Spotify</span>
+  </div>
+  <div class="disco__row">
+    <img class="disco__row-art" src="art/toxic-baby.jpg" alt="">
+    <span class="disco__row-year">2026</span>
+    <span class="disco__row-title">Toxic Baby</span>
+    <span class="disco__row-type">Album · Spotify</span>
+  </div>
+  <div class="disco__row">
+    <img class="disco__row-art" src="art/free-fall.jpg" alt="">
+    <span class="disco__row-year">2026</span>
+    <span class="disco__row-title">Free Fall</span>
+    <span class="disco__row-type">EP · Spotify</span>
+  </div>
+  <div class="disco__row">
+    <img class="disco__row-art" src="art/helicopter-man.jpg" alt="">
+    <span class="disco__row-year">2026</span>
+    <span class="disco__row-title">Helicopter Man</span>
+    <span class="disco__row-type">EP · Spotify</span>
+  </div>
+  <div class="disco__row" style="border-bottom:none;">
+    <img class="disco__row-art" src="art/overmind.jpg" alt="">
+    <span class="disco__row-year">2026</span>
+    <span class="disco__row-title">The Call of the Jungle (Overmind)</span>
+    <span class="disco__row-type">EP · Spotify</span>
+  </div>
+
+  <p style="margin-top:.5in;font-size:11px;color:var(--parchment-faint);max-width:60ch;">Full catalog, including SoundCloud-only and unofficial uploads, at soundcloud.com/mal-griot and open.spotify.com/artist/61bgVlMQw2S0t6d8mVPVIS.</p>
+</div>
+
+<!-- PAGE 4: GALLERY -->
+<div class="page gallery">
+  <div class="gallery__head">
+    <span class="eyebrow">Photography</span>
+    <h2>Gallery</h2>
+  </div>
+  <div class="gallery__grid">
+    <img src="gallery-1.jpg" alt="Mal Griot portrait">
+    <img src="gallery-2.jpg" alt="Mal Griot in the studio">
+    <img src="gallery-3.jpg" alt="Mal Griot performing live">
+    <img src="gallery-4.jpg" alt="Mal Griot performing live">
+  </div>
+</div>
+
+<!-- PAGE 5: LIVE / VOICE -->
+<div class="page">
+  <div class="split">
+    <div class="split__photo"><img src="live.jpg" alt="Mal Griot performing live"></div>
+    <div class="split__body">
+      <div class="split__block">
+        <span class="eyebrow">Live</span>
+        <h2>On stage</h2>
+        <p>Solo, looped, or full-band — sets built for intimate rooms and festival stages alike, from Sofar Sounds showcases to club and gallery bills. Live looping, keys, and vocal FX build full arrangements in real time.</p>
+        <ul>
+          <li>Full-band or solo/looped set configurations</li>
+          <li>DJ-adjacent live sets for club and festival slots</li>
+          <li>Hosting / MC work for showcases and private events</li>
+        </ul>
+      </div>
+      <div class="divider"></div>
+      <div class="split__block">
+        <span class="eyebrow">Voice Acting</span>
+        <h2>Behind the mic</h2>
+        <p>A wide vocal range — falsetto to baritone — delivered in a warm, all-American accent. Work spans character voice acting, audiobook narration (including 25 distinct characters voiced for the audiobook <em>Forget Me Not</em> by JT Ezra), guided meditations, and commercial VO.</p>
+        <ul>
+          <li>Character &amp; animation voice acting</li>
+          <li>Audiobook and long-form narration</li>
+          <li>Commercial, app, and guided-meditation VO</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 6: CONTACT -->
+<div class="page contact">
+  <img class="contact__bg" src="contact-bg.jpg" alt="">
+  <div class="contact__scrim"></div>
+  <div class="contact__content">
+    <img class="mark" src="logo/river-mark-grayscale-512.png" alt="" style="width:46px;height:46px;margin-bottom:22px;">
+    <span class="eyebrow">Booking &amp; Press Inquiries</span>
+    <h2>Let's talk.</h2>
+    <p class="lede">Booking a show, commissioning a voice-over, or setting up a session — reach out and it goes straight to Mal.</p>
+
+    <div class="contact__grid">
+      <div class="contact__item"><span class="k">Email</span><span class="v">yep.that.malcolm@gmail.com</span></div>
+      <div class="contact__item"><span class="k">Phone / WhatsApp</span><span class="v">+91 77188 16239</span></div>
+      <div class="contact__item"><span class="k">Instagram</span><span class="v">@yep.that.malcolm</span></div>
+    </div>
+
+    <div class="contact__socials">
+      <span>Spotify — Mal Griot</span>
+      <span>SoundCloud — mal-griot</span>
+      <span>malgriot.com</span>
+    </div>
+
+    <div class="contact__foot">© 2026 Mal Griot. All rights reserved.</div>
+  </div>
+</div>
+
+</body>
+</html>
