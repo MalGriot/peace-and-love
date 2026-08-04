@@ -24,6 +24,8 @@ Wire up a real, in-character chatbot ("Mal") that:
 - **Never use an en dash ("–") anywhere in generated text.** Use a comma, period, or separate sentence instead. This is a hard style rule enforced in the system prompt, not a suggestion.
 - **Opens and closes conversationally with "Peace and love"**: greets with a "Peace and love, ..." opener (e.g. "Peace and love, what's good", "Peace and love, what's up", "Peace and love, I'm listening") and, when a visitor thanks him or the conversation wraps up, responds in kind (e.g. "Peace and love, no problem, let's get it started"). Varies the exact phrase rather than repeating the same line every time.
 - **At most one hand emoji per message** (from the fixed reaction set below, e.g. 🙌🏾), used naturally where it fits — never more than one, never forced into every message.
+- **Unknown answers get a playful hand-off, not a guess**: when the bot genuinely doesn't know something, it says so in character and hands off to WhatsApp specifically (not just "contact"), e.g. "Ooh, good question, let me get back to you on that, can you text it to me on WhatsApp?" — wording varies, but the "text me on WhatsApp" framing and the `offerContact` hand-off (below) are constant.
+- **Off-topic chatter gets a dry one-liner, not a full reply**: if a visitor sends something that isn't really a question or on-topic remark (testing the bot, random chatter, nonsense), the bot responds briefly and dryly instead of writing out a real answer, e.g. "o...k?", "um... sure?", "hmm...".
 
 ## Architecture
 
@@ -81,6 +83,12 @@ When a bot reply has `offerContact: true`, two small pill buttons render directl
 
 Both options are always offered together (booking, rates, or anything else the bot hands off), so the visitor picks whichever they prefer rather than the bot guessing.
 
+### Message limit
+
+A visitor gets **10 messages** per conversation (counting only their own messages, not the bot's replies or the canned greeting). This is enforced entirely client-side, not by the model: when the visitor's 10th message is sent, the frontend does not call the Worker at all — it immediately shows a canned redirect line (picked from a small fixed set, varied like the rest of the persona copy, e.g. "Peace and love, we've covered a lot, can we continue this conversation on WhatsApp?") with the same "Contact page" / "WhatsApp" button pair as any other hand-off, then **disables the input** (placeholder changes to something like "Continue on WhatsApp", send button disabled) so the conversation has a hard, predictable end rather than looping indefinitely.
+
+This is a deliberate, code-enforced cap rather than a prompt instruction, so it can't be talked around and doesn't cost an API call on the message that ends the conversation. It's a client-side UX limit only, not a server-side rate limit — a visitor could still call the Worker directly past 10 messages (already noted under "Out of scope": rate limiting beyond input/history caps is a later operational concern, not part of this build).
+
 ### Input row
 
 Pill text input (`maxlength` enforced client-side, e.g. 500 chars) + circular send button matching the existing button style. When a reply target is active, the dismissible quote-preview bar sits directly above this row.
@@ -109,6 +117,8 @@ UI feature — verified by hand in the browser preview, not automated tests:
 - Reactions: opening the picker on messages near the top and bottom of the scroll area confirms it flips above/below and stays horizontally centered/clamped inside the panel at every scroll position; selecting an emoji renders it on the correct corner (bot → bottom-right, visitor → bottom-left); the bot's own `reaction` field renders correctly on a visitor message.
 - Reply threading: replying to an older message shows the quoted snippet correctly; sending two visitor messages in a row and confirming the bot's `replyToId` threads to the intended one.
 - Error path: Worker unreachable → fallback message renders.
+- Message limit: sending 10 visitor messages triggers the canned WhatsApp redirect on the 10th without a Worker call, and disables the input afterward.
+- Unknown-answer and off-topic behavior: an out-of-scope question gets a playful "text me on WhatsApp" hand-off (with `offerContact` buttons); off-topic chatter gets a short dry reply instead of a full answer.
 - Mobile width: panel fits viewport, doesn't overflow.
 
 ## Out of scope
