@@ -317,19 +317,32 @@
     .release:hover .release__disc{transform:translateX(35px) scale(1.12)}
   }
 
-  /* ---- about: bio, EPK, socials ---- */
-  .about{
-    padding:20px clamp(20px,5vw,64px) 120px;
-    display:flex;gap:clamp(36px,6vw,80px);align-items:flex-start;flex-wrap:wrap;
+  /* ---- about: carousel, EPK, socials ---- */
+  .about{padding:20px clamp(20px,5vw,64px) 0}
+  .about-carousel{position:relative}
+  .about-carousel__track{
+    display:flex;transition:transform .65s cubic-bezier(.22,.9,.3,1),height .4s ease;
+    overflow:hidden;
   }
-  .about__photo{
+  .about-slide{
+    flex:none;width:100%;display:flex;gap:clamp(36px,6vw,80px);align-items:flex-start;flex-wrap:wrap;
+  }
+  .about-slide__photo{
     width:min(320px,100%);aspect-ratio:4/5;flex:none;border-radius:6px;overflow:hidden;
     box-shadow:0 30px 70px rgba(0,0,0,.5);
   }
-  .about__photo img{width:100%;height:100%;object-fit:cover}
-  .about__body{flex:1;min-width:260px;padding-top:6px}
+  .about-slide__photo img{width:100%;height:100%;object-fit:cover}
+  .about-slide__body{flex:1;min-width:260px;padding-top:6px}
   .about__eyebrow{color:var(--brass);font-size:12px;letter-spacing:.2em;text-transform:uppercase;display:block;margin-bottom:14px}
-  .about__bio{font-size:16px;line-height:1.7;color:var(--paper-dim);max-width:62ch;margin:0 0 28px}
+  .about__bio{font-size:16px;line-height:1.7;color:var(--paper-dim);max-width:62ch;margin:0 0 16px}
+  .about__bio:last-child{margin-bottom:0}
+  .about-carousel__dots{display:flex;gap:8px;justify-content:center;margin-top:32px}
+  .about-carousel__dot{
+    width:8px;height:8px;padding:0;border-radius:999px;border:none;background:rgba(239,230,216,.25);
+    cursor:pointer;transition:background .2s,width .2s;
+  }
+  .about-carousel__dot.is-active{background:var(--brass);width:24px}
+  .about__footer{padding:36px clamp(20px,5vw,64px) 120px}
   .about__row{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:28px}
   .about__epk-note{font-size:12px;color:var(--paper-faint);margin:10px 0 0}
   .about__socials{display:flex;gap:12px}
@@ -716,13 +729,44 @@
 </section>
 
 <section class="about">
-  <div class="about__photo">
-    <img src="img/hero-3.jpg" alt="Mal Griot in the studio" style="object-position:61% 27%">
-  </div>
-  <div class="about__body">
-    <span class="about__eyebrow">About</span>
-    <p class="about__bio">Born and raised in Queens, New York, on soul records and church harmonies. Vocalist, spoken-word artist, and voice actor working across Afro-house, funk, and soul, most recently on the album <em class="nb">breathe love d e e p</em>.</p>
+  <div class="about-carousel" id="aboutCarousel">
+    <div class="about-carousel__track" id="aboutTrack">
 
+      <div class="about-slide is-active">
+        <div class="about-slide__photo"><img src="img/about.jpg" alt="Mal Griot portrait" style="object-position:50% 22%"></div>
+        <div class="about-slide__body">
+          <span class="about__eyebrow">Origins</span>
+          <p class="about__bio">American, born and raised in Queens, New York — now based in India. The sound didn't change address so much as add one, carrying that low end and close-mic delivery into Afro-house, funk, and soul.</p>
+          <p class="about__bio">Singer, songwriter, poet, live looper, MC/host, voice actor — treated as one continuous instrument rather than separate careers. The through-line is the voice: sung, spoken, looped, or handed to a character, whichever the moment calls for.</p>
+          <p class="about__bio">The catalog moves freely across Afro-house, funk, soul, hip-hop, neo-soul, jazz, R&amp;B, spoken word, ambient, and cinematic — a refusal to sit still in one genre long enough to be filed under it. Curiosity and freedom over a fixed lane.</p>
+        </div>
+      </div>
+
+      <div class="about-slide">
+        <div class="about-slide__photo"><img src="img/about-2.jpg" alt="Mal Griot in the studio" style="object-position:50% 22%"></div>
+        <div class="about-slide__body">
+          <span class="about__eyebrow">Work Ethic &amp; Accolades</span>
+          <p class="about__bio">"I Tried It," with Bangalore producer Unnayanaa on Wind Horse Records, earned airplay on BBC Radio 6 Music and coverage from Magnetic Magazine and MIXMAG — a fusion, as one review put it, of "house grooves and poetic storytelling."</p>
+          <p class="about__bio">The catalog keeps building: "Helicopter Man" with the band Deep Dawn, the solo productions "Overmind" and "Sun Burna," and the full-length <em class="nb">breathe love d e e p</em> — ten tracks about stillness, breath, and the space between one thought and the next.</p>
+          <p class="about__bio">None of it ships on the first draft. Every lyric, poem, and bio gets cut and reworked, sometimes dozens of passes, in pursuit of emotional truth over commercial trends — authenticity and craftsmanship over easy polish.</p>
+        </div>
+      </div>
+
+      <div class="about-slide">
+        <div class="about-slide__photo"><img src="img/about-3.jpg" alt="Mal Griot performing live" style="object-position:50% 22%"></div>
+        <div class="about-slide__body">
+          <span class="about__eyebrow">Personality</span>
+          <p class="about__bio">Every performance is built to feel like an experience, not a concert. Transitions, lighting, atmosphere, and silence matter as much as the notes — the pause before a verse does as much work as the verse itself.</p>
+          <p class="about__bio">Off stage, the instinct is the same one that shapes the songs: a systems thinker who builds his own frameworks, currently sorting ninety-plus poems by theme rather than chronology, chasing the shape of the thing before the thing is finished.</p>
+          <p class="about__bio">No patience for managed, softened feedback — wants it straight, the same way he wants the work itself. <em class="nb">"Create work that people return to years later."</em></p>
+        </div>
+      </div>
+
+    </div>
+    <div class="about-carousel__dots" id="aboutDots"></div>
+  </div>
+
+  <div class="about__footer">
     <div class="about__row">
       <a href="epk/Mal-Griot-EPK.pdf" class="btn btn-outline" download>Download the EPK</a>
     </div>
@@ -872,6 +916,50 @@
     hero.classList.remove('is-paused');
     startTimer();
   });
+
+  showSlide(0);
+  startTimer();
+})();
+</script>
+<script>
+(function(){
+  var carousel = document.getElementById('aboutCarousel');
+  var track = document.getElementById('aboutTrack');
+  var dotsWrap = document.getElementById('aboutDots');
+  var slides = Array.prototype.slice.call(track.children);
+  var index = 0;
+  var timer = null;
+
+  slides.forEach(function(_, i){
+    var dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'about-carousel__dot' + (i === 0 ? ' is-active' : '');
+    dot.setAttribute('aria-label', 'Show about slide ' + (i + 1));
+    dot.addEventListener('click', function(){ showSlide(i); resetTimer(); });
+    dotsWrap.appendChild(dot);
+  });
+  var dots = Array.prototype.slice.call(dotsWrap.children);
+
+  function setHeight(){
+    track.style.height = slides[index].offsetHeight + 'px';
+  }
+
+  function showSlide(i){
+    index = (i + slides.length) % slides.length;
+    track.style.transform = 'translateX(-' + (index * 100) + '%)';
+    slides.forEach(function(el, idx){ el.classList.toggle('is-active', idx === index); });
+    dots.forEach(function(el, idx){ el.classList.toggle('is-active', idx === index); });
+    setHeight();
+  }
+
+  function nextSlide(){ showSlide(index + 1); }
+  function startTimer(){ timer = setInterval(nextSlide, 12000); }
+  function stopTimer(){ clearInterval(timer); }
+  function resetTimer(){ stopTimer(); startTimer(); }
+
+  carousel.addEventListener('mouseenter', stopTimer);
+  carousel.addEventListener('mouseleave', startTimer);
+  window.addEventListener('resize', setHeight);
 
   showSlide(0);
   startTimer();
