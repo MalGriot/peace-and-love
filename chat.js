@@ -22,6 +22,7 @@ const CHAT_GREETINGS = [
 
 let chatMessages = [];
 let chatNextId = 1;
+let chatReplyTargetId = null;
 
 function chatGenerateId() {
   return 'm' + (chatNextId++) + '-' + Date.now().toString(36);
@@ -82,6 +83,31 @@ function chatSetReaction(messageId, emoji) {
   chatRender();
 }
 
+function chatSnippet(text) {
+  const clean = String(text).trim();
+  return clean.length > 40 ? clean.slice(0, 40) + '...' : clean;
+}
+
+function chatStartReply(messageId) {
+  const target = chatFindMessage(messageId);
+  if (!target) return;
+  chatReplyTargetId = messageId;
+  const preview = document.getElementById('chatReplyPreview');
+  const previewText = document.getElementById('chatReplyPreviewText');
+  if (preview && previewText) {
+    const who = target.role === 'bot' ? 'Griot' : 'you';
+    previewText.textContent = `Replying to ${who}: "${chatSnippet(target.text)}"`;
+    preview.hidden = false;
+  }
+  chatClosePicker();
+}
+
+function chatCancelReply() {
+  chatReplyTargetId = null;
+  const preview = document.getElementById('chatReplyPreview');
+  if (preview) preview.hidden = true;
+}
+
 function chatLastUserMessage() {
   for (let i = chatMessages.length - 1; i >= 0; i--) {
     if (chatMessages[i].role === 'user') return chatMessages[i];
@@ -97,11 +123,19 @@ function initChat() {
   const input = document.getElementById('chatInput');
   if (!chat || !chatBtn || !messagesEl || !form || !input) return;
 
+  const replyCancel = document.getElementById('chatReplyCancel');
+  if (replyCancel) replyCancel.addEventListener('click', () => chatCancelReply());
+
   messagesEl.addEventListener('click', (e) => {
     const reactBtn = e.target.closest('[data-chat-react]');
+    const replyBtn = e.target.closest('[data-chat-reply]');
     const emojiBtn = e.target.closest('[data-chat-emoji]');
     if (reactBtn) {
       chatTogglePicker(reactBtn.closest('.msg-row').dataset.messageId);
+      return;
+    }
+    if (replyBtn) {
+      chatStartReply(replyBtn.closest('.msg-row').dataset.messageId);
       return;
     }
     if (emojiBtn) {
@@ -129,8 +163,9 @@ function initChat() {
 }
 
 function chatSendUserMessage(text) {
-  const message = { id: chatGenerateId(), role: 'user', text, replyToId: null, reaction: null };
+  const message = { id: chatGenerateId(), role: 'user', text, replyToId: chatReplyTargetId, reaction: null };
   chatMessages.push(message);
+  chatCancelReply();
   chatRender();
   chatSetStatus('typing');
   chatShowTyping();
@@ -140,6 +175,7 @@ function chatSendUserMessage(text) {
       id: m.id,
       role: m.role === 'bot' ? 'assistant' : 'user',
       content: m.text,
+      replyToId: m.replyToId || undefined,
     })),
   };
 
@@ -173,14 +209,14 @@ function chatSendUserMessage(text) {
 
 function chatAppendBotMessage(data) {
   if (data.reaction) {
-    const target = chatLastUserMessage();
+    const target = (data.replyToId && chatFindMessage(data.replyToId)) || chatLastUserMessage();
     if (target) target.reaction = data.reaction;
   }
   chatMessages.push({
     id: chatGenerateId(),
     role: 'bot',
     text: data.text,
-    replyToId: null,
+    replyToId: data.replyToId || null,
     reaction: null,
   });
   chatRender();
@@ -227,16 +263,21 @@ function chatRender() {
 
 function chatRenderRow(message) {
   const isBot = message.role === 'bot';
+  const quoted = message.replyToId ? chatFindMessage(message.replyToId) : null;
+  const quoteHtml = quoted
+    ? `<div class="msg-quote">Replying to ${quoted.role === 'bot' ? 'Griot' : 'you'}: "${chatEscapeHtml(chatSnippet(quoted.text))}"</div>`
+    : '';
   const reactionHtml = message.reaction ? `<div class="reaction-chip">${message.reaction}</div>` : '';
   return `
     <div class="msg-row msg-row--${isBot ? 'bot' : 'user'}" data-message-id="${message.id}">
       ${isBot ? '<img class="msg-row__avatar" src="img/about.jpg" alt="">' : ''}
       <div class="msg-wrap">
-        <div class="msg msg--${isBot ? 'bot' : 'user'}">${chatEscapeHtml(message.text)}</div>
+        <div class="msg msg--${isBot ? 'bot' : 'user'}">${quoteHtml}${chatEscapeHtml(message.text)}</div>
         ${reactionHtml}
       </div>
       <div class="msg-controls">
         <button type="button" data-chat-react title="React">🙂</button>
+        <button type="button" data-chat-reply title="Reply">↩</button>
       </div>
     </div>`;
 }

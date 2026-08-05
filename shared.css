@@ -300,3 +300,6 @@ a{color:inherit}
   .mini-player:hover .mini-player__title-track,.mini-player.is-dragging .mini-player__title-track,
   .mini-player:focus-within .mini-player__title-track{white-space:nowrap}
 }
+
+.msg-quote{font-size:11px;color:var(--paper-dim);border-left:2px solid var(--brass);padding:3px 8px;margin-bottom:6px;background:rgba(0,0,0,.15);border-radius:4px}
+.msg--user .msg-quote{color:rgba(18,16,15,.6);border-left-color:#12100f;background:rgba(18,16,15,.08)}
