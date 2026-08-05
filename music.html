@@ -320,9 +320,9 @@
   /* ---- about: carousel, EPK, socials ---- */
   .about{padding:20px clamp(20px,5vw,64px) 0}
   .about-carousel{position:relative}
+  .about-carousel__viewport{overflow:hidden;transition:height .4s ease}
   .about-carousel__track{
-    display:flex;transition:transform .65s cubic-bezier(.22,.9,.3,1),height .4s ease;
-    overflow:hidden;
+    display:flex;transition:transform .65s cubic-bezier(.22,.9,.3,1);
   }
   .about-slide{
     flex:none;width:100%;display:flex;gap:clamp(36px,6vw,80px);align-items:flex-start;flex-wrap:wrap;
@@ -730,6 +730,7 @@
 
 <section class="about">
   <div class="about-carousel" id="aboutCarousel">
+   <div class="about-carousel__viewport" id="aboutViewport">
     <div class="about-carousel__track" id="aboutTrack">
 
       <div class="about-slide is-active">
@@ -763,6 +764,7 @@
       </div>
 
     </div>
+   </div>
     <div class="about-carousel__dots" id="aboutDots"></div>
   </div>
 
@@ -924,6 +926,7 @@
 <script>
 (function(){
   var carousel = document.getElementById('aboutCarousel');
+  var viewport = document.getElementById('aboutViewport');
   var track = document.getElementById('aboutTrack');
   var dotsWrap = document.getElementById('aboutDots');
   var slides = Array.prototype.slice.call(track.children);
@@ -941,7 +944,7 @@
   var dots = Array.prototype.slice.call(dotsWrap.children);
 
   function setHeight(){
-    track.style.height = slides[index].offsetHeight + 'px';
+    viewport.style.height = slides[index].offsetHeight + 'px';
   }
 
   function showSlide(i){
@@ -953,7 +956,7 @@
   }
 
   function nextSlide(){ showSlide(index + 1); }
-  function startTimer(){ timer = setInterval(nextSlide, 12000); }
+  function startTimer(){ timer = setInterval(nextSlide, 22000); }
   function stopTimer(){ clearInterval(timer); }
   function resetTimer(){ stopTimer(); startTimer(); }
 
@@ -1200,6 +1203,7 @@
   var activePanel = null;          // currently open .release__panel, or null
   var activeAnchor = null;         // its trigger <a class="release">
   var releaseReadyHandler = null;  // bound only while a SoundCloud panel is open
+  var loadTimeoutId = null;        // "couldn't load" fallback timer for the open SoundCloud panel
 
   function parseRelease(href){
     if(href.indexOf('soundcloud.com') !== -1){
@@ -1214,14 +1218,23 @@
 
   function closeActivePanel(){
     if(!activePanel) return;
-    activePanel.classList.remove('is-open');
+    var panel = activePanel;
+    panel.classList.remove('is-open');
     activeAnchor.setAttribute('aria-expanded', 'false');
     if(releaseReadyHandler){
       window.removeEventListener('griot:release-ready', releaseReadyHandler);
       releaseReadyHandler = null;
     }
-    var iframe = activePanel.querySelector('.release__panel-embed');
-    if(iframe) iframe.src = 'about:blank';
+    if(loadTimeoutId){
+      clearTimeout(loadTimeoutId);
+      loadTimeoutId = null;
+    }
+    // Clear the panel's content once the collapse transition finishes (removes
+    // the iframe/track-row buttons from the DOM and tab order) — but only if
+    // nothing reopened this same panel in the meantime.
+    setTimeout(function(){
+      if(panel !== activePanel) panel.innerHTML = '';
+    }, 400);
     activePanel = null;
     activeAnchor = null;
   }
@@ -1240,9 +1253,21 @@
     var loading = panel.querySelector('.release__panel-loading');
     var list = panel.querySelector('.release__tracks');
 
+    // If the SoundCloud Widget API script never loads (blocked/slow/offline),
+    // griot:release-ready never fires. Give up after 8s and show a terminal
+    // error state instead of leaving "Loading tracklist…" up forever.
+    loadTimeoutId = setTimeout(function(){
+      loadTimeoutId = null;
+      loading.textContent = "Couldn't load the tracklist — open it on SoundCloud below.";
+    }, 8000);
+
     releaseReadyHandler = function(e){
       var sounds = (e.detail && e.detail.sounds) || [];
       if(!sounds.length) return;
+      if(loadTimeoutId){
+        clearTimeout(loadTimeoutId);
+        loadTimeoutId = null;
+      }
       loading.hidden = true;
       list.hidden = false;
       list.innerHTML = '';

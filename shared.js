@@ -312,7 +312,8 @@ function initMiniPlayer() {
       widget.load(e.detail.url, { show_artwork: true, callback: refreshTracks });
     });
     window.addEventListener('griot:play-track-index', (e) => {
-      if (!e.detail || typeof e.detail.index !== 'number') return;
+      if (!e.detail || !Number.isInteger(e.detail.index)) return;
+      if (e.detail.index < 0 || e.detail.index >= sounds.length) return;
       widget.skip(e.detail.index);
       widget.play();
     });
