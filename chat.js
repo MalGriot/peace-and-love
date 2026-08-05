@@ -13,6 +13,7 @@ const CHAT_MAX_SENT_HISTORY = 20;
 const CHAT_TYPING_BASE_DELAY_MS = 500;
 const CHAT_TYPING_PER_WORD_MS = 40;
 const CHAT_TYPING_MAX_DELAY_MS = 2200;
+const CHAT_REACTION_EMOJI = ['🙌🏾', '🫶🏾', '👌🏾', '🤘🏾', '🙏🏾', '💪🏾', '👍🏾', '🤝🏾', '👊🏾', '🤙🏾'];
 const CHAT_GREETINGS = [
   "Peace and love, what's good. Ask me about the music, the coaching work, or what it takes to book me.",
   "Peace and love, what's up. Music, Griot Cuts, wellness coaching, or booking, I'm listening.",
@@ -45,6 +46,49 @@ function chatFindMessage(id) {
   return chatMessages.find((m) => m.id === id) || null;
 }
 
+// The picker always centers horizontally inside the message list (see the
+// .emoji-picker CSS) so it can never be clipped by the panel's edges; the
+// only thing computed here is whether it opens above or below its row.
+function chatTogglePicker(messageId) {
+  const row = document.querySelector(`.msg-row[data-message-id="${messageId}"]`);
+  if (!row) return;
+  const alreadyOpen = row.querySelector('.emoji-picker');
+  chatClosePicker();
+  if (alreadyOpen) return;
+
+  const messagesEl = document.getElementById('chatMessages');
+  const rowRect = row.getBoundingClientRect();
+  const listRect = messagesEl.getBoundingClientRect();
+  const spaceBelow = listRect.bottom - rowRect.bottom;
+  const openBelow = spaceBelow > 140;
+
+  const picker = document.createElement('div');
+  picker.className = 'emoji-picker ' + (openBelow ? 'picker-below' : 'picker-above');
+  picker.innerHTML = CHAT_REACTION_EMOJI
+    .map((emoji) => `<button type="button" data-chat-emoji="${emoji}">${emoji}</button>`)
+    .join('');
+  row.appendChild(picker);
+}
+
+function chatClosePicker() {
+  document.querySelectorAll('.emoji-picker').forEach((el) => el.remove());
+}
+
+function chatSetReaction(messageId, emoji) {
+  const message = chatFindMessage(messageId);
+  if (!message) return;
+  message.reaction = emoji;
+  chatClosePicker();
+  chatRender();
+}
+
+function chatLastUserMessage() {
+  for (let i = chatMessages.length - 1; i >= 0; i--) {
+    if (chatMessages[i].role === 'user') return chatMessages[i];
+  }
+  return null;
+}
+
 function initChat() {
   const chat = document.querySelector('.chat-widget');
   const chatBtn = document.querySelector('.chat-widget__btn');
@@ -52,6 +96,20 @@ function initChat() {
   const form = document.getElementById('chatForm');
   const input = document.getElementById('chatInput');
   if (!chat || !chatBtn || !messagesEl || !form || !input) return;
+
+  messagesEl.addEventListener('click', (e) => {
+    const reactBtn = e.target.closest('[data-chat-react]');
+    const emojiBtn = e.target.closest('[data-chat-emoji]');
+    if (reactBtn) {
+      chatTogglePicker(reactBtn.closest('.msg-row').dataset.messageId);
+      return;
+    }
+    if (emojiBtn) {
+      const row = emojiBtn.closest('.msg-row');
+      chatSetReaction(row.dataset.messageId, emojiBtn.dataset.chatEmoji);
+      return;
+    }
+  });
 
   chatBtn.addEventListener('click', () => {
     const opening = !chat.classList.contains('is-open');
@@ -114,6 +172,10 @@ function chatSendUserMessage(text) {
 }
 
 function chatAppendBotMessage(data) {
+  if (data.reaction) {
+    const target = chatLastUserMessage();
+    if (target) target.reaction = data.reaction;
+  }
   chatMessages.push({
     id: chatGenerateId(),
     role: 'bot',
@@ -158,17 +220,23 @@ function chatHideTyping() {
 function chatRender() {
   const messagesEl = document.getElementById('chatMessages');
   if (!messagesEl) return;
+  chatClosePicker();
   messagesEl.innerHTML = chatMessages.map(chatRenderRow).join('');
   messagesEl.scrollTop = messagesEl.scrollHeight;
 }
 
 function chatRenderRow(message) {
   const isBot = message.role === 'bot';
+  const reactionHtml = message.reaction ? `<div class="reaction-chip">${message.reaction}</div>` : '';
   return `
     <div class="msg-row msg-row--${isBot ? 'bot' : 'user'}" data-message-id="${message.id}">
       ${isBot ? '<img class="msg-row__avatar" src="img/about.jpg" alt="">' : ''}
       <div class="msg-wrap">
         <div class="msg msg--${isBot ? 'bot' : 'user'}">${chatEscapeHtml(message.text)}</div>
+        ${reactionHtml}
+      </div>
+      <div class="msg-controls">
+        <button type="button" data-chat-react title="React">🙂</button>
       </div>
     </div>`;
 }
