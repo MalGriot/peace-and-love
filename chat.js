@@ -202,7 +202,8 @@ function chatSendUserMessage(text) {
       chatHideTyping();
       chatSetStatus('online');
       chatAppendBotMessage({
-        text: 'Something went sideways, reach out directly on the contact page.',
+        text: 'Something went sideways.',
+        offerContact: true,
       });
     });
 }
@@ -218,6 +219,7 @@ function chatAppendBotMessage(data) {
     text: data.text,
     replyToId: data.replyToId || null,
     reaction: null,
+    offerContact: !!data.offerContact,
   });
   chatRender();
 }
@@ -268,6 +270,12 @@ function chatRenderRow(message) {
     ? `<div class="msg-quote">Replying to ${quoted.role === 'bot' ? 'Griot' : 'you'}: "${chatEscapeHtml(chatSnippet(quoted.text))}"</div>`
     : '';
   const reactionHtml = message.reaction ? `<div class="reaction-chip">${message.reaction}</div>` : '';
+  const contactHtml = message.offerContact
+    ? `<div class="chat-widget__contact-ctas">
+        <a class="btn btn-light" href="contact.html">Contact page</a>
+        <a class="btn btn-outline" href="https://wa.me/917718816239" target="_blank" rel="noopener">WhatsApp</a>
+      </div>`
+    : '';
   return `
     <div class="msg-row msg-row--${isBot ? 'bot' : 'user'}" data-message-id="${message.id}">
       ${isBot ? '<img class="msg-row__avatar" src="img/about.jpg" alt="">' : ''}
@@ -279,5 +287,6 @@ function chatRenderRow(message) {
         <button type="button" data-chat-react title="React">🙂</button>
         <button type="button" data-chat-reply title="Reply">↩</button>
       </div>
-    </div>`;
+    </div>
+    ${contactHtml}`;
 }
