@@ -30,6 +30,7 @@ let chatMessages = [];
 let chatNextId = 1;
 let chatReplyTargetId = null;
 let chatVisitorMessageCount = 0;
+let chatTypingVisible = false;
 
 function chatGenerateId() {
   return 'm' + (chatNextId++) + '-' + Date.now().toString(36);
@@ -122,6 +123,15 @@ function chatLastUserMessage() {
   return null;
 }
 
+function chatOpen() {
+  const chat = document.querySelector('.chat-widget');
+  if (!chat) return;
+  chat.classList.add('is-open');
+  if (chatMessages.length === 0) {
+    chatAppendBotMessage({ text: CHAT_GREETINGS[Math.floor(Math.random() * CHAT_GREETINGS.length)] });
+  }
+}
+
 function initChat() {
   const chat = document.querySelector('.chat-widget');
   const chatBtn = document.querySelector('.chat-widget__btn');
@@ -154,9 +164,10 @@ function initChat() {
 
   chatBtn.addEventListener('click', () => {
     const opening = !chat.classList.contains('is-open');
-    chat.classList.toggle('is-open');
-    if (opening && chatMessages.length === 0) {
-      chatAppendBotMessage({ text: CHAT_GREETINGS[Math.floor(Math.random() * CHAT_GREETINGS.length)] });
+    if (opening) {
+      chatOpen();
+    } else {
+      chat.classList.remove('is-open');
     }
   });
 
@@ -243,7 +254,8 @@ function chatDisableInput() {
 
 function chatAppendBotMessage(data) {
   if (data.reaction) {
-    const target = (data.replyToId && chatFindMessage(data.replyToId)) || chatLastUserMessage();
+    const replyTarget = data.replyToId && chatFindMessage(data.replyToId);
+    const target = (replyTarget && replyTarget.role === 'user' && replyTarget) || chatLastUserMessage();
     if (target) target.reaction = data.reaction;
   }
   chatMessages.push({
@@ -270,20 +282,26 @@ function chatSetStatus(state) {
   }
 }
 
-function chatShowTyping() {
-  const messagesEl = document.getElementById('chatMessages');
-  if (!messagesEl || document.getElementById('chatTypingRow')) return;
+function chatBuildTypingRow() {
   const row = document.createElement('div');
   row.className = 'msg-row msg-row--bot';
   row.id = 'chatTypingRow';
   row.innerHTML =
     '<img class="msg-row__avatar" src="img/about.jpg" alt="">' +
     '<div class="msg-wrap"><div class="msg--typing"><span></span><span></span><span></span></div></div>';
-  messagesEl.appendChild(row);
+  return row;
+}
+
+function chatShowTyping() {
+  const messagesEl = document.getElementById('chatMessages');
+  chatTypingVisible = true;
+  if (!messagesEl || document.getElementById('chatTypingRow')) return;
+  messagesEl.appendChild(chatBuildTypingRow());
   messagesEl.scrollTop = messagesEl.scrollHeight;
 }
 
 function chatHideTyping() {
+  chatTypingVisible = false;
   const row = document.getElementById('chatTypingRow');
   if (row) row.remove();
 }
@@ -293,6 +311,7 @@ function chatRender() {
   if (!messagesEl) return;
   chatClosePicker();
   messagesEl.innerHTML = chatMessages.map(chatRenderRow).join('');
+  if (chatTypingVisible) messagesEl.appendChild(chatBuildTypingRow());
   messagesEl.scrollTop = messagesEl.scrollHeight;
 }
 

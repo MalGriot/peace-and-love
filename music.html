@@ -828,8 +828,7 @@
   ctaBtn.addEventListener('click', function(){
     var s = heroSlides[heroIndex];
     if(s.action === 'chat'){
-      var chat = document.querySelector('.chat-widget');
-      if(chat) chat.classList.add('is-open');
+      if (typeof chatOpen === 'function') chatOpen();
     } else {
       window.location.href = s.target;
     }
