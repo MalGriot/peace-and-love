@@ -25,6 +25,14 @@ test('SYSTEM_PROMPT states the Peace and love framing', () => {
   assert.ok(SYSTEM_PROMPT.includes('Peace and love'));
 });
 
+test('SYSTEM_PROMPT requires the very first reply to open with exactly "Peace and love!"', () => {
+  assert.match(SYSTEM_PROMPT, /very first reply.*"Peace and love!"/s);
+});
+
+test('SYSTEM_PROMPT explains the [id:...] tag convention for threading replies', () => {
+  assert.match(SYSTEM_PROMPT, /\[id:/);
+});
+
 test('SYSTEM_PROMPT caps hand emoji use at one per reply', () => {
   assert.match(SYSTEM_PROMPT, /at most one|only one|never more than one/i);
 });

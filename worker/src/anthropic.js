@@ -30,6 +30,12 @@ export function toAnthropicMessages(messages) {
       const target = byId.get(m.replyToId);
       content = `[Replying to: "${target.content}"] ${content}`;
     }
+    // Only visitor messages carry an id prefix: the model's replyToId always
+    // threads to a visitor message (see systemPrompt.js), never to one of
+    // its own earlier replies, so assistant turns don't need one.
+    if (m.role === 'user') {
+      content = `[id:${m.id}] ${content}`;
+    }
     return { role: m.role, content };
   });
 }
@@ -68,9 +74,16 @@ export async function getBotResponse({ apiKey, systemPrompt, messages, fetchImpl
     throw new AnthropicError('respond tool call missing text');
   }
 
+  // The model can only thread to a real visitor message from this
+  // conversation — never a hallucinated id, and never one of its own
+  // earlier replies (assistant ids are never exposed to it in the first
+  // place, see toAnthropicMessages).
+  const validUserIds = new Set(messages.filter((m) => m.role === 'user').map((m) => m.id));
+  const replyToId = typeof input.replyToId === 'string' && validUserIds.has(input.replyToId) ? input.replyToId : null;
+
   return {
     text: input.text,
-    replyToId: typeof input.replyToId === 'string' ? input.replyToId : null,
+    replyToId,
     reaction: typeof input.reaction === 'string' && REACTION_EMOJI_SET.has(input.reaction) ? input.reaction : null,
     offerContact: input.offerContact === true,
   };

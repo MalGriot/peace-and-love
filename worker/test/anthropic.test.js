@@ -2,11 +2,18 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { getBotResponse, toAnthropicMessages, AnthropicError, MODEL } from '../src/anthropic.js';
 
-test('toAnthropicMessages maps id/role/content to role/content pairs', () => {
+test('toAnthropicMessages prefixes user messages with an [id:...] tag so the model can reference them', () => {
   const result = toAnthropicMessages([
     { id: 'a1', role: 'user', content: 'do you do weddings?' },
   ]);
-  assert.deepEqual(result, [{ role: 'user', content: 'do you do weddings?' }]);
+  assert.deepEqual(result, [{ role: 'user', content: '[id:a1] do you do weddings?' }]);
+});
+
+test('toAnthropicMessages does not prefix assistant messages with an id tag', () => {
+  const result = toAnthropicMessages([
+    { id: 'a1', role: 'assistant', content: 'Peace and love! What is good.' },
+  ]);
+  assert.deepEqual(result, [{ role: 'assistant', content: 'Peace and love! What is good.' }]);
 });
 
 test('toAnthropicMessages prepends quoted context when replyToId is set', () => {
@@ -69,6 +76,44 @@ test('getBotResponse passes through replyToId, reaction, and offerContact when p
 
   const result = await getBotResponse({ apiKey: 'k', systemPrompt: 's', messages: [{ id: 'a1', role: 'user', content: 'hi' }], fetchImpl });
   assert.deepEqual(result, { text: 'Bet.', replyToId: 'a1', reaction: '🙌🏾', offerContact: true });
+});
+
+test('getBotResponse nulls out a replyToId that does not match a real user message in the conversation', async () => {
+  const fetchImpl = async () => ({
+    ok: true,
+    status: 200,
+    json: async () => ({
+      content: [
+        { type: 'tool_use', name: 'respond', input: { text: 'Bet.', replyToId: 'made-up-id' } },
+      ],
+    }),
+  });
+
+  const result = await getBotResponse({ apiKey: 'k', systemPrompt: 's', messages: [{ id: 'a1', role: 'user', content: 'hi' }], fetchImpl });
+  assert.equal(result.replyToId, null);
+});
+
+test('getBotResponse nulls out a replyToId that points at an assistant message rather than a user one', async () => {
+  const fetchImpl = async () => ({
+    ok: true,
+    status: 200,
+    json: async () => ({
+      content: [
+        { type: 'tool_use', name: 'respond', input: { text: 'Bet.', replyToId: 'bot1' } },
+      ],
+    }),
+  });
+
+  const result = await getBotResponse({
+    apiKey: 'k',
+    systemPrompt: 's',
+    messages: [
+      { id: 'bot1', role: 'assistant', content: 'Peace and love! What is good.' },
+      { id: 'a1', role: 'user', content: 'hi' },
+    ],
+    fetchImpl,
+  });
+  assert.equal(result.replyToId, null);
 });
 
 test('getBotResponse throws AnthropicError on a non-ok response', async () => {
