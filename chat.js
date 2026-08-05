@@ -19,10 +19,17 @@ const CHAT_GREETINGS = [
   "Peace and love, what's up. Music, Griot Cuts, wellness coaching, or booking, I'm listening.",
   "Peace and love, I'm listening. What do you want to know?",
 ];
+const CHAT_MAX_VISITOR_MESSAGES = 10;
+const CHAT_LIMIT_REDIRECTS = [
+  "Peace and love, we've covered a lot. Can we continue this conversation on WhatsApp?",
+  "Actually, can we continue this conversation on WhatsApp? Hit me up from there.",
+  "Peace and love, let's keep going on WhatsApp from here.",
+];
 
 let chatMessages = [];
 let chatNextId = 1;
 let chatReplyTargetId = null;
+let chatVisitorMessageCount = 0;
 
 function chatGenerateId() {
   return 'm' + (chatNextId++) + '-' + Date.now().toString(36);
@@ -155,6 +162,7 @@ function initChat() {
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+    if (input.disabled) return;
     const text = input.value.trim().slice(0, CHAT_MAX_INPUT_LENGTH);
     if (!text) return;
     input.value = '';
@@ -166,7 +174,22 @@ function chatSendUserMessage(text) {
   const message = { id: chatGenerateId(), role: 'user', text, replyToId: chatReplyTargetId, reaction: null };
   chatMessages.push(message);
   chatCancelReply();
+  chatVisitorMessageCount++;
   chatRender();
+
+  if (chatVisitorMessageCount >= CHAT_MAX_VISITOR_MESSAGES) {
+    chatSetStatus('typing');
+    chatShowTyping();
+    const redirectText = CHAT_LIMIT_REDIRECTS[Math.floor(Math.random() * CHAT_LIMIT_REDIRECTS.length)];
+    setTimeout(() => {
+      chatHideTyping();
+      chatSetStatus('online');
+      chatAppendBotMessage({ text: redirectText, offerContact: true });
+      chatDisableInput();
+    }, chatTypingDelayMs(redirectText));
+    return;
+  }
+
   chatSetStatus('typing');
   chatShowTyping();
 
@@ -206,6 +229,16 @@ function chatSendUserMessage(text) {
         offerContact: true,
       });
     });
+}
+
+function chatDisableInput() {
+  const input = document.getElementById('chatInput');
+  const form = document.getElementById('chatForm');
+  if (input) {
+    input.disabled = true;
+    input.placeholder = 'Continue on WhatsApp';
+  }
+  if (form) form.classList.add('is-disabled');
 }
 
 function chatAppendBotMessage(data) {
