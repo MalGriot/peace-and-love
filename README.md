@@ -51,7 +51,7 @@ A fourth optional slot, `<div id="chrome-player"></div>`, holds the persistent m
 
 **Album art, pulled live, not stock:** `music.html` fetches each release's real cover from SoundCloud's or Spotify's public oEmbed endpoint (`soundcloud.com/oembed?format=json&url=...` / `open.spotify.com/oembed?url=...`, both CORS-open, no API key needed) and swaps it into `.release__art` on load, per release `href`. Falls back to the stock placeholder already in the `<img>` tag if the fetch fails (offline, private track, etc.) — see the inline `<script>` near the bottom of `music.html`, after the hero-carousel script. "Overmind" is intentionally a single discography row using its **Spotify** URL/art (titled "The Call of the Jungle (Overmind)" there) even though it also exists on SoundCloud, because SoundCloud has no artwork uploaded for that track yet.
 
-## Known stub / unfinished
+## Chat widget
 
 The chat widget ("Mal", bottom-right bubble) is a real chatbot, not a shell. Markup lives in `shared.js`'s `chatWidgetHtml()` (used by `renderChrome()` on every satellite page, and directly by `index.html` since it has no nav/footer); all interactive behavior (state, rendering, reactions, reply threading, the Worker call) lives in `chat.js`, loaded on every page right after `shared.js`. Styling is in `shared.css` alongside the rest of the shared chrome.
 
