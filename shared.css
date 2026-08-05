@@ -38,6 +38,31 @@ img,video{max-width:100%;display:block}
 a{color:inherit}
 ::selection{background:var(--brass);color:#12100f}
 
+/* ---------- rising ember field ----------
+   JS-injected (initEmberField in shared.js) fixed layer of small points that
+   drift upward and flicker in brightness, like cinder/ash rising off a fire.
+   Sits behind all page content; the static --stars-svg tile above is the
+   no-JS fallback so the sky never reads as empty. */
+.ember-field{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.ember{
+  position:absolute;bottom:-4%;border-radius:50%;
+  background:var(--gold);
+  will-change:transform,opacity;
+  animation:ember-rise linear infinite, ember-sparkle ease-in-out infinite;
+}
+.ember--paper{background:var(--paper)}
+@keyframes ember-rise{
+  from{transform:translate(0,0)}
+  to{transform:translate(var(--ember-drift,0px),-112vh)}
+}
+@keyframes ember-sparkle{
+  0%,100%{opacity:var(--ember-op-min,.12)}
+  50%{opacity:var(--ember-op-max,.85)}
+}
+@media (prefers-reduced-motion: reduce){
+  .ember-field{display:none}
+}
+
 /* ---------- shared nav ---------- */
 .site-nav{
   position:fixed;top:0;left:0;right:0;z-index:100;

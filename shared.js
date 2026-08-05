@@ -515,7 +515,47 @@ document.addEventListener('DOMContentLoaded', () => {
   initChat();
   initMiniPlayer();
   initAnimatedFavicon();
+  initEmberField();
 });
+
+// Rising ember/ash field: small points that drift upward and flicker in
+// brightness, like cinder rising off a fire, replacing the flat static star
+// scatter with something alive. Skips entirely under reduced-motion.
+function initEmberField() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const field = document.createElement('div');
+  field.className = 'ember-field';
+  field.setAttribute('aria-hidden', 'true');
+
+  const count = window.innerWidth < 700 ? 26 : 48;
+  for (let i = 0; i < count; i++) {
+    const ember = document.createElement('span');
+    ember.className = 'ember' + (Math.random() < 0.35 ? ' ember--paper' : '');
+
+    const size = (Math.random() * 2 + 0.6).toFixed(2);
+    const left = (Math.random() * 100).toFixed(2);
+    const riseDuration = (Math.random() * 16 + 14).toFixed(1);
+    const riseDelay = (-Math.random() * riseDuration).toFixed(1);
+    const sparkleDuration = (Math.random() * 3 + 1.8).toFixed(1);
+    const sparkleDelay = (-Math.random() * sparkleDuration).toFixed(1);
+    const drift = (Math.random() * 80 - 40).toFixed(0);
+    const opMax = (Math.random() * 0.4 + 0.5).toFixed(2);
+
+    ember.style.cssText = `
+      left:${left}%;
+      width:${size}px;height:${size}px;
+      --ember-drift:${drift}px;
+      --ember-op-min:.08;
+      --ember-op-max:${opMax};
+      animation-duration:${riseDuration}s, ${sparkleDuration}s;
+      animation-delay:${riseDelay}s, ${sparkleDelay}s;
+    `;
+    field.appendChild(ember);
+  }
+
+  document.body.prepend(field);
+}
 
 // Spins the gold mark in the browser tab by redrawing it to a canvas each
 // frame and swapping the favicon <link> href for the resulting data URL.
