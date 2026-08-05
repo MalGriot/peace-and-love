@@ -139,6 +139,12 @@ function initMiniPlayer() {
   let albumArtFallback = null;
 
   let currentReleaseName = 'breathe love d e e p';
+  // The "New Album" hero stage (sleeve art, vinyl, its own tile row) always
+  // stays pinned to breathe love d e e p, even while a different release is
+  // loaded into this same shared widget from a Discography panel — only the
+  // mini-player (title/art/transport) follows whatever's actually playing.
+  const BLD_URL = 'https://soundcloud.com/mal-griot/sets/breathelovedeep';
+  let isBLDActive = true;
   const sampleCanvas = document.createElement('canvas');
   const sampleCtx = sampleCanvas.getContext('2d');
 
@@ -205,7 +211,7 @@ function initMiniPlayer() {
     }
     const art = s.artwork_url || (s.user && s.user.avatar_url) || albumArtFallback;
     const bigArt = art ? art.replace('-large', '-t500x500') : null;
-    if (sleeveArt && bigArt) {
+    if (isBLDActive && sleeveArt && bigArt) {
       sleeveArt.src = bigArt;
       if (vinylLabel) vinylLabel.src = bigArt;
       if (vinyl) {
@@ -215,7 +221,7 @@ function initMiniPlayer() {
       }
     }
     if (miniArt && bigArt) miniArt.src = bigArt;
-    if (tracksWrap) {
+    if (isBLDActive && tracksWrap) {
       Array.prototype.forEach.call(tracksWrap.children, (el, i) => {
         const active = i === index;
         el.classList.toggle('is-active', active);
@@ -225,7 +231,10 @@ function initMiniPlayer() {
   }
 
   function buildTracks(widget) {
-    if (!tracksWrap) return;
+    // Only the BLD hero stage's own tile row rebuilds from the loaded
+    // sounds — while a Discography release is active it stays exactly as
+    // BLD last left it (its own click handlers still point at BLD's sounds).
+    if (!tracksWrap || !isBLDActive) return;
     tracksWrap.innerHTML = '';
     albumArtFallback = sounds.map((s) => s.artwork_url || (s.user && s.user.avatar_url)).find(Boolean) || null;
     sounds.forEach((s, i) => {
@@ -250,8 +259,23 @@ function initMiniPlayer() {
       }
       tile.addEventListener('click', (e) => {
         e.stopPropagation();
-        widget.skip(i);
-        widget.play();
+        // A Discography release may have since taken over this shared widget
+        // — these indexes only make sense against BLD's own sounds, so make
+        // sure BLD is actually reloaded (via the same public event Discography
+        // panels use) before skipping into it, so the mini-player's title/art
+        // and this tile row itself get fully re-synced too, not just the audio.
+        if (isBLDActive) {
+          widget.skip(i);
+          widget.play();
+          return;
+        }
+        const onReady = () => {
+          window.removeEventListener('griot:release-ready', onReady);
+          widget.skip(i);
+          widget.play();
+        };
+        window.addEventListener('griot:release-ready', onReady);
+        window.dispatchEvent(new CustomEvent('griot:load-release', { detail: { url: BLD_URL, title: 'breathe love d e e p' } }));
       });
       tracksWrap.appendChild(tile);
     });
@@ -309,6 +333,7 @@ function initMiniPlayer() {
       if (!e.detail || !e.detail.url) return;
       currentReleaseName = e.detail.title || currentReleaseName;
       currentIndex = 0;
+      isBLDActive = e.detail.url === BLD_URL;
       widget.load(e.detail.url, { show_artwork: true, callback: refreshTracks });
     });
     window.addEventListener('griot:play-track-index', (e) => {
