@@ -14,11 +14,6 @@ const CHAT_TYPING_BASE_DELAY_MS = 500;
 const CHAT_TYPING_PER_WORD_MS = 40;
 const CHAT_TYPING_MAX_DELAY_MS = 2200;
 const CHAT_REACTION_EMOJI = ['🙌🏾', '🫶🏾', '👌🏾', '🤘🏾', '🙏🏾', '💪🏾', '👍🏾', '🤝🏾', '👊🏾', '🤙🏾'];
-const CHAT_GREETINGS = [
-  "Peace and love, what's good. Ask me about the music, the coaching work, or what it takes to book me.",
-  "Peace and love, what's up. Music, Griot Cuts, wellness coaching, or booking, I'm listening.",
-  "Peace and love, I'm listening. What do you want to know?",
-];
 const CHAT_MAX_VISITOR_MESSAGES = 10;
 const CHAT_LIMIT_REDIRECTS = [
   "Peace and love, we've covered a lot. Can we continue this conversation on WhatsApp?",
@@ -127,9 +122,6 @@ function chatOpen() {
   const chat = document.querySelector('.chat-widget');
   if (!chat) return;
   chat.classList.add('is-open');
-  if (chatMessages.length === 0) {
-    chatAppendBotMessage({ text: CHAT_GREETINGS[Math.floor(Math.random() * CHAT_GREETINGS.length)] });
-  }
 }
 
 function initChat() {
@@ -328,17 +320,23 @@ function chatRenderRow(message) {
         <a class="btn btn-outline" href="https://wa.me/917718816239" target="_blank" rel="noopener">WhatsApp</a>
       </div>`
     : '';
-  return `
-    <div class="msg-row msg-row--${isBot ? 'bot' : 'user'}" data-message-id="${message.id}">
-      ${isBot ? '<img class="msg-row__avatar" src="img/about.jpg" alt="">' : ''}
+  const bubbleHtml = `
       <div class="msg-wrap">
         <div class="msg msg--${isBot ? 'bot' : 'user'}">${quoteHtml}${chatEscapeHtml(message.text)}</div>
         ${reactionHtml}
-      </div>
+      </div>`;
+  const controlsHtml = `
       <div class="msg-controls">
         <button type="button" data-chat-react title="React">🙂</button>
         <button type="button" data-chat-reply title="Reply">↩</button>
-      </div>
+      </div>`;
+  // Controls hug the inner side of each bubble: right of bot messages
+  // (bot is left-aligned), left of the visitor's own messages (which are
+  // right-aligned) — so DOM order is swapped per role, not just CSS.
+  return `
+    <div class="msg-row msg-row--${isBot ? 'bot' : 'user'}" data-message-id="${message.id}">
+      ${isBot ? '<img class="msg-row__avatar" src="img/about.jpg" alt="">' : ''}
+      ${isBot ? bubbleHtml + controlsHtml : controlsHtml + bubbleHtml}
     </div>
     ${contactHtml}`;
 }

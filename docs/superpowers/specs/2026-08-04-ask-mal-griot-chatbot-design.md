@@ -60,12 +60,12 @@ Reuses the existing bubble/toggle exactly as-is (`.chat-widget__btn`, `.chat-wid
 
 ### Message list
 
-Scrollable, capped height. Bot bubbles left-aligned (each with the small avatar beside it), visitor bubbles right-aligned in brass, matching the site's ink/paper/brass tokens. Opens with a canned in-character greeting rendered client-side (no API call for the first line), styled like the rest: "Peace and love, ..." opener.
+Scrollable, capped height. Bot bubbles left-aligned (each with the small avatar beside it), visitor bubbles right-aligned in brass, matching the site's ink/paper/brass tokens. Opening the panel shows no proactive greeting — it starts empty. The bot's first message is a real reply to whatever the visitor actually says first (still opening in character with "Peace and love, ..." per the system prompt), not a canned line shown before the visitor has said anything.
 
 **Typing indicator**: when the visitor sends a message, an actual three-dot bubble (Instagram-DM style) is appended to the message list at the bottom, in the exact spot the next bot bubble will render, alongside the header status-line swap described above. Even once the API response has already arrived, the reply is held briefly so the pause reads as natural — duration scales with reply length (a base delay + a small per-word increment), capped at a short maximum so it never feels sluggish.
 
 **Reactions** (both directions — visitor can react to any message, and the bot can react to the visitor's):
-- A reaction trigger (🙂) and a reply trigger (↩) sit immediately beside each bubble, hugging its edge, vertically centered against the bubble's full height. Both are hidden until the message is hovered (or tapped, on touch).
+- A reaction trigger (🙂) and a reply trigger (↩) sit immediately beside each bubble, hugging its **inner** edge (toward the center of the panel) — to the right of bot messages, to the left of the visitor's own messages — vertically centered against the bubble's full height. Both are hidden until the message is hovered (or tapped, on touch).
 - Clicking 🙂 opens a picker: a 2×5 grid of 10 brown-skin-tone hand emojis — 🙌🏾 🫶🏾 👌🏾 🤘🏾 🙏🏾 💪🏾 👍🏾 🤝🏾 👊🏾 🤙🏾. The picker always renders horizontally centered within the chat panel (never anchored to the trigger's own horizontal position, so it can never be clipped by the panel's left/right edge) and flips to open above or below the trigger depending on how close that message is to the top/bottom of the visible scroll area, so it always stays fully inside the panel. Hovering an emoji (in the picker, or the 🙂 trigger itself) scales it up slightly with a soft brass-tinted circle behind it, matching the site's brand accent.
 - Selecting an emoji closes the picker immediately and renders that emoji as a small badge at the bottom of the bubble: **bottom-right corner for the bot's messages, bottom-left corner (just inside the corner) for the visitor's own messages.**
 - The bot can also attach a reaction to a visitor's message (via the `reaction` field returned from the Worker, see Architecture) — rendered the same way, at the visitor bubble's bottom-left.
@@ -85,7 +85,7 @@ Both options are always offered together (booking, rates, or anything else the b
 
 ### Message limit
 
-A visitor gets **10 messages** per conversation (counting only their own messages, not the bot's replies or the canned greeting). This is enforced entirely client-side, not by the model: when the visitor's 10th message is sent, the frontend does not call the Worker at all — it immediately shows a canned redirect line (picked from a small fixed set, varied like the rest of the persona copy, e.g. "Peace and love, we've covered a lot, can we continue this conversation on WhatsApp?") with the same "Contact page" / "WhatsApp" button pair as any other hand-off, then **disables the input** (placeholder changes to something like "Continue on WhatsApp", send button disabled) so the conversation has a hard, predictable end rather than looping indefinitely.
+A visitor gets **10 messages** per conversation (counting only their own messages, not the bot's replies). This is enforced entirely client-side, not by the model: when the visitor's 10th message is sent, the frontend does not call the Worker at all — it immediately shows a canned redirect line (picked from a small fixed set, varied like the rest of the persona copy, e.g. "Peace and love, we've covered a lot, can we continue this conversation on WhatsApp?") with the same "Contact page" / "WhatsApp" button pair as any other hand-off, then **disables the input** (placeholder changes to something like "Continue on WhatsApp", send button disabled) so the conversation has a hard, predictable end rather than looping indefinitely.
 
 This is a deliberate, code-enforced cap rather than a prompt instruction, so it can't be talked around and doesn't cost an API call on the message that ends the conversation. It's a client-side UX limit only, not a server-side rate limit — a visitor could still call the Worker directly past 10 messages (already noted under "Out of scope": rate limiting beyond input/history caps is a later operational concern, not part of this build).
 
@@ -101,7 +101,7 @@ A working reference mockup (static HTML, not shipped) was iterated live during d
 
 ## Data flow
 
-1. Visitor opens the widget → sees canned greeting (client-side only, no request).
+1. Visitor opens the widget → panel is empty; nothing happens until they type.
 2. Visitor sends a message (optionally with `replyToId` if replying to a specific earlier message) → appended to in-memory history, each message keyed by a client-generated `id` → header status swaps to "typing..." and an inline typing bubble is appended → `POST` to the Worker's `/chat` with the capped history.
 3. Worker calls Anthropic (via the `respond` tool) with the assembled system prompt + history → returns `{ text, replyToId, reaction, offerContact }`.
 4. Frontend waits out the length-scaled minimum delay (if the response arrived faster than that), then removes the typing bubble, restores the header to "Online", and renders the bot bubble — quoting the target message inline if `replyToId` is set, attaching `reaction` to the relevant visitor message if set, and appending the "Contact page" / "WhatsApp" button pair beneath the bubble if `offerContact` is true.
