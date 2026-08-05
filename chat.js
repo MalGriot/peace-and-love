@@ -4,9 +4,7 @@
 // right after shared.js. initChat() is called once from shared.js's
 // DOMContentLoaded listener.
 
-// Update this after `wrangler deploy` (see worker/README.md) — same
-// placeholder-then-fill pattern as YOUTUBE_API_KEY in music.html.
-const CHAT_WORKER_URL = 'https://mal-griot-chat.YOUR-SUBDOMAIN.workers.dev/chat';
+const CHAT_WORKER_URL = 'https://mal-griot-chat.malgriot.workers.dev/chat';
 
 const CHAT_MAX_INPUT_LENGTH = 500;
 const CHAT_MAX_SENT_HISTORY = 20;
