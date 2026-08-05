@@ -49,9 +49,9 @@ export default {
     const capped = capHistory(body.messages);
 
     // Anthropic requires the first message in a conversation to have role
-    // "user". Both a leading greeting appended client-side and capHistory
-    // itself (once history exceeds the cap) can produce a leading
-    // non-user message, so trim it here regardless of source.
+    // "user". capHistory can produce a leading assistant message once
+    // history exceeds the cap (whichever message survives the slice may
+    // not be a user turn), so trim it here defensively.
     const firstUserIndex = capped.findIndex((m) => m.role === 'user');
     const trimmed = firstUserIndex === -1 ? [] : capped.slice(firstUserIndex);
 

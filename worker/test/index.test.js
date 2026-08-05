@@ -116,7 +116,7 @@ test('a generic non-AnthropicError thrown from getBotResponse still returns 502 
   }
 });
 
-test('a leading assistant message (e.g. the client-side greeting) is dropped before being sent to Anthropic', async () => {
+test('a leading assistant message (e.g. left over after capHistory trims to the tail) is dropped before being sent to Anthropic', async () => {
   let capturedBody;
   const fakeAnthropicResponse = {
     ok: true,
