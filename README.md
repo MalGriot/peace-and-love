@@ -51,9 +51,13 @@ A fourth optional slot, `<div id="chrome-player"></div>`, holds the persistent m
 
 **Album art, pulled live, not stock:** `music.html` fetches each release's real cover from SoundCloud's or Spotify's public oEmbed endpoint (`soundcloud.com/oembed?format=json&url=...` / `open.spotify.com/oembed?url=...`, both CORS-open, no API key needed) and swaps it into `.release__art` on load, per release `href`. Falls back to the stock placeholder already in the `<img>` tag if the fetch fails (offline, private track, etc.) — see the inline `<script>` near the bottom of `music.html`, after the hero-carousel script. "Overmind" is intentionally a single discography row using its **Spotify** URL/art (titled "The Call of the Jungle (Overmind)" there) even though it also exists on SoundCloud, because SoundCloud has no artwork uploaded for that track yet.
 
-## Known stub / unfinished
+## Chat widget
 
-The chat widget (bottom-right bubble, `.chat-widget` in `shared.css`, markup in `shared.js`'s `chatHtml`) is **shell-only** — the panel just shows a static "warming up" message. Comment in `shared.css` explicitly flags it: "Phase 2 wires logic." No backend, no assistant wired up yet.
+The chat widget ("Mal", bottom-right bubble) is a real chatbot, not a shell. Markup lives in `shared.js`'s `chatWidgetHtml()` (used by `renderChrome()` on every satellite page, and directly by `index.html` since it has no nav/footer); all interactive behavior (state, rendering, reactions, reply threading, the Worker call) lives in `chat.js`, loaded on every page right after `shared.js`. Styling is in `shared.css` alongside the rest of the shared chrome.
+
+The bot is backed by a small Cloudflare Worker in `worker/` (a separate Node project with its own `package.json`) that holds the Anthropic API key server-side and calls Claude (`claude-haiku-4-5-20251001`) via a forced `respond` tool call, returning `{ text, replyToId, reaction, offerContact }`. See `worker/README.md` for local dev and deployment (`wrangler dev` / `wrangler secret put ANTHROPIC_API_KEY` / `wrangler deploy`). After deploying, update `CHAT_WORKER_URL` near the top of `chat.js` to the deployed Worker's URL, same placeholder-then-fill pattern as `YOUTUBE_API_KEY` below.
+
+The bot speaks in character as Mal Griot: greets and signs off with "Peace and love", never uses an en dash, uses at most one hand emoji per reply (from a fixed 10-emoji brown-skin-tone set), never discusses his personal life (child, relationships), and never states a rate. A visitor gets 10 messages per conversation; the 10th is intercepted client-side with a WhatsApp redirect and the input then disables. Booking, pricing, unknown-answer, and limit-reached replies all hand off to both the contact page and WhatsApp (+91 77188 16239) via buttons rendered under the reply. Full design rationale: `docs/superpowers/specs/2026-08-04-ask-mal-griot-chatbot-design.md`.
 
 Instagram (`instagram.com/yep.that.malcolm`), Spotify (`open.spotify.com/artist/61bgVlMQw2S0t6d8mVPVIS`), and SoundCloud (`soundcloud.com/mal-griot`) links are all real, site-wide.
 

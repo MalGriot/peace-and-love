@@ -39,24 +39,13 @@ function renderChrome(active) {
       </div>
     </footer>`;
 
-  const chatHtml = `
-    <div class="chat-widget" id="chat">
-      <button type="button" class="chat-widget__btn" id="chatBtn" aria-label="Open chat">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-      </button>
-      <div class="chat-widget__panel">
-        <p class="chat-widget__title">Ask MAL GRIOT</p>
-        <p class="chat-widget__body">The assistant is warming up — check back soon. For now, reach out directly via the contact page.</p>
-      </div>
-    </div>`;
-
   const navSlot = document.getElementById('chrome-nav');
   const footerSlot = document.getElementById('chrome-footer');
   const chatSlot = document.getElementById('chrome-chat');
   const playerSlot = document.getElementById('chrome-player');
   if (navSlot) navSlot.outerHTML = navHtml;
   if (footerSlot) footerSlot.outerHTML = footerHtml;
-  if (chatSlot) chatSlot.outerHTML = chatHtml;
+  if (chatSlot) chatSlot.outerHTML = chatWidgetHtml();
 
   // The mini-player only shows on the music page by default. On the other
   // satellite pages it stays out of the DOM entirely until the visitor has
@@ -71,6 +60,42 @@ function renderChrome(active) {
       playerSlot.remove();
     }
   }
+}
+
+// The "Mal" chat widget markup — used by renderChrome() on every satellite
+// page and directly by index.html (which has no nav/footer, so it doesn't
+// call renderChrome() at all). All interactive behavior lives in chat.js's
+// initChat(), wired up from this file's DOMContentLoaded listener below.
+function chatWidgetHtml() {
+  return `
+    <div class="chat-widget" id="chat">
+      <button type="button" class="chat-widget__btn" id="chatBtn" aria-label="Open chat">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      </button>
+      <div class="chat-widget__panel">
+        <div class="chat-widget__header">
+          <img class="chat-widget__avatar" src="img/about.jpg" alt="Mal Griot">
+          <div>
+            <p class="chat-widget__title">Mal</p>
+            <p class="chat-widget__status" id="chatStatus">
+              <span class="status-dot" id="chatStatusDot"></span>
+              <span id="chatStatusText">Online</span>
+            </p>
+          </div>
+        </div>
+        <div class="chat-widget__messages" id="chatMessages"></div>
+        <div class="chat-widget__reply-preview" id="chatReplyPreview" hidden>
+          <span id="chatReplyPreviewText"></span>
+          <button type="button" class="chat-widget__reply-cancel" id="chatReplyCancel" aria-label="Cancel reply">&times;</button>
+        </div>
+        <form class="chat-widget__form" id="chatForm">
+          <input class="chat-widget__input" id="chatInput" type="text" maxlength="500" placeholder="Say something..." autocomplete="off">
+          <button type="submit" class="chat-widget__send" aria-label="Send">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>`;
 }
 
 // Persistent mini-player markup — injected into the #chrome-player slot on
@@ -487,12 +512,7 @@ document.addEventListener('DOMContentLoaded', () => {
     );
   }
 
-  const chat = document.querySelector('.chat-widget');
-  const chatBtn = document.querySelector('.chat-widget__btn');
-  if (chat && chatBtn) {
-    chatBtn.addEventListener('click', () => chat.classList.toggle('is-open'));
-  }
-
+  initChat();
   initMiniPlayer();
   initAnimatedFavicon();
 });

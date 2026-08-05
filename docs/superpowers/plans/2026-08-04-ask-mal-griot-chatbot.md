@@ -86,7 +86,7 @@ README.md                        # MODIFIED: replace the "shell-only" chat parag
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
-    "test": "node --test test/"
+    "test": "node --test"
   },
   "devDependencies": {
     "wrangler": "^3.90.0"
