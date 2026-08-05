@@ -250,10 +250,19 @@ function chatAppendBotMessage(data) {
     const target = (replyTarget && replyTarget.role === 'user' && replyTarget) || chatLastUserMessage();
     if (target) target.reaction = data.reaction;
   }
+
+  // The bot's very first message in a session always opens with "Peace and
+  // love!" — guaranteed here rather than left purely to the model, since
+  // there's no more canned client-side greeting to fall back on.
+  const isFirstBotMessage = !chatMessages.some((m) => m.role === 'bot');
+  const text = isFirstBotMessage && !/^peace and love!?/i.test(data.text.trim())
+    ? `Peace and love! ${data.text}`
+    : data.text;
+
   chatMessages.push({
     id: chatGenerateId(),
     role: 'bot',
-    text: data.text,
+    text,
     replyToId: data.replyToId || null,
     reaction: null,
     offerContact: !!data.offerContact,
