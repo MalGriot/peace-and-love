@@ -1,7 +1,7 @@
 import { corsHeaders, isAllowedOrigin } from './cors.js';
 import { validateMessages, capHistory, ValidationError } from './history.js';
 import { SYSTEM_PROMPT } from './systemPrompt.js';
-import { getBotResponse } from './anthropic.js';
+import { getBotResponse } from './workersAi.js';
 
 function jsonResponse(body, status, origin) {
   return new Response(JSON.stringify(body), {
@@ -48,16 +48,16 @@ export default {
 
     const capped = capHistory(body.messages);
 
-    // Anthropic requires the first message in a conversation to have role
-    // "user". capHistory can produce a leading assistant message once
-    // history exceeds the cap (whichever message survives the slice may
-    // not be a user turn), so trim it here defensively.
+    // Some model providers require the first message in a conversation to
+    // have role "user". capHistory can produce a leading assistant message
+    // once history exceeds the cap (whichever message survives the slice
+    // may not be a user turn), so trim it here defensively.
     const firstUserIndex = capped.findIndex((m) => m.role === 'user');
     const trimmed = firstUserIndex === -1 ? [] : capped.slice(firstUserIndex);
 
     try {
       const result = await getBotResponse({
-        apiKey: env.ANTHROPIC_API_KEY,
+        ai: env.AI,
         systemPrompt: SYSTEM_PROMPT,
         messages: trimmed,
       });

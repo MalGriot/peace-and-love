@@ -61,8 +61,8 @@ test('SYSTEM_PROMPT instructs a dry reply for off-topic chatter', () => {
   assert.match(SYSTEM_PROMPT, /o\.\.\.k|um\.\.\. sure|hmm\.\.\./i);
 });
 
-test('SYSTEM_PROMPT instructs use of the respond tool fields', () => {
-  assert.match(SYSTEM_PROMPT, /respond/);
+test('SYSTEM_PROMPT instructs JSON-only output with the response fields', () => {
+  assert.match(SYSTEM_PROMPT, /JSON/);
   assert.match(SYSTEM_PROMPT, /replyToId/);
   assert.match(SYSTEM_PROMPT, /reaction/);
   assert.match(SYSTEM_PROMPT, /offerContact/);

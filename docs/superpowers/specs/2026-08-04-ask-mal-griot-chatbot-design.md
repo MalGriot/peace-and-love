@@ -34,9 +34,9 @@ Two independently-deployed pieces:
 1. **Frontend** — stays on GitHub Pages, unchanged hosting. `shared.js`'s `chatHtml` panel is upgraded from a static message to a real conversational UI (see "Widget UI"). A small script in `shared.js` manages an in-memory (per page load, not persisted) message history array and POSTs it to the backend on each turn.
 
 2. **Backend** — new `worker/` directory in this repo: a single Cloudflare Worker (`worker/src/index.js` + `worker/wrangler.toml`) that:
-   - Holds `ANTHROPIC_API_KEY` as a Worker secret (`wrangler secret put ANTHROPIC_API_KEY`) — never shipped to the browser.
+   - Calls Cloudflare Workers AI (`@cf/meta/llama-3.3-70b-instruct-fp8-fast`) via the Worker's own `AI` binding — free up to 10,000 neurons/day, no separate API key to create or store; auth rides on the Cloudflare account the Worker is deployed under.
    - Exposes one endpoint, `POST /chat`, accepting `{ messages: [{id, role, content, replyToId?}, ...] }` (capped server-side to the last ~10 exchanges; each message carries a stable client-generated `id` so replies and reactions can reference it).
-   - Calls the Anthropic Messages API with model `claude-haiku-4-5-20251001`, a system prompt built from real site copy + the content boundaries above, and a single tool definition (`respond`) so the model returns structured output instead of free text alone:
+   - Calls Workers AI with a system prompt built from real site copy + the content boundaries above, using JSON Mode (`response_format: { type: 'json_schema', json_schema: {...} }`) so the model returns structured output instead of free text alone:
      - `text` (string, required): the reply, following the content boundaries (no en dash, at most one hand emoji, "Peace and love" framing where natural).
      - `replyToId` (string, optional): the `id` of a specific earlier visitor message this reply is threaded to — used especially when the visitor sent more than one message in a row, so the bot can address the right one.
      - `reaction` (string, optional): one emoji from the fixed 10-emoji set (below) to react to the visitor's message with, when a reaction fits better than words.
@@ -45,6 +45,7 @@ Two independently-deployed pieces:
    - The model never emits raw links or HTML in `text` — `offerContact` is a flag, not a place to paste a URL. The frontend is what turns `offerContact: true` into the two actual buttons (see Widget UI), so a link can't be malformed, hallucinated, or used to inject arbitrary markup into a bubble.
    - CORS restricted to `https://sumtinels.github.io` (plus `http://localhost:*`/`127.0.0.1:*` for local testing).
    - Deployed independently via `wrangler deploy` — no coupling to the GitHub Pages deploy. The deployed Worker URL is hardcoded as a constant near the top of `shared.js` (same pattern as the existing `YOUTUBE_API_KEY` placeholder), documented in the README for future updates.
+   - **Tradeoff, noted deliberately**: a free 70B open model is a weaker, less consistent instruction-follower than a frontier model like Claude. The persona's hard rules (no en dash, exactly one emoji, etc.) are prompted but not structurally guaranteed by the model the way, say, the 10-message limit or input-length caps are enforced in code. Chosen anyway because this is a personal site with no ongoing budget for the chat feature.
 
 Rationale: GitHub Pages cannot execute server code, so the API key can't live client-side without being exposed. A Cloudflare Worker is the smallest possible add-on — one file, generous free tier, no server to maintain — and keeps the static site's hosting untouched.
 
@@ -103,7 +104,7 @@ A working reference mockup (static HTML, not shipped) was iterated live during d
 
 1. Visitor opens the widget → panel is empty; nothing happens until they type.
 2. Visitor sends a message (optionally with `replyToId` if replying to a specific earlier message) → appended to in-memory history, each message keyed by a client-generated `id` → header status swaps to "typing..." and an inline typing bubble is appended → `POST` to the Worker's `/chat` with the capped history.
-3. Worker calls Anthropic (via the `respond` tool) with the assembled system prompt + history → returns `{ text, replyToId, reaction, offerContact }`.
+3. Worker calls Workers AI (JSON Mode) with the assembled system prompt + history → returns `{ text, replyToId, reaction, offerContact }`.
 4. Frontend waits out the length-scaled minimum delay (if the response arrived faster than that), then removes the typing bubble, restores the header to "Online", and renders the bot bubble — quoting the target message inline if `replyToId` is set, attaching `reaction` to the relevant visitor message if set, and appending the "Contact page" / "WhatsApp" button pair beneath the bubble if `offerContact` is true.
 5. Selecting an emoji from a message's reaction picker (either party) closes the picker and attaches that badge to the message locally — reactions are a client-side/UI affordance except when the bot itself originates one via step 4.
 6. On navigation to another page, history resets (no persistence) — acceptable for an MVP FAQ/concierge widget.
