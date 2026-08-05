@@ -96,3 +96,57 @@ test('an upstream Anthropic error returns 502', async () => {
     assert.equal(response.status, 502);
   });
 });
+
+test('a generic non-AnthropicError thrown from getBotResponse still returns 502 with CORS headers', async () => {
+  const original = globalThis.fetch;
+  globalThis.fetch = async () => {
+    throw new TypeError('network died');
+  };
+  try {
+    const request = new Request('https://worker.example/chat', {
+      method: 'POST',
+      headers: { Origin: ORIGIN, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: [{ id: 'a1', role: 'user', content: 'hi' }] }),
+    });
+    const response = await worker.fetch(request, { ANTHROPIC_API_KEY: 'test' });
+    assert.equal(response.status, 502);
+    assert.equal(response.headers.get('Access-Control-Allow-Origin'), ORIGIN);
+  } finally {
+    globalThis.fetch = original;
+  }
+});
+
+test('a leading assistant message (e.g. the client-side greeting) is dropped before being sent to Anthropic', async () => {
+  let capturedBody;
+  const fakeAnthropicResponse = {
+    ok: true,
+    status: 200,
+    json: async () => ({
+      content: [{ type: 'tool_use', name: 'respond', input: { text: 'Peace and love.' } }],
+    }),
+  };
+  const original = globalThis.fetch;
+  globalThis.fetch = async (url, init) => {
+    capturedBody = JSON.parse(init.body);
+    return fakeAnthropicResponse;
+  };
+  try {
+    const request = new Request('https://worker.example/chat', {
+      method: 'POST',
+      headers: { Origin: ORIGIN, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: [
+          { id: 'greet1', role: 'assistant', content: "Peace and love, what's good." },
+          { id: 'a1', role: 'user', content: 'hi' },
+        ],
+      }),
+    });
+    const response = await worker.fetch(request, { ANTHROPIC_API_KEY: 'test' });
+    assert.equal(response.status, 200);
+    assert.ok(capturedBody, 'expected the Worker to have called fetch with a captured body');
+    assert.equal(capturedBody.messages[0].role, 'user');
+    assert.equal(capturedBody.messages.length, 1);
+  } finally {
+    globalThis.fetch = original;
+  }
+});

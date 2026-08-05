@@ -1,6 +1,10 @@
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
 export const MODEL = 'claude-haiku-4-5-20251001';
 
+// Must match CHAT_REACTION_EMOJI in chat.js — the fixed hand-emoji set the
+// model is allowed to react with. Anything else the model returns is dropped.
+export const REACTION_EMOJI_SET = new Set(['🙌🏾', '🫶🏾', '👌🏾', '🤘🏾', '🙏🏾', '💪🏾', '👍🏾', '🤝🏾', '👊🏾', '🤙🏾']);
+
 const RESPOND_TOOL = {
   name: 'respond',
   description: "Send Mal's reply to the visitor.",
@@ -67,7 +71,7 @@ export async function getBotResponse({ apiKey, systemPrompt, messages, fetchImpl
   return {
     text: input.text,
     replyToId: typeof input.replyToId === 'string' ? input.replyToId : null,
-    reaction: typeof input.reaction === 'string' ? input.reaction : null,
+    reaction: typeof input.reaction === 'string' && REACTION_EMOJI_SET.has(input.reaction) ? input.reaction : null,
     offerContact: input.offerContact === true,
   };
 }

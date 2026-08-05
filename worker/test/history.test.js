@@ -29,8 +29,22 @@ test('validateMessages rejects empty content', () => {
   assert.throws(() => validateMessages([{ id: 'a1', role: 'user', content: '' }]), ValidationError);
 });
 
-test('validateMessages rejects content over 500 characters', () => {
+test('validateMessages rejects user content over 500 characters', () => {
   assert.throws(() => validateMessages([{ id: 'a1', role: 'user', content: 'x'.repeat(501) }]), ValidationError);
+});
+
+test('validateMessages accepts a long assistant message under the 2000-char ceiling', () => {
+  assert.doesNotThrow(() => validateMessages([
+    { id: 'a1', role: 'assistant', content: 'x'.repeat(1600) },
+    { id: 'a2', role: 'user', content: 'hi' },
+  ]));
+});
+
+test('validateMessages rejects an assistant message over the 2000-char ceiling', () => {
+  assert.throws(() => validateMessages([
+    { id: 'a1', role: 'assistant', content: 'x'.repeat(2001) },
+    { id: 'a2', role: 'user', content: 'hi' },
+  ]), ValidationError);
 });
 
 test('validateMessages rejects a non-string replyToId', () => {

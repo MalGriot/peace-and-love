@@ -1,7 +1,7 @@
 import { corsHeaders, isAllowedOrigin } from './cors.js';
 import { validateMessages, capHistory, ValidationError } from './history.js';
 import { SYSTEM_PROMPT } from './systemPrompt.js';
-import { getBotResponse, AnthropicError } from './anthropic.js';
+import { getBotResponse } from './anthropic.js';
 
 function jsonResponse(body, status, origin) {
   return new Response(JSON.stringify(body), {
@@ -48,18 +48,22 @@ export default {
 
     const capped = capHistory(body.messages);
 
+    // Anthropic requires the first message in a conversation to have role
+    // "user". Both a leading greeting appended client-side and capHistory
+    // itself (once history exceeds the cap) can produce a leading
+    // non-user message, so trim it here regardless of source.
+    const firstUserIndex = capped.findIndex((m) => m.role === 'user');
+    const trimmed = firstUserIndex === -1 ? [] : capped.slice(firstUserIndex);
+
     try {
       const result = await getBotResponse({
         apiKey: env.ANTHROPIC_API_KEY,
         systemPrompt: SYSTEM_PROMPT,
-        messages: capped,
+        messages: trimmed,
       });
       return jsonResponse(result, 200, origin);
     } catch (err) {
-      if (err instanceof AnthropicError) {
-        return jsonResponse({ error: 'Upstream error' }, 502, origin);
-      }
-      throw err;
+      return jsonResponse({ error: 'Upstream error' }, 502, origin);
     }
   },
 };

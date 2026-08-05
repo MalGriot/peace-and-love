@@ -1,5 +1,12 @@
 export const MAX_HISTORY_MESSAGES = 20;
 
+// The 500-char cap mirrors the frontend's maxlength on the visitor's own
+// input box, so it should only constrain user messages. Assistant replies
+// are bounded by max_tokens: 400 in the Anthropic call (~1600 chars), so
+// they get a higher ceiling comfortably above that.
+export const MAX_USER_CONTENT_LENGTH = 500;
+export const MAX_ASSISTANT_CONTENT_LENGTH = 2000;
+
 export class ValidationError extends Error {}
 
 export function validateMessages(messages) {
@@ -19,8 +26,9 @@ export function validateMessages(messages) {
     if (typeof m.content !== 'string' || m.content.length === 0) {
       throw new ValidationError('message content must be a non-empty string');
     }
-    if (m.content.length > 500) {
-      throw new ValidationError('message content exceeds 500 characters');
+    const maxLength = m.role === 'user' ? MAX_USER_CONTENT_LENGTH : MAX_ASSISTANT_CONTENT_LENGTH;
+    if (m.content.length > maxLength) {
+      throw new ValidationError(`message content exceeds ${maxLength} characters`);
     }
     if (m.replyToId !== undefined && m.replyToId !== null && typeof m.replyToId !== 'string') {
       throw new ValidationError('replyToId must be a string, null, or omitted');

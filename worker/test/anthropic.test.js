@@ -79,6 +79,21 @@ test('getBotResponse throws AnthropicError on a non-ok response', async () => {
   );
 });
 
+test('getBotResponse nulls out a reaction outside the fixed 10-emoji set', async () => {
+  const fetchImpl = async () => ({
+    ok: true,
+    status: 200,
+    json: async () => ({
+      content: [
+        { type: 'tool_use', name: 'respond', input: { text: 'Bet.', reaction: '🔥' } },
+      ],
+    }),
+  });
+
+  const result = await getBotResponse({ apiKey: 'k', systemPrompt: 's', messages: [{ id: 'a1', role: 'user', content: 'hi' }], fetchImpl });
+  assert.equal(result.reaction, null);
+});
+
 test('getBotResponse throws AnthropicError when no respond tool call is present', async () => {
   const fetchImpl = async () => ({ ok: true, status: 200, json: async () => ({ content: [{ type: 'text', text: 'oops' }] }) });
   await assert.rejects(
