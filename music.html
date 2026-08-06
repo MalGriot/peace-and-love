@@ -330,9 +330,9 @@
   }
   .about-slide__photo{
     width:min(320px,100%);aspect-ratio:4/5;flex:none;border-radius:6px;overflow:hidden;
-    box-shadow:0 30px 70px rgba(0,0,0,.5);
+    box-shadow:0 30px 70px rgba(0,0,0,.5);background:var(--velvet-wine);
   }
-  .about-slide__photo img{width:100%;height:100%;object-fit:cover}
+  .about-slide__photo img{width:100%;height:100%;object-fit:cover;opacity:.5;mix-blend-mode:luminosity}
   .about-slide__body{flex:1;min-width:260px;padding-top:6px}
   .about__eyebrow{color:var(--brass);font-size:12px;letter-spacing:.2em;text-transform:uppercase;display:block;margin-bottom:14px}
   .about__bio{font-size:16px;line-height:1.7;color:var(--paper-dim);max-width:62ch;margin:0 0 16px}
@@ -464,7 +464,7 @@
   <div class="m-hero__inner">
     <span class="m-hero__eyebrow">Singer · Songwriter · Poet · MC/Host · Looper · Voice Actor</span>
     <div class="m-hero__copy" id="heroCopy">
-      <h1 class="m-hero__title" id="heroTitle">Hear It Live</h1>
+      <h1 class="m-hero__title" id="heroTitle">Want me there?</h1>
       <p class="m-hero__desc" id="heroDesc">Intimate rooms, full voice, no holding back — catch the next one live.</p>
       <button type="button" class="btn btn-light" id="heroCta">Book a Show</button>
     </div>
@@ -621,7 +621,7 @@
     <span class="release__year">2026</span>
     <div class="release__main">
       <div class="release__art-stage">
-        <div class="release__disc release__disc--vinyl">
+        <div class="release__disc release__disc--cd">
           <div class="release__disc-spin">
             <img class="release__disc__label" src="" alt="">
             <span class="release__disc__hole"></span>
@@ -631,7 +631,7 @@
       </div>
       <div>
         <h3 class="release__title">Toxic Baby</h3>
-        <span class="release__type">Album · Spotify</span>
+        <span class="release__type">EP · Spotify</span>
         <span class="release__credits">Mal Griot &amp; Deep Dawn — Hangar 18 Studio</span>
       </div>
     </div>
@@ -653,7 +653,7 @@
         <img class="release__art" src="https://images.pexels.com/photos/18430331/pexels-photo-18430331/free-photo-of-close-up-of-a-gramophone-playing-music.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
       </div>
       <div>
-        <h3 class="release__title">TRULY HIGHER</h3>
+        <h3 class="release__title">Truly Higher</h3>
         <span class="release__type">EP · SoundCloud</span>
       </div>
     </div>
@@ -828,7 +828,7 @@
   var heroSlides = [
     {
       img: 'img/hero-1.jpg', alt: 'Mal Griot performing live with the band', pos: '36% 18%',
-      align: 'left', title: 'Hear It Live',
+      align: 'left', title: 'Want me there?',
       desc: 'Intimate rooms, full voice, no holding back — catch the next one live.',
       cta: 'Book a Show', action: 'link', target: 'contact.html'
     },
@@ -840,7 +840,7 @@
     },
     {
       img: 'img/hero-3.jpg', alt: 'Mal Griot in the studio surrounded by pedalboards', pos: '61% 27%',
-      align: 'right', title: 'Come Ask',
+      align: 'right', title: 'Hmu',
       desc: 'Curious about the process, the gear, or what’s next? Ask direct.',
       cta: 'Ask Griot Anything', action: 'chat'
     }
