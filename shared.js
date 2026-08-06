@@ -4,7 +4,7 @@ function renderChrome(active) {
   const links = [
     ['music.html', 'Music', 'music'],
     ['griot-cuts.html', 'Griot Cuts', 'cuts'],
-    ['wellness-coaching.html', 'Soundscapes', 'wellness'],
+    ['soundscapes.html', 'Soundscapes', 'wellness'],
     ['contact.html', 'Contact', 'contact'],
   ];
   const linkHtml = links
