@@ -2,7 +2,7 @@
 // stay in sync without a server-side include. Call renderChrome('music'|'cuts'|'wellness'|'contact').
 function renderChrome(active) {
   const links = [
-    ['music.html', 'Music', 'music'],
+    ['music.html', 'Voice', 'music'],
     ['griot-cuts.html', 'Video', 'cuts'],
     ['soundscapes.html', 'Soundscapes', 'wellness'],
     ['contact.html', 'Contact', 'contact'],
@@ -342,6 +342,7 @@ function initMiniPlayer() {
     widget.bind(SC.Widget.Events.PLAY, () => {
       setPlaying(true);
       try { localStorage.setItem('griotPlayerActivated', '1'); } catch (e) {}
+      window.dispatchEvent(new CustomEvent('griot:mini-player-playing'));
     });
     widget.bind(SC.Widget.Events.PAUSE, () => setPlaying(false));
     widget.bind(SC.Widget.Events.FINISH, () => setPlaying(false));
