@@ -379,6 +379,21 @@
   }
   .videos__eyebrow{color:var(--brass);font-size:12px;letter-spacing:.2em;text-transform:uppercase}
   .videos__title{font-family:var(--font-display);font-weight:400;font-size:clamp(26px,3vw,38px);margin:10px 0 34px}
+  .videos__featured{
+    max-width:900px;margin:0 auto 44px;
+  }
+  .videos__featured-tag{
+    display:inline-block;color:var(--brass);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    border:1px solid rgba(201,162,75,.4);border-radius:999px;padding:5px 14px;margin-bottom:16px;
+  }
+  .videos__featured-stage{
+    aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:rgba(239,230,216,.06);
+    box-shadow:0 30px 70px rgba(0,0,0,.5);
+  }
+  .videos__featured-stage iframe{width:100%;height:100%;border:0;display:block}
+  .videos__featured-desc{
+    font-size:15px;color:var(--paper-dim);max-width:60ch;margin:16px auto 0;
+  }
   .videos__grid{
     display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1100px;margin:0 auto 30px;
   }
@@ -800,6 +815,11 @@
 <section class="videos" id="videos">
   <span class="videos__eyebrow">Watch</span>
   <h2 class="videos__title">Performances</h2>
+  <div class="videos__featured">
+    <span class="videos__featured-tag">Featured — a movie in your mind</span>
+    <div class="videos__featured-stage"><iframe src="https://www.youtube-nocookie.com/embed/FuHX5wwS3JQ" title="Immersive audiobook chapter — Mal Griot" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+    <p class="videos__featured-desc">An immersive 14-minute audiobook chapter, built with heavy sound design — close your eyes and let it run like a film.</p>
+  </div>
   <div class="videos__grid">
     <div class="videos__card"><iframe src="https://www.youtube-nocookie.com/embed/wBonF3kFFPU" title="Mal Griot video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
     <div class="videos__card"><iframe src="https://www.youtube-nocookie.com/embed/NkaRBHImjSo" title="Mal Griot video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
