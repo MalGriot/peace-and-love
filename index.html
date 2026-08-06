@@ -18,8 +18,9 @@
   }
   .home-mark:hover{transform:translateX(-50%) scale(1.12)}
   .home-mark__row{display:flex;align-items:center;gap:8px}
-  .home-mark__icon{width:22px;height:22px;filter:drop-shadow(0 2px 10px rgba(0,0,0,.5));transition:transform .6s ease}
-  .home-mark:hover .home-mark__icon{transform:rotate(360deg)}
+  .home-mark__icon{width:22px;height:22px;filter:drop-shadow(0 2px 10px rgba(0,0,0,.5))}
+  .home-mark:hover .home-mark__icon{animation:record-spin 1.6s linear infinite}
+  @keyframes record-spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
   .home-mark__name{font-family:var(--font-display);font-size:clamp(16px,2vw,20px);letter-spacing:.16em;text-transform:uppercase;color:#fff;text-shadow:0 2px 16px rgba(0,0,0,.5)}
   .home-mark__sub{font-family:var(--font-body);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.7)}
 
@@ -128,7 +129,7 @@
       <img src="img/brand/nav-mark-gold.png" alt="" class="home-mark__icon">
       <span class="home-mark__name">Mal Griot</span>
     </span>
-    <span class="home-mark__sub">Music · Videos · Soundscapes</span>
+    <span class="home-mark__sub">Voice · Videos · Soundscapes</span>
   </div>
 
   <div class="home-bar">
@@ -155,7 +156,7 @@
 
   <div class="panels" id="panels" style="position:absolute;inset:0;display:flex">
 
-    <a href="music.html" class="panel" data-key="music">
+    <a href="voice.html" class="panel" data-key="music">
       <div class="panel__media">
         <img class="panel__photo" src="img/hero-1.jpg" alt="Mal Griot performing live" style="object-position:36% 18%">
         <video class="panel__video" data-src="video/music-hover.mp4" muted loop playsinline></video>

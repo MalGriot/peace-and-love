@@ -2,7 +2,7 @@
 // stay in sync without a server-side include. Call renderChrome('music'|'cuts'|'wellness'|'contact').
 function renderChrome(active) {
   const links = [
-    ['music.html', 'Voice', 'music'],
+    ['voice.html', 'Voice', 'music'],
     ['griot-cuts.html', 'Video', 'cuts'],
     ['soundscapes.html', 'Soundscapes', 'wellness'],
     ['contact.html', 'Contact', 'contact'],
@@ -134,7 +134,7 @@ const playerHtml = `
   </iframe>`;
 
 // Wires the mini-player up once its markup exists in the DOM (on every page).
-// Guards every element that's specific to the music.html listening stage
+// Guards every element that's specific to the voice.html listening stage
 // (#listenVinyl, #sleeveArt, #listenTracks, #listenStage) since they don't
 // exist on the other pages — the player still works there, just without
 // those extra visuals.
