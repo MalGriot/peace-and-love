@@ -19,13 +19,25 @@
     position:relative;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;justify-content:flex-end;
     overflow:hidden;background:var(--leather-deep);
   }
-  .g-hero video, .g-hero__poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(.25) contrast(1.15) brightness(.68)}
-  .g-hero__poster{object-position:61% 27%}
+  .g-hero__poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(.25) contrast(1.15) brightness(.68);object-position:50% 42%;cursor:pointer;z-index:1}
+  .g-hero.is-playing .g-hero__poster{pointer-events:none}
+  .g-hero__video-wrap{position:absolute;inset:0;z-index:2;opacity:0;transition:opacity .8s ease;pointer-events:none}
+  .g-hero.is-playing .g-hero__video-wrap{opacity:1;pointer-events:auto}
+  .g-hero__video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
   .g-hero__grain{position:absolute;inset:0;opacity:.5;mix-blend-mode:overlay;pointer-events:none;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
   .g-hero__scratch{position:absolute;inset:0;background:repeating-linear-gradient(115deg, rgba(255,255,255,.03) 0 1px, transparent 1px 90px);pointer-events:none}
   .g-hero__scrim{position:absolute;inset:0;background:linear-gradient(to top, var(--leather-deep) 5%, rgba(18,13,9,.25) 60%)}
   .g-hero__inner{position:relative;z-index:2;padding:150px clamp(20px,5vw,64px) 64px}
+  .g-hero__play{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;
+    width:84px;height:84px;border-radius:50%;background:rgba(18,13,9,.55);border:2px solid rgba(239,230,216,.7);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(2px);
+    transition:transform .25s ease,background .25s ease;
+  }
+  .g-hero__play:hover{transform:translate(-50%,-50%) scale(1.08);background:rgba(232,64,47,.75);border-color:var(--scar)}
+  .g-hero__play svg{margin-left:4px}
+  .g-hero.is-playing .g-hero__play{display:none}
   .g-hero__eyebrow{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--scar);margin-bottom:16px;font-weight:600}
   .g-hero__title{
     font-family:var(--font-display);font-weight:600;font-size:clamp(52px,10vw,140px);line-height:.86;margin:0 0 20px;
@@ -72,10 +84,12 @@
 
 <div id="chrome-nav"></div>
 
-<header class="g-hero">
-  <img class="g-hero__poster" id="ghPoster" src="img/hero-3.jpg" alt="Mal Griot in the studio surrounded by pedalboards">
-  <video id="ghVideo" autoplay muted loop playsinline style="opacity:0;transition:opacity .8s ease"
-    src="https://videos.pexels.com/video-files/7699548/7699548-sd_640_360_30fps.mp4"></video>
+<header class="g-hero" id="ghHero">
+  <img class="g-hero__poster" id="ghPoster" src="https://images.pexels.com/photos/9258252/pexels-photo-9258252.jpeg?cs=tinysrgb&dpr=2&w=1600" alt="Sun Burna cover art">
+  <div id="ghVideoWrap" class="g-hero__video-wrap"></div>
+  <button type="button" class="g-hero__play" id="ghPlay" aria-label="Play video">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="var(--paper,#efe6d8)"><path d="M8 5v14l11-7z"/></svg>
+  </button>
   <div class="g-hero__scratch"></div>
   <div class="g-hero__grain"></div>
   <div class="g-hero__scrim"></div>
@@ -164,9 +178,16 @@
 <script src="chat.js"></script>
 <script>
   renderChrome('cuts');
-  const v = document.getElementById('ghVideo');
-  v.addEventListener('canplay', () => { v.style.opacity = 1; });
-  v.play().catch(() => {});
+  const hero = document.getElementById('ghHero');
+  const poster = document.getElementById('ghPoster');
+  const videoWrap = document.getElementById('ghVideoWrap');
+  const playBtn = document.getElementById('ghPlay');
+  function playHero(){
+    hero.classList.add('is-playing');
+    videoWrap.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/OQ0wqOBxscU?autoplay=1&rel=0" title="Sun Burna" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+  }
+  playBtn.addEventListener('click', playHero);
+  poster.addEventListener('click', playHero);
 </script>
 </body>
 </html>

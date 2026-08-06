@@ -35,7 +35,7 @@
   .m-hero__grain{position:absolute;inset:0;opacity:.35;mix-blend-mode:overlay;pointer-events:none;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
   .m-hero__slides{position:absolute;inset:0;overflow:hidden}
-  .m-hero__slide{position:absolute;inset:0;opacity:0;transition:opacity 2.8s ease}
+  .m-hero__slide{position:absolute;inset:0;opacity:0;transition:opacity 7s ease}
   .m-hero__slide.is-active{opacity:1}
   .m-hero__slide img{
     width:100%;height:100%;object-fit:cover;opacity:.5;mix-blend-mode:luminosity;
@@ -346,7 +346,7 @@
   .about__footer{padding:36px clamp(20px,5vw,64px) 120px}
   .about__row{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:28px}
   .about__epk-note{font-size:12px;color:var(--paper-faint);margin:10px 0 0}
-  .about__socials{display:flex;gap:12px}
+  .about__socials{display:flex;gap:12px;flex-wrap:wrap}
   .about__socials a{
     width:44px;height:44px;border-radius:999px;border:1px solid rgba(239,230,216,.2);
     display:flex;align-items:center;justify-content:center;color:var(--paper-dim);
@@ -834,9 +834,9 @@
     },
     {
       img: 'img/hero-2.jpg', alt: 'Mal Griot singing into the mic', pos: '50% 18%',
-      align: 'center', title: 'Watch It Move',
-      desc: 'Kinetic edits, music videos, and behind-the-scenes cuts from the sessions.',
-      cta: 'Watch the Videos', action: 'link', target: 'griot-cuts.html'
+      align: 'center', title: 'Learn Songwriting',
+      desc: 'How a line survives dozens of rewrites before it earns its place in a song — the process, unfiltered.',
+      cta: 'Ask About Songwriting', action: 'chat'
     },
     {
       img: 'img/hero-3.jpg', alt: 'Mal Griot in the studio surrounded by pedalboards', pos: '61% 27%',
@@ -919,6 +919,20 @@
     startTimer();
   });
 
+  var heroTouchX = null;
+  hero.addEventListener('touchstart', function(e){
+    heroTouchX = e.touches[0].clientX;
+  }, { passive: true });
+  hero.addEventListener('touchend', function(e){
+    if(heroTouchX === null) return;
+    var dx = e.changedTouches[0].clientX - heroTouchX;
+    heroTouchX = null;
+    if(Math.abs(dx) < 40) return;
+    if(dx < 0){ showSlide((heroIndex + 1) % heroSlides.length); }
+    else { showSlide((heroIndex - 1 + heroSlides.length) % heroSlides.length); }
+    resetTimer();
+  }, { passive: true });
+
   showSlide(0);
   startTimer();
 })();
@@ -956,13 +970,27 @@
   }
 
   function nextSlide(){ showSlide(index + 1); }
-  function startTimer(){ timer = setInterval(nextSlide, 22000); }
+  function startTimer(){ timer = setInterval(nextSlide, 24000); }
   function stopTimer(){ clearInterval(timer); }
   function resetTimer(){ stopTimer(); startTimer(); }
 
   carousel.addEventListener('mouseenter', stopTimer);
   carousel.addEventListener('mouseleave', startTimer);
   window.addEventListener('resize', setHeight);
+
+  var aboutTouchX = null;
+  viewport.addEventListener('touchstart', function(e){
+    aboutTouchX = e.touches[0].clientX;
+  }, { passive: true });
+  viewport.addEventListener('touchend', function(e){
+    if(aboutTouchX === null) return;
+    var dx = e.changedTouches[0].clientX - aboutTouchX;
+    aboutTouchX = null;
+    if(Math.abs(dx) < 40) return;
+    if(dx < 0){ showSlide(index + 1); }
+    else { showSlide(index - 1); }
+    resetTimer();
+  }, { passive: true });
 
   showSlide(0);
   startTimer();

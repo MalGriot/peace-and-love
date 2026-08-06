@@ -20,7 +20,7 @@
 }
 
 *{box-sizing:border-box}
-html,body{margin:0;padding:0}
+html,body{margin:0;padding:0;overflow-x:hidden;max-width:100%}
 /* Base body treatment: deep ink sky with a scatter of barely-there star-like
    glints — no curtain texture, just the dark ground and faint points of light.
    Satellite pages with their own signature texture (asphalt, leather, linen)
