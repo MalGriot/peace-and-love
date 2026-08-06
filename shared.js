@@ -3,7 +3,7 @@
 function renderChrome(active) {
   const links = [
     ['voice.html', 'Voice', 'music'],
-    ['griot-cuts.html', 'Video', 'cuts'],
+    ['video.html', 'Video', 'cuts'],
     ['soundscapes.html', 'Soundscapes', 'wellness'],
     ['contact.html', 'Contact', 'contact'],
   ];
