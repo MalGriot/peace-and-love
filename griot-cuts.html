@@ -9,84 +9,89 @@
 <link rel="stylesheet" href="shared.css">
 <style>
   :root{
-    --leather-deep:#120d09;
-    --leather-warm:#241811;
-    --scar:#e8402f;
-    --sun-gold:#f4a93b;
-    --sun-amber:#e07a2c;
     --sun-teal:#3c6672;
   }
-  body{background-color:var(--leather-deep);background-image:var(--stars-svg);background-repeat:repeat;background-attachment:fixed}
+  body{background-color:var(--ink);background-image:var(--stars-svg);background-repeat:repeat;background-attachment:fixed}
 
   .g-hero{
     position:relative;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;justify-content:flex-end;
-    overflow:hidden;background:var(--leather-deep);
+    overflow:hidden;background:var(--ink);
+    --hero-accent:var(--gold);
   }
-  .g-hero__poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(.1) contrast(1.1) brightness(.72) saturate(1.15);object-position:50% 38%;cursor:pointer;z-index:1;transition:opacity .5s ease}
-  .g-hero.is-playing .g-hero__poster{pointer-events:none}
-  .g-hero__video-wrap{position:absolute;inset:0;z-index:2;opacity:0;transition:opacity .8s ease;cursor:pointer}
-  .g-hero.is-playing .g-hero__video-wrap{opacity:1;pointer-events:auto}
+  .g-hero__slides{position:absolute;inset:0;z-index:1}
+  .g-hero__slide{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .6s ease}
+  .g-hero__slide.is-active{opacity:1;pointer-events:auto}
+  .g-hero__poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(.1) contrast(1.1) brightness(.72) saturate(1.15);cursor:pointer;transition:opacity .5s ease}
+  .g-hero__slide.is-playing .g-hero__poster{pointer-events:none}
+  .g-hero__video-wrap{position:absolute;inset:0;z-index:1;opacity:0;transition:opacity .8s ease;cursor:pointer}
+  .g-hero__slide.is-playing .g-hero__video-wrap{opacity:1;pointer-events:auto}
   .g-hero__video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none}
-  .g-hero__grain{position:absolute;inset:0;opacity:.5;mix-blend-mode:overlay;pointer-events:none;
+  .g-hero__grain{position:absolute;inset:0;opacity:.5;mix-blend-mode:overlay;pointer-events:none;z-index:2;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
-  .g-hero__scratch{position:absolute;inset:0;background:repeating-linear-gradient(115deg, rgba(255,255,255,.03) 0 1px, transparent 1px 90px);pointer-events:none}
+  .g-hero__scratch{position:absolute;inset:0;background:repeating-linear-gradient(115deg, rgba(255,255,255,.03) 0 1px, transparent 1px 90px);pointer-events:none;z-index:2}
   .g-hero__scrim{
-    position:absolute;inset:0;pointer-events:none;transition:opacity .5s ease;
+    position:absolute;inset:0;pointer-events:none;transition:opacity .5s ease;z-index:2;
     background:
-      linear-gradient(to top, rgba(8,5,2,.96) 0%, rgba(30,17,7,.62) 40%, rgba(224,122,44,.14) 68%, transparent 100%),
-      radial-gradient(120% 80% at 20% 100%, rgba(244,169,59,.22), transparent 65%),
+      linear-gradient(to top, rgba(11,10,9,.96) 0%, rgba(11,10,9,.62) 40%, rgba(201,162,75,.14) 68%, transparent 100%),
+      radial-gradient(120% 80% at 20% 100%, rgba(224,178,106,.18), transparent 65%),
       radial-gradient(90% 70% at 100% 0%, rgba(60,102,114,.22), transparent 60%);
   }
   .g-hero.is-video-playing .g-hero__scrim{opacity:.4}
-  .g-hero__inner{position:relative;z-index:2;padding:150px clamp(20px,5vw,64px) 64px;opacity:1;transform:translateY(0);transition:opacity .5s ease,transform .5s ease}
+  .g-hero__inner{position:relative;z-index:3;padding:150px clamp(20px,5vw,64px) 100px;opacity:1;transform:translateY(0);transition:opacity .5s ease,transform .5s ease}
   .g-hero.is-video-playing .g-hero__inner{opacity:0;transform:translateY(10px);pointer-events:none}
   .g-hero__cta-row{display:flex;align-items:center;gap:14px}
   .g-hero__mute{
     display:flex;flex-shrink:0;align-items:center;justify-content:center;
-    width:44px;height:44px;border-radius:50%;background:rgba(8,5,2,.6);border:1.5px solid rgba(239,230,216,.6);
+    width:44px;height:44px;border-radius:50%;background:rgba(11,10,9,.6);border:1.5px solid rgba(245,241,234,.6);
     cursor:pointer;backdrop-filter:blur(2px);transition:transform .25s ease,background .25s ease;
   }
-  .g-hero__mute:hover{transform:scale(1.08);background:rgba(224,122,44,.8);border-color:var(--sun-gold)}
-  .g-hero__eyebrow{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--sun-gold);margin-bottom:16px;font-weight:600}
+  .g-hero__mute:hover{transform:scale(1.08);background:rgba(201,162,75,.8);border-color:var(--gold)}
+  .g-hero__eyebrow{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;font-weight:600}
   .g-hero__title{
-    font-family:var(--font-display);font-weight:600;font-size:clamp(52px,10vw,140px);line-height:.86;margin:0 0 20px;
+    font-family:var(--font-display);font-weight:600;font-size:clamp(52px,10vw,140px);line-height:.86;margin:0 0 14px;
     text-transform:uppercase;letter-spacing:-.01em;
     text-shadow:0 8px 40px rgba(0,0,0,.75), 0 2px 12px rgba(0,0,0,.85);
   }
-  .g-hero__title em{font-style:normal;color:var(--sun-gold)}
+  .g-hero__title em{font-style:normal;color:var(--hero-accent)}
+  .g-hero__credit{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--hero-accent);margin:0 0 18px;text-shadow:0 2px 14px rgba(0,0,0,.7)}
   .g-hero__desc{font-size:15.5px;line-height:1.6;color:var(--paper-dim);max-width:42ch;margin-bottom:32px;text-shadow:0 2px 14px rgba(0,0,0,.7)}
+  .g-hero__dots{position:absolute;left:50%;bottom:96px;translate:-50% 0;z-index:4;display:flex;gap:9px}
+  .g-hero__dot{width:8px;height:8px;padding:0;border-radius:999px;border:none;background:rgba(245,241,234,.28);cursor:pointer;transition:background .3s ease,transform .3s ease}
+  .g-hero__dot.is-active{background:var(--gold);transform:scale(1.3)}
 
   /* kinetic marquee strip */
-  .marquee{overflow:hidden;border-top:1px solid rgba(239,230,216,.12);border-bottom:1px solid rgba(239,230,216,.12);background:var(--leather-warm);padding:16px 0}
-  .marquee__track{display:flex;gap:40px;white-space:nowrap;animation:scroll-left 22s linear infinite;width:max-content}
+  .marquee{overflow:hidden;border-top:1px solid rgba(245,241,234,.12);border-bottom:1px solid rgba(245,241,234,.12);background:rgba(0,0,0,.28);padding:16px 0}
+  .marquee__track{display:flex;gap:40px;white-space:nowrap;width:max-content;animation:scroll-left linear infinite}
   .marquee__track span{font-family:var(--font-display);font-weight:600;font-size:20px;text-transform:uppercase;letter-spacing:.02em;color:var(--paper-dim)}
-  .marquee__track span:nth-child(odd){color:var(--scar)}
-  @keyframes scroll-left{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .marquee__track span:nth-child(odd){color:var(--gold)}
+  @keyframes scroll-left{from{transform:translateX(0)}to{transform:translateX(var(--marquee-shift, -50%))}}
 
   /* portfolio grid */
   .portfolio{padding:100px clamp(20px,5vw,64px)}
   .portfolio__head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:44px;flex-wrap:wrap}
   .portfolio__head h2{font-family:var(--font-display);font-weight:600;text-transform:uppercase;font-size:clamp(28px,3.4vw,44px);margin:0}
+  .portfolio__head a{color:var(--gold);font-size:13px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid rgba(224,178,106,.4);padding-bottom:2px;transition:border-color .2s ease}
+  .portfolio__head a:hover{border-color:var(--gold)}
   .portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-  .p-card{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:2px}
+  .p-card{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:2px;display:block;text-decoration:none;color:inherit}
   .p-card img{width:100%;height:100%;object-fit:cover;filter:grayscale(.35) contrast(1.1);transition:transform .5s ease,filter .5s ease}
   .p-card:hover img{transform:scale(1.06);filter:grayscale(0) contrast(1.1)}
-  .p-card__scrim{position:absolute;inset:0;background:linear-gradient(to top, rgba(18,13,9,.9), transparent 60%)}
+  .p-card__scrim{position:absolute;inset:0;background:linear-gradient(to top, rgba(11,10,9,.9), transparent 60%)}
   .p-card__label{position:absolute;left:16px;bottom:14px;right:16px}
-  .p-card__label .kind{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--scar);display:block;margin-bottom:4px;font-weight:600}
+  .p-card__label .kind{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);display:block;margin-bottom:4px;font-weight:600}
   .p-card__label .name{font-family:var(--font-display);font-weight:500;font-size:18px}
   @media (max-width:860px){.portfolio-grid{grid-template-columns:repeat(2,1fr)}}
   @media (max-width:560px){.portfolio-grid{grid-template-columns:1fr}}
 
   /* services strip */
-  .services{padding:0 clamp(20px,5vw,64px) 100px;display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:rgba(239,230,216,.1)}
-  .service{background:var(--leather-deep);padding:36px 28px}
-  .service .num{color:var(--scar);font-family:var(--font-display);font-weight:600;font-size:14px}
+  .services{padding:0 clamp(20px,5vw,64px) 100px;display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:rgba(245,241,234,.1)}
+  .service{background:var(--ink);padding:36px 28px}
+  .service .num{color:var(--brass);font-family:var(--font-display);font-weight:600;font-size:14px}
   .service h3{font-family:var(--font-display);font-weight:500;font-size:20px;margin:14px 0 10px}
   .service p{font-size:13.5px;color:var(--paper-dim);line-height:1.6;margin:0}
   @media (max-width:760px){.services{grid-template-columns:1fr}}
 
-  .g-cta{padding:90px clamp(20px,5vw,64px);text-align:center;background:var(--leather-warm);border-top:1px solid rgba(239,230,216,.1)}
+  .g-cta{padding:90px clamp(20px,5vw,64px);text-align:center;background:var(--velvet-deep);border-top:1px solid rgba(245,241,234,.1)}
   .g-cta h2{font-family:var(--font-display);font-weight:600;text-transform:uppercase;font-size:clamp(30px,4.2vw,48px);margin:0 0 24px}
 </style>
 </head>
@@ -95,15 +100,15 @@
 <div id="chrome-nav"></div>
 
 <header class="g-hero" id="ghHero">
-  <img class="g-hero__poster" id="ghPoster" src="https://img.youtube.com/vi/OQ0wqOBxscU/maxresdefault.jpg" alt="Sun Burna visualizer lyric video by Mal Griot">
-  <div id="ghVideoWrap" class="g-hero__video-wrap"></div>
+  <div class="g-hero__slides" id="ghSlides"></div>
   <div class="g-hero__scratch"></div>
   <div class="g-hero__grain"></div>
   <div class="g-hero__scrim"></div>
   <div class="g-hero__inner">
-    <span class="g-hero__eyebrow">Video Editing</span>
-    <h1 class="g-hero__title">Griot<br><em>Cuts</em></h1>
-    <p class="g-hero__desc">Story-first, kinetic edits — music videos, reels, and brand content cut with rhythm, not just trimmed.</p>
+    <span class="g-hero__eyebrow" id="ghEyebrow">Video Editing</span>
+    <h1 class="g-hero__title" id="ghTitle">Griot<br><em>Cuts</em></h1>
+    <p class="g-hero__credit" id="ghCredit" hidden></p>
+    <p class="g-hero__desc" id="ghDesc">Precise, story-first cuts with retention-built pacing, color grading, and clean captions — edits made to be watched, not skipped.</p>
     <div class="g-hero__cta-row">
       <a href="#work" class="btn btn-light">See the Work</a>
       <button type="button" class="g-hero__mute" id="ghMute" aria-label="Unmute video">
@@ -111,6 +116,7 @@
       </button>
     </div>
   </div>
+  <div class="g-hero__dots" id="ghDots"></div>
 </header>
 
 <div class="marquee">
@@ -190,27 +196,115 @@
 <script src="chat.js"></script>
 <script>
   renderChrome('cuts');
-  const hero = document.getElementById('ghHero');
-  const poster = document.getElementById('ghPoster');
-  const videoWrap = document.getElementById('ghVideoWrap');
-  const muteBtn = document.getElementById('ghMute');
 
-  var VIDEO_ID = 'OQ0wqOBxscU';
-  var UPLOADS_PLAYLIST_ID = 'UU2ouYdd3qmP9vSvLpKD8-CQ'; // Mal Griot channel uploads (UC -> UU)
+  var HERO_SLIDES = [
+    {
+      videoId: 'Kjgp3adMSSY',
+      poster: 'https://img.youtube.com/vi/Kjgp3adMSSY/hqdefault.jpg',
+      alt: 'Griot Cuts video editing reel',
+      eyebrow: 'Video Editing',
+      titleHtml: 'Griot<br><em>Cuts</em>',
+      credit: '',
+      desc: 'Precise, story-first cuts with retention-built pacing, color grading, and clean captions — edits made to be watched, not skipped.',
+      accent: 'var(--gold)',
+      playlistId: null
+    },
+    {
+      videoId: 'OQ0wqOBxscU',
+      poster: 'https://img.youtube.com/vi/OQ0wqOBxscU/maxresdefault.jpg',
+      alt: 'Sun Burna visualizer lyric video by Mal Griot',
+      eyebrow: 'Self-Produced',
+      titleHtml: 'Sun<br><em>Burna</em>',
+      credit: 'Written · Shot · Edited · Mixed by Mal Griot',
+      desc: 'A visualizer lyric video built entirely in-house — writing, footage, edit, and mix all under one roof.',
+      accent: 'var(--sun-teal)',
+      playlistId: 'UU2ouYdd3qmP9vSvLpKD8-CQ' // Mal Griot channel uploads (UC -> UU)
+    }
+  ];
 
-  var player = null;
-  var apiReady = false;
-  var activated = false; // true once the viewer has intentionally started playback with sound
+  var hero = document.getElementById('ghHero');
+  var slidesWrap = document.getElementById('ghSlides');
+  var dotsWrap = document.getElementById('ghDots');
+  var eyebrowEl = document.getElementById('ghEyebrow');
+  var titleEl = document.getElementById('ghTitle');
+  var creditEl = document.getElementById('ghCredit');
+  var descEl = document.getElementById('ghDesc');
+  var muteBtn = document.getElementById('ghMute');
 
   var iconUnmuted = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--paper,#efe6d8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
   var iconMuted = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--paper,#efe6d8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>';
-  muteBtn.innerHTML = iconMuted;
 
-  function ensurePlayer(cb){
-    if(player){ cb(); return; }
-    videoWrap.innerHTML = '<div id="ghPlayerTarget"></div>';
-    player = new YT.Player('ghPlayerTarget', {
-      videoId: VIDEO_ID,
+  var slideIndex = 0;
+  var apiReady = false;
+  var slideTimer = null;
+  var anyActivated = false; // stops autoplay for good once any slide's sound is turned on
+
+  var slideState = HERO_SLIDES.map(function(){
+    return { player: null, activated: false, el: null, videoWrap: null };
+  });
+
+  HERO_SLIDES.forEach(function(s, i){
+    var el = document.createElement('div');
+    el.className = 'g-hero__slide' + (i === 0 ? ' is-active' : '');
+    el.innerHTML =
+      '<img class="g-hero__poster" src="' + s.poster + '" alt="' + s.alt + '">' +
+      '<div class="g-hero__video-wrap"></div>';
+    slidesWrap.appendChild(el);
+    slideState[i].el = el;
+    slideState[i].videoWrap = el.querySelector('.g-hero__video-wrap');
+
+    var dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'g-hero__dot' + (i === 0 ? ' is-active' : '');
+    dot.setAttribute('aria-label', 'Show slide ' + (i + 1));
+    dot.addEventListener('click', function(){ showSlide(i); });
+    dotsWrap.appendChild(dot);
+
+    el.addEventListener('mouseenter', function(){ previewOn(i); });
+    el.addEventListener('mouseleave', function(){ previewOff(i); });
+    el.addEventListener('click', function(e){
+      if (i !== slideIndex) return;
+      if (e.target.closest('#ghMute, .g-hero__inner a')) return;
+      togglePlay(i, e);
+    });
+  });
+
+  function applySlide(i){
+    slideIndex = i;
+    var s = HERO_SLIDES[i];
+    Array.prototype.forEach.call(slidesWrap.children, function(el, idx){
+      el.classList.toggle('is-active', idx === i);
+    });
+    Array.prototype.forEach.call(dotsWrap.children, function(el, idx){
+      el.classList.toggle('is-active', idx === i);
+    });
+    hero.style.setProperty('--hero-accent', s.accent);
+    eyebrowEl.textContent = s.eyebrow;
+    titleEl.innerHTML = s.titleHtml;
+    if (s.credit) { creditEl.textContent = s.credit; creditEl.hidden = false; }
+    else { creditEl.hidden = true; }
+    descEl.textContent = s.desc;
+    syncMuteButton(i);
+  }
+
+  function showSlide(i){
+    if (i === slideIndex) return;
+    applySlide(i);
+  }
+
+  function nextSlide(){ showSlide((slideIndex + 1) % HERO_SLIDES.length); }
+  function startTimer(){ if (anyActivated) return; slideTimer = setInterval(nextSlide, 5000); }
+  function stopTimer(){ clearInterval(slideTimer); }
+
+  hero.addEventListener('mouseenter', stopTimer);
+  hero.addEventListener('mouseleave', startTimer);
+
+  function ensurePlayer(i, cb){
+    var st = slideState[i];
+    if (st.player) { cb(); return; }
+    st.videoWrap.innerHTML = '<div id="ghPlayerTarget-' + i + '"></div>';
+    st.player = new YT.Player('ghPlayerTarget-' + i, {
+      videoId: HERO_SLIDES[i].videoId,
       host: 'https://www.youtube-nocookie.com',
       playerVars: {
         autoplay: 0, mute: 1, controls: 0, rel: 0, modestbranding: 1, playsinline: 1,
@@ -218,26 +312,31 @@
       },
       events: {
         onReady: function(){ cb(); },
-        onStateChange: function(e){
-          if(e.data === YT.PlayerState.PLAYING){
-            hero.classList.add('is-video-playing');
-            try{ player.unloadModule('captions'); }catch(err){}
-          } else if(e.data === YT.PlayerState.PAUSED){
-            hero.classList.remove('is-video-playing');
-          } else if(e.data === YT.PlayerState.ENDED){
-            hero.classList.remove('is-video-playing');
-            if(activated){
-              // hand off to more Mal Griot uploads instead of YouTube's suggestion grid
-              player.loadPlaylist({ list: UPLOADS_PLAYLIST_ID, listType: 'playlist', index: 0 });
-            } else {
-              // loop the muted preview
-              player.seekTo(0);
-              player.playVideo();
-            }
-          }
-        }
+        onStateChange: function(e){ onPlayerStateChange(i, e); }
       }
     });
+  }
+
+  function onPlayerStateChange(i, e){
+    var st = slideState[i];
+    if (e.data === YT.PlayerState.PLAYING){
+      st.el.classList.add('is-playing');
+      if (i === slideIndex) hero.classList.add('is-video-playing');
+      try { st.player.unloadModule('captions'); } catch(err){}
+    } else if (e.data === YT.PlayerState.PAUSED){
+      st.el.classList.remove('is-playing');
+      if (i === slideIndex) hero.classList.remove('is-video-playing');
+    } else if (e.data === YT.PlayerState.ENDED){
+      st.el.classList.remove('is-playing');
+      if (i === slideIndex) hero.classList.remove('is-video-playing');
+      if (st.activated){
+        var s = HERO_SLIDES[i];
+        if (s.playlistId) st.player.loadPlaylist({ list: s.playlistId, listType: 'playlist', index: 0 });
+      } else {
+        st.player.seekTo(0);
+        st.player.playVideo();
+      }
+    }
   }
 
   window.onYouTubeIframeAPIReady = function(){ apiReady = true; };
@@ -245,61 +344,84 @@
   tag.src = 'https://www.youtube.com/iframe_api';
   document.head.appendChild(tag);
 
-  function previewOn(){
-    if(activated || !apiReady) return;
-    ensurePlayer(function(){
-      player.mute();
-      player.playVideo();
-      hero.classList.add('is-playing');
+  function previewOn(i){
+    var st = slideState[i];
+    if (st.activated || !apiReady) return;
+    ensurePlayer(i, function(){
+      st.player.mute();
+      st.player.playVideo();
     });
   }
-  function previewOff(){
-    if(activated) return;
-    if(player){ player.pauseVideo(); }
-    hero.classList.remove('is-playing');
+  function previewOff(i){
+    var st = slideState[i];
+    if (st.activated) return;
+    if (st.player) st.player.pauseVideo();
   }
 
-  hero.addEventListener('mouseenter', previewOn);
-  hero.addEventListener('mouseleave', previewOff);
+  function syncMuteButton(i){
+    var st = slideState[i];
+    if (st.activated && st.player && !st.player.isMuted()){
+      muteBtn.innerHTML = iconUnmuted;
+      muteBtn.setAttribute('aria-label', 'Mute video');
+    } else {
+      muteBtn.innerHTML = iconMuted;
+      muteBtn.setAttribute('aria-label', 'Unmute video');
+    }
+  }
 
-  function togglePlay(e){
-    if(e){ e.stopPropagation(); }
-    if(!apiReady) return;
-    ensurePlayer(function(){
-      if(!activated){
-        activated = true;
-        hero.classList.add('is-activated', 'is-playing');
-        player.unMute();
-        player.playVideo();
-        muteBtn.innerHTML = iconUnmuted;
-        muteBtn.setAttribute('aria-label','Mute video');
-      } else if(player.getPlayerState() === YT.PlayerState.PLAYING){
-        player.pauseVideo();
+  function togglePlay(i, e){
+    if (e) e.stopPropagation();
+    if (!apiReady) return;
+    var st = slideState[i];
+    ensurePlayer(i, function(){
+      if (!st.activated){
+        activate(i);
+      } else if (st.player.getPlayerState() === YT.PlayerState.PLAYING){
+        st.player.pauseVideo();
       } else {
-        player.playVideo();
+        st.player.playVideo();
       }
     });
   }
+
+  function activate(i){
+    var st = slideState[i];
+    st.activated = true;
+    anyActivated = true;
+    stopTimer();
+    st.player.unMute();
+    st.player.playVideo();
+    syncMuteButton(i);
+    window.dispatchEvent(new CustomEvent('griot:pause-mini-player'));
+  }
+
   function toggleMute(e){
-    if(e){ e.stopPropagation(); }
-    if(!apiReady) return;
-    if(!activated){ togglePlay(); return; }
-    if(!player) return;
-    if(player.isMuted()){
-      player.unMute();
-      muteBtn.innerHTML = iconUnmuted;
-      muteBtn.setAttribute('aria-label','Mute video');
+    if (e) e.stopPropagation();
+    if (!apiReady) return;
+    var st = slideState[slideIndex];
+    if (!st.activated){ togglePlay(slideIndex, e); return; }
+    if (!st.player) return;
+    if (st.player.isMuted()){
+      st.player.unMute();
+      window.dispatchEvent(new CustomEvent('griot:pause-mini-player'));
     } else {
-      player.mute();
-      muteBtn.innerHTML = iconMuted;
-      muteBtn.setAttribute('aria-label','Unmute video');
+      st.player.mute();
     }
+    syncMuteButton(slideIndex);
   }
   muteBtn.addEventListener('click', toggleMute);
-  hero.addEventListener('click', function(e){
-    if(e.target.closest('#ghMute, .g-hero__inner a')) return;
-    togglePlay(e);
+
+  window.addEventListener('griot:mini-player-playing', function(){
+    slideState.forEach(function(st){
+      if (st.player && st.activated && !st.player.isMuted()){
+        st.player.mute();
+      }
+    });
+    syncMuteButton(slideIndex);
   });
+
+  applySlide(0);
+  startTimer();
 </script>
 </body>
 </html>
