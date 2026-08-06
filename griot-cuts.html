@@ -200,7 +200,7 @@
   var HERO_SLIDES = [
     {
       videoId: 'Kjgp3adMSSY',
-      poster: 'https://img.youtube.com/vi/Kjgp3adMSSY/hqdefault.jpg',
+      poster: 'img/GRIOT%20CUTS.png',
       alt: 'Griot Cuts video editing reel',
       eyebrow: 'Video Editing',
       titleHtml: 'Griot<br><em>Cuts</em>',
@@ -240,7 +240,7 @@
   var anyActivated = false; // stops autoplay for good once any slide's sound is turned on
 
   var slideState = HERO_SLIDES.map(function(){
-    return { player: null, activated: false, el: null, videoWrap: null };
+    return { player: null, activated: false, muted: true, el: null, videoWrap: null };
   });
 
   HERO_SLIDES.forEach(function(s, i){
@@ -272,6 +272,9 @@
   function applySlide(i){
     slideIndex = i;
     var s = HERO_SLIDES[i];
+    slideState.forEach(function(st, idx){
+      if (idx !== i && st.player) { st.player.pauseVideo(); }
+    });
     Array.prototype.forEach.call(slidesWrap.children, function(el, idx){
       el.classList.toggle('is-active', idx === i);
     });
@@ -360,7 +363,7 @@
 
   function syncMuteButton(i){
     var st = slideState[i];
-    if (st.activated && st.player && !st.player.isMuted()){
+    if (st.activated && !st.muted){
       muteBtn.innerHTML = iconUnmuted;
       muteBtn.setAttribute('aria-label', 'Mute video');
     } else {
@@ -390,6 +393,7 @@
     anyActivated = true;
     stopTimer();
     st.player.unMute();
+    st.muted = false;
     st.player.playVideo();
     syncMuteButton(i);
     window.dispatchEvent(new CustomEvent('griot:pause-mini-player'));
@@ -401,11 +405,13 @@
     var st = slideState[slideIndex];
     if (!st.activated){ togglePlay(slideIndex, e); return; }
     if (!st.player) return;
-    if (st.player.isMuted()){
+    if (st.muted){
       st.player.unMute();
+      st.muted = false;
       window.dispatchEvent(new CustomEvent('griot:pause-mini-player'));
     } else {
       st.player.mute();
+      st.muted = true;
     }
     syncMuteButton(slideIndex);
   }
@@ -413,8 +419,9 @@
 
   window.addEventListener('griot:mini-player-playing', function(){
     slideState.forEach(function(st){
-      if (st.player && st.activated && !st.player.isMuted()){
+      if (st.player && st.activated && !st.muted){
         st.player.mute();
+        st.muted = true;
       }
     });
     syncMuteButton(slideIndex);
