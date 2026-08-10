@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sumtinels.github.io/mal-griot-trifold-website/sitemap.xml
