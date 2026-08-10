@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://sumtinels.github.io/mal-griot-trifold-website/sitemap.xml
+Sitemap: https://malgriot.github.io/peace-and-love/sitemap.xml
