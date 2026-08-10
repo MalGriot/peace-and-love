@@ -456,26 +456,36 @@
     track.appendChild(frag);
   }
 
-  appendSequence();
-  var trackGap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 0;
-  // one "period" is the width of a single sequence PLUS the gap that will
-  // sit between it and the next sequence once a second one is appended —
-  // that gap isn't part of scrollWidth yet, so it's added explicitly. This
-  // is what makes translateX(-period) land exactly on the next sequence's
-  // start, with no dead space at the seam.
-  var period = track.scrollWidth + trackGap;
+  var period = null;
 
-  while (track.scrollWidth < window.innerWidth * 2) {
-    appendSequence();
-  }
-  window.addEventListener('resize', function(){
-    while (track.scrollWidth < window.innerWidth * 2 + period) {
+  function ensureEnoughSequences(){
+    while (track.scrollWidth < window.innerWidth + period) {
       appendSequence();
     }
-  });
+  }
 
-  track.style.setProperty('--marquee-shift', '-' + period + 'px');
-  track.style.animationDuration = (period / SPEED_PX_PER_SEC) + 's';
+  function layout(){
+    track.innerHTML = '';
+    appendSequence();
+    var trackGap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 0;
+    // one "period" is the width of a single sequence PLUS the gap that will
+    // sit between it and the next sequence once a second one is appended —
+    // that gap isn't part of scrollWidth yet, so it's added explicitly. This
+    // is what makes translateX(-period) land exactly on the next sequence's
+    // start, with no dead space at the seam.
+    period = track.scrollWidth + trackGap;
+    ensureEnoughSequences();
+    track.style.setProperty('--marquee-shift', '-' + period + 'px');
+    track.style.animationDuration = (period / SPEED_PX_PER_SEC) + 's';
+  }
+
+  layout();
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(layout);
+  }
+  window.addEventListener('resize', function(){
+    if (period !== null) ensureEnoughSequences();
+  });
 })();
 </script>
 </body>
