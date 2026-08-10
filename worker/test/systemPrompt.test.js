@@ -10,7 +10,7 @@ test('SYSTEM_PROMPT includes real site facts, not placeholders', () => {
   for (const fact of [
     'Queens, New York',
     'breathe love d e e p',
-    'hello@malgriot.com',
+    'yep.that.malcolm@gmail.com',
     'soundcloud.com/mal-griot',
   ]) {
     assert.ok(SYSTEM_PROMPT.includes(fact), `expected SYSTEM_PROMPT to include "${fact}"`);
