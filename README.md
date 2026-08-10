@@ -9,7 +9,7 @@ Static personal site for Mal Griot (vocalist / spoken-word artist / MC-host / vo
 | `index.html` | Home — builds its own hero/nav inline, does **not** use `renderChrome` |
 | `voice.html` | Voice page — hero photo carousel, listening stage, discography, about/EPK/socials, Instagram grid |
 | `video.html` | Video page (Griot Cuts) |
-| `wellness-coaching.html` | Wellness + Coaching page |
+| `soundscapes.html` | Soundscapes page |
 | `contact.html` | Contact page |
 | `shared.css` | All shared styling: CSS custom properties, nav, footer, buttons, chat widget shell, mini-player |
 | `shared.js` | `renderChrome(active)` — injects nav/footer/chat/mini-player; scroll state, mobile menu, chat toggle, mini-player wiring (`initMiniPlayer`) |
@@ -25,7 +25,7 @@ Every page except `index.html` has three empty slot elements in its markup:
 <div id="chrome-footer"></div>
 <div id="chrome-chat"></div>
 ```
-and calls `renderChrome('<page-key>')` on load. `shared.js` replaces each slot's `outerHTML` with the nav/footer/chat markup, marking the link matching `active` with `.is-active`. Page keys used in the nav link list: `music`, `cuts`, `wellness`, `contact` (mapped to `voice.html`, `video.html`, `wellness-coaching.html`, `contact.html`).
+and calls `renderChrome('<page-key>')` on load. `shared.js` replaces each slot's `outerHTML` with the nav/footer/chat markup, marking the link matching `active` with `.is-active`. Page keys used in the nav link list: `music`, `cuts`, `wellness`, `contact` (mapped to `voice.html`, `video.html`, `soundscapes.html`, `contact.html`).
 
 A fourth optional slot, `<div id="chrome-player"></div>`, holds the persistent mini-player (SoundCloud playback controls). It's always injected on `music` (that's the discovery page); on the other three satellite pages it's only injected once the visitor has pressed play at least once, tracked via `localStorage.griotPlayerActivated`. `index.html` has no slot and never calls `renderChrome`, so the mini-player never appears there. `initMiniPlayer()` (in `shared.js`, called from the `DOMContentLoaded` listener) wires up the SoundCloud Widget API — it guards every element specific to `voice.html`'s listening stage (`#listenStage`, `#listenVinyl`, `#sleeveArt`, `#listenTracks`) so the same function works everywhere without erroring on pages that don't have them.
 
