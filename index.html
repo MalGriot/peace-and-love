@@ -115,10 +115,8 @@
   /* narrow-panel label collapse so copy never overlaps at .72 flex width */
   @media (max-width:900px){
     .panels{flex-direction:column}
-    .home{overflow-y:auto;height:auto;min-height:100vh}
-    html,body{overflow:auto}
-    .panel{height:34vh;flex:none !important}
-    .panels.has-hover .panel.is-active{flex:none !important;height:34vh}
+    .panel{flex:1 !important;height:auto}
+    .panels.has-hover .panel.is-active{flex:1 !important}
     .panel__title{font-size:28px}
     .panel__content{padding-bottom:24px}
     .home-mark{top:64px}
