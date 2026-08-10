@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { corsHeaders, isAllowedOrigin } from '../src/cors.js';
 
 test('isAllowedOrigin allows the production GitHub Pages origin', () => {
-  assert.equal(isAllowedOrigin('https://sumtinels.github.io'), true);
+  assert.equal(isAllowedOrigin('https://malgriot.github.io'), true);
 });
 
 test('isAllowedOrigin allows localhost on any port', () => {
@@ -21,8 +21,8 @@ test('isAllowedOrigin rejects a missing origin', () => {
 });
 
 test('corsHeaders sets Access-Control-Allow-Origin for an allowed origin', () => {
-  const headers = corsHeaders('https://sumtinels.github.io');
-  assert.equal(headers['Access-Control-Allow-Origin'], 'https://sumtinels.github.io');
+  const headers = corsHeaders('https://malgriot.github.io');
+  assert.equal(headers['Access-Control-Allow-Origin'], 'https://malgriot.github.io');
   assert.equal(headers['Access-Control-Allow-Methods'], 'POST, OPTIONS');
 });
 

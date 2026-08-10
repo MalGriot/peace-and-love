@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import worker from '../src/index.js';
 
-const ORIGIN = 'https://sumtinels.github.io';
+const ORIGIN = 'https://malgriot.github.io';
 
 function fakeEnv(runImpl) {
   return { AI: { run: runImpl || (async () => ({ response: { text: 'Peace and love, what is good.' } })) } };

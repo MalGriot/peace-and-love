@@ -1,4 +1,4 @@
-const ALLOWED_ORIGINS = new Set(['https://sumtinels.github.io']);
+const ALLOWED_ORIGINS = new Set(['https://malgriot.github.io']);
 
 export function isAllowedOrigin(origin) {
   if (!origin) return false;
