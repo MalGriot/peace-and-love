@@ -141,10 +141,13 @@
     .panel{flex:1 !important;height:auto}
     .panels.has-hover .panel.is-active{flex:1 !important}
     .panel__title{font-size:28px}
-    .panel__content{padding-bottom:24px}
+    .panel__content{padding-bottom:76px}
     .home-mark{top:64px}
     .home-mark__sub{display:none}
-    .home-bar{bottom:16px;gap:16px}
+    .home-bar{
+      bottom:16px;left:16px;right:88px;transform:none;
+      justify-content:center;flex-wrap:wrap;row-gap:10px;gap:14px;
+    }
     .home-bar a svg{width:17px;height:17px}
     .home-bar a[data-tip]::after,.home-bar a[data-tip]::before{display:none}
   }
