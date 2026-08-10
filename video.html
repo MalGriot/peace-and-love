@@ -40,7 +40,7 @@
   .g-hero__scrim{
     position:absolute;inset:0;pointer-events:none;transition:opacity .5s ease;z-index:2;
     background:
-      linear-gradient(to top, rgba(11,10,9,.96) 0%, rgba(11,10,9,.62) 40%, rgba(201,162,75,.14) 68%, transparent 100%),
+      linear-gradient(to top, rgba(18,16,15,.96) 0%, rgba(18,16,15,.62) 40%, rgba(201,138,69,.14) 68%, transparent 100%),
       radial-gradient(120% 80% at 20% 100%, rgba(224,178,106,.18), transparent 65%),
       radial-gradient(90% 70% at 100% 0%, rgba(60,102,114,.22), transparent 60%);
   }
@@ -49,11 +49,12 @@
   .g-hero.is-video-playing .g-hero__inner{opacity:0;transform:translateY(10px);pointer-events:none}
   .g-hero__cta-row{display:flex;align-items:center;gap:14px}
   .g-hero__mute{
+    position:absolute;top:24px;right:clamp(20px,5vw,64px);z-index:4;
     display:flex;flex-shrink:0;align-items:center;justify-content:center;
-    width:44px;height:44px;border-radius:50%;background:rgba(11,10,9,.6);border:1.5px solid rgba(245,241,234,.6);
+    width:44px;height:44px;border-radius:50%;background:rgba(18,16,15,.6);border:1.5px solid rgba(239,230,216,.6);
     cursor:pointer;backdrop-filter:blur(2px);transition:transform .25s ease,background .25s ease;
   }
-  .g-hero__mute:hover{transform:scale(1.08);background:rgba(201,162,75,.8);border-color:var(--gold)}
+  .g-hero__mute:hover{transform:scale(1.08);background:rgba(201,138,69,.8);border-color:var(--gold)}
   .g-hero__eyebrow{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;font-weight:600}
   .g-hero__title{
     font-family:var(--font-display);font-weight:600;font-size:clamp(52px,10vw,140px);line-height:.86;margin:0 0 14px;
@@ -64,11 +65,11 @@
   .g-hero__credit{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--hero-accent);margin:0 0 18px;text-shadow:0 2px 14px rgba(0,0,0,.7)}
   .g-hero__desc{font-size:15.5px;line-height:1.6;color:var(--paper-dim);max-width:42ch;margin-bottom:32px;text-shadow:0 2px 14px rgba(0,0,0,.7)}
   .g-hero__dots{position:absolute;left:50%;bottom:96px;translate:-50% 0;z-index:4;display:flex;gap:9px}
-  .g-hero__dot{width:8px;height:8px;padding:0;border-radius:999px;border:none;background:rgba(245,241,234,.28);cursor:pointer;transition:background .3s ease,transform .3s ease}
+  .g-hero__dot{width:8px;height:8px;padding:0;border-radius:999px;border:none;background:rgba(239,230,216,.28);cursor:pointer;transition:background .3s ease,transform .3s ease}
   .g-hero__dot.is-active{background:var(--gold);transform:scale(1.3)}
 
   /* kinetic marquee strip */
-  .marquee{overflow:hidden;border-top:1px solid rgba(245,241,234,.12);border-bottom:1px solid rgba(245,241,234,.12);background:rgba(0,0,0,.28);padding:16px 0}
+  .marquee{overflow:hidden;border-top:1px solid rgba(239,230,216,.12);border-bottom:1px solid rgba(239,230,216,.12);background:rgba(0,0,0,.28);padding:16px 0}
   .marquee__track{display:flex;gap:40px;white-space:nowrap;width:max-content;animation:scroll-left linear infinite}
   .marquee__track span{font-family:var(--font-display);font-weight:600;font-size:20px;text-transform:uppercase;letter-spacing:.02em;color:var(--paper-dim)}
   .marquee__track span:nth-child(odd){color:var(--gold)}
@@ -84,7 +85,7 @@
   .p-card{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:2px;display:block;text-decoration:none;color:inherit}
   .p-card img{width:100%;height:100%;object-fit:cover;filter:grayscale(.35) contrast(1.1);transition:transform .5s ease,filter .5s ease}
   .p-card:hover img{transform:scale(1.06);filter:grayscale(0) contrast(1.1)}
-  .p-card__scrim{position:absolute;inset:0;background:linear-gradient(to top, rgba(11,10,9,.9), transparent 60%)}
+  .p-card__scrim{position:absolute;inset:0;background:linear-gradient(to top, rgba(18,16,15,.9), transparent 60%)}
   .p-card__label{position:absolute;left:16px;bottom:14px;right:16px}
   .p-card__label .kind{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);display:block;margin-bottom:4px;font-weight:600}
   .p-card__label .name{font-family:var(--font-display);font-weight:500;font-size:18px}
@@ -92,14 +93,14 @@
   @media (max-width:560px){.portfolio-grid{grid-template-columns:1fr}}
 
   /* services strip */
-  .services{padding:0 clamp(20px,5vw,64px) 100px;display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:rgba(245,241,234,.1)}
+  .services{padding:0 clamp(20px,5vw,64px) 100px;display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:rgba(239,230,216,.1)}
   .service{background:var(--ink);padding:36px 28px}
   .service .num{color:var(--brass);font-family:var(--font-display);font-weight:600;font-size:14px}
   .service h3{font-family:var(--font-display);font-weight:500;font-size:20px;margin:14px 0 10px}
   .service p{font-size:13.5px;color:var(--paper-dim);line-height:1.6;margin:0}
   @media (max-width:760px){.services{grid-template-columns:1fr}}
 
-  .g-cta{padding:90px clamp(20px,5vw,64px);text-align:center;background:var(--velvet-deep);border-top:1px solid rgba(245,241,234,.1)}
+  .g-cta{padding:90px clamp(20px,5vw,64px);text-align:center;background:var(--velvet-deep);border-top:1px solid rgba(239,230,216,.1)}
   .g-cta h2{font-family:var(--font-display);font-weight:600;text-transform:uppercase;font-size:clamp(30px,4.2vw,48px);margin:0 0 24px}
 </style>
 </head>
@@ -119,11 +120,11 @@
     <p class="g-hero__desc" id="ghDesc">Precise, story-first cuts with retention-built pacing, color grading, and clean captions — edits made to be watched, not skipped.</p>
     <div class="g-hero__cta-row">
       <a href="#work" class="btn btn-light">See the Work</a>
-      <button type="button" class="g-hero__mute" id="ghMute" aria-label="Unmute video">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--paper,#efe6d8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
-      </button>
     </div>
   </div>
+  <button type="button" class="g-hero__mute" id="ghMute" aria-label="Unmute video">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--paper,#efe6d8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+  </button>
   <div class="g-hero__dots" id="ghDots"></div>
 </header>
 
@@ -245,7 +246,7 @@
   var anyActivated = false; // stops autoplay for good once any slide's sound is turned on
 
   var slideState = HERO_SLIDES.map(function(){
-    return { player: null, activated: false, muted: true, el: null, videoWrap: null };
+    return { player: null, activated: false, muted: true, ready: false, pending: [], el: null, videoWrap: null };
   });
 
   HERO_SLIDES.forEach(function(s, i){
@@ -269,7 +270,6 @@
     el.addEventListener('mouseleave', function(){ previewOff(i); });
     el.addEventListener('click', function(e){
       if (i !== slideIndex) return;
-      if (e.target.closest('#ghMute, .g-hero__inner a')) return;
       togglePlay(i, e);
     });
   });
@@ -301,7 +301,7 @@
   }
 
   function nextSlide(){ showSlide((slideIndex + 1) % HERO_SLIDES.length); }
-  function startTimer(){ if (anyActivated) return; slideTimer = setInterval(nextSlide, 5000); }
+  function startTimer(){ stopTimer(); if (anyActivated) return; slideTimer = setInterval(nextSlide, 5000); }
   function stopTimer(){ clearInterval(slideTimer); }
 
   hero.addEventListener('mouseenter', stopTimer);
@@ -309,7 +309,8 @@
 
   function ensurePlayer(i, cb){
     var st = slideState[i];
-    if (st.player) { cb(); return; }
+    if (st.ready) { cb(); return; }
+    if (st.player) { st.pending.push(cb); return; }
     st.videoWrap.innerHTML = '<div id="ghPlayerTarget-' + i + '"></div>';
     st.player = new YT.Player('ghPlayerTarget-' + i, {
       videoId: HERO_SLIDES[i].videoId,
@@ -319,7 +320,13 @@
         cc_load_policy: 0, iv_load_policy: 3
       },
       events: {
-        onReady: function(){ cb(); },
+        onReady: function(){
+          st.ready = true;
+          cb();
+          var queued = st.pending;
+          st.pending = [];
+          queued.forEach(function(fn){ fn(); });
+        },
         onStateChange: function(e){ onPlayerStateChange(i, e); }
       }
     });
