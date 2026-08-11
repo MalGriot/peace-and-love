@@ -68,3 +68,31 @@
 @media (max-width:760px) and (prefers-reduced-motion: reduce){
   .site-nav__links,.site-nav__links a{transition:none}
 }
+
+/* ---------- Morph Slider (Discography hero: album-cover crossfade) ---------- */
+.morph-slider{position:relative;width:100%;height:100%;overflow:hidden;border-radius:18px}
+.morph-slider__slide{
+  position:absolute;inset:0;background-size:cover;background-position:center;
+  opacity:0;transform:scale(1.06);
+  transition:opacity 1.4s ease, transform 6s ease;
+}
+.morph-slider__slide.is-active{opacity:1;transform:scale(1)}
+
+@media (prefers-reduced-motion: reduce){
+  .morph-slider__slide{transition:opacity .3s ease}
+}
+
+/* ---------- Metallic Paint (shimmering gold page-title sheen) ---------- */
+.metallic-paint{
+  background:linear-gradient(100deg, var(--brass) 20%, var(--gold) 40%, #fff6df 50%, var(--gold) 60%, var(--brass) 80%);
+  background-size:220% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:metallic-sheen 5s ease-in-out infinite;
+}
+@keyframes metallic-sheen{
+  0%{background-position:0% 50%}
+  100%{background-position:220% 50%}
+}
+@media (prefers-reduced-motion: reduce){
+  .metallic-paint{animation:none;background-position:60% 50%}
+}

@@ -88,3 +88,41 @@ function initStaggeredMenu() {
     if (e.key === 'Escape') setOpen(false);
   });
 }
+
+// ---------- Morph Slider ----------
+// Reads comma-separated image URLs from data-slides on the container,
+// builds one absolutely-positioned .morph-slider__slide per image, and
+// crossfades between them on a fixed interval. No-ops without .morph-slider.
+function initMorphSlider(root) {
+  const el = root || document.querySelector('.morph-slider');
+  if (!el) return;
+  const urls = (el.dataset.slides || '').split(',').map((s) => s.trim()).filter(Boolean);
+  if (!urls.length) return;
+
+  el.innerHTML = '';
+  urls.forEach((url) => {
+    const slide = document.createElement('div');
+    slide.className = 'morph-slider__slide';
+    slide.style.backgroundImage = `url("${url}")`;
+    el.appendChild(slide);
+  });
+  const slides = el.querySelectorAll('.morph-slider__slide');
+  slides[0].classList.add('is-active');
+  if (slides.length < 2) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  let i = 0;
+  setInterval(() => {
+    slides[i].classList.remove('is-active');
+    i = (i + 1) % slides.length;
+    slides[i].classList.add('is-active');
+  }, 3200);
+}
+
+// ---------- Metallic Paint ----------
+// Adds the shimmering gradient-text class to the given element (or every
+// [data-metallic-paint] element found). No-ops if none are present.
+function initMetallicPaint(root) {
+  const els = root ? [root] : document.querySelectorAll('[data-metallic-paint]');
+  els.forEach((el) => el.classList.add('metallic-paint'));
+}
