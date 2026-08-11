@@ -67,3 +67,24 @@ function initGooeyNav() {
   });
   list.addEventListener('mouseleave', () => blob.classList.remove('is-visible'));
 }
+
+// ---------- Staggered Menu ----------
+// Replaces the old plain slide-down toggle: opens .site-nav__links as a
+// full-screen overlay (see effects.css) and closes it on link click or Esc.
+function initStaggeredMenu() {
+  const toggle = document.querySelector('.site-nav__toggle');
+  const list = document.querySelector('.site-nav__links');
+  if (!toggle || !list) return;
+
+  function setOpen(open) {
+    list.classList.toggle('is-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+
+  toggle.addEventListener('click', () => setOpen(!list.classList.contains('is-open')));
+  list.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setOpen(false);
+  });
+}

@@ -501,17 +501,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('scroll', onScroll, { passive: true });
   }
 
-  const toggle = document.querySelector('.site-nav__toggle');
-  const links = document.querySelector('.site-nav__links');
-  if (toggle && links) {
-    toggle.addEventListener('click', () => {
-      const open = links.classList.toggle('is-open');
-      toggle.setAttribute('aria-expanded', String(open));
-    });
-    links.querySelectorAll('a').forEach((a) =>
-      a.addEventListener('click', () => links.classList.remove('is-open'))
-    );
-  }
+  if (typeof initStaggeredMenu === 'function') initStaggeredMenu();
 
   initChat();
   initMiniPlayer();

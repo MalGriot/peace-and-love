@@ -35,3 +35,36 @@
 @media (max-width:760px){
   .gooey-nav__wrap{display:none}
 }
+
+/* ---------- Staggered Menu (mobile full-screen nav) ----------
+   Below 760px, .site-nav__links becomes a full-screen overlay. Opening it
+   (via .is-open on the list, toggled by initStaggeredMenu()) staggers each
+   link in with an increasing transition-delay per nth-child, rather than
+   the whole list appearing at once. */
+@media (max-width:760px){
+  .site-nav__toggle{display:block;z-index:101}
+  .site-nav__links{
+    position:fixed;inset:0;
+    background:rgba(8,7,6,.98);
+    display:flex;flex-direction:column;justify-content:center;align-items:center;gap:26px;
+    opacity:0;pointer-events:none;
+    transition:opacity .3s ease;
+  }
+  .site-nav__links.is-open{opacity:1;pointer-events:auto}
+  .site-nav__links a{
+    font-size:20px;
+    opacity:0;transform:translateY(18px);
+    transition:opacity .4s ease, transform .4s ease;
+    transition-delay:0s;
+  }
+  .site-nav__links.is-open a{opacity:1;transform:translateY(0)}
+  .site-nav__links.is-open a:nth-child(1){transition-delay:.05s}
+  .site-nav__links.is-open a:nth-child(2){transition-delay:.1s}
+  .site-nav__links.is-open a:nth-child(3){transition-delay:.15s}
+  .site-nav__links.is-open a:nth-child(4){transition-delay:.2s}
+  .site-nav__links.is-open a:nth-child(5){transition-delay:.25s}
+}
+
+@media (max-width:760px) and (prefers-reduced-motion: reduce){
+  .site-nav__links,.site-nav__links a{transition:none}
+}
