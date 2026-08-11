@@ -22,7 +22,7 @@
    separate rectangle. Desktop only — .site-nav__links collapses to the
    full-screen Staggered Menu below 760px (see Task 3), where this blob
    never appears. */
-.site-nav__links{position:relative}
+@media (min-width:761px){ .site-nav__links{position:relative} }
 .gooey-nav__wrap{position:absolute;inset:-14px -10px;pointer-events:none;filter:url(#gooey-nav-filter);z-index:-1}
 .gooey-blob{
   position:absolute;top:0;left:0;height:100%;border-radius:999px;
