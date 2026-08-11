@@ -517,6 +517,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initMiniPlayer();
   initAnimatedFavicon();
   initEmberField();
+  if (typeof initGooeyNav === 'function') initGooeyNav();
+  if (typeof initScrollReveal === 'function') initScrollReveal();
 });
 
 // Rising ember/ash field: small points that drift upward and flicker in

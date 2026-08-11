@@ -13,3 +13,25 @@
 @media (prefers-reduced-motion: reduce){
   .reveal{opacity:1;transform:none;transition:none}
 }
+
+/* ---------- Gooey Nav (desktop nav-link hover) ----------
+   A blurred, high-contrast blob (.gooey-blob) tracks the hovered link's
+   bounding box and is rendered through an SVG "goo" filter (feGaussianBlur
+   + feColorMatrix contrast boost) so its edges visually merge with the pill
+   highlight sitting underneath the active link, rather than looking like a
+   separate rectangle. Desktop only — .site-nav__links collapses to the
+   full-screen Staggered Menu below 760px (see Task 3), where this blob
+   never appears. */
+.site-nav__links{position:relative}
+.gooey-nav__wrap{position:absolute;inset:-14px -10px;pointer-events:none;filter:url(#gooey-nav-filter);z-index:-1}
+.gooey-blob{
+  position:absolute;top:0;left:0;height:100%;border-radius:999px;
+  background:var(--brass);
+  opacity:0;
+  transition:transform .35s cubic-bezier(.22,.9,.3,1), width .35s cubic-bezier(.22,.9,.3,1), opacity .2s ease;
+}
+.gooey-blob.is-visible{opacity:1}
+
+@media (max-width:760px){
+  .gooey-nav__wrap{display:none}
+}
