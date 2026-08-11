@@ -87,6 +87,9 @@ function initStaggeredMenu() {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') setOpen(false);
   });
+  window.matchMedia('(max-width:760px)').addEventListener('change', (e) => {
+    if (!e.matches) setOpen(false);
+  });
 }
 
 // ---------- Morph Slider ----------
