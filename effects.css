@@ -3,15 +3,15 @@
    Loaded via <script src="effects.js"> after shared.js on every page that
    uses any of these; each effect's init() no-ops if its markup isn't present. */
 
-.reveal{
+.js .reveal{
   opacity:0;
   transform:translateY(16px);
   transition:opacity .7s ease, transform .7s ease;
 }
-.reveal.is-in{opacity:1;transform:translateY(0)}
+.js .reveal.is-in{opacity:1;transform:translateY(0)}
 
 @media (prefers-reduced-motion: reduce){
-  .reveal{opacity:1;transform:none;transition:none}
+  .js .reveal{opacity:1;transform:none;transition:none}
 }
 
 /* ---------- Gooey Nav (desktop nav-link hover) ----------
