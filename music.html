@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>document.documentElement.className+=' js';</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Music — Mal Griot</title>
+<meta name="description" content="Mal Griot's music — albums and EPs, streaming right here.">
+<meta property="og:title" content="Music — Mal Griot">
+<meta property="og:description" content="Mal Griot's music — albums and EPs, streaming right here.">
+<meta property="og:image" content="https://malgriot.github.io/peace-and-love/img/og/share-contact.png">
+<meta property="og:url" content="https://malgriot.github.io/peace-and-love/music.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://malgriot.github.io/peace-and-love/img/og/share-contact.png">
+<link rel="canonical" href="https://malgriot.github.io/peace-and-love/music.html">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Mal Griot",
+  "alternateName": "MAL GRIOT",
+  "jobTitle": "Vocalist, Spoken-Word Artist, MC/Host, Voice Actor",
+  "url": "https://malgriot.github.io/peace-and-love/",
+  "image": "https://malgriot.github.io/peace-and-love/img/og/share-contact.png",
+  "sameAs": [
+    "https://instagram.com/yep.that.malcolm",
+    "https://www.linkedin.com/in/malgriot/",
+    "https://open.spotify.com/artist/61bgVlMQw2S0t6d8mVPVIS",
+    "https://soundcloud.com/mal-griot",
+    "https://music.apple.com/us/artist/mal-griot/1773454818",
+    "https://music.youtube.com/channel/UC2ouYdd3qmP9vSvLpKD8-CQ",
+    "https://music.amazon.com/artists/B0DTP5MFVP/mal-griot",
+    "https://tidal.com/artist/53475605",
+    "https://www.youtube.com/@MalGriot"
+  ]
+}
+</script>
+<link rel="icon" href="img/brand/favicon.ico">
+<link rel="apple-touch-icon" href="img/brand/apple-touch-icon.png">
+<link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="effects.css">
+<style>
+  .d-releases{padding:20px clamp(20px,5vw,64px) 100px;max-width:1200px;margin:0 auto}
+  .d-releases__head{padding:40px 0 30px;border-bottom:1px solid rgba(239,230,216,.1)}
+  .d-releases__head h2{font-family:var(--font-display);font-weight:400;font-size:clamp(24px,2.6vw,32px);margin:0}
+
+  /* ---- editorial release rows — same treatment as voice.html's discography
+     (hover disc slide-out, accent-matched color, click-to-expand tracklist),
+     sized down to this page's existing compact row height / 64px art ---- */
+  .release{
+    display:grid;grid-template-columns:56px 1fr auto;gap:18px;align-items:center;
+    padding:20px 4px;border-bottom:1px solid rgba(239,230,216,.08);
+    transition:background .3s ease;position:relative;
+  }
+  .release:hover{background:rgba(239,230,216,.03)}
+  .release__year{font-family:var(--font-display);font-size:14px;color:var(--paper-dim);letter-spacing:.05em}
+
+  .release__art-stage{position:relative;width:96px;height:64px;flex:none;--disc-a:#0f3535;--disc-b:#1f5555}
+  .release__art{
+    position:absolute;left:0;top:0;z-index:2;width:64px;height:64px;object-fit:cover;border-radius:5px;
+    box-shadow:0 6px 14px rgba(0,0,0,.4);transition:transform .35s ease;background:rgba(239,230,216,.06);
+  }
+  .release:hover .release__art{transform:translateX(-6px) rotate(-3deg) scale(1.06)}
+
+  .release__disc{
+    position:absolute;left:0;top:0;width:64px;height:64px;border-radius:999px;
+    opacity:0;transform:translateX(0) scale(.9);
+    transition:transform .4s cubic-bezier(.22,.9,.3,1),opacity .4s ease;
+    box-shadow:0 10px 20px rgba(0,0,0,.5);
+  }
+  .release:hover .release__disc{opacity:1;transform:translateX(28px) scale(1.12)}
+
+  .release__disc-spin{position:absolute;inset:0;border-radius:999px}
+  .release:hover .release__disc-spin{animation:release-disc-spin 2.6s linear infinite}
+
+  .release__disc--vinyl .release__disc-spin{
+    background:radial-gradient(circle at 34% 30%, var(--disc-b) 0%, var(--disc-a) 78%);
+  }
+  .release__disc--cd .release__disc-spin{
+    background:
+      radial-gradient(circle at 32% 28%, rgba(255,255,255,.95) 0%, rgba(255,255,255,0) 32%),
+      conic-gradient(from 200deg at 50% 50%, #f3d1ff, #c1e8ff, #c8ffe0, #fff3b0, #ffd1dc, #d1c4ff, #f3d1ff);
+  }
+  .release__disc--cd .release__disc-spin::before{
+    content:"";position:absolute;inset:0;border-radius:999px;mix-blend-mode:overlay;
+    background:repeating-radial-gradient(circle at center, rgba(255,255,255,.16) 0 1px, transparent 1px 3px);
+  }
+  .release__disc--cd .release__disc-spin::after{
+    content:"";position:absolute;inset:0;border-radius:999px;
+    background:radial-gradient(circle at 68% 72%, rgba(160,170,190,.35), transparent 45%);
+  }
+  .release__disc__label{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:36%;height:36%;border-radius:999px;object-fit:cover;z-index:2;
+    box-shadow:0 0 0 1px rgba(0,0,0,.35);
+  }
+  .release__disc__hole{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:2.25%;height:2.25%;border-radius:999px;background:var(--asphalt);z-index:3;
+  }
+
+  .release__main{display:flex;gap:16px;align-items:center;min-width:0}
+  .release__title{font-family:var(--font-display);font-weight:400;font-size:clamp(17px,2vw,22px);margin:0 0 4px;transition:color .25s ease}
+  .release:hover .release__title{color:var(--release-accent, var(--brass))}
+  .release__type{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--paper-dim)}
+  .release__credits{
+    display:block;font-size:12px;letter-spacing:.02em;text-transform:none;
+    color:var(--release-accent, var(--brass));
+    max-height:0;opacity:0;visibility:hidden;overflow:hidden;margin-top:0;
+    transition:max-height .35s ease,opacity .3s ease,margin-top .35s ease,visibility 0s linear .35s;
+  }
+  .release:hover .release__credits{max-height:40px;opacity:1;visibility:visible;margin-top:2px;transition-delay:0s}
+  .release__play{
+    width:38px;height:38px;border-radius:999px;border:1px solid rgba(239,230,216,.25);
+    display:flex;align-items:center;justify-content:center;color:var(--paper);flex:none;
+    transition:background .2s,border-color .2s;
+  }
+  .release:hover .release__play{background:var(--release-accent, var(--brass));border-color:var(--release-accent, var(--brass));color:#12100f}
+  @media (max-width:640px){
+    .release{grid-template-columns:1fr auto;grid-template-areas:"main play" "year year"}
+    .release__year{grid-area:year;padding-top:8px}
+    .release__main{grid-area:main}
+    .release__play{grid-area:play}
+    .release__art-stage{width:80px;height:56px;flex:none}
+    .release__art,.release__disc{width:56px;height:56px}
+    .release:hover .release__disc{transform:translateX(24px) scale(1.12)}
+  }
+
+  /* ---- release track popups (accordion, one open at a time) ---- */
+  .release__panel{
+    max-height:0;opacity:0;overflow:hidden;margin-top:0;
+    transition:max-height .4s ease,opacity .3s ease,margin-top .4s ease;
+  }
+  .release__panel.is-open{max-height:600px;opacity:1;margin-top:20px}
+  .release__panel-inner{
+    border-top:2px solid var(--release-accent, var(--brass));
+    background:rgba(74,31,34,.18);border-radius:8px;
+    padding:22px clamp(16px,3vw,28px);
+  }
+  .release__tracks{list-style:none;margin:0;padding:0}
+  .release__track-row{
+    display:flex;align-items:center;gap:14px;padding:10px 4px;width:100%;
+    border:none;border-bottom:1px solid rgba(239,230,216,.08);
+    background:none;text-align:left;cursor:pointer;
+    color:var(--paper);font-family:var(--font-body);
+    transition:color .2s ease;
+  }
+  .release__track-row:last-child{border-bottom:none}
+  .release__track-row:hover,
+  .release__track-row.is-active{color:var(--release-accent, var(--brass))}
+  .release__track-row .num{font-size:11px;color:var(--paper-dim);width:22px;flex:none}
+  .release__track-row .title{flex:1;font-size:14px;min-width:0}
+  .release__track-row .play-ico{flex:none;width:20px;height:20px;display:flex;align-items:center;justify-content:center}
+  .release__panel-loading{font-size:13px;color:var(--paper-dim);padding:8px 4px}
+  .release__panel-embed{width:100%;border:none;border-radius:6px;display:block}
+  .release__panel-fallback{margin-top:16px}
+
+  .d-cta{padding:0 clamp(20px,5vw,64px) 120px;max-width:1200px;margin:0 auto;text-align:center}
+  .d-cta__inner{background:#1c1815;border:1px solid rgba(239,230,216,.1);border-radius:20px;padding:56px 32px}
+  .d-cta h2{font-family:var(--font-display);font-weight:400;font-size:clamp(26px,3.4vw,36px);margin:0 0 14px}
+  .d-cta p{color:var(--paper-dim);margin:0 0 28px}
+  .d-cta__row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+  /* ---- hero collapse: pinned scroll sequence, .listen--hero only (music.html) ----
+     Scrolling drives a GSAP timeline: the copy locks in just under the title,
+     then the title shrinks up under "New Album" while the album art rises
+     into its place and the copy wipes away bottom-up. Reverses cleanly on
+     scroll-up since it's a single scrubbed, pinned timeline. */
+  .listen--hero .warp-text{will-change:transform}
+  .listen--hero .scroll-float{will-change:transform,clip-path,opacity;clip-path:inset(0 0 0% 0)}
+  .listen--hero .listen__stage{will-change:transform}
+  /* .listen's shared border-bottom sits at the section's own (unshrunk) box
+     edge — but this section is GSAP-pinned and its visible content is only
+     ever moved via transform, never actually resized, so that border ends up
+     rendering far past the shrunk hero, over whatever content the pin has
+     scrolled to (e.g. a stray line across the release rows below). Drop it
+     here; .listen__gap-fix / the releases section's own border supplies the
+     visual separation instead. */
+  .listen--hero{border-bottom:none}
+</style>
+</head>
+<body>
+
+<div id="chrome-nav"></div>
+
+<section class="listen listen--hero" id="listen">
+  <span class="listen__eyebrow">New Album</span>
+  <h1
+    class="warp-text"
+    role="img"
+    aria-label="breathelovedeep"
+    style="height:clamp(150px,20vw,280px)"
+    data-warp-text="breathelovedeep"
+    data-color="#f8f5ff"
+    data-warp-strength="0.18"
+    data-warp-scale="3"
+    data-speed="0.55"
+    data-pointer-influence="0.33"
+    data-pointer-strength="0.8"
+    data-refraction="0.001"
+    data-ripple="true"
+    data-font-size="clamp(3.5rem, 9vw, 10rem)"
+    data-font-weight="700"
+    data-font-family="var(--font-display)"
+    data-letter-spacing="-0.06em"
+    data-line-height="0.9"
+  ></h1>
+  <p class="scroll-float" data-base-opacity="0" data-base-rotation="5" data-blur-strength="10">Fall into the sky with us. Float on up through heightened sights. MAL GRIOT's latest exhaled odyssey is a collection of songs about love, loss, longing, and learning to let go that will take you through it. Straight up.</p>
+
+  <div class="listen__stage" id="listenStage" role="button" tabindex="0" aria-label="Play breathe love d e e p">
+    <div class="listen__vinyl" id="listenVinyl">
+      <div class="listen__vinyl-spin">
+        <img class="listen__vinyl-label" id="listenVinylLabel" src="" alt="">
+        <span class="listen__vinyl-hole"></span>
+      </div>
+      <div class="listen__vinyl-pause">
+        <span><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></span>
+      </div>
+    </div>
+    <div class="listen__sleeve">
+      <img src="https://images.pexels.com/photos/9257184/pexels-photo-9257184.jpeg?cs=tinysrgb&dpr=2&w=900" alt="breathe love d e e p album cover" id="sleeveArt">
+      <div class="listen__sleeve-play">
+        <span><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="listen__tracks" id="listenTracks"></div>
+</section>
+
+<div class="listen__gap-fix" id="listenGapFix"></div>
+
+<section class="d-releases">
+  <div class="d-releases__head reveal"><h2>All Releases</h2></div>
+
+  <a class="release reveal" href="https://soundcloud.com/mal-griot/sets/breathelovedeep" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+    <span class="release__year">2026</span>
+    <div class="release__main">
+      <div class="release__art-stage">
+        <div class="release__disc release__disc--vinyl">
+          <div class="release__disc-spin">
+            <img class="release__disc__label" src="" alt="">
+            <span class="release__disc__hole"></span>
+          </div>
+        </div>
+        <img class="release__art" src="https://images.pexels.com/photos/9257184/pexels-photo-9257184.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+      </div>
+      <div>
+        <h3 class="release__title"><span class="nb">breathe love d e e p</span></h3>
+      </div>
+    </div>
+    <span class="release__play">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </span>
+  </a>
+
+  <a class="release reveal" href="https://open.spotify.com/track/5uvEb58GBUWOo8bfxhCy8v" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+    <span class="release__year">2025</span>
+    <div class="release__main">
+      <div class="release__art-stage">
+        <div class="release__disc release__disc--vinyl">
+          <div class="release__disc-spin">
+            <img class="release__disc__label" src="" alt="">
+            <span class="release__disc__hole"></span>
+          </div>
+        </div>
+        <img class="release__art" src="https://images.pexels.com/photos/13532875/pexels-photo-13532875.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+      </div>
+      <div>
+        <h3 class="release__title">I Tried It</h3>
+        <span class="release__credits">Mal Griot &amp; Unnayanaa — Wind Horse Records</span>
+      </div>
+    </div>
+    <span class="release__play">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </span>
+  </a>
+
+  <a class="release reveal" href="https://open.spotify.com/album/2IHKGSoXq9EUbaomNYdG88" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+    <span class="release__year">2026</span>
+    <div class="release__main">
+      <div class="release__art-stage">
+        <div class="release__disc release__disc--cd">
+          <div class="release__disc-spin">
+            <img class="release__disc__label" src="" alt="">
+            <span class="release__disc__hole"></span>
+          </div>
+        </div>
+        <img class="release__art" src="https://images.pexels.com/photos/13532875/pexels-photo-13532875.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+      </div>
+      <div>
+        <h3 class="release__title">The Call of the Jungle (Overmind)</h3>
+        <span class="release__credits">Mal Griot &amp; Diveakssh Schae — Diveakssh Schae Records</span>
+      </div>
+    </div>
+    <span class="release__play">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </span>
+  </a>
+
+  <a class="release reveal" href="https://open.spotify.com/album/0mG2qACRHS8sHoyiniieFp" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+    <span class="release__year">2026</span>
+    <div class="release__main">
+      <div class="release__art-stage">
+        <div class="release__disc release__disc--cd">
+          <div class="release__disc-spin">
+            <img class="release__disc__label" src="" alt="">
+            <span class="release__disc__hole"></span>
+          </div>
+        </div>
+        <img class="release__art" src="https://images.pexels.com/photos/9258252/pexels-photo-9258252.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+      </div>
+      <div>
+        <h3 class="release__title">Free Fall</h3>
+        <span class="release__credits">Mal Griot &amp; Stalvart John — Dynamite Disco Club</span>
+      </div>
+    </div>
+    <span class="release__play">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </span>
+  </a>
+
+  <a class="release reveal" href="https://open.spotify.com/track/3u1kmOSbXQtWsYg3q8KFMj" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+    <span class="release__year">2026</span>
+    <div class="release__main">
+      <div class="release__art-stage">
+        <div class="release__disc release__disc--cd">
+          <div class="release__disc-spin">
+            <img class="release__disc__label" src="" alt="">
+            <span class="release__disc__hole"></span>
+          </div>
+        </div>
+        <img class="release__art" src="https://images.pexels.com/photos/9257184/pexels-photo-9257184.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+      </div>
+      <div>
+        <h3 class="release__title">Helicopter Man</h3>
+        <span class="release__credits">Mal Griot &amp; Deep Dawn — Hangar 18 Studio</span>
+      </div>
+    </div>
+    <span class="release__play">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </span>
+  </a>
+
+  <a class="release reveal" href="https://open.spotify.com/album/6oilUaIrr7oAbkiXLKc00h" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+    <span class="release__year">2026</span>
+    <div class="release__main">
+      <div class="release__art-stage">
+        <div class="release__disc release__disc--cd">
+          <div class="release__disc-spin">
+            <img class="release__disc__label" src="" alt="">
+            <span class="release__disc__hole"></span>
+          </div>
+        </div>
+        <img class="release__art" src="https://images.pexels.com/photos/16944874/pexels-photo-16944874/free-photo-of-vinyl-records-collection.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+      </div>
+      <div>
+        <h3 class="release__title">Toxic Baby</h3>
+        <span class="release__credits">Mal Griot &amp; Deep Dawn — Hangar 18 Studio</span>
+      </div>
+    </div>
+    <span class="release__play">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </span>
+  </a>
+
+  <a class="release reveal" href="https://soundcloud.com/mal-griot/sets/truly-higher" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+    <span class="release__year">2025</span>
+    <div class="release__main">
+      <div class="release__art-stage">
+        <div class="release__disc release__disc--cd">
+          <div class="release__disc-spin">
+            <img class="release__disc__label" src="" alt="">
+            <span class="release__disc__hole"></span>
+          </div>
+        </div>
+        <img class="release__art" src="https://images.pexels.com/photos/18430331/pexels-photo-18430331/free-photo-of-close-up-of-a-gramophone-playing-music.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+      </div>
+      <div>
+        <h3 class="release__title">Truly Higher</h3>
+      </div>
+    </div>
+    <span class="release__play">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </span>
+  </a>
+
+  <a class="release reveal" href="https://soundcloud.com/mal-griot/sets/sun-burna" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+    <span class="release__year">2026</span>
+    <div class="release__main">
+      <div class="release__art-stage">
+        <div class="release__disc release__disc--cd">
+          <div class="release__disc-spin">
+            <img class="release__disc__label" src="" alt="">
+            <span class="release__disc__hole"></span>
+          </div>
+        </div>
+        <img class="release__art" src="https://images.pexels.com/photos/9258252/pexels-photo-9258252.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+      </div>
+      <div>
+        <h3 class="release__title">Sun Burna</h3>
+      </div>
+    </div>
+    <span class="release__play">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </span>
+  </a>
+
+  <a class="release reveal" href="https://soundcloud.com/mal-griot/sets/sumthn" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+    <span class="release__year">2025</span>
+    <div class="release__main">
+      <div class="release__art-stage">
+        <div class="release__disc release__disc--cd">
+          <div class="release__disc-spin">
+            <img class="release__disc__label" src="" alt="">
+            <span class="release__disc__hole"></span>
+          </div>
+        </div>
+        <img class="release__art" src="https://images.pexels.com/photos/9009605/pexels-photo-9009605.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+      </div>
+      <div>
+        <h3 class="release__title">sumthn</h3>
+      </div>
+    </div>
+    <span class="release__play">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </span>
+  </a>
+
+  <a class="release reveal" href="https://soundcloud.com/mal-griot/sets/periodyssius" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+    <span class="release__year">2025</span>
+    <div class="release__main">
+      <div class="release__art-stage">
+        <div class="release__disc release__disc--vinyl">
+          <div class="release__disc-spin">
+            <img class="release__disc__label" src="" alt="">
+            <span class="release__disc__hole"></span>
+          </div>
+        </div>
+        <img class="release__art" src="https://images.pexels.com/photos/30042523/pexels-photo-30042523/free-photo-of-vintage-record-player-with-spinning-vinyl.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+      </div>
+      <div>
+        <h3 class="release__title">PeRiOdYsSiUs</h3>
+      </div>
+    </div>
+    <span class="release__play">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </span>
+  </a>
+</section>
+
+<section class="d-cta reveal">
+  <div class="d-cta__inner">
+    <h2>Hear it, or book the voice behind it.</h2>
+    <p>Stream everything above, or get in touch about a session or a show.</p>
+    <div class="d-cta__row">
+      <a href="contact.html" class="btn btn-outline">Get in Touch</a>
+    </div>
+  </div>
+</section>
+
+<div id="chrome-footer"></div>
+<div id="chrome-chat"></div>
+<div id="chrome-player"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="vendor/ogl.js"></script>
+<script src="warp-text.js"></script>
+<script src="shared.js"></script>
+<script src="chat.js"></script>
+<script src="effects.js"></script>
+<script>renderChrome('discography');</script>
+<script>
+(function(){
+  // Pull real album art for each SoundCloud/Spotify release the same way
+  // voice.html's discography does, via their public oEmbed endpoints (no API
+  // key needed for either). Falls back to the existing stock image on any
+  // failure (offline, CORS, private track, or — for Spotify — no thumbnail
+  // on an artist-only link).
+  //
+  // Every release also gets: the same art mirrored into its disc's center
+  // "label" (release__disc__label), and — for vinyl (album) releases — the
+  // disc's groove color sampled live from the art itself via a hidden
+  // canvas, so each record's color matches its cover instead of a fixed tint.
+
+  var sampleCanvas = document.createElement('canvas');
+  var sampleCtx = sampleCanvas.getContext('2d');
+
+  function tintVinylFromArt(stage, img){
+    try{
+      sampleCanvas.width = 1;
+      sampleCanvas.height = 1;
+      sampleCtx.drawImage(img, 0, 0, 1, 1);
+      var d = sampleCtx.getImageData(0, 0, 1, 1).data;
+      var r = d[0], g = d[1], b = d[2];
+      var dark = 'rgb(' + Math.round(r*0.35) + ',' + Math.round(g*0.35) + ',' + Math.round(b*0.35) + ')';
+      var light = 'rgb(' + Math.round(Math.min(255,r*0.7+40)) + ',' + Math.round(Math.min(255,g*0.7+40)) + ',' + Math.round(Math.min(255,b*0.7+40)) + ')';
+      stage.style.setProperty('--disc-a', dark);
+      stage.style.setProperty('--disc-b', light);
+    }catch(e){
+      // Tainted canvas (CORS) or decode failure — leave the default teal tint.
+    }
+  }
+
+  // Hover accent per release: the brand kit's Candlelit Velvet palette has
+  // only two colors safe as text on a near-black ground (Amber, Gold), so
+  // gold/amber blends with Wine and Parchment fill out a small warm-red/rose
+  // option too — everything still built from the approved tokens. Each
+  // release is matched to whichever of the four sits closest, in hue/
+  // lightness, to its own album art, so the hover state reads as
+  // complementary rather than an arbitrary rotation of colors.
+  var ACCENTS = [
+    { name:'gold',  hex:'#E0B26A' },
+    { name:'amber', hex:'#C98A45' },
+    { name:'ember', hex:'#9A6044' },
+    { name:'rose',  hex:'#BA9B93' }
+  ];
+
+  function hexToRgb(hex){
+    var n = parseInt(hex.slice(1), 16);
+    return { r:(n>>16)&255, g:(n>>8)&255, b:n&255 };
+  }
+  function rgbToHsl(r, g, b){
+    r/=255; g/=255; b/=255;
+    var max=Math.max(r,g,b), min=Math.min(r,g,b);
+    var h=0, s=0, l=(max+min)/2;
+    if(max !== min){
+      var d = max-min;
+      s = l > 0.5 ? d/(2-max-min) : d/(max+min);
+      switch(max){
+        case r: h=(g-b)/d+(g<b?6:0); break;
+        case g: h=(b-r)/d+2; break;
+        case b: h=(r-g)/d+4; break;
+      }
+      h *= 60;
+    }
+    return { h:h, s:s, l:l };
+  }
+  ACCENTS.forEach(function(a){
+    var rgb = hexToRgb(a.hex);
+    a.hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+  });
+
+  function nearestAccent(r, g, b){
+    var sample = rgbToHsl(r, g, b);
+    var best = ACCENTS[0], bestDist = Infinity;
+    ACCENTS.forEach(function(a){
+      var dh = Math.abs(sample.h - a.hsl.h);
+      dh = Math.min(dh, 360 - dh) / 180;
+      var dl = sample.l - a.hsl.l;
+      var ds = sample.s - a.hsl.s;
+      var dist = dh*dh*2 + dl*dl + ds*ds*0.4;
+      if(dist < bestDist){ bestDist = dist; best = a; }
+    });
+    return best.hex;
+  }
+
+  function accentFromArt(link, img){
+    try{
+      sampleCanvas.width = 8;
+      sampleCanvas.height = 8;
+      sampleCtx.drawImage(img, 0, 0, 8, 8);
+      var d = sampleCtx.getImageData(0, 0, 8, 8).data;
+      var r=0, g=0, b=0, n=d.length/4;
+      for(var i=0;i<d.length;i+=4){ r+=d[i]; g+=d[i+1]; b+=d[i+2]; }
+      link.style.setProperty('--release-accent', nearestAccent(r/n, g/n, b/n));
+    }catch(e){
+      // Tainted canvas (CORS) — leave the default brass hover.
+    }
+  }
+
+  function syncDisc(a){
+    var stage = a.querySelector('.release__art-stage');
+    var img = a.querySelector('.release__art');
+    var label = a.querySelector('.release__disc__label');
+    var isVinyl = a.querySelector('.release__disc--vinyl') !== null;
+    if(!stage || !img || !label) return;
+
+    function apply(){
+      label.src = img.src;
+      if(isVinyl) tintVinylFromArt(stage, img);
+      accentFromArt(a, img);
+    }
+    if(img.complete && img.naturalWidth) apply();
+    else img.addEventListener('load', apply, { once: true });
+  }
+
+  document.querySelectorAll('.release__art').forEach(function(img){
+    img.crossOrigin = 'anonymous';
+  });
+  document.querySelectorAll('.release').forEach(syncDisc);
+
+  function pullArt(selector, oembedBase){
+    document.querySelectorAll(selector).forEach(function(a){
+      var img = a.querySelector('.release__art');
+      if(!img) return;
+      fetch(oembedBase + encodeURIComponent(a.href))
+        .then(function(r){ return r.ok ? r.json() : null; })
+        .then(function(data){
+          if(data && data.thumbnail_url){
+            img.src = data.thumbnail_url;
+            syncDisc(a);
+          }
+        })
+        .catch(function(){});
+    });
+  }
+  pullArt('.release[href*="soundcloud.com"]', 'https://soundcloud.com/oembed?format=json&url=');
+  pullArt('.release[href*="open.spotify.com"]', 'https://open.spotify.com/oembed?url=');
+})();
+</script>
+<script>
+(function(){
+  // Release track popups: click a release row to expand an inline panel
+  // beneath it with a tracklist/player, instead of leaving the site.
+  // SoundCloud releases play through the same shared mini-player widget
+  // that drives the "breathe love d e e p" stage above (see shared.js).
+  // Spotify releases embed Spotify's own player via its iFrame Controller
+  // API — its play/pause state is mirrored into that same mini-player
+  // (window.griotMiniPlayer.setExternal/updateExternalPlaying/clearExternal
+  // in shared.js), so whichever source is actually playing stays reflected
+  // and controllable from the one mini-player, not just SoundCloud's.
+
+  var activePanel = null;          // currently open .release__panel, or null
+  var activeAnchor = null;         // its trigger <a class="release">
+  var activePlatform = null;       // 'soundcloud' | 'spotify' — platform of the open panel
+  var releaseReadyHandler = null;  // bound only while a SoundCloud panel is open
+  var loadTimeoutId = null;        // "couldn't load" fallback timer for the open SoundCloud panel
+
+  // Spotify's official iFrame Controller API — loaded once, lazily, the first
+  // time a Spotify release panel opens. Lets the panel's embedded player be
+  // driven (and its play/pause state read) from outside the iframe, which is
+  // what makes it possible to mirror a playing Spotify track into the shared
+  // mini-player the same way SoundCloud tracks already are.
+  function withSpotifyIframeApi(cb){
+    if(window.__spotifyIframeApi){ cb(window.__spotifyIframeApi); return; }
+    if(window.__spotifyIframeApiQueue){ window.__spotifyIframeApiQueue.push(cb); return; }
+    window.__spotifyIframeApiQueue = [cb];
+    window.onSpotifyIframeApiReady = function(IFrameAPI){
+      window.__spotifyIframeApi = IFrameAPI;
+      var queue = window.__spotifyIframeApiQueue;
+      window.__spotifyIframeApiQueue = null;
+      queue.forEach(function(fn){ fn(IFrameAPI); });
+    };
+    var script = document.createElement('script');
+    script.src = 'https://open.spotify.com/embed/iframe-api/v1';
+    script.async = true;
+    document.head.appendChild(script);
+  }
+
+  function parseRelease(href){
+    if(href.indexOf('soundcloud.com') !== -1){
+      return { platform: 'soundcloud', url: href };
+    }
+    var sp = href.match(/open\.spotify\.com\/(track|album)\/([a-zA-Z0-9]+)/);
+    if(sp){
+      return { platform: 'spotify', kind: sp[1], id: sp[2], url: href };
+    }
+    return null;
+  }
+
+  function closeActivePanel(){
+    if(!activePanel) return;
+    var panel = activePanel;
+    panel.classList.remove('is-open');
+    activeAnchor.setAttribute('aria-expanded', 'false');
+    if(releaseReadyHandler){
+      window.removeEventListener('griot:release-ready', releaseReadyHandler);
+      releaseReadyHandler = null;
+    }
+    if(loadTimeoutId){
+      clearTimeout(loadTimeoutId);
+      loadTimeoutId = null;
+    }
+    if(activePlatform === 'spotify' && window.griotMiniPlayer){
+      window.griotMiniPlayer.clearExternal();
+    }
+    activePlatform = null;
+    // Clear the panel's content once the collapse transition finishes (removes
+    // the iframe/track-row buttons from the DOM and tab order) — but only if
+    // nothing reopened this same panel in the meantime.
+    setTimeout(function(){
+      if(panel !== activePanel) panel.innerHTML = '';
+    }, 400);
+    activePanel = null;
+    activeAnchor = null;
+  }
+
+  function buildSoundCloudPanel(panel, releaseUrl, releaseTitle){
+    panel.innerHTML =
+      '<div class="release__panel-inner">' +
+        '<div class="release__panel-loading">Loading tracklist…</div>' +
+        '<ul class="release__tracks" hidden></ul>' +
+      '</div>';
+
+    window.dispatchEvent(new CustomEvent('griot:pause-mini-player'));
+    window.dispatchEvent(new CustomEvent('griot:load-release', { detail: { url: releaseUrl, title: releaseTitle } }));
+
+    var loading = panel.querySelector('.release__panel-loading');
+    var list = panel.querySelector('.release__tracks');
+
+    // If the SoundCloud Widget API script never loads (blocked/slow/offline),
+    // griot:release-ready never fires. Give up after 8s and show a terminal
+    // error state instead of leaving "Loading tracklist…" up forever.
+    loadTimeoutId = setTimeout(function(){
+      loadTimeoutId = null;
+      loading.textContent = "Couldn't load the tracklist — try again in a moment.";
+    }, 8000);
+
+    releaseReadyHandler = function(e){
+      var sounds = (e.detail && e.detail.sounds) || [];
+      if(!sounds.length) return;
+      if(loadTimeoutId){
+        clearTimeout(loadTimeoutId);
+        loadTimeoutId = null;
+      }
+      loading.hidden = true;
+      list.hidden = false;
+      list.innerHTML = '';
+      sounds.forEach(function(s, i){
+        var li = document.createElement('li');
+        var row = document.createElement('button');
+        row.type = 'button';
+        row.className = 'release__track-row';
+        row.innerHTML =
+          '<span class="num">' + String(i + 1).padStart(2, '0') + '</span>' +
+          '<span class="title">' + (s.title || 'Track ' + (i + 1)) + '</span>' +
+          '<span class="play-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>';
+        row.addEventListener('click', function(){
+          window.dispatchEvent(new CustomEvent('griot:play-track-index', { detail: { index: i } }));
+        });
+        li.appendChild(row);
+        list.appendChild(li);
+      });
+    };
+    window.addEventListener('griot:release-ready', releaseReadyHandler);
+  }
+
+  function buildSpotifyPanel(panel, info, anchor){
+    var height = info.kind === 'track' ? 152 : 400;
+    var embedId = 'spotify-embed-' + info.kind + '-' + info.id;
+    panel.innerHTML =
+      '<div class="release__panel-inner">' +
+        '<div id="' + embedId + '" class="release__panel-embed" style="height:' + height + 'px"></div>' +
+      '</div>';
+
+    var titleEl = anchor.querySelector('.release__title');
+    var artImg = anchor.querySelector('.release__art');
+    var title = titleEl ? titleEl.textContent.trim() : 'Spotify';
+    var art = artImg ? artImg.src : '';
+
+    withSpotifyIframeApi(function(IFrameAPI){
+      var el = panel.querySelector('#' + embedId);
+      // The panel may have been closed (and its content wiped) before the
+      // API finished loading — don't mount a controller into a dead panel.
+      if(!el || !document.body.contains(el)) return;
+      IFrameAPI.createController(el, { uri: 'spotify:' + info.kind + ':' + info.id, width: '100%', height: height }, function(controller){
+        panel._spotifyController = controller;
+        controller.addListener('playback_update', function(e){
+          if(window.griotMiniPlayer) window.griotMiniPlayer.updateExternalPlaying(!e.data.isPaused);
+        });
+        controller.addListener('ready', function(){
+          if(window.griotMiniPlayer){
+            window.griotMiniPlayer.setExternal({
+              title: title,
+              art: art,
+              isPlaying: false,
+              onToggle: function(){ controller.togglePlay(); }
+            });
+          }
+        });
+      });
+    });
+  }
+
+  function openPanel(anchor, panel, info){
+    var accent = getComputedStyle(anchor).getPropertyValue('--release-accent').trim();
+    if(accent) panel.style.setProperty('--release-accent', accent);
+
+    activePlatform = info.platform;
+    if(info.platform === 'soundcloud'){
+      var titleEl = anchor.querySelector('.release__title');
+      buildSoundCloudPanel(panel, info.url, titleEl ? titleEl.textContent.trim() : '');
+    } else if(info.platform === 'spotify'){
+      window.dispatchEvent(new CustomEvent('griot:pause-mini-player'));
+      buildSpotifyPanel(panel, info, anchor);
+    }
+
+    panel.classList.add('is-open');
+    anchor.setAttribute('aria-expanded', 'true');
+    activePanel = panel;
+    activeAnchor = anchor;
+  }
+
+  document.querySelectorAll('.release').forEach(function(anchor, idx){
+    var info = parseRelease(anchor.getAttribute('href'));
+    if(!info) return; // not a recognized platform yet — leave it as a normal link
+
+    var panel = document.createElement('div');
+    panel.className = 'release__panel';
+    panel.id = 'release-panel-' + idx;
+    anchor.insertAdjacentElement('afterend', panel);
+    anchor.setAttribute('aria-expanded', 'false');
+    anchor.setAttribute('aria-controls', panel.id);
+
+    anchor.addEventListener('click', function(e){
+      e.preventDefault();
+      var wasOpen = activePanel === panel;
+      closeActivePanel();
+      if(!wasOpen) openPanel(anchor, panel, info);
+    });
+  });
+})();
+</script>
+<script>
+  // Hero collapse: pin the "New Album" block and scrub a 5-phase timeline
+  // off scroll position, fully sequential (no overlap) so each beat finishes
+  // before the next starts:
+  // Phase 1: copy is invisible at rest (only eyebrow + title show). It
+  // fades in and floats up to lock in close beneath the title, like a
+  // subtitle.
+  // Phase 1.5: a held pause once locked — extra scroll distance before
+  // anything moves again.
+  // Phase 2: title shrinks + slides up to rest under the eyebrow, while the
+  // copy wipes away bottom-up and fades out — the copy finishes disappearing
+  // completely here, before the album ever moves.
+  // Phase 3: only now does the album rise, to a resting spot well short of
+  // the title (a roomy gap under the compact header).
+  // Phase 4: a couple more scrolls once the album has settled — the CTA
+  // button and the 10-track row rise together underneath it, so the album
+  // ends up sitting just above the tracks.
+  // Scrubbed + pinned, so scrolling up plays this in reverse automatically.
+  (function () {
+    function initHeroCollapse() {
+      if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+      const section = document.querySelector('.listen--hero');
+      const eyebrow = section && section.querySelector('.listen__eyebrow');
+      const title = section && section.querySelector('.warp-text');
+      const copy = section && section.querySelector('.scroll-float');
+      const stage = section && section.querySelector('.listen__stage');
+      const cta = section && section.querySelector('.listen__cta');
+      const tracks = section && section.querySelector('.listen__tracks');
+      const gapFix = document.querySelector('.listen__gap-fix');
+      if (!section || !eyebrow || !title || !copy || !stage) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      const SHRINK_SCALE = 0.34;
+      const belowGroup = [cta, tracks].filter(Boolean);
+      let tl;
+
+      function build() {
+        if (tl) {
+          if (tl.scrollTrigger) tl.scrollTrigger.kill();
+          tl.kill();
+        }
+        gsap.set([title, copy, stage].concat(belowGroup), { clearProps: 'all' });
+        if (gapFix) gsap.set(gapFix, { clearProps: 'all' });
+        // .listen__cta inherits .btn's CSS `transition: transform .25s ease`
+        // (its hover lift). That fights the scrub's per-frame transform
+        // updates and leaves it visually stuck, so disable it here.
+        if (belowGroup.length) gsap.set(belowGroup, { transition: 'none' });
+
+        const eyebrowRect = eyebrow.getBoundingClientRect();
+        const titleRect = title.getBoundingClientRect();
+        const copyRect = copy.getBoundingClientRect();
+        const stageRect = stage.getBoundingClientRect();
+
+        const shrunkTitleHeight = titleRect.height * SHRINK_SCALE;
+        const titleTargetTop = eyebrowRect.bottom + 14;
+        const titleDeltaY = titleTargetTop - titleRect.top;
+
+        // Album's resting spot: risen to sit close under the shrunk title.
+        const stageTargetTop = titleTargetTop + shrunkTitleHeight + 40;
+        const stageDeltaY = stageTargetTop - stageRect.top;
+        const stageTargetBottom = stageTargetTop + stageRect.height;
+
+        // Make sure the album starts fully below the fold — push it down
+        // further before the rise begins if its natural position would
+        // otherwise peek into view at the bottom of the viewport.
+        const stageStartDrop = Math.max(0, window.innerHeight + 40 - stageRect.top);
+        gsap.set(stage, { y: stageStartDrop });
+
+        // Locked "subtitle" spot: right beneath the title, tight gap.
+        const copyLockTop = titleRect.bottom + 16;
+        const copyLockY = copyLockTop - copyRect.top;
+        const copyStartY = copyLockY + 46; // sits a bit lower/hidden pre-float
+
+        gsap.set(copy, { y: copyStartY, opacity: 0, clipPath: 'inset(0 0 0% 0)' });
+
+        // Phase 4: bring the CTA + track row up to sit just under the
+        // album's new resting spot, so the "rest of the page" rises as one.
+        let belowDeltaY = 0;
+        if (belowGroup.length) {
+          const firstRect = belowGroup[0].getBoundingClientRect();
+          const desiredTop = stageTargetBottom + 28;
+          belowDeltaY = desiredTop - firstRect.top;
+        }
+
+        tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: section,
+            start: 'top top',
+            end: '+=260%',
+            scrub: 0.5,
+            pin: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true
+          }
+        });
+
+        // Phase 1: copy fades in + floats up to lock beneath the title.
+        tl.to(copy, { y: copyLockY, opacity: 1, duration: 0.4, ease: 'none' }, 0);
+        // Phase 1.5: held pause (nothing tweened) — more scroll before the
+        // title/copy move again. Next phase starts well after phase 1 ends.
+        const phase2Start = 0.9;
+        // Phase 2: title shrinks + slides under the eyebrow, copy wipes
+        // away bottom-up and fades out — fully finished before the album
+        // moves at all.
+        const phase2Dur = 0.45;
+        tl.to(title, { y: titleDeltaY, scale: SHRINK_SCALE, transformOrigin: '50% 0%', duration: phase2Dur, ease: 'none' }, phase2Start)
+          .to(copy, { clipPath: 'inset(0 0 100% 0)', opacity: 0, duration: phase2Dur, ease: 'none' }, phase2Start);
+        // Phase 3: only now does the album rise.
+        const phase3Start = phase2Start + phase2Dur;
+        const phase3Dur = 0.5;
+        tl.to(stage, { y: stageDeltaY, duration: phase3Dur, ease: 'none' }, phase3Start);
+        // Phase 4: CTA + tracks rise to follow the album. Their box in
+        // normal document flow doesn't actually shrink just because we
+        // transform them up, so pull the next section in with them via
+        // listen__gap-fix's negative margin — otherwise unpinning leaves a
+        // phantom gap before "All Releases" equal to how far the tracks
+        // rose. (Can't animate the pinned section's own margin — GSAP's
+        // pin logic actively resets that every frame; this sibling div,
+        // outside the pin-spacer, isn't touched by it.)
+        if (belowGroup.length) {
+          const phase4Start = phase3Start + phase3Dur + 0.05;
+          const phase4Dur = 0.3;
+          tl.to(belowGroup, { y: belowDeltaY, duration: phase4Dur, ease: 'none' }, phase4Start);
+          if (gapFix) {
+            tl.to(gapFix, { marginTop: belowDeltaY, duration: phase4Dur, ease: 'none' }, phase4Start);
+          }
+        }
+      }
+
+      build();
+
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(build, 200);
+      });
+    }
+
+    if (document.readyState === 'complete') initHeroCollapse();
+    else window.addEventListener('load', initHeroCollapse);
+  })();
+</script>
+</body>
+</html>

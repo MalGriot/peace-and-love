@@ -13,6 +13,7 @@
   --gold: #e0b26a;
   --velvet-deep: #1c060c;
   --velvet-wine: #3a0f1c;
+  --asphalt: #111013;
   --font-display: 'Philosopher', Georgia, serif;
   --font-body: 'Inter', -apple-system, sans-serif;
   /* barely-there star scatter, reused as a background-image layer across pages */
@@ -451,7 +452,7 @@ a{color:inherit}
 }
 .listen__vinyl-hole{
   position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:9%;height:9%;border-radius:999px;background:var(--asphalt);z-index:3;
+  width:2.25%;height:2.25%;border-radius:999px;background:var(--asphalt);z-index:3;
 }
 .listen__vinyl-pause{
   position:absolute;inset:0;border-radius:999px;z-index:4;
@@ -519,7 +520,7 @@ a{color:inherit}
 }
 .listen__track-disc-hole{
   position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:12%;height:12%;border-radius:999px;background:var(--asphalt);z-index:3;
+  width:3%;height:3%;border-radius:999px;background:var(--asphalt);z-index:3;
 }
 
 .listen__track .num{position:absolute;top:3px;left:4px;font-size:9px;color:var(--paper-dim);z-index:3}

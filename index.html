@@ -75,6 +75,7 @@
   .home-bar a.home-bar__contact{
     font-family:var(--font-body);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
   }
+  .home-bar__contact-icon{display:none}
   .home-bar a[data-tip]::after{
     content:attr(data-tip);position:absolute;bottom:calc(100% + 14px);left:50%;transform:translateX(-50%) translateY(4px);
     white-space:nowrap;background:#0b0a09;color:var(--gold);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
@@ -124,8 +125,8 @@
   .acc-item[data-key="voiceover"]:hover .acc-item__photo{transform:scale(1.46)}
 
   /* on-hover zoom focal points */
-  .acc-item[data-key="discography"]:hover .acc-item__photo{transform-origin:44% 20% !important}
-  .acc-item[data-key="performance"]:hover .acc-item__photo{transform-origin:51% 20% !important}
+  .acc-item[data-key="discography"]:hover .acc-item__photo{object-position:44% 15% !important;transform-origin:44% 15% !important}
+  .acc-item[data-key="performance"]:hover .acc-item__photo{object-position:51% 15% !important;transform-origin:51% 15% !important}
   .acc-item[data-key="hosting"]:hover .acc-item__photo{transform-origin:72.1% 17% !important}
   .acc-item[data-key="poetry"]:hover .acc-item__photo{transform-origin:50% 18% !important}
   .acc-item[data-key="acting"]:hover .acc-item__photo{transform-origin:57% 19% !important}
@@ -194,8 +195,8 @@
   /* stack vertically on narrow screens; tap expands height instead of width */
   @media (max-width:900px){
     .accordion{flex-direction:column;overflow-x:hidden;overflow-y:auto}
-    .acc-item{flex:0 0 20vh !important;width:100% !important;height:20vh}
-    .accordion.has-active .acc-item.is-active{flex:0 0 40vh !important}
+    .acc-item{flex:0 0 33.34vh !important;width:100% !important;height:33.34vh}
+    .accordion.has-active .acc-item.is-active{flex:0 0 50vh !important}
     .acc-item__title{
       writing-mode:horizontal-tb;transform:none;
       left:18px;right:18px;bottom:14px;font-size:16px;padding:0;
@@ -208,19 +209,34 @@
     .acc-item__soon{left:18px;bottom:44px}
     .home-mark{top:22px}
     .home-bar{
-      bottom:16px;left:16px;right:88px;transform:none;
-      justify-content:center;flex-wrap:wrap;row-gap:10px;gap:14px;
+      top:auto;left:auto;transform:none;
+      right:clamp(16px,3vw,32px);
+      bottom:calc(clamp(16px,3vw,32px) + 56px + 14px);
+      flex-direction:column;flex-wrap:nowrap;
+      align-items:center;justify-content:flex-end;
+      gap:10px;width:56px;
     }
-    .home-bar a svg{width:17px;height:17px}
+    .home-bar a{
+      width:44px;height:44px;flex:none;
+      background:rgba(8,7,6,.55);border-radius:999px;
+      border:1px solid rgba(224,178,106,.22);backdrop-filter:blur(6px);
+    }
+    .home-bar a svg{width:19px;height:19px}
     .home-bar a[data-tip]::after,.home-bar a[data-tip]::before{display:none}
+    .home-bar a.home-bar__contact{font-size:0}
+    .home-bar__contact-icon{display:block}
+    .home-bar__contact-text{display:none}
 
-    .acc-item[data-key="discography"] .acc-item__photo{object-position:44% 8% !important}
-    .acc-item[data-key="hosting"] .acc-item__photo{object-position:55% 8% !important}
-    .acc-item[data-key="acting"] .acc-item__photo{object-position:45% 30% !important}
-    .acc-item[data-key="voiceover"] .acc-item__photo{object-position:49% 60% !important}
-    .acc-item[data-key="meditation"] .acc-item__photo{object-position:50% 10% !important}
-    .acc-item[data-key="soundscapes"] .acc-item__photo{object-position:65% 20% !important}
-    .acc-item[data-key="about"] .acc-item__photo{object-position:41% 8% !important}
+    .acc-item[data-key="discography"] .acc-item__photo{object-position:44% 0% !important}
+    .acc-item[data-key="performance"] .acc-item__photo{object-position:51% 8% !important}
+    .acc-item[data-key="hosting"] .acc-item__photo{object-position:55% 4% !important}
+    .acc-item[data-key="poetry"] .acc-item__photo{object-position:50% 26% !important}
+    .acc-item[data-key="acting"] .acc-item__photo{object-position:45% 20% !important}
+    .acc-item[data-key="voiceover"] .acc-item__photo{object-position:49% 36% !important}
+    .acc-item[data-key="soundbaths"] .acc-item__photo{object-position:44% 11% !important}
+    .acc-item[data-key="meditation"] .acc-item__photo{object-position:50% 0% !important}
+    .acc-item[data-key="soundscapes"] .acc-item__photo{object-position:65% 19% !important}
+    .acc-item[data-key="about"] .acc-item__photo{object-position:41% 0% !important}
   }
 </style>
 </head>
@@ -253,12 +269,15 @@
     <a href="mailto:yep.that.malcolm@gmail.com" aria-label="Email" data-tip="Email">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 5.5A2.5 2.5 0 014.5 3h15A2.5 2.5 0 0122 5.5v13a2.5 2.5 0 01-2.5 2.5h-15A2.5 2.5 0 012 18.5v-13zm2.2.3l7.8 6.3 7.8-6.3H4.2zM20 7.6l-7.5 6a1 1 0 01-1 0L4 7.6V18.5c0 .28.22.5.5.5h15a.5.5 0 00.5-.5V7.6z"/></svg>
     </a>
-    <a href="contact.html" class="home-bar__contact">Contact</a>
+    <a href="contact.html" class="home-bar__contact" aria-label="Contact" data-tip="Contact">
+      <svg class="home-bar__contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg>
+      <span class="home-bar__contact-text">Contact</span>
+    </a>
   </div>
 
   <div class="accordion" id="accordion">
 
-    <a href="discography.html" class="acc-item" data-key="discography">
+    <a href="music.html" class="acc-item" data-key="discography">
       <img class="acc-item__photo" src="img/discography-home.jpg" alt="" style="object-position:44% 40%;transform-origin:44% 40%">
       <video class="acc-item__video" src="video/music-hover.mp4" muted loop playsinline preload="none"></video>
       <div class="acc-item__scrim"></div>

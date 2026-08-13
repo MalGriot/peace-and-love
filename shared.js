@@ -3,7 +3,7 @@
 function renderChrome(active) {
   const links = [
     ['voice.html', 'Voice', 'music'],
-    ['discography.html', 'Music', 'discography'],
+    ['music.html', 'Music', 'discography'],
     ['video.html', 'Video', 'cuts'],
     ['soundscapes.html', 'Soundscapes', 'wellness'],
     ['contact.html', 'Contact', 'contact'],
@@ -15,7 +15,7 @@ function renderChrome(active) {
   // Full site map for the staggered-menu nav panel — every page, in accordion order.
   const menuItems = [
     ['index.html', 'Home', 'home'],
-    ['discography.html', 'Music', 'discography'],
+    ['music.html', 'Music', 'discography'],
     ['performance.html', 'Performance', 'performance'],
     ['hosting.html', 'Hosting', 'hosting'],
     ['poetry.html', 'Poetry', 'poetry'],
@@ -59,8 +59,6 @@ function renderChrome(active) {
           <h3 class="sm-socials-title">Socials</h3>
           <div class="sm-socials-list">
             <a href="https://instagram.com/yep.that.malcolm" target="_blank" rel="noopener">Instagram</a>
-            <a href="https://open.spotify.com/artist/61bgVlMQw2S0t6d8mVPVIS" target="_blank" rel="noopener">Spotify</a>
-            <a href="https://soundcloud.com/mal-griot" target="_blank" rel="noopener">SoundCloud</a>
           </div>
         </div>
       </aside>
@@ -77,8 +75,6 @@ function renderChrome(active) {
         <ul class="site-footer__links">${linkHtml}</ul>
         <div class="site-footer__social">
           <a href="https://instagram.com/yep.that.malcolm" target="_blank" rel="noopener" aria-label="Instagram"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
-          <a href="https://open.spotify.com/artist/61bgVlMQw2S0t6d8mVPVIS" target="_blank" rel="noopener" aria-label="Spotify"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M7 10.5c3-1 7-.6 9.5.9M7.5 13.6c2.4-.8 5.6-.4 7.6.8M8 16.4c1.9-.6 4.3-.3 5.9.6"/></svg></a>
-          <a href="https://soundcloud.com/mal-griot" target="_blank" rel="noopener" aria-label="SoundCloud"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 15v-3M6 16v-6M9 16.5v-8M12 16.5V7.5a3 3 0 0 1 5-2.2M12 16.5h7a3 3 0 0 0 0-6 4 4 0 0 0-3-1.8"/></svg></a>
         </div>
       </div>
       <div class="site-footer__bottom">
@@ -210,6 +206,12 @@ function initMiniPlayer() {
   let currentIndex = 0;
   let currentlyPlaying = false;
   let albumArtFallback = null;
+  // Set whenever a non-SoundCloud source (currently: a Spotify release panel)
+  // takes over the mini-player — see window.griotMiniPlayer below. While set,
+  // the transport buttons drive that source instead of the SC widget.
+  let externalSource = null;
+  const miniNextBtn = document.getElementById('miniNext');
+  const miniPrevBtn = document.getElementById('miniPrev');
 
   let currentReleaseName = 'breathe love d e e p';
   // The "New Album" hero stage (sleeve art, vinyl, its own tile row) always
@@ -246,10 +248,15 @@ function initMiniPlayer() {
     currentlyPlaying = isPlaying;
     miniIconPlay.style.display = isPlaying ? 'none' : 'block';
     miniIconPause.style.display = isPlaying ? 'block' : 'none';
-    if (stage) stage.classList.toggle('is-playing', isPlaying);
+    // The hero vinyl and its 10 track discs only ever spin for breathe love
+    // d e e p itself — if a Discography release (SoundCloud, via isBLDActive,
+    // or Spotify, via externalSource) is what's actually playing, BLD's own
+    // visuals stay in their base/paused state instead of following along.
+    const bldPlaying = isPlaying && isBLDActive && !externalSource;
+    if (stage) stage.classList.toggle('is-playing', bldPlaying);
     if (tracksWrap) {
       const activeTile = tracksWrap.querySelector('.listen__track.is-active');
-      if (activeTile) activeTile.classList.toggle('is-playing', isPlaying);
+      if (activeTile) activeTile.classList.toggle('is-playing', bldPlaying);
     }
     if (isPlaying) dismissHint();
   }
@@ -417,9 +424,18 @@ function initMiniPlayer() {
       widget.play();
     });
 
-    miniToggle.addEventListener('click', togglePlay);
-    document.getElementById('miniNext').addEventListener('click', () => widget.next());
-    document.getElementById('miniPrev').addEventListener('click', () => widget.prev());
+    miniToggle.addEventListener('click', () => {
+      if (externalSource) { externalSource.onToggle(); return; }
+      togglePlay();
+    });
+    miniNextBtn.addEventListener('click', () => {
+      if (externalSource) { if (externalSource.onNext) externalSource.onNext(); return; }
+      widget.next();
+    });
+    miniPrevBtn.addEventListener('click', () => {
+      if (externalSource) { if (externalSource.onPrev) externalSource.onPrev(); return; }
+      widget.prev();
+    });
 
     if (stage) {
       stage.addEventListener('click', togglePlay);
@@ -451,6 +467,48 @@ function initMiniPlayer() {
   miniPlayer.addEventListener('click', dismissHint, { once: true });
 
   initMiniPlayerDrag(miniPlayer);
+
+  // Public hook for non-SoundCloud sources (currently: Spotify release
+  // panels, see music.html) to take over the mini-player's display and
+  // transport controls. The SC widget itself is paused separately via the
+  // existing griot:pause-mini-player event before this is called.
+  window.griotMiniPlayer = {
+    setExternal(source) {
+      externalSource = source;
+      miniTitle.innerHTML = source.title;
+      if (miniTitleDup) miniTitleDup.innerHTML = source.title;
+      if (miniTitlePlain) miniTitlePlain.textContent = source.title;
+      if (miniTitleTrack) {
+        miniTitleTrack.classList.remove('is-scrolling');
+        requestAnimationFrame(() => {
+          const mask = miniTitleTrack.parentElement;
+          const firstSpan = miniTitleTrack.firstElementChild;
+          miniTitleTrack.classList.toggle('is-scrolling', firstSpan.scrollWidth > mask.clientWidth);
+        });
+      }
+      if (miniArt && source.art) miniArt.src = source.art;
+      miniNextBtn.style.visibility = source.onNext ? '' : 'hidden';
+      miniPrevBtn.style.visibility = source.onPrev ? '' : 'hidden';
+      setPlaying(!!source.isPlaying);
+      miniPlayer.classList.add('is-visible');
+      dismissHint();
+    },
+    updateExternalPlaying(isPlaying) {
+      if (!externalSource) return;
+      setPlaying(isPlaying);
+    },
+    clearExternal() {
+      if (!externalSource) return;
+      externalSource = null;
+      miniNextBtn.style.visibility = '';
+      miniPrevBtn.style.visibility = '';
+      activate(currentIndex);
+      setPlaying(false);
+    },
+    isExternalActive() {
+      return !!externalSource;
+    }
+  };
 }
 
 // Makes the mini-player draggable and snaps it to the nearest of six docks
