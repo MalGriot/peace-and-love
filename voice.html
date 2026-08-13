@@ -105,156 +105,8 @@
     .m-hero.align-right .m-hero__desc{margin-left:0;margin-right:auto}
   }
 
-  /* ---- listening stage ---- */
-  .listen{
-    padding:110px clamp(20px,5vw,64px) 100px;background:transparent;
-    border-bottom:1px solid rgba(239,230,216,.08);
-    display:flex;flex-direction:column;align-items:center;text-align:center;gap:40px;
-    position:relative;z-index:0;
-  }
-  .listen__eyebrow{color:var(--brass);font-size:12px;letter-spacing:.2em;text-transform:uppercase}
-  .listen__title{font-family:var(--font-display);font-weight:400;font-size:clamp(30px,4vw,46px);margin:10px 0 14px}
-  .listen__desc{font-size:14.5px;line-height:1.7;color:var(--paper-dim);max-width:44ch;margin:0 auto 8px}
-
-  .listen__stage{
-    position:relative;width:min(360px,80vw);aspect-ratio:1;cursor:pointer;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .listen__stage:focus-visible{outline:2px solid var(--brass);outline-offset:6px}
-
-  /* inactive: static cover, only scales on hover (no tilt/move).
-     click swaps it out for the spinning record — see .is-playing below. */
-  .listen__sleeve{
-    position:absolute;inset:0;z-index:2;border-radius:6px;overflow:hidden;
-    box-shadow:0 30px 70px rgba(0,0,0,.6),0 0 0 1px rgba(239,230,216,.08);
-    transition:transform .3s ease, opacity .4s ease;
-  }
-  .listen__stage:hover .listen__sleeve,
-  .listen__stage:focus-visible .listen__sleeve{transform:scale(1.04)}
-  .listen__stage.is-playing .listen__sleeve{opacity:0;transform:scale(1);pointer-events:none}
-  .listen__sleeve img{width:100%;height:100%;object-fit:cover;display:block}
-  .listen__sleeve-play{
-    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    background:rgba(17,16,19,.28);opacity:0;transition:opacity .25s ease;
-  }
-  .listen__stage:hover .listen__sleeve-play,
-  .listen__stage:focus-visible .listen__sleeve-play{opacity:1}
-  .listen__sleeve-play span{
-    width:64px;height:64px;border-radius:999px;background:var(--brass);color:#12100f;
-    display:flex;align-items:center;justify-content:center;
-  }
-
-  /* active: the record takes the sleeve's exact footprint (same inset:0
-     box) so the crossfade reads as one swapping for the other in place */
-  .listen__vinyl{
-    --disc-a:#0f3535;--disc-b:#1f5555;
-    position:absolute;inset:0;border-radius:999px;
-    box-shadow:0 20px 60px rgba(0,0,0,.55);
-    opacity:0;transform:scale(.92);pointer-events:none;
-    transition:opacity .4s ease, transform .4s ease;
-  }
-  .listen__stage.is-playing .listen__vinyl{opacity:1;transform:scale(1);pointer-events:auto}
-  /* the spin layer rotates independently of the outer disc's fade/scale
-     transition, same motif as the discography's release__disc-spin */
-  .listen__vinyl-spin{
-    position:absolute;inset:0;border-radius:999px;
-    background:radial-gradient(circle at 34% 30%, var(--disc-b) 0%, var(--disc-a) 78%);
-    transition:background .3s ease;
-  }
-  .listen__stage.is-playing .listen__vinyl-spin{animation:release-disc-spin 2.6s linear infinite}
-  .listen__vinyl-label{
-    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-    width:36%;height:36%;border-radius:999px;object-fit:cover;z-index:2;
-    box-shadow:0 0 0 1px rgba(0,0,0,.35);
-  }
-  .listen__vinyl-hole{
-    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-    width:9%;height:9%;border-radius:999px;background:var(--asphalt);z-index:3;
-  }
-  .listen__vinyl-pause{
-    position:absolute;inset:0;border-radius:999px;z-index:4;
-    display:flex;align-items:center;justify-content:center;
-    background:rgba(17,16,19,.28);opacity:0;transition:opacity .25s ease;
-  }
-  .listen__stage:hover .listen__vinyl-pause,
-  .listen__stage:focus-visible .listen__vinyl-pause{opacity:1}
-  .listen__vinyl-pause span{
-    width:64px;height:64px;border-radius:999px;background:var(--brass);color:#12100f;
-    display:flex;align-items:center;justify-content:center;
-  }
-
-  .listen__cta{margin-top:6px}
-
-  /* desktop: one unbroken row, however many tracks there are.
-     mobile: fixed 5-wide grid so rows split evenly (5+5 for a 10-track
-     album) instead of wrapping wherever the flex box happens to run out
-     of width. */
-  .listen__tracks{
-    display:flex;gap:10px;justify-content:center;flex-wrap:nowrap;
-    margin-top:48px;padding-top:36px;
-  }
-  @media (max-width:700px){
-    .listen__tracks{
-      display:grid;grid-template-columns:repeat(5,56px);justify-content:center;
-    }
-  }
-  .listen__track{
-    width:56px;height:56px;border-radius:6px;position:relative;cursor:pointer;
-    background:var(--velvet-deep);border:1px solid rgba(239,230,216,.12);
-    transition:border-color .2s ease,transform .2s ease;
-    --disc-a:#0f3535;--disc-b:#1f5555;
-  }
-  .listen__track:hover{border-color:var(--brass);transform:translateY(-2px) scale(1.08);z-index:5}
-  .listen__track.is-active{border-color:var(--brass);box-shadow:0 0 0 1px var(--brass);z-index:4}
-
-  .listen__track-art{
-    position:relative;z-index:2;width:100%;height:100%;object-fit:cover;border-radius:5px;
-    display:block;opacity:.75;transition:transform .3s ease,opacity .3s ease;
-  }
-  .listen__track:hover .listen__track-art{transform:scale(1.08);opacity:.9}
-  .listen__track.is-active .listen__track-art{opacity:1}
-
-  .listen__track-disc{
-    position:absolute;left:0;bottom:0;width:100%;height:100%;border-radius:999px;z-index:1;
-    opacity:0;transform:translateY(6%) scale(.7);
-    transition:transform .35s cubic-bezier(.22,.9,.3,1),opacity .35s ease;
-    box-shadow:0 10px 22px rgba(0,0,0,.5);
-  }
-  .listen__track.is-active.is-playing .listen__track-disc{
-    opacity:1;transform:translateY(-62%) scale(.92);
-  }
-  .listen__track-disc-spin{
-    position:absolute;inset:0;border-radius:999px;
-    background:radial-gradient(circle at 34% 30%, var(--disc-b) 0%, var(--disc-a) 78%);
-  }
-  .listen__track.is-active.is-playing .listen__track-disc-spin{
-    animation:release-disc-spin 2.6s linear infinite;
-  }
-  .listen__track-disc-label{
-    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-    width:36%;height:36%;border-radius:999px;object-fit:cover;z-index:2;
-    box-shadow:0 0 0 1px rgba(0,0,0,.35);
-  }
-  .listen__track-disc-hole{
-    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-    width:12%;height:12%;border-radius:999px;background:var(--asphalt);z-index:3;
-  }
-
-  .listen__track .num{position:absolute;top:3px;left:4px;font-size:9px;color:var(--paper-dim);z-index:3}
-
-  .listen__track-tip{
-    position:absolute;bottom:calc(100% + 10px);left:50%;z-index:6;
-    transform:translateX(-50%) translateY(4px);white-space:nowrap;
-    padding:6px 10px;border-radius:8px;background:var(--paper);color:var(--ink);
-    font-size:11px;font-weight:500;opacity:0;pointer-events:none;
-    transition:opacity .2s ease,transform .2s ease;
-  }
-  .listen__track-tip::after{
-    content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
-    border:5px solid transparent;border-top-color:var(--paper);
-  }
-  .listen__track:hover .listen__track-tip,
-  .listen__track:focus-visible .listen__track-tip{opacity:1;transform:translateX(-50%) translateY(0)}
+  /* ---- listening stage: .listen* styles now live in shared.css
+     (shared with the Music/discography page's own New Album stage) ---- */
 
   /* ---- editorial release timeline (allagi.music-style) ---- */
   .releases{padding:20px clamp(20px,5vw,64px) 120px}
@@ -293,7 +145,7 @@
     position:absolute;inset:0;border-radius:999px;
   }
   .release:hover .release__disc-spin{animation:release-disc-spin 2.6s linear infinite}
-  @keyframes release-disc-spin{to{transform:rotate(360deg)}}
+  /* @keyframes release-disc-spin now lives in shared.css */
 
   .release__disc--vinyl .release__disc-spin{
     background:radial-gradient(circle at 34% 30%, var(--disc-b) 0%, var(--disc-a) 78%);

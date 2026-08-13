@@ -3,7 +3,7 @@
 function renderChrome(active) {
   const links = [
     ['voice.html', 'Voice', 'music'],
-    ['discography.html', 'Discography', 'discography'],
+    ['discography.html', 'Music', 'discography'],
     ['video.html', 'Video', 'cuts'],
     ['soundscapes.html', 'Soundscapes', 'wellness'],
     ['contact.html', 'Contact', 'contact'],
@@ -12,14 +12,60 @@ function renderChrome(active) {
     .map(([href, label, key]) => `<a href="${href}"${key === active ? ' class="is-active"' : ''}>${label}</a>`)
     .join('');
 
+  // Full site map for the staggered-menu nav panel — every page, in accordion order.
+  const menuItems = [
+    ['index.html', 'Home', 'home'],
+    ['discography.html', 'Music', 'discography'],
+    ['performance.html', 'Performance', 'performance'],
+    ['hosting.html', 'Hosting', 'hosting'],
+    ['poetry.html', 'Poetry', 'poetry'],
+    ['acting.html', 'Acting', 'acting'],
+    ['voice.html', 'Voice', 'music'],
+    ['voiceover.html', 'Voice Over', 'voiceover'],
+    ['video.html', 'Video', 'cuts'],
+    ['soundbaths.html', 'Sound Baths', 'soundbaths'],
+    ['meditation.html', 'Meditation', 'meditation'],
+    ['soundscapes.html', 'Soundscapes', 'wellness'],
+    ['about.html', 'About', 'about'],
+    ['contact.html', 'Contact', 'contact'],
+  ];
+  const menuItemHtml = menuItems
+    .map(([href, label, key], i) => `
+      <li class="sm-panel-itemWrap">
+        <a class="sm-panel-item${key === active ? ' is-active' : ''}" href="${href}" style="--sm-delay:${(i * 0.045).toFixed(3)}s">
+          <span class="sm-panel-itemLabel">${label}</span>
+        </a>
+      </li>`)
+    .join('');
+
   const navHtml = `
-    <nav class="site-nav">
-      <a href="index.html" class="site-nav__mark"><img src="img/brand/nav-mark-gold.png" alt="" class="site-nav__mark-icon" width="22" height="22">Mal Griot</a>
-      <ul class="site-nav__links">${linkHtml}</ul>
-      <button type="button" class="site-nav__toggle" aria-label="Menu" aria-expanded="false">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-      </button>
-    </nav>`;
+    <div class="staggered-menu-wrapper">
+      <header class="staggered-menu-header">
+        <a href="index.html" class="sm-logo"><img src="img/brand/nav-mark-gold.png" alt="" class="sm-logo-img" width="22" height="22">Mal Griot</a>
+        <button type="button" class="sm-toggle" aria-label="Open menu" aria-expanded="false">
+          <span class="sm-toggle-text">Menu</span>
+          <span class="sm-icon" aria-hidden="true">
+            <span class="sm-icon-line"></span>
+            <span class="sm-icon-line sm-icon-line-v"></span>
+          </span>
+        </button>
+      </header>
+      <aside class="staggered-menu-panel" aria-hidden="true">
+        <button type="button" class="sm-panel-close" aria-label="Close menu">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>
+        </button>
+        <ul class="sm-panel-list">${menuItemHtml}</ul>
+        <div class="sm-socials">
+          <h3 class="sm-socials-title">Socials</h3>
+          <div class="sm-socials-list">
+            <a href="https://instagram.com/yep.that.malcolm" target="_blank" rel="noopener">Instagram</a>
+            <a href="https://open.spotify.com/artist/61bgVlMQw2S0t6d8mVPVIS" target="_blank" rel="noopener">Spotify</a>
+            <a href="https://soundcloud.com/mal-griot" target="_blank" rel="noopener">SoundCloud</a>
+          </div>
+        </div>
+      </aside>
+      <div class="sm-backdrop"></div>
+    </div>`;
 
   const footerHtml = `
     <footer class="site-footer">
@@ -48,14 +94,15 @@ function renderChrome(active) {
   if (footerSlot) footerSlot.outerHTML = footerHtml;
   if (chatSlot) chatSlot.outerHTML = chatWidgetHtml();
 
-  // The mini-player only shows on the music page by default. On the other
-  // satellite pages it stays out of the DOM entirely until the visitor has
-  // pressed play at least once (tracked in localStorage) — home (index.html)
-  // never gets it, since it doesn't call renderChrome at all.
+  // The mini-player only shows by default on pages with their own New Album
+  // listening stage (Voice, and now the Music/discography page). On the
+  // other satellite pages it stays out of the DOM entirely until the
+  // visitor has pressed play at least once (tracked in localStorage) —
+  // home (index.html) never gets it, since it doesn't call renderChrome at all.
   if (playerSlot) {
     let activated = false;
     try { activated = localStorage.getItem('griotPlayerActivated') === '1'; } catch (e) {}
-    if (active === 'music' || activated) {
+    if (active === 'music' || active === 'discography' || activated) {
       playerSlot.outerHTML = playerHtml;
     } else {
       playerSlot.remove();
@@ -493,23 +540,45 @@ function initMiniPlayerDrag(miniPlayer) {
   window.addEventListener('resize', () => place(anchor));
 }
 
-// Shared chrome behavior: nav scroll state, mobile menu, chat widget shell toggle.
-document.addEventListener('DOMContentLoaded', () => {
-  const nav = document.querySelector('.site-nav');
-  if (nav) {
-    const onScroll = () => nav.classList.toggle('is-scrolled', window.scrollY > 12);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
+// Staggered-menu nav: hamburger toggle opens a slide-in panel listing every
+// page, with a react-bits-style staggered entrance handled via CSS transition
+// delays (--sm-delay, set per item in renderChrome's menuItemHtml).
+function initStaggeredMenu() {
+  const wrapper = document.querySelector('.staggered-menu-wrapper');
+  if (!wrapper) return;
+  const toggle = wrapper.querySelector('.sm-toggle');
+  const toggleText = wrapper.querySelector('.sm-toggle-text');
+  const panel = wrapper.querySelector('.staggered-menu-panel');
+  const backdrop = wrapper.querySelector('.sm-backdrop');
+  const closeBtn = wrapper.querySelector('.sm-panel-close');
+
+  function setOpen(open) {
+    wrapper.classList.toggle('is-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    toggleText.textContent = open ? 'Close' : 'Menu';
+    panel.setAttribute('aria-hidden', String(!open));
   }
 
+  toggle.addEventListener('click', () => setOpen(!wrapper.classList.contains('is-open')));
+  backdrop.addEventListener('click', () => setOpen(false));
+  closeBtn.addEventListener('click', () => setOpen(false));
+  panel.querySelectorAll('.sm-panel-item').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setOpen(false);
+  });
+}
+
+// Shared chrome behavior: mobile menu, chat widget shell toggle.
+document.addEventListener('DOMContentLoaded', () => {
   if (typeof initStaggeredMenu === 'function') initStaggeredMenu();
 
   initChat();
   initMiniPlayer();
   initAnimatedFavicon();
   initEmberField();
-  if (typeof initGooeyNav === 'function') initGooeyNav();
   if (typeof initScrollReveal === 'function') initScrollReveal();
+  if (typeof initScrollFloat === 'function') initScrollFloat();
 });
 
 // Rising ember/ash field: small points that drift upward and flicker in

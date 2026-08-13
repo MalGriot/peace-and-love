@@ -24,71 +24,71 @@ function initScrollReveal() {
   els.forEach((el) => io.observe(el));
 }
 
-// ---------- Gooey Nav ----------
-// Injects an SVG goo filter (once, into <body>) plus a tracking blob behind
-// .site-nav__links, and moves the blob to whichever link is hovered/focused.
-// No-ops on pages without .site-nav__links (chrome not rendered / index.html).
-function initGooeyNav() {
-  const list = document.querySelector('.site-nav__links');
-  if (!list) return;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+// ---------- Scroll Float ----------
+// react-bits ScrollReveal, ported to vanilla JS against the real gsap +
+// ScrollTrigger (loaded via CDN <script> tags on pages that use it — no
+// bundler needed). Splits each .scroll-float element's text into per-word
+// spans, then scrubs container rotation and per-word opacity/blur directly
+// off scroll position, matching the original component's animation 1:1.
+// Reads props from data-* attributes (see the table in the react-bits docs):
+// data-base-opacity, data-base-rotation, data-blur-strength,
+// data-enable-blur="false", data-rotation-end, data-word-animation-end.
+function initScrollFloat() {
+  const els = document.querySelectorAll('.scroll-float');
+  if (!els.length) return;
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  gsap.registerPlugin(ScrollTrigger);
 
-  if (!document.getElementById('gooey-nav-filter')) {
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('width', '0');
-    svg.setAttribute('height', '0');
-    svg.style.position = 'absolute';
-    svg.innerHTML = `
-      <filter id="gooey-nav-filter">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur"/>
-        <feColorMatrix in="blur" mode="matrix"
-          values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -9" result="goo"/>
-      </filter>`;
-    document.body.appendChild(svg);
-  }
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const wrap = document.createElement('div');
-  wrap.className = 'gooey-nav__wrap';
-  wrap.innerHTML = '<div class="gooey-blob"></div>';
-  list.appendChild(wrap);
-  const blob = wrap.querySelector('.gooey-blob');
+  els.forEach((el) => {
+    const words = el.textContent.trim().split(/\s+/);
+    el.innerHTML = words.map((word) => `<span class="word">${word}</span>`).join(' ');
+    const wordEls = el.querySelectorAll('.word');
 
-  function moveTo(link) {
-    const listRect = list.getBoundingClientRect();
-    const rect = link.getBoundingClientRect();
-    blob.style.width = rect.width + 'px';
-    blob.style.transform = `translateX(${rect.left - listRect.left}px)`;
-    blob.classList.add('is-visible');
-  }
+    if (reduceMotion) return;
 
-  list.querySelectorAll('a').forEach((a) => {
-    a.addEventListener('mouseenter', () => moveTo(a));
-    a.addEventListener('focus', () => moveTo(a));
-  });
-  list.addEventListener('mouseleave', () => blob.classList.remove('is-visible'));
-}
+    const baseOpacity = parseFloat(el.dataset.baseOpacity ?? '0.1');
+    const baseRotation = parseFloat(el.dataset.baseRotation ?? '3');
+    const blurStrength = parseFloat(el.dataset.blurStrength ?? '4');
+    const enableBlur = el.dataset.enableBlur !== 'false';
+    const rotationEnd = el.dataset.rotationEnd || 'bottom bottom';
+    const wordAnimationEnd = el.dataset.wordAnimationEnd || 'bottom bottom';
 
-// ---------- Staggered Menu ----------
-// Replaces the old plain slide-down toggle: opens .site-nav__links as a
-// full-screen overlay (see effects.css) and closes it on link click or Esc.
-function initStaggeredMenu() {
-  const toggle = document.querySelector('.site-nav__toggle');
-  const list = document.querySelector('.site-nav__links');
-  if (!toggle || !list) return;
+    gsap.fromTo(
+      el,
+      { transformOrigin: '0% 50%', rotate: baseRotation, y: 60 },
+      {
+        ease: 'none',
+        rotate: 0,
+        y: 0,
+        scrollTrigger: { trigger: el, start: 'top bottom', end: rotationEnd, scrub: true }
+      }
+    );
 
-  function setOpen(open) {
-    list.classList.toggle('is-open', open);
-    toggle.setAttribute('aria-expanded', String(open));
-    document.body.style.overflow = open ? 'hidden' : '';
-  }
+    gsap.fromTo(
+      wordEls,
+      { opacity: baseOpacity, willChange: 'opacity' },
+      {
+        ease: 'none',
+        opacity: 1,
+        stagger: 0.05,
+        scrollTrigger: { trigger: el, start: 'top bottom-=20%', end: wordAnimationEnd, scrub: true }
+      }
+    );
 
-  toggle.addEventListener('click', () => setOpen(!list.classList.contains('is-open')));
-  list.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') setOpen(false);
-  });
-  window.matchMedia('(max-width:760px)').addEventListener('change', (e) => {
-    if (!e.matches) setOpen(false);
+    if (enableBlur) {
+      gsap.fromTo(
+        wordEls,
+        { filter: `blur(${blurStrength}px)` },
+        {
+          ease: 'none',
+          filter: 'blur(0px)',
+          stagger: 0.05,
+          scrollTrigger: { trigger: el, start: 'top bottom-=20%', end: wordAnimationEnd, scrub: true }
+        }
+      );
+    }
   });
 }
 

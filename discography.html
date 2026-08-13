@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <script>document.documentElement.className+=' js';</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Discography — Mal Griot</title>
-<meta name="description" content="Mal Griot's discography — albums and EPs across SoundCloud and Spotify.">
-<meta property="og:title" content="Discography — Mal Griot">
-<meta property="og:description" content="Mal Griot's discography — albums and EPs across SoundCloud and Spotify.">
+<title>Music — Mal Griot</title>
+<meta name="description" content="Mal Griot's music — albums and EPs across SoundCloud and Spotify.">
+<meta property="og:title" content="Music — Mal Griot">
+<meta property="og:description" content="Mal Griot's music — albums and EPs across SoundCloud and Spotify.">
 <meta property="og:image" content="https://malgriot.github.io/peace-and-love/img/og/share-contact.png">
 <meta property="og:url" content="https://malgriot.github.io/peace-and-love/discography.html">
 <meta property="og:type" content="website">
@@ -41,14 +41,6 @@
 <link rel="stylesheet" href="shared.css">
 <link rel="stylesheet" href="effects.css">
 <style>
-  .d-hero{min-height:70vh;display:flex;align-items:center;padding:130px clamp(20px,5vw,64px) 60px}
-  .d-hero__grid{width:100%;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:56px;align-items:center}
-  .d-eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);margin-bottom:16px;display:block}
-  .d-title{font-family:var(--font-display);font-weight:400;font-size:clamp(40px,6vw,72px);margin:0 0 20px}
-  .d-desc{font-size:15.5px;line-height:1.7;color:var(--paper-dim);max-width:46ch}
-  .d-hero__art{width:100%;aspect-ratio:1/1}
-  @media (max-width:900px){.d-hero__grid{grid-template-columns:1fr}.d-hero__art{max-width:320px;margin:0 auto}}
-
   .d-releases{padding:20px clamp(20px,5vw,64px) 100px;max-width:1200px;margin:0 auto}
   .d-releases__head{padding:40px 0 30px;border-bottom:1px solid rgba(239,230,216,.1)}
   .d-releases__head h2{font-family:var(--font-display);font-weight:400;font-size:clamp(24px,2.6vw,32px);margin:0}
@@ -81,17 +73,51 @@
 
 <div id="chrome-nav"></div>
 
-<section class="d-hero">
-  <div class="d-hero__grid">
-    <div class="reveal">
-      <span class="d-eyebrow">Discography</span>
-      <h1 class="d-title" data-metallic-paint>Ten releases, one throughline.</h1>
-      <p class="d-desc">Afro-house, funk, and soul across SoundCloud and Spotify — solo work and collaborations with producers and labels around the world.</p>
+<section class="listen" id="listen">
+  <span class="listen__eyebrow">New Album</span>
+  <h1
+    class="warp-text"
+    role="img"
+    aria-label="breathelovedeep"
+    style="height:clamp(150px,20vw,280px)"
+    data-warp-text="breathelovedeep"
+    data-color="#f8f5ff"
+    data-warp-strength="0.18"
+    data-warp-scale="3"
+    data-speed="0.55"
+    data-pointer-influence="0.33"
+    data-pointer-strength="0.8"
+    data-refraction="0.001"
+    data-ripple="true"
+    data-font-size="clamp(3.5rem, 9vw, 10rem)"
+    data-font-weight="700"
+    data-font-family="var(--font-display)"
+    data-letter-spacing="-0.06em"
+    data-line-height="0.9"
+  ></h1>
+  <p class="scroll-float" data-base-opacity="0" data-base-rotation="5" data-blur-strength="10">Fall into the sky with us. Float on a soulful sound-sighted journey through MAL GRIOT's latest exhaled odyssey. Let this collection of songs about love, loss, longing, and learning to let go move through you.</p>
+
+  <div class="listen__stage" id="listenStage" role="button" tabindex="0" aria-label="Play breathe love d e e p">
+    <div class="listen__vinyl" id="listenVinyl">
+      <div class="listen__vinyl-spin">
+        <img class="listen__vinyl-label" id="listenVinylLabel" src="" alt="">
+        <span class="listen__vinyl-hole"></span>
+      </div>
+      <div class="listen__vinyl-pause">
+        <span><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></span>
+      </div>
     </div>
-    <div class="d-hero__art reveal">
-      <div class="morph-slider" data-slides="https://images.pexels.com/photos/9257184/pexels-photo-9257184.jpeg?cs=tinysrgb&dpr=2&w=600,https://images.pexels.com/photos/13532875/pexels-photo-13532875.jpeg?cs=tinysrgb&dpr=2&w=600,https://images.pexels.com/photos/9258252/pexels-photo-9258252.jpeg?cs=tinysrgb&dpr=2&w=600,https://images.pexels.com/photos/16944874/pexels-photo-16944874/free-photo-of-vinyl-records-collection.jpeg?cs=tinysrgb&dpr=2&w=600"></div>
+    <div class="listen__sleeve">
+      <img src="https://images.pexels.com/photos/9257184/pexels-photo-9257184.jpeg?cs=tinysrgb&dpr=2&w=900" alt="breathe love d e e p album cover" id="sleeveArt">
+      <div class="listen__sleeve-play">
+        <span><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+      </div>
     </div>
   </div>
+
+  <a href="https://soundcloud.com/mal-griot/sets/breathelovedeep" target="_blank" rel="noopener" class="btn btn-outline listen__cta">Open on SoundCloud</a>
+
+  <div class="listen__tracks" id="listenTracks"></div>
 </section>
 
 <section class="d-releases">
@@ -218,14 +244,15 @@
 <div id="chrome-chat"></div>
 <div id="chrome-player"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="vendor/ogl.js"></script>
+<script src="warp-text.js"></script>
 <script src="shared.js"></script>
 <script src="chat.js"></script>
 <script src="effects.js"></script>
 <script>renderChrome('discography');</script>
 <script>
-  initMorphSlider();
-  initMetallicPaint();
-
   // Pull real cover art for each release the same way voice.html does
   // (soundcloud.com/oembed and open.spotify.com/oembed are both CORS-open,
   // no API key needed): fall back silently to no image if the fetch fails.

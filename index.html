@@ -91,68 +91,79 @@
   .home-bar a[data-tip]:hover::after{opacity:1;transform:translateX(-50%) translateY(0)}
   .home-bar a[data-tip]:hover::before{opacity:1}
 
-  .panel{
-    position:relative;flex:1;height:100%;overflow:hidden;display:block;
+  .accordion{
+    position:absolute;inset:0;display:flex;overflow-x:auto;overflow-y:hidden;
+    scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;
+  }
+  .accordion::-webkit-scrollbar{display:none}
+  .acc-item{
+    position:relative;flex:0 0 20vw;width:20vw;height:100%;overflow:hidden;display:block;
     text-decoration:none;cursor:pointer;
     transition:flex .6s cubic-bezier(.22,.9,.3,1);
   }
-  .panels.has-hover .panel{flex:.72}
-  .panels.has-hover .panel.is-active{flex:1.7}
+  .accordion.has-active .acc-item.is-active{flex:0 0 40vw}
 
-  .panel__media{position:absolute;inset:0;width:100%;height:100%}
-  .panel__photo{
+  .acc-item__photo{
     position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-    filter:grayscale(0) brightness(1);opacity:1;
+    filter:grayscale(1) brightness(.55);
     transition:filter .5s ease,opacity .5s ease,transform 8s ease;
   }
-  .panels.has-hover .panel:not(.is-active) .panel__photo{filter:grayscale(1) brightness(.6);}
-  .panel.is-active .panel__photo{opacity:0}
-  .panel:hover .panel__photo{transform:scale(1.04)}
+  .acc-item.is-active .acc-item__photo{filter:grayscale(0) brightness(1)}
+  .acc-item.is-playing .acc-item__photo{opacity:0}
+  .acc-item:hover .acc-item__photo{transform:scale(1.04)}
 
-  .panel__video{
+  .acc-item__video{
     position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
     opacity:0;transition:opacity .6s ease;
   }
-  .panel.is-active .panel__video{opacity:1}
+  .acc-item.is-playing .acc-item__video{opacity:1}
 
-  .panel__scrim{position:absolute;inset:0;background:linear-gradient(to top, rgba(8,7,6,.94) 0%, rgba(8,7,6,.55) 32%, rgba(8,7,6,.1) 60%);z-index:2}
-  .panel.is-active .panel__scrim{background:linear-gradient(to top, rgba(8,7,6,.85) 0%, rgba(8,7,6,.45) 34%, rgba(8,7,6,.06) 62%)}
-
-  .panel__content{
-    position:relative;z-index:3;height:100%;display:flex;flex-direction:column;justify-content:flex-end;
-    padding:clamp(20px,4vh,52px) clamp(18px,3vw,44px) clamp(84px,13vh,118px);
+  .acc-item__mute{
+    width:32px;height:32px;flex:none;border-radius:50%;border:1px solid rgba(255,255,255,.35);
+    background:rgba(8,7,6,.55);backdrop-filter:blur(4px);
+    display:none;align-items:center;justify-content:center;cursor:pointer;
+    opacity:0;transition:opacity .3s ease,background .2s ease,transform .2s ease;
   }
-  .panel__eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.9);margin-bottom:10px;
-    text-shadow:0 1px 3px rgba(0,0,0,.9),0 2px 10px rgba(0,0,0,.7);
-    opacity:0;transform:translateY(8px);transition:opacity .4s ease .1s,transform .4s ease .1s;white-space:nowrap}
-  .panel.is-active .panel__eyebrow{opacity:1;transform:translateY(0)}
-  .panel__title{
-    font-family:var(--font-display);font-weight:500;font-size:clamp(22px,3.4vw,44px);color:#fff;line-height:1.02;margin-bottom:10px;white-space:nowrap;
+  .acc-item__mute svg{width:15px;height:15px;fill:#fff}
+  .accordion.has-active .acc-item.is-active.is-playing .acc-item__mute{display:flex;opacity:1}
+  .acc-item__mute:hover{background:rgba(8,7,6,.85);transform:scale(1.08)}
+
+  .acc-item__scrim{position:absolute;inset:0;background:linear-gradient(to top, rgba(8,7,6,.92) 0%, rgba(8,7,6,.5) 34%, rgba(8,7,6,.12) 62%);z-index:2}
+
+  .acc-item__title{
+    position:absolute;z-index:3;left:0;right:0;bottom:clamp(84px,13vh,118px);
+    font-family:var(--font-display);font-weight:500;color:#fff;line-height:1.05;
     text-shadow:0 1px 4px rgba(0,0,0,.95),0 4px 16px rgba(0,0,0,.75),0 10px 34px rgba(0,0,0,.5);
+    writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);
+    padding:0 0 0 clamp(10px,1.4vw,18px);font-size:clamp(15px,1.6vw,20px);letter-spacing:.04em;
+    white-space:nowrap;transition:writing-mode 0s .1s;
   }
-  .panel__desc{
-    font-size:13.5px;color:rgba(255,255,255,.92);max-width:30ch;line-height:1.5;
-    text-shadow:0 1px 3px rgba(0,0,0,.9),0 3px 12px rgba(0,0,0,.65);
-    max-height:0;opacity:0;overflow:hidden;transition:max-height .4s ease,opacity .3s ease;
+  .accordion.has-active .acc-item.is-active .acc-item__title{
+    writing-mode:horizontal-tb;transform:none;padding:0 clamp(18px,3vw,44px);
+    font-size:clamp(22px,3.4vw,44px);transition:none;
+    display:flex;align-items:center;gap:16px;
   }
-  .panel.is-active .panel__desc{max-height:80px;opacity:1}
+  .acc-item__soon{
+    position:absolute;z-index:3;left:clamp(18px,3vw,44px);bottom:clamp(48px,8vh,72px);
+    font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.75);
+    text-shadow:0 1px 3px rgba(0,0,0,.9);opacity:0;transition:opacity .3s ease .15s;
+  }
+  .accordion.has-active .acc-item.is-active .acc-item__soon{opacity:1}
 
-  .panel__mute{
-    position:absolute;bottom:clamp(112px,15vh,150px);right:clamp(16px,3vw,28px);z-index:4;
-    width:40px;height:40px;border-radius:999px;border:none;background:rgba(11,10,9,.55);color:#fff;
-    display:flex;align-items:center;justify-content:center;cursor:pointer;
-    opacity:0;pointer-events:none;transition:opacity .35s ease;
-  }
-  .panel.is-active .panel__mute{opacity:1;pointer-events:auto}
-  .panel__mute svg{width:16px;height:16px}
-
-  /* narrow-panel label collapse so copy never overlaps at .72 flex width */
+  /* stack vertically on narrow screens; tap expands height instead of width */
   @media (max-width:900px){
-    .panels{flex-direction:column}
-    .panel{flex:1 !important;height:auto}
-    .panels.has-hover .panel.is-active{flex:1 !important}
-    .panel__title{font-size:28px}
-    .panel__content{padding-bottom:76px}
+    .accordion{flex-direction:column;overflow-x:hidden;overflow-y:auto}
+    .acc-item{flex:0 0 20vh !important;width:100% !important;height:20vh}
+    .accordion.has-active .acc-item.is-active{flex:0 0 40vh !important}
+    .acc-item__title{
+      writing-mode:horizontal-tb;transform:none;
+      left:18px;right:18px;bottom:14px;font-size:16px;padding:0;
+      display:flex;align-items:center;gap:12px;
+    }
+    .accordion.has-active .acc-item.is-active .acc-item__title{font-size:26px;padding:0;gap:12px}
+    .acc-item__mute{width:26px;height:26px}
+    .acc-item__mute svg{width:13px;height:13px}
+    .acc-item__soon{left:18px;bottom:44px}
     .home-mark{top:22px}
     .home-mark__sub{display:none}
     .home-bar{
@@ -161,6 +172,14 @@
     }
     .home-bar a svg{width:17px;height:17px}
     .home-bar a[data-tip]::after,.home-bar a[data-tip]::before{display:none}
+
+    .acc-item[data-key="discography"] .acc-item__photo{object-position:44% 8% !important}
+    .acc-item[data-key="hosting"] .acc-item__photo{object-position:55% 8% !important}
+    .acc-item[data-key="acting"] .acc-item__photo{object-position:45% 30% !important}
+    .acc-item[data-key="voiceover"] .acc-item__photo{object-position:49% 60% !important}
+    .acc-item[data-key="meditation"] .acc-item__photo{object-position:50% 10% !important}
+    .acc-item[data-key="soundscapes"] .acc-item__photo{object-position:65% 20% !important}
+    .acc-item[data-key="about"] .acc-item__photo{object-position:41% 8% !important}
   }
 </style>
 </head>
@@ -197,54 +216,85 @@
     <a href="contact.html" class="home-bar__contact">Contact</a>
   </div>
 
-  <div class="panels" id="panels" style="position:absolute;inset:0;display:flex">
+  <div class="accordion" id="accordion">
 
-    <a href="voice.html" class="panel" data-key="music">
-      <div class="panel__media">
-        <img class="panel__photo" src="img/PP_09334.JPG" alt="Mal Griot performing live" style="object-position:32% 44%">
-        <video class="panel__video" data-src="video/music-hover.mp4" muted loop playsinline></video>
-      </div>
-      <div class="panel__scrim"></div>
-      <button type="button" class="panel__mute" data-mute aria-label="Toggle sound">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
-      </button>
-      <div class="panel__content">
-        <span class="panel__eyebrow">Singer · Songwriter</span>
-        <span class="panel__title">Voice</span>
-        <span class="panel__desc">Afro-house, funk and soul — original songs, releases and live performance.</span>
-      </div>
+    <a href="discography.html" class="acc-item" data-key="discography">
+      <img class="acc-item__photo" src="img/discography-home.jpg" alt="" style="object-position:44% 19%;transform-origin:44% 19%">
+      <video class="acc-item__video" src="video/music-hover.mp4" muted loop playsinline preload="none"></video>
+      <div class="acc-item__scrim"></div>
+      <span class="acc-item__title">Music<button class="acc-item__mute" type="button" aria-label="Unmute video"><svg viewBox="0 0 24 24"></svg></button></span>
+      <span class="acc-item__soon">Coming soon</span>
     </a>
 
-    <a href="video.html" class="panel" data-key="cuts">
-      <div class="panel__media">
-        <img class="panel__photo" src="img/hero-3.jpg" alt="Mal Griot in the studio surrounded by pedalboards" style="object-position:61% 27%">
-        <video class="panel__video" data-src="video/cuts-hover.mp4" muted loop playsinline></video>
-      </div>
-      <div class="panel__scrim"></div>
-      <button type="button" class="panel__mute" data-mute aria-label="Toggle sound">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
-      </button>
-      <div class="panel__content">
-        <span class="panel__eyebrow">Video Editing</span>
-        <span class="panel__title">Videos</span>
-        <span class="panel__desc">Kinetic, story-first edits for artists, brands and creators.</span>
-      </div>
+    <a href="performance.html" class="acc-item" data-key="performance">
+      <img class="acc-item__photo" src="img/performance-home.jpg" alt="" style="object-position:49% 25%;transform-origin:49% 25%">
+      <video class="acc-item__video" src="video/performance-hover.mp4" muted loop playsinline preload="none"></video>
+      <div class="acc-item__scrim"></div>
+      <span class="acc-item__title">Performance<button class="acc-item__mute" type="button" aria-label="Unmute video"><svg viewBox="0 0 24 24"></svg></button></span>
+      <span class="acc-item__soon">Coming soon</span>
     </a>
 
-    <a href="soundscapes.html" class="panel" data-key="wellness">
-      <div class="panel__media">
-        <img class="panel__photo" src="img/1722241513419.jpg" alt="Mal Griot, quiet portrait" style="object-position:37% 18%">
-        <video class="panel__video" data-src="https://videos.pexels.com/video-files/8391665/8391665-sd_640_360_24fps.mp4" muted loop playsinline></video>
-      </div>
-      <div class="panel__scrim"></div>
-      <button type="button" class="panel__mute" data-mute aria-label="Toggle sound">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
-      </button>
-      <div class="panel__content">
-        <span class="panel__eyebrow">Sound Facilitation</span>
-        <span class="panel__title">Soundscapes</span>
-        <span class="panel__desc">Sound facilitation and songwriting coaching for finding your voice.</span>
-      </div>
+    <a href="hosting.html" class="acc-item" data-key="hosting">
+      <img class="acc-item__photo" src="img/hosting-home.jpg" alt="" style="object-position:55% 23%;transform-origin:55% 23%">
+      <video class="acc-item__video" src="video/music-hover.mp4" muted loop playsinline preload="none"></video>
+      <div class="acc-item__scrim"></div>
+      <span class="acc-item__title">Hosting<button class="acc-item__mute" type="button" aria-label="Unmute video"><svg viewBox="0 0 24 24"></svg></button></span>
+      <span class="acc-item__soon">Coming soon</span>
+    </a>
+
+    <a href="poetry.html" class="acc-item" data-key="poetry">
+      <img class="acc-item__photo" src="img/poetry-home.jpg" alt="" style="object-position:44% 30%;transform-origin:44% 30%">
+      <video class="acc-item__video" src="video/poetry-hover.mp4" muted loop playsinline preload="none"></video>
+      <div class="acc-item__scrim"></div>
+      <span class="acc-item__title">Poetry<button class="acc-item__mute" type="button" aria-label="Unmute video"><svg viewBox="0 0 24 24"></svg></button></span>
+      <span class="acc-item__soon">Coming soon</span>
+    </a>
+
+    <a href="acting.html" class="acc-item" data-key="acting">
+      <img class="acc-item__photo" src="img/acting-home.jpg" alt="" style="object-position:45% 24%;transform-origin:45% 24%">
+      <video class="acc-item__video" src="video/acting-hover.mp4" muted loop playsinline preload="none" style="object-position:50% 0%"></video>
+      <div class="acc-item__scrim"></div>
+      <span class="acc-item__title">Acting<button class="acc-item__mute" type="button" aria-label="Unmute video"><svg viewBox="0 0 24 24"></svg></button></span>
+      <span class="acc-item__soon">Coming soon</span>
+    </a>
+
+    <a href="voiceover.html" class="acc-item" data-key="voiceover">
+      <img class="acc-item__photo" src="img/voiceover-home.jpg" alt="" style="object-position:49% 12%;transform-origin:49% 12%">
+      <video class="acc-item__video" src="video/voiceover-hover.mp4" muted loop playsinline preload="none"></video>
+      <div class="acc-item__scrim"></div>
+      <span class="acc-item__title">Voice Over<button class="acc-item__mute" type="button" aria-label="Unmute video"><svg viewBox="0 0 24 24"></svg></button></span>
+      <span class="acc-item__soon">Coming soon</span>
+    </a>
+
+    <a href="soundbaths.html" class="acc-item" data-key="soundbaths">
+      <img class="acc-item__photo" src="img/soundbaths-home.jpg" alt="" style="object-position:44% 16%;transform-origin:44% 16%">
+      <video class="acc-item__video" src="video/soundbaths-hover.mp4" muted loop playsinline preload="none"></video>
+      <div class="acc-item__scrim"></div>
+      <span class="acc-item__title">Sound Baths<button class="acc-item__mute" type="button" aria-label="Unmute video"><svg viewBox="0 0 24 24"></svg></button></span>
+      <span class="acc-item__soon">Coming soon</span>
+    </a>
+
+    <a href="meditation.html" class="acc-item" data-key="meditation">
+      <img class="acc-item__photo" src="img/meditation-home.jpg" alt="" style="object-position:50% 30%;transform-origin:50% 30%">
+      <video class="acc-item__video" src="video/meditation-hover.mp4" muted loop playsinline preload="none"></video>
+      <div class="acc-item__scrim"></div>
+      <span class="acc-item__title">Meditation<button class="acc-item__mute" type="button" aria-label="Unmute video"><svg viewBox="0 0 24 24"></svg></button></span>
+      <span class="acc-item__soon">Coming soon</span>
+    </a>
+
+    <a href="soundscapes.html" class="acc-item" data-key="soundscapes">
+      <img class="acc-item__photo" src="img/soundscapes-home.jpg" alt="" style="object-position:65% 44%;transform-origin:65% 44%">
+      <video class="acc-item__video" src="video/music-hover.mp4" muted loop playsinline preload="none"></video>
+      <div class="acc-item__scrim"></div>
+      <span class="acc-item__title">Soundscapes<button class="acc-item__mute" type="button" aria-label="Unmute video"><svg viewBox="0 0 24 24"></svg></button></span>
+    </a>
+
+    <a href="about.html" class="acc-item" data-key="about">
+      <img class="acc-item__photo" src="img/about-home.jpg" alt="" style="object-position:41% 38%;transform-origin:41% 38%">
+      <video class="acc-item__video" src="video/music-hover.mp4" muted loop playsinline preload="none"></video>
+      <div class="acc-item__scrim"></div>
+      <span class="acc-item__title">About<button class="acc-item__mute" type="button" aria-label="Unmute video"><svg viewBox="0 0 24 24"></svg></button></span>
+      <span class="acc-item__soon">Coming soon</span>
     </a>
 
   </div>
@@ -257,45 +307,95 @@
 <script>
   document.getElementById('chrome-chat').outerHTML = chatWidgetHtml();
 
-  const panels = document.getElementById('panels');
-  document.querySelectorAll('.panel').forEach((panel) => {
-    const video = panel.querySelector('.panel__video');
-    const muteBtn = panel.querySelector('[data-mute]');
-    let muted = true;
+  const accordion = document.getElementById('accordion');
+  const items = document.querySelectorAll('.acc-item');
+  accordion.classList.add('has-active');
 
-    panel.addEventListener('mouseenter', () => {
-      panels.classList.add('has-hover');
-      document.querySelectorAll('.panel').forEach((p) => p.classList.remove('is-active'));
-      panel.classList.add('is-active');
-      if (!video.src) video.src = video.dataset.src;
-      video.muted = muted;
-      video.currentTime = 0;
-      video.play().catch(() => {});
+  const ICON_UNMUTED = '<path d="M4 9v6h4l5 5V4L8 9H4z"/><path d="M15.5 8.5a4 4 0 010 7"/><path d="M18 6a7.5 7.5 0 010 12" style="fill:none;stroke:#fff;stroke-width:1.6;stroke-linecap:round"/>';
+  const ICON_MUTED = '<path d="M4 9v6h4l5 5V4L8 9H4z"/><path d="M15.5 9.5l5 5M20.5 9.5l-5 5" style="fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round"/>';
+
+  const VIDEO_DELAY = 5000;
+
+  items.forEach((item) => {
+    const video = item.querySelector('.acc-item__video');
+    const muteBtn = item.querySelector('.acc-item__mute');
+    const muteIcon = muteBtn.querySelector('svg');
+    let playTimer = null;
+
+    const renderMuteIcon = () => {
+      muteIcon.innerHTML = video.muted ? ICON_MUTED : ICON_UNMUTED;
+      muteBtn.setAttribute('aria-label', video.muted ? 'Unmute video' : 'Mute video');
+    };
+    renderMuteIcon();
+
+    item.addEventListener('mouseenter', () => {
+      items.forEach((i) => i.classList.remove('is-active', 'is-playing'));
+      item.classList.add('is-active');
+
+      clearTimeout(playTimer);
+      playTimer = setTimeout(() => {
+        item.classList.add('is-playing');
+        video.currentTime = 0;
+        video.play().catch(() => {});
+      }, VIDEO_DELAY);
     });
 
-    panel.addEventListener('mouseleave', () => {
-      panels.classList.remove('has-hover');
-      panel.classList.remove('is-active');
+    item.addEventListener('mouseleave', () => {
+      item.classList.remove('is-active', 'is-playing');
+      clearTimeout(playTimer);
       video.pause();
-      muted = true;
-      video.muted = true;
-      updateIcon();
     });
-
-    function updateIcon() {
-      muteBtn.innerHTML = muted
-        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>'
-        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg>';
-    }
 
     muteBtn.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      muted = !muted;
-      video.muted = muted;
-      updateIcon();
+      video.muted = !video.muted;
+      if (!video.muted) {
+        video.volume = 1;
+        video.play().catch(() => {});
+      }
+      renderMuteIcon();
+    });
+
+    item.addEventListener('click', (e) => {
+      if (item.getAttribute('href') === '#') e.preventDefault();
     });
   });
+
+  // Idle auto-scroll: slowly ping-pong the strip end-to-end while nothing is hovered
+  const AUTO_SCROLL_SPEED = 26; // px/sec
+  const stackedQuery = window.matchMedia('(max-width:900px)');
+  let autoScrollDir = 1;
+  let autoScrollPaused = false;
+  let autoScrollLastTs = null;
+
+  const stepAutoScroll = (ts) => {
+    if (autoScrollLastTs == null) autoScrollLastTs = ts;
+    const dt = (ts - autoScrollLastTs) / 1000;
+    autoScrollLastTs = ts;
+
+    if (!autoScrollPaused) {
+      const vertical = stackedQuery.matches;
+      const max = vertical
+        ? accordion.scrollHeight - accordion.clientHeight
+        : accordion.scrollWidth - accordion.clientWidth;
+      if (max > 0) {
+        const current = vertical ? accordion.scrollTop : accordion.scrollLeft;
+        let next = current + AUTO_SCROLL_SPEED * autoScrollDir * dt;
+        if (next >= max) { next = max; autoScrollDir = -1; }
+        else if (next <= 0) { next = 0; autoScrollDir = 1; }
+        if (vertical) accordion.scrollTop = next;
+        else accordion.scrollLeft = next;
+      }
+    }
+    requestAnimationFrame(stepAutoScroll);
+  };
+  requestAnimationFrame(stepAutoScroll);
+
+  accordion.addEventListener('mouseenter', () => { autoScrollPaused = true; });
+  accordion.addEventListener('mouseleave', () => { autoScrollPaused = false; autoScrollLastTs = null; });
+  accordion.addEventListener('touchstart', () => { autoScrollPaused = true; }, { passive: true });
+  accordion.addEventListener('touchend', () => { autoScrollPaused = false; autoScrollLastTs = null; });
 </script>
 </body>
 </html>
