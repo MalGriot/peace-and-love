@@ -468,13 +468,56 @@ void main() {
     }
   }
 
+  // "0:23% 42%,10:47% 42%,20:37% 42%" -> [{t:0,x:.23,y:.42}, ...] sorted by t.
+  // Lets a slide's crop follow a moving subject instead of sitting on one
+  // static point — see the dsc-9634 slide, where Mal Griot walks across a
+  // wide group shot and a single crop can't keep him in frame throughout.
+  function parseKeyframeGroup(group) {
+    return group
+      .split(',')
+      .map(entry => entry.trim())
+      .filter(Boolean)
+      .map(entry => {
+        const [t, pos] = entry.split(':');
+        const parts = (pos || '50% 50%').trim().split(/\s+/);
+        return {
+          t: parseFloat(t) || 0,
+          x: parseFloat(parts[0]) / 100,
+          y: parseFloat(parts[1] ?? parts[0]) / 100
+        };
+      })
+      .sort((a, b) => a.t - b.t);
+  }
+
+  function positionAt(keyframes, t) {
+    if (!keyframes || !keyframes.length) return null;
+    if (t <= keyframes[0].t) return keyframes[0];
+    const last = keyframes[keyframes.length - 1];
+    if (t >= last.t) return last;
+    for (let i = 0; i < keyframes.length - 1; i++) {
+      const a = keyframes[i];
+      const b = keyframes[i + 1];
+      if (t >= a.t && t <= b.t) {
+        const f = (t - a.t) / Math.max(b.t - a.t, 0.0001);
+        return { x: a.x + (b.x - a.x) * f, y: a.y + (b.y - a.y) * f };
+      }
+    }
+    return last;
+  }
+
   function initSlider(root) {
     const sources = (root.dataset.videos || '').split(',').map(s => s.trim()).filter(Boolean);
     const posters = (root.dataset.posters || '').split(',').map(s => s.trim()).filter(Boolean);
     const positions = (root.dataset.objectPositions || '').split(',').map(s => s.trim()).filter(Boolean);
+    const keyframeGroups = (root.dataset.positionKeyframes || '').split('|').map(s => s.trim());
     if (!sources.length) return;
 
-    const items = sources.map((src, i) => ({ src, poster: posters[i] || '', position: positions[i] || '50% 50%' }));
+    const items = sources.map((src, i) => ({
+      src,
+      poster: posters[i] || '',
+      position: positions[i] || '50% 50%',
+      keyframes: keyframeGroups[i] ? parseKeyframeGroup(keyframeGroups[i]) : null
+    }));
 
     const options = {
       transition: root.dataset.transition || 'melt',
@@ -516,6 +559,12 @@ void main() {
       video.addEventListener('ended', () => {
         if (videoEls.indexOf(video) === index) engine.next();
       });
+      if (item.keyframes) {
+        video.addEventListener('timeupdate', () => {
+          const p = positionAt(item.keyframes, video.currentTime);
+          if (p) video.style.objectPosition = `${(p.x * 100).toFixed(2)}% ${(p.y * 100).toFixed(2)}%`;
+        });
+      }
       return video;
     });
     const videoWraps = videoEls.map(v => v.parentElement);
@@ -548,6 +597,7 @@ void main() {
     function showActiveVideo() {
       videoWraps.forEach((wrap, i) => wrap.classList.toggle('is-active', i === index));
       videoEls.forEach((v, i) => {
+        v.style.objectPosition = items[i].position;
         if (i === index) {
           try { v.currentTime = 0; } catch (e) {}
           v.muted = muted;
