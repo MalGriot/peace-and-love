@@ -505,18 +505,49 @@ void main() {
     return last;
   }
 
+  // Per-slide desktop value, overridden by the mobile value (comma list)
+  // when one is present at that index and the viewport is mobile-width.
+  // Also reports which indices were actually overridden, since a mobile
+  // video swap invalidates desktop-only data (like crop keyframes tracking
+  // a subject's position in footage the mobile viewport isn't using).
+  function mergeMobile(base, mobile, isMobile) {
+    const usedMobile = base.map((v, i) => isMobile && !!mobile[i]);
+    const merged = base.map((v, i) => (usedMobile[i] ? mobile[i] : v));
+    return { merged, usedMobile };
+  }
+
   function initSlider(root) {
-    const sources = (root.dataset.videos || '').split(',').map(s => s.trim()).filter(Boolean);
-    const posters = (root.dataset.posters || '').split(',').map(s => s.trim()).filter(Boolean);
-    const positions = (root.dataset.objectPositions || '').split(',').map(s => s.trim()).filter(Boolean);
-    const keyframeGroups = (root.dataset.positionKeyframes || '').split('|').map(s => s.trim());
+    const isMobile = window.matchMedia('(max-width: 640px)').matches;
+
+    const { merged: sources, usedMobile: videoIsMobile } = mergeMobile(
+      (root.dataset.videos || '').split(',').map(s => s.trim()).filter(Boolean),
+      (root.dataset.videosMobile || '').split(',').map(s => s.trim()),
+      isMobile
+    );
+    const { merged: posters } = mergeMobile(
+      (root.dataset.posters || '').split(',').map(s => s.trim()).filter(Boolean),
+      (root.dataset.postersMobile || '').split(',').map(s => s.trim()),
+      isMobile
+    );
+    const { merged: positions } = mergeMobile(
+      (root.dataset.objectPositions || '').split(',').map(s => s.trim()).filter(Boolean),
+      (root.dataset.objectPositionsMobile || '').split(',').map(s => s.trim()),
+      isMobile
+    );
+    const { merged: keyframeGroups } = mergeMobile(
+      (root.dataset.positionKeyframes || '').split('|').map(s => s.trim()),
+      (root.dataset.positionKeyframesMobile || '').split('|').map(s => s.trim()),
+      isMobile
+    );
     if (!sources.length) return;
 
     const items = sources.map((src, i) => ({
       src,
       poster: posters[i] || '',
       position: positions[i] || '50% 50%',
-      keyframes: keyframeGroups[i] ? parseKeyframeGroup(keyframeGroups[i]) : null
+      // Desktop keyframes describe desktop-only footage — drop them when
+      // this slide's video was swapped for a mobile-specific clip.
+      keyframes: !videoIsMobile[i] && keyframeGroups[i] ? parseKeyframeGroup(keyframeGroups[i]) : null
     }));
 
     const options = {
