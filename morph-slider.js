@@ -517,20 +517,25 @@ void main() {
   }
 
   function initSlider(root) {
+    if (!root.dataset.videos) return;
     const isMobile = window.matchMedia('(max-width: 640px)').matches;
 
+    // NOT filter(Boolean) on these — a slide can have an empty video src
+    // (an image-only "end card" slide), and positions must stay aligned to
+    // slide index, so an empty entry has to survive the split as a hole,
+    // not get dropped and shift every later slide's data left by one.
     const { merged: sources, usedMobile: videoIsMobile } = mergeMobile(
-      (root.dataset.videos || '').split(',').map(s => s.trim()).filter(Boolean),
+      (root.dataset.videos || '').split(',').map(s => s.trim()),
       (root.dataset.videosMobile || '').split(',').map(s => s.trim()),
       isMobile
     );
     const { merged: posters } = mergeMobile(
-      (root.dataset.posters || '').split(',').map(s => s.trim()).filter(Boolean),
+      (root.dataset.posters || '').split(',').map(s => s.trim()),
       (root.dataset.postersMobile || '').split(',').map(s => s.trim()),
       isMobile
     );
     const { merged: positions } = mergeMobile(
-      (root.dataset.objectPositions || '').split(',').map(s => s.trim()).filter(Boolean),
+      (root.dataset.objectPositions || '').split(',').map(s => s.trim()),
       (root.dataset.objectPositionsMobile || '').split(',').map(s => s.trim()),
       isMobile
     );
@@ -574,7 +579,13 @@ void main() {
     let index = 0;
     let muted = true;
 
-    const videoEls = items.map(item => {
+    // A slide with no video src (item.src === '') is an image-only "end
+    // card" — no <video> is created for it, so it has nothing to play/pause
+    // and no 'ended' listener to auto-advance away from it. The WebGL
+    // canvas already renders its poster persistently once the slider
+    // settles there, so it just stays put.
+    const videoEls = items.map((item, i) => {
+      if (!item.src) return null;
       const wrap = document.createElement('div');
       wrap.className = 'morph-slider-video';
       const video = document.createElement('video');
@@ -588,7 +599,7 @@ void main() {
       wrap.appendChild(video);
       videoLayer.appendChild(wrap);
       video.addEventListener('ended', () => {
-        if (videoEls.indexOf(video) === index) engine.next();
+        if (i === index) engine.next();
       });
       if (item.keyframes) {
         video.addEventListener('timeupdate', () => {
@@ -598,7 +609,7 @@ void main() {
       }
       return video;
     });
-    const videoWraps = videoEls.map(v => v.parentElement);
+    const videoWraps = videoEls.map(v => (v ? v.parentElement : null));
 
     let dots = [];
     if (dotsWrap) {
@@ -626,8 +637,9 @@ void main() {
     }
 
     function showActiveVideo() {
-      videoWraps.forEach((wrap, i) => wrap.classList.toggle('is-active', i === index));
+      videoWraps.forEach((wrap, i) => { if (wrap) wrap.classList.toggle('is-active', i === index); });
       videoEls.forEach((v, i) => {
+        if (!v) return;
         v.style.objectPosition = items[i].position;
         if (i === index) {
           try { v.currentTime = 0; } catch (e) {}
@@ -641,8 +653,8 @@ void main() {
     }
 
     function hideVideos() {
-      videoWraps.forEach(wrap => wrap.classList.remove('is-active'));
-      videoEls.forEach(v => v.pause());
+      videoWraps.forEach(wrap => { if (wrap) wrap.classList.remove('is-active'); });
+      videoEls.forEach(v => { if (v) v.pause(); });
     }
 
     const engine = new MorphEngine(stage, {
@@ -669,7 +681,7 @@ void main() {
     if (unmuteBtn) {
       unmuteBtn.addEventListener('click', () => {
         muted = !muted;
-        videoEls.forEach(v => { v.muted = muted; });
+        videoEls.forEach(v => { if (v) v.muted = muted; });
         unmuteBtn.textContent = muted ? 'Unmute' : 'Mute';
       });
     }
