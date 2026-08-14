@@ -209,8 +209,17 @@ html, body { height: 100%; background: #0c0c0e; overflow: hidden; }
 /* The button's last word (see hosting.html) swaps every 1s on a timer,
    independent of slide changes — a quick opacity crossfade keeps the swap
    from reading as a jarring flicker. */
+/* Keeps "Book Mal to Host Your [word]" on one line at any viewport width —
+   without this, the flex button (below) wraps the text and, worse, shrinks
+   the word span under its pinned width despite the explicit width set in
+   hosting.html's pinWordWidth(). */
+.morph-slider-cta .btn {
+  white-space: nowrap;
+}
+
 .morph-slider-cta__word {
   display: inline-block;
+  flex-shrink: 0;
   /* 600 is the heaviest Inter weight the page actually loads (see shared.css's
      font import) — using 700 here would fall back to synthetic/faux bold. */
   font-weight: 600;
@@ -222,6 +231,21 @@ html, body { height: 100%; background: #0c0c0e; overflow: hidden; }
      longest word in the rotation, so "Book Mal to Host Your" never shifts
      as the trailing word cycles. */
   transition: opacity 0.15s ease;
+}
+
+@media (max-width: 640px) {
+  .morph-slider-cta .btn {
+    font-size: 10.5px;
+    padding: 11px 18px;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 400px) {
+  .morph-slider-cta .btn {
+    font-size: 9.5px;
+    padding: 10px 14px;
+  }
 }
 
 .morph-slider-cta p {
