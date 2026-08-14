@@ -206,17 +206,100 @@ html, body { height: 100%; background: #0c0c0e; overflow: hidden; }
   text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
 }
 
-/* The button's last word (see hosting.html) swaps every 1s on a timer,
-   independent of slide changes — a quick opacity crossfade keeps the swap
-   from reading as a jarring flicker. */
 /* Keeps "Book Mal to Host Your [word]" on one line at any viewport width —
    without this, the flex button (below) wraps the text and, worse, shrinks
    the word span under its pinned width despite the explicit width set in
-   hosting.html's pinWordWidth(). */
+   hosting.html's pinWordWidth(). Hover inverts to the site's dark ink so
+   the button feels alive; the cycling word switches to gold so it still
+   pops against that darker background instead of clashing with its own
+   per-word color. */
 .morph-slider-cta .btn {
   white-space: nowrap;
 }
 
+.morph-slider-cta .btn:hover,
+.morph-slider-cta .btn:focus-visible {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.morph-slider-cta .btn:hover .morph-slider-cta__word,
+.morph-slider-cta .btn:focus-visible .morph-slider-cta__word {
+  color: var(--gold);
+}
+
+/* React Bits' <StarBorder/>, recolored to the Candlelit Velvet accent pair
+   (brass + gold) and wired as the button's IDLE state: two radial-gradient
+   embers sweep along the inside of the pill by default, and fade out on
+   hover/focus since that state already has its own distinct treatment (the
+   ink/paper invert above). isolation + negative z-index keep the sweep
+   behind the button's own text/word span; overflow:hidden on the pill
+   contains it to the border. */
+.morph-slider-cta .btn {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.morph-slider-cta .btn::before,
+.morph-slider-cta .btn::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 300%;
+  height: 50%;
+  opacity: 0.85;
+  border-radius: 50%;
+  pointer-events: none;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-duration: 4.5s;
+  animation-play-state: running;
+  transition: opacity 0.35s ease;
+}
+
+.morph-slider-cta .btn::before {
+  bottom: -12px;
+  right: -250%;
+  background: radial-gradient(circle, var(--gold), transparent 10%);
+  animation-name: mg-star-sweep-bottom;
+}
+
+.morph-slider-cta .btn::after {
+  top: -12px;
+  left: -250%;
+  background: radial-gradient(circle, var(--brass), transparent 10%);
+  animation-name: mg-star-sweep-top;
+}
+
+.morph-slider-cta .btn:hover::before,
+.morph-slider-cta .btn:hover::after,
+.morph-slider-cta .btn:focus-visible::before,
+.morph-slider-cta .btn:focus-visible::after {
+  opacity: 0;
+  animation-play-state: paused;
+}
+
+@keyframes mg-star-sweep-bottom {
+  0% { transform: translate(0%, 0%); }
+  100% { transform: translate(-100%, 0%); }
+}
+
+@keyframes mg-star-sweep-top {
+  0% { transform: translate(0%, 0%); }
+  100% { transform: translate(100%, 0%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .morph-slider-cta .btn::before,
+  .morph-slider-cta .btn::after { animation: none !important; }
+}
+
+/* The button's last word (see hosting.html): same font/weight as the rest
+   of the button (brand type stays Inter throughout), width pinned in px by
+   pinWordWidth() so the button never shifts as the word cycles. Color is
+   read from --word-color (set per-word in JS) rather than a plain color
+   declaration so the hover rule above can cleanly win on specificity. */
 .morph-slider-cta__word {
   display: inline-block;
   flex-shrink: 0;
@@ -224,13 +307,45 @@ html, body { height: 100%; background: #0c0c0e; overflow: hidden; }
   white-space: nowrap;
   overflow: hidden;
   vertical-align: bottom;
-  /* Font-family/weight/style/case/tracking/size are all set per-word inline
-     by hosting.html's applyWordStyle() — each event type gets a typeface
-     suited to it (signature script for weddings, bold condensed for
-     concerts, etc). Width is likewise pinned in px by pinWordWidth(), sized
-     off the widest word across all those fonts, so "Book Mal to Host Your"
-     never shifts as the trailing word cycles. */
-  transition: opacity 0.15s ease;
+  color: var(--word-color, var(--ink));
+}
+
+/* Per-character fold-in, ported from React Bits' <FoldText/> (splitBy="char",
+   hinge="top") to plain CSS + the GSAP already on this page — see
+   hosting.html's foldIn(). Each letter is a 3D hinge panel that rotates
+   down from a folded, shaded crease into place. */
+.fold-seg {
+  display: inline-block;
+  line-height: inherit;
+  perspective: 260px;
+  transform-style: preserve-3d;
+  vertical-align: baseline;
+}
+
+.fold-piece {
+  position: relative;
+  display: inline-block;
+  color: inherit;
+  line-height: inherit;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+
+.fold-piece::after {
+  content: '';
+  position: absolute;
+  inset: -0.08em -0.02em;
+  pointer-events: none;
+  opacity: var(--fold-crease, 0);
+  mix-blend-mode: multiply;
+  border-radius: 0.08em;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.18) 42%, rgba(255, 255, 255, 0.3) 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fold-piece { transform: none !important; }
+  .fold-piece::after { opacity: 0 !important; }
 }
 
 @media (max-width: 640px) {

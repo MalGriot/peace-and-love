@@ -9,13 +9,6 @@
 <link rel="apple-touch-icon" href="img/brand/apple-touch-icon.png">
 <link rel="stylesheet" href="shared.css">
 <link rel="stylesheet" href="morph-slider.css?v=4">
-<!-- Extra display faces used only by the cycling word in the booking CTA
-     (see morph-slider.css / the script below) — each event type gets a
-     typeface that fits its character (signature script for weddings, bold
-     condensed for concerts, etc). Scoped to this page; the brand kit's
-     Philosopher/Inter pairing is untouched everywhere else. -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Caveat:wght@700&family=Anton&family=Bebas+Neue&family=Poppins:wght@500;600;700&family=Playfair+Display:ital,wght@1,500;1,600;1,700&family=Cormorant+Garamond:ital,wght@500&display=swap">
 </head>
 <body>
 
@@ -98,51 +91,24 @@
     headline.textContent = HEADLINES[Math.min(e.detail.index, HEADLINES.length - 1)];
   });
 
-  // Each word carries its own typeface/weight/tracking/case, tuned to the
-  // character of that event — a signature script for weddings, bold
-  // condensed poster type for concerts/festivals, glam italic serif for
-  // galas/award shows, clean geometric sans for corporate/professional
-  // bookings, calm italic serif for retreats, marker script for open
-  // mics/parties. sizeEm scales script/handwritten faces up (they read
-  // smaller than a bold sans at the same font-size) so every word reads
-  // with roughly the same visual weight despite the very different faces.
   var WORDS = [
-    { text: 'Event',              font: "'Inter', sans-serif",             weight: 600, style: 'normal', caps: true,  tracking: '0.12em', sizeEm: 1 },
-    { text: 'Weddings',           font: "'Great Vibes', cursive",          weight: 400, style: 'normal', caps: false, tracking: '0.01em', sizeEm: 1.65 },
-    { text: 'Festivals',          font: "'Anton', sans-serif",             weight: 400, style: 'normal', caps: true,  tracking: '0.02em', sizeEm: 1.05 },
-    { text: 'Concerts',           font: "'Bebas Neue', sans-serif",        weight: 400, style: 'normal', caps: true,  tracking: '0.05em', sizeEm: 1.15 },
-    { text: 'Conferences',        font: "'Poppins', sans-serif",           weight: 600, style: 'normal', caps: true,  tracking: '0.08em', sizeEm: 1 },
-    { text: 'Galas',               font: "'Playfair Display', serif",      weight: 600, style: 'italic', caps: false, tracking: '0.01em', sizeEm: 1.15 },
-    { text: 'Launches',           font: "'Poppins', sans-serif",           weight: 700, style: 'normal', caps: true,  tracking: '0.1em',  sizeEm: 1 },
-    { text: 'Summits',            font: "'Poppins', sans-serif",           weight: 700, style: 'normal', caps: true,  tracking: '0.14em', sizeEm: 1 },
-    { text: 'Panels',             font: "'Poppins', sans-serif",           weight: 500, style: 'normal', caps: true,  tracking: '0.06em', sizeEm: 1 },
-    { text: 'Workshops',          font: "'Poppins', sans-serif",           weight: 500, style: 'normal', caps: true,  tracking: '0.04em', sizeEm: 1 },
-    { text: 'Retreats',           font: "'Cormorant Garamond', serif",     weight: 500, style: 'italic', caps: false, tracking: '0.02em', sizeEm: 1.2 },
-    { text: 'Open Mics',          font: "'Caveat', cursive",               weight: 700, style: 'normal', caps: false, tracking: '0.01em', sizeEm: 1.5 },
-    { text: 'Award Shows',        font: "'Playfair Display', serif",       weight: 700, style: 'italic', caps: false, tracking: '0.01em', sizeEm: 1.15 },
-    { text: 'Brand Activations',  font: "'Poppins', sans-serif",           weight: 700, style: 'normal', caps: true,  tracking: '0.05em', sizeEm: 0.95 },
-    { text: 'Corporate Events',   font: "'Poppins', sans-serif",           weight: 600, style: 'normal', caps: true,  tracking: '0.06em', sizeEm: 0.95 },
-    { text: 'Private Parties',    font: "'Great Vibes', cursive",          weight: 400, style: 'normal', caps: false, tracking: '0.01em', sizeEm: 1.45 },
-    { text: 'Fundraisers',        font: "'Playfair Display', serif",       weight: 500, style: 'italic', caps: false, tracking: '0.01em', sizeEm: 1.1 },
-    { text: 'Networking Events',  font: "'Poppins', sans-serif",           weight: 600, style: 'normal', caps: true,  tracking: '0.05em', sizeEm: 0.95 },
-    { text: 'Party',              font: "'Caveat', cursive",               weight: 700, style: 'normal', caps: false, tracking: '0.01em', sizeEm: 1.55 }
+    'Event', 'Wedding', 'Festival', 'Concert', 'Conference', 'Gala',
+    'Launch', 'Summit', 'Panel', 'Workshop', 'Retreat', 'Open Mic',
+    'Award Show', 'Brand Activation', 'Corporate Event', 'Private Party',
+    'Fundraiser', 'Networking Event', 'Party'
   ];
 
-  function applyWordStyle(el, w) {
-    el.textContent = w.text;
-    el.style.fontFamily = w.font;
-    el.style.fontWeight = w.weight;
-    el.style.fontStyle = w.style;
-    el.style.textTransform = w.caps ? 'uppercase' : 'none';
-    el.style.letterSpacing = w.tracking;
-    el.style.fontSize = w.sizeEm + 'em';
-  }
+  // Warm accents from the Candlelit Velvet brand family (the same
+  // amber/ember tones voice.html already uses for its own hover accents,
+  // plus one deeper terracotta) — no black/near-black, and all legible
+  // against the light .btn-light pill (paper/gold are too low-contrast on
+  // the paper background itself, so they're left out here).
+  var COLORS = ['#c98a45', '#9a6044', '#7a4632'];
 
-  // Pin the word slot to the widest word's rendered width (each measured in
-  // its own font/weight/size) so "Book Mal to Host Your" never shifts as
-  // the last word cycles through very different typefaces — measured off a
-  // hidden clone rather than guessed, and redone on resize/font-load since
-  // the button's base font-size changes at mobile breakpoints.
+  // Pin the word slot to the widest word's rendered width (same brand font
+  // for every word) so "Book Mal to Host Your" never shifts as the last
+  // word cycles, and redone on resize/font-load since the button's
+  // font-size changes at breakpoints.
   var measurer = wordEl.cloneNode(false);
   measurer.style.position = 'absolute';
   measurer.style.visibility = 'hidden';
@@ -153,27 +119,56 @@
   function pinWordWidth() {
     var max = 0;
     WORDS.forEach(function (w) {
-      applyWordStyle(measurer, w);
+      measurer.textContent = w;
       max = Math.max(max, measurer.getBoundingClientRect().width);
     });
     wordEl.style.width = Math.ceil(max) + 'px';
   }
 
-  applyWordStyle(wordEl, WORDS[0]);
   pinWordWidth();
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(pinWordWidth);
   }
   window.addEventListener('resize', pinWordWidth);
 
+  // Ported from React Bits' <FoldText/> (splitBy="char", hinge="top") to
+  // vanilla JS + the GSAP already loaded on this page: each character gets
+  // its own hinge-fold panel that rotates in from -92deg with a crease
+  // shade, staggered per letter. Re-run on every word swap instead of once
+  // on mount/scroll, since here the trigger is "the word just changed".
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function foldIn(text, color) {
+    wordEl.style.setProperty('--word-color', color);
+    wordEl.innerHTML = '';
+    var pieces = [];
+    Array.prototype.forEach.call(text, function (ch) {
+      var seg = document.createElement('span');
+      seg.className = 'fold-seg';
+      var piece = document.createElement('span');
+      piece.className = 'fold-piece';
+      piece.textContent = ch === ' ' ? ' ' : ch;
+      seg.appendChild(piece);
+      wordEl.appendChild(seg);
+      pieces.push(piece);
+    });
+
+    if (reduceMotion || typeof gsap === 'undefined') {
+      pieces.forEach(function (p) { p.style.opacity = 1; });
+      return;
+    }
+
+    gsap.fromTo(pieces,
+      { opacity: 0, rotateX: -92, transformOrigin: '50% 0%', '--fold-crease': 0.55 },
+      { opacity: 1, rotateX: 0, '--fold-crease': 0, duration: 0.55, ease: 'power3.out', stagger: 0.035 }
+    );
+  }
+
   var wordIndex = 0;
+  foldIn(WORDS[0], COLORS[0]);
   setInterval(function () {
     wordIndex = (wordIndex + 1) % WORDS.length;
-    wordEl.style.opacity = 0;
-    setTimeout(function () {
-      applyWordStyle(wordEl, WORDS[wordIndex]);
-      wordEl.style.opacity = 1;
-    }, 150);
+    foldIn(WORDS[wordIndex], COLORS[wordIndex % COLORS.length]);
   }, 1000);
 })();
 </script>
