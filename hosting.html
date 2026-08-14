@@ -9,6 +9,13 @@
 <link rel="apple-touch-icon" href="img/brand/apple-touch-icon.png">
 <link rel="stylesheet" href="shared.css">
 <link rel="stylesheet" href="morph-slider.css?v=4">
+<!-- Extra display faces used only by the cycling word in the booking CTA
+     (see morph-slider.css / the script below) — each event type gets a
+     typeface that fits its character (signature script for weddings, bold
+     condensed for concerts, etc). Scoped to this page; the brand kit's
+     Philosopher/Inter pairing is untouched everywhere else. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Caveat:wght@700&family=Anton&family=Bebas+Neue&family=Poppins:wght@500;600;700&family=Playfair+Display:ital,wght@1,500;1,600;1,700&family=Cormorant+Garamond:ital,wght@500&display=swap">
 </head>
 <body>
 
@@ -91,18 +98,51 @@
     headline.textContent = HEADLINES[Math.min(e.detail.index, HEADLINES.length - 1)];
   });
 
+  // Each word carries its own typeface/weight/tracking/case, tuned to the
+  // character of that event — a signature script for weddings, bold
+  // condensed poster type for concerts/festivals, glam italic serif for
+  // galas/award shows, clean geometric sans for corporate/professional
+  // bookings, calm italic serif for retreats, marker script for open
+  // mics/parties. sizeEm scales script/handwritten faces up (they read
+  // smaller than a bold sans at the same font-size) so every word reads
+  // with roughly the same visual weight despite the very different faces.
   var WORDS = [
-    'Event', 'Weddings', 'Festivals', 'Concerts', 'Conferences', 'Galas',
-    'Launches', 'Summits', 'Panels', 'Workshops', 'Retreats', 'Open Mics',
-    'Award Shows', 'Brand Activations', 'Corporate Events', 'Private Parties',
-    'Fundraisers', 'Networking Events', 'Party'
+    { text: 'Event',              font: "'Inter', sans-serif",             weight: 600, style: 'normal', caps: true,  tracking: '0.12em', sizeEm: 1 },
+    { text: 'Weddings',           font: "'Great Vibes', cursive",          weight: 400, style: 'normal', caps: false, tracking: '0.01em', sizeEm: 1.65 },
+    { text: 'Festivals',          font: "'Anton', sans-serif",             weight: 400, style: 'normal', caps: true,  tracking: '0.02em', sizeEm: 1.05 },
+    { text: 'Concerts',           font: "'Bebas Neue', sans-serif",        weight: 400, style: 'normal', caps: true,  tracking: '0.05em', sizeEm: 1.15 },
+    { text: 'Conferences',        font: "'Poppins', sans-serif",           weight: 600, style: 'normal', caps: true,  tracking: '0.08em', sizeEm: 1 },
+    { text: 'Galas',               font: "'Playfair Display', serif",      weight: 600, style: 'italic', caps: false, tracking: '0.01em', sizeEm: 1.15 },
+    { text: 'Launches',           font: "'Poppins', sans-serif",           weight: 700, style: 'normal', caps: true,  tracking: '0.1em',  sizeEm: 1 },
+    { text: 'Summits',            font: "'Poppins', sans-serif",           weight: 700, style: 'normal', caps: true,  tracking: '0.14em', sizeEm: 1 },
+    { text: 'Panels',             font: "'Poppins', sans-serif",           weight: 500, style: 'normal', caps: true,  tracking: '0.06em', sizeEm: 1 },
+    { text: 'Workshops',          font: "'Poppins', sans-serif",           weight: 500, style: 'normal', caps: true,  tracking: '0.04em', sizeEm: 1 },
+    { text: 'Retreats',           font: "'Cormorant Garamond', serif",     weight: 500, style: 'italic', caps: false, tracking: '0.02em', sizeEm: 1.2 },
+    { text: 'Open Mics',          font: "'Caveat', cursive",               weight: 700, style: 'normal', caps: false, tracking: '0.01em', sizeEm: 1.5 },
+    { text: 'Award Shows',        font: "'Playfair Display', serif",       weight: 700, style: 'italic', caps: false, tracking: '0.01em', sizeEm: 1.15 },
+    { text: 'Brand Activations',  font: "'Poppins', sans-serif",           weight: 700, style: 'normal', caps: true,  tracking: '0.05em', sizeEm: 0.95 },
+    { text: 'Corporate Events',   font: "'Poppins', sans-serif",           weight: 600, style: 'normal', caps: true,  tracking: '0.06em', sizeEm: 0.95 },
+    { text: 'Private Parties',    font: "'Great Vibes', cursive",          weight: 400, style: 'normal', caps: false, tracking: '0.01em', sizeEm: 1.45 },
+    { text: 'Fundraisers',        font: "'Playfair Display', serif",       weight: 500, style: 'italic', caps: false, tracking: '0.01em', sizeEm: 1.1 },
+    { text: 'Networking Events',  font: "'Poppins', sans-serif",           weight: 600, style: 'normal', caps: true,  tracking: '0.05em', sizeEm: 0.95 },
+    { text: 'Party',              font: "'Caveat', cursive",               weight: 700, style: 'normal', caps: false, tracking: '0.01em', sizeEm: 1.55 }
   ];
 
-  // Pin the word slot to the widest word's rendered width so "Book Mal to
-  // Host Your" never shifts as the last word cycles — measured off a hidden
-  // clone (same font/weight) rather than guessed in ch units, and redone on
-  // resize/font-load since the headline's font-size is a clamp() that moves
-  // with viewport width.
+  function applyWordStyle(el, w) {
+    el.textContent = w.text;
+    el.style.fontFamily = w.font;
+    el.style.fontWeight = w.weight;
+    el.style.fontStyle = w.style;
+    el.style.textTransform = w.caps ? 'uppercase' : 'none';
+    el.style.letterSpacing = w.tracking;
+    el.style.fontSize = w.sizeEm + 'em';
+  }
+
+  // Pin the word slot to the widest word's rendered width (each measured in
+  // its own font/weight/size) so "Book Mal to Host Your" never shifts as
+  // the last word cycles through very different typefaces — measured off a
+  // hidden clone rather than guessed, and redone on resize/font-load since
+  // the button's base font-size changes at mobile breakpoints.
   var measurer = wordEl.cloneNode(false);
   measurer.style.position = 'absolute';
   measurer.style.visibility = 'hidden';
@@ -113,12 +153,13 @@
   function pinWordWidth() {
     var max = 0;
     WORDS.forEach(function (w) {
-      measurer.textContent = w;
+      applyWordStyle(measurer, w);
       max = Math.max(max, measurer.getBoundingClientRect().width);
     });
     wordEl.style.width = Math.ceil(max) + 'px';
   }
 
+  applyWordStyle(wordEl, WORDS[0]);
   pinWordWidth();
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(pinWordWidth);
@@ -130,7 +171,7 @@
     wordIndex = (wordIndex + 1) % WORDS.length;
     wordEl.style.opacity = 0;
     setTimeout(function () {
-      wordEl.textContent = WORDS[wordIndex];
+      applyWordStyle(wordEl, WORDS[wordIndex]);
       wordEl.style.opacity = 1;
     }, 150);
   }, 1000);

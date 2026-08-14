@@ -220,16 +220,16 @@ html, body { height: 100%; background: #0c0c0e; overflow: hidden; }
 .morph-slider-cta__word {
   display: inline-block;
   flex-shrink: 0;
-  /* 600 is the heaviest Inter weight the page actually loads (see shared.css's
-     font import) — using 700 here would fall back to synthetic/faux bold. */
-  font-weight: 600;
   text-align: left;
   white-space: nowrap;
   overflow: hidden;
   vertical-align: bottom;
-  /* Width is pinned in px by hosting.html's pinWordWidth(), sized off the
-     longest word in the rotation, so "Book Mal to Host Your" never shifts
-     as the trailing word cycles. */
+  /* Font-family/weight/style/case/tracking/size are all set per-word inline
+     by hosting.html's applyWordStyle() — each event type gets a typeface
+     suited to it (signature script for weddings, bold condensed for
+     concerts, etc). Width is likewise pinned in px by pinWordWidth(), sized
+     off the widest word across all those fonts, so "Book Mal to Host Your"
+     never shifts as the trailing word cycles. */
   transition: opacity 0.15s ease;
 }
 
