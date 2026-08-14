@@ -666,6 +666,7 @@ void main() {
       onIndexChange: newIndex => {
         index = newIndex;
         updateDots();
+        root.dispatchEvent(new CustomEvent('slide-change', { detail: { index: newIndex, total: items.length } }));
       },
       onBusyChange: busy => {
         if (busy) hideVideos();
@@ -674,6 +675,7 @@ void main() {
     });
 
     showActiveVideo();
+    root.dispatchEvent(new CustomEvent('slide-change', { detail: { index, total: items.length } }));
 
     if (prevBtn) prevBtn.addEventListener('click', () => engine.prev());
     if (nextBtn) nextBtn.addEventListener('click', () => engine.next());

@@ -4,7 +4,7 @@
    plays — see morph-slider.js for why (file:// pages can't feed video
    straight into WebGL). */
 
-html, body { height: 100%; background: #0c0c0e; }
+html, body { height: 100%; background: #0c0c0e; overflow: hidden; }
 
 .morph-slider {
   position: relative;
@@ -167,4 +167,73 @@ html, body { height: 100%; background: #0c0c0e; }
 @media (max-width: 420px) {
   .morph-slider-btn { width: 36px; height: 36px; }
   .morph-slider-unmute { font-size: 11px; padding: 8px 12px; }
+}
+
+/* Booking CTA — sits directly over the reel (no page scroll, no floating
+   card), styled with the same typography/hierarchy as the .m-cta block
+   that closes voice.html: Philosopher headline, paper-dim description,
+   .btn.btn-light button. A scrim behind it (darkening toward the bottom)
+   keeps the copy readable over whatever the video is showing. */
+.morph-slider-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(12, 12, 14, 0.88) 0%, rgba(12, 12, 14, 0.5) 32%, rgba(12, 12, 14, 0.05) 62%, transparent 78%);
+}
+
+.morph-slider-cta {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  text-align: center;
+  padding: 24px clamp(20px, 6vw, 64px) 108px;
+  pointer-events: none;
+}
+
+.morph-slider-cta > * { pointer-events: auto; }
+
+.morph-slider-cta h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(26px, 3.6vw, 42px);
+  color: var(--paper);
+  margin: 0 0 14px;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* The button's last word (see hosting.html) swaps every 1s on a timer,
+   independent of slide changes — a quick opacity crossfade keeps the swap
+   from reading as a jarring flicker. */
+.morph-slider-cta__word {
+  display: inline-block;
+  /* 600 is the heaviest Inter weight the page actually loads (see shared.css's
+     font import) — using 700 here would fall back to synthetic/faux bold. */
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  vertical-align: bottom;
+  /* Width is pinned in px by hosting.html's pinWordWidth(), sized off the
+     longest word in the rotation, so "Book Mal to Host Your" never shifts
+     as the trailing word cycles. */
+  transition: opacity 0.15s ease;
+}
+
+.morph-slider-cta p {
+  font-size: clamp(13.5px, 1.5vw, 15px);
+  line-height: 1.55;
+  color: var(--paper-dim);
+  max-width: 52ch;
+  margin: 0 0 26px;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 640px) {
+  .morph-slider-cta { padding-bottom: 96px; }
+  .morph-slider-cta p { max-width: 40ch; }
 }

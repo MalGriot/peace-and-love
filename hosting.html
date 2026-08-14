@@ -49,6 +49,14 @@
     </button>
   </div>
 
+  <div class="morph-slider-scrim"></div>
+
+  <div class="morph-slider-cta">
+    <h2 id="hosting-cta-headline">Need a host who can actually perform?</h2>
+    <p>MC, performer, poet, storyteller, and crowd facilitator — bringing presence, personality, and energy to your event.</p>
+    <a href="contact.html" class="btn btn-light">Book Mal to Host Your <span class="morph-slider-cta__word" id="hosting-cta-word">Event</span></a>
+  </div>
+
   <div class="morph-slider-indicators" role="tablist" aria-label="Clips"></div>
 
   <button type="button" class="morph-slider-unmute">Unmute</button>
@@ -62,5 +70,71 @@
 <script src="shared.js"></script>
 <script src="chat.js"></script>
 <script>renderChrome('hosting');</script>
+<script>
+// CTA copy: headline tracks the reel's current slide (see morph-slider.js's
+// 'slide-change' event); the button's last word cycles independently on a
+// fixed 1s timer so it keeps moving even while the reel sits still.
+(function () {
+  var slider = document.getElementById('hosting-slider');
+  var headline = document.getElementById('hosting-cta-headline');
+  var wordEl = document.getElementById('hosting-cta-word');
+  if (!slider || !headline || !wordEl) return;
+
+  var HEADLINES = [
+    'Need a host who can actually perform?',
+    'Hire a host who can bring everyone together',
+    'Ready to hand over the mic?',
+    'Go with a host that does the most'
+  ];
+
+  slider.addEventListener('slide-change', function (e) {
+    headline.textContent = HEADLINES[Math.min(e.detail.index, HEADLINES.length - 1)];
+  });
+
+  var WORDS = [
+    'Event', 'Weddings', 'Festivals', 'Concerts', 'Conferences', 'Galas',
+    'Launches', 'Summits', 'Panels', 'Workshops', 'Retreats', 'Open Mics',
+    'Award Shows', 'Brand Activations', 'Corporate Events', 'Private Parties',
+    'Fundraisers', 'Networking Events', 'Party'
+  ];
+
+  // Pin the word slot to the widest word's rendered width so "Book Mal to
+  // Host Your" never shifts as the last word cycles — measured off a hidden
+  // clone (same font/weight) rather than guessed in ch units, and redone on
+  // resize/font-load since the headline's font-size is a clamp() that moves
+  // with viewport width.
+  var measurer = wordEl.cloneNode(false);
+  measurer.style.position = 'absolute';
+  measurer.style.visibility = 'hidden';
+  measurer.style.whiteSpace = 'nowrap';
+  measurer.style.width = 'auto';
+  wordEl.parentNode.appendChild(measurer);
+
+  function pinWordWidth() {
+    var max = 0;
+    WORDS.forEach(function (w) {
+      measurer.textContent = w;
+      max = Math.max(max, measurer.getBoundingClientRect().width);
+    });
+    wordEl.style.width = Math.ceil(max) + 'px';
+  }
+
+  pinWordWidth();
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(pinWordWidth);
+  }
+  window.addEventListener('resize', pinWordWidth);
+
+  var wordIndex = 0;
+  setInterval(function () {
+    wordIndex = (wordIndex + 1) % WORDS.length;
+    wordEl.style.opacity = 0;
+    setTimeout(function () {
+      wordEl.textContent = WORDS[wordIndex];
+      wordEl.style.opacity = 1;
+    }, 150);
+  }, 1000);
+})();
+</script>
 </body>
 </html>
