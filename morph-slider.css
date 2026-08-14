@@ -1,7 +1,8 @@
 /* MAL GRIOT — MorphSlider (react-bits) styling, ported for a fullscreen
-   self-hosted video slider. The WebGL canvas both plays and morphs between
-   each slide's <video> element directly — see morph-slider.js for the
-   engine. */
+   self-hosted video slider. The WebGL canvas morphs between poster stills;
+   once a transition settles, that slide's real <video> fades in on top and
+   plays — see morph-slider.js for why (file:// pages can't feed video
+   straight into WebGL). */
 
 html, body { height: 100%; background: #0c0c0e; }
 
@@ -34,6 +35,30 @@ html, body { height: 100%; background: #0c0c0e; }
   display: block;
   width: 100%;
   height: 100%;
+}
+
+.morph-slider-videos {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.morph-slider-video {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.morph-slider-video.is-active { opacity: 1; }
+
+.morph-slider-video video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .morph-slider-controls {

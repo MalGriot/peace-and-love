@@ -8,7 +8,7 @@
 <link rel="icon" href="img/brand/favicon.ico">
 <link rel="apple-touch-icon" href="img/brand/apple-touch-icon.png">
 <link rel="stylesheet" href="shared.css">
-<link rel="stylesheet" href="morph-slider.css?v=3">
+<link rel="stylesheet" href="morph-slider.css?v=4">
 </head>
 <body>
 
@@ -18,6 +18,8 @@
   id="hosting-slider"
   class="morph-slider"
   data-videos="video/hosting-reel/dsc-9634.mp4,video/hosting-reel/sofar-6.mp4,video/hosting-reel/deep-dawn.mp4"
+  data-posters="video/hosting-reel/dsc-9634-poster.jpg,video/hosting-reel/sofar-6-poster.jpg,video/hosting-reel/deep-dawn-poster.jpg"
+  data-object-positions="66% 38%,43% 30%,62% 42%"
   data-transition="melt"
   data-duration="1.1"
   data-intensity="0.55"
@@ -28,6 +30,7 @@
   data-overlay-color="#000000"
 >
   <div class="morph-slider-stage" tabindex="0" role="group" aria-roledescription="carousel" aria-label="Hosting reel"></div>
+  <div class="morph-slider-videos"></div>
 
   <div class="morph-slider-controls">
     <button type="button" class="morph-slider-btn" data-action="prev" aria-label="Previous clip">
@@ -51,7 +54,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="vendor/ogl.js"></script>
-<script src="morph-slider.js?v=3"></script>
+<script src="morph-slider.js?v=4"></script>
 <script src="shared.js"></script>
 <script src="chat.js"></script>
 <script>renderChrome('hosting');</script>
