@@ -1,18 +1,18 @@
 // MAL GRIOT — vanilla port of react-bits MorphSlider, adapted to slide
-// between YouTube videos instead of static images. Deliberately a classic
-// script, NOT type="module" (see warp-text.js for why file:// pages need
-// this). vendor/ogl.js exposes window.OGL the same way. gsap and the
-// YouTube IFrame API are loaded from CDN via <script src> in performance.html.
+// between self-hosted video clips instead of static images. Deliberately a
+// classic script, NOT type="module" (see warp-text.js for why file:// pages
+// need this). vendor/ogl.js exposes window.OGL the same way; gsap is loaded
+// from CDN via <script src> ahead of this file.
 //
-// The WebGL canvas morphs between each video's thumbnail (img.youtube.com
-// supports CORS, so thumbnails can be read into a texture). A real YT.Player
-// iframe can't be fed into WebGL cross-origin, so instead: once a transition
-// settles on a slide, that slide's YouTube player fades in on top of the
-// canvas and plays; during a transition the players are hidden and the
-// canvas alone morphs between thumbnails.
+// Each slide's <video> element doubles as both the WebGL texture source and
+// the actual playing video — same-origin video is readable into a canvas
+// texture with no CORS hurdles, so the melt transition morphs directly
+// between two live, playing videos rather than static thumbnails. ogl's
+// Texture only re-uploads pixel data when `needsUpdate` is set, so every
+// render frame flags the textures backing any currently-playing video.
 //
-// Initializes every .morph-slider element on the page, reading video IDs
-// and transition props from its data-* attributes.
+// Initializes every .morph-slider element on the page, reading video src
+// URLs and transition props from its data-* attributes.
 
 (function () {
   const { Renderer, Triangle, Program, Mesh, Texture } = window.OGL;
@@ -202,18 +202,20 @@ void main() {
   }
 
   class MorphEngine {
-    constructor(container, { items, startIndex, reducedMotion, options, onIndexChange, onBusyChange, dprCap }) {
+    constructor(container, { items, startIndex, reducedMotion, options, onIndexChange, onBusyChange, onEnded, dprCap }) {
       this.container = container;
       this.items = items;
       this.options = options;
       this.onIndexChange = onIndexChange;
       this.onBusyChange = onBusyChange;
+      this.onEnded = onEnded;
       this.reducedMotion = reducedMotion;
 
       this.current = startIndex;
       this.animating = false;
       this.dragging = false;
       this.dragDir = 0;
+      this.dragTarget = -1;
       this.shownIndex = startIndex;
       this.tween = null;
 
@@ -267,29 +269,66 @@ void main() {
       this.resizeObserver.observe(container);
       this.resize();
 
-      this.loadTextures();
+      this.loadVideos();
+      this.playVideo(this.current);
 
       this.boundLoop = this.loop.bind(this);
       this.raf = requestAnimationFrame(this.boundLoop);
     }
 
-    loadTextures() {
-      this.items.forEach((item, index) => {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.src = item.image;
-        img.onload = () => {
-          const texture = new Texture(this.gl, { generateMipmaps: false });
-          texture.image = img;
-          this.textures[index] = texture;
-          this.sizes[index] = [img.naturalWidth || 1, img.naturalHeight || 1];
+    loadVideos() {
+      this.videoEls = this.items.map((item, index) => {
+        const video = document.createElement('video');
+        video.src = item.src;
+        video.muted = true;
+        video.playsInline = true;
+        video.setAttribute('playsinline', '');
+        video.preload = 'auto';
+        video.loop = false;
+        // NOT display:none — WebKit (and some other engines) stop decoding
+        // frames for display:none video, even though play()/currentTime
+        // keep advancing (audio keeps going, texture goes stale/black).
+        // Keep it "rendered" but invisible instead.
+        video.style.position = 'absolute';
+        video.style.width = '1px';
+        video.style.height = '1px';
+        video.style.opacity = '0';
+        video.style.pointerEvents = 'none';
+        this.container.appendChild(video);
+
+        const texture = this.textures[index];
+        const onReady = () => {
+          texture.image = video;
+          this.sizes[index] = [video.videoWidth || 1, video.videoHeight || 1];
           if (index === this.current) {
             this.program.uniforms.tCurrent.value = texture;
             this.program.uniforms.uCurrentSize.value = this.sizes[index];
           }
         };
-        img.onerror = () => {};
+        video.addEventListener('loadeddata', onReady, { once: true });
+        video.addEventListener('ended', () => {
+          if (index === this.current && this.onEnded) this.onEnded();
+        });
+        return video;
       });
+    }
+
+    playVideo(i) {
+      const v = this.videoEls && this.videoEls[i];
+      if (v) { try { v.play().catch(() => {}); } catch (e) {} }
+    }
+
+    pauseVideo(i, reset) {
+      const v = this.videoEls && this.videoEls[i];
+      if (v) {
+        v.pause();
+        if (reset) { try { v.currentTime = 0; } catch (e) {} }
+      }
+    }
+
+    setMuted(muted) {
+      if (!this.videoEls) return;
+      this.videoEls.forEach(v => { v.muted = muted; });
     }
 
     resize() {
@@ -302,6 +341,11 @@ void main() {
 
     loop(t) {
       this.program.uniforms.uTime.value = t * 0.001;
+      if (this.videoEls) {
+        this.videoEls.forEach((v, i) => {
+          if (!v.paused && !v.ended) this.textures[i].needsUpdate = true;
+        });
+      }
       this.renderer.render({ scene: this.mesh });
       this.raf = requestAnimationFrame(this.boundLoop);
     }
@@ -318,6 +362,7 @@ void main() {
       this.program.uniforms.tNext.value = this.textures[target];
       this.program.uniforms.uNextSize.value = this.sizes[target];
       this.program.uniforms.uDir.value = dir;
+      this.playVideo(target);
       return target;
     }
 
@@ -352,6 +397,7 @@ void main() {
     }
 
     commit(target) {
+      const prev = this.current;
       this.current = target;
       this.program.uniforms.tCurrent.value = this.textures[target];
       this.program.uniforms.uCurrentSize.value = this.sizes[target];
@@ -359,6 +405,7 @@ void main() {
       this.animating = false;
       this.tween = null;
       this.announce(target);
+      if (prev !== target) this.pauseVideo(prev, true);
       if (this.onBusyChange) this.onBusyChange(false);
     }
 
@@ -373,6 +420,7 @@ void main() {
       if (this.animating || this.items.length < 2) return false;
       this.dragging = true;
       this.dragDir = 0;
+      this.dragTarget = -1;
       if (this.onBusyChange) this.onBusyChange(true);
       return true;
     }
@@ -390,7 +438,7 @@ void main() {
       }
       if (dir !== this.dragDir) {
         this.dragDir = dir;
-        this.prepareNext(dir);
+        this.dragTarget = this.prepareNext(dir);
       }
       const progress = Math.min(Math.abs(ndx), 1);
       this.program.uniforms.uProgress.value = progress;
@@ -418,6 +466,7 @@ void main() {
         });
       } else {
         this.announce(this.current);
+        const cancelledTarget = this.dragTarget;
         this.tween = gsap.to(this.program.uniforms.uProgress, {
           value: 0,
           duration,
@@ -425,6 +474,7 @@ void main() {
           onComplete: () => {
             this.animating = false;
             this.tween = null;
+            if (cancelledTarget >= 0) this.pauseVideo(cancelledTarget, true);
             if (this.onBusyChange) this.onBusyChange(false);
           }
         });
@@ -441,19 +491,16 @@ void main() {
       if (this.tween) this.tween.kill();
       this.resizeObserver.disconnect();
       this.canvas.removeEventListener('webglcontextlost', this.boundContextLost);
+      if (this.videoEls) this.videoEls.forEach(v => { v.pause(); v.removeAttribute('src'); v.load(); if (v.parentNode) v.parentNode.removeChild(v); });
       if (this.canvas.parentNode) this.canvas.parentNode.removeChild(this.canvas);
     }
   }
 
-  function thumbnailFor(id) {
-    return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
-  }
-
   function initSlider(root) {
-    const videoIds = (root.dataset.videos || '').split(',').map(s => s.trim()).filter(Boolean);
-    if (!videoIds.length) return;
+    const sources = (root.dataset.videos || '').split(',').map(s => s.trim()).filter(Boolean);
+    if (!sources.length) return;
 
-    const items = videoIds.map(id => ({ image: thumbnailFor(id), videoId: id }));
+    const items = sources.map(src => ({ src }));
 
     const options = {
       transition: root.dataset.transition || 'melt',
@@ -466,11 +513,8 @@ void main() {
       overlayColor: root.dataset.overlayColor || '#000000',
       loop: root.dataset.loop !== 'false'
     };
-    const autoplaySlides = root.dataset.autoplay === 'true';
-    const autoplayDelay = parseFloat(root.dataset.autoplayDelay || '4');
 
     const stage = root.querySelector('.morph-slider-stage');
-    const videoLayer = root.querySelector('.morph-slider-videos');
     const dotsWrap = root.querySelector('.morph-slider-indicators');
     const prevBtn = root.querySelector('[data-action="prev"]');
     const nextBtn = root.querySelector('[data-action="next"]');
@@ -480,19 +524,6 @@ void main() {
 
     let index = 0;
     let muted = true;
-    const players = new Array(items.length).fill(null);
-    const playerWraps = [];
-
-    items.forEach((item, i) => {
-      const wrap = document.createElement('div');
-      wrap.className = 'morph-slider-video';
-      wrap.dataset.index = String(i);
-      const mount = document.createElement('div');
-      mount.id = `morph-yt-${root.id || 'slider'}-${i}`;
-      wrap.appendChild(mount);
-      videoLayer.appendChild(wrap);
-      playerWraps.push(wrap);
-    });
 
     let dots = [];
     if (dotsWrap) {
@@ -519,50 +550,6 @@ void main() {
       });
     }
 
-    function playerFor(i) {
-      if (players[i] || typeof YT === 'undefined' || !YT.Player) return players[i];
-      players[i] = new YT.Player(playerWraps[i].firstChild, {
-        videoId: items[i].videoId,
-        playerVars: {
-          autoplay: 0,
-          mute: 1,
-          controls: 1,
-          rel: 0,
-          playsinline: 1,
-          modestbranding: 1
-        },
-        events: {
-          onStateChange: e => {
-            if (e.data === YT.PlayerState.ENDED) engine.next();
-          }
-        }
-      });
-      return players[i];
-    }
-
-    function showActiveVideo() {
-      playerWraps.forEach((wrap, i) => wrap.classList.toggle('is-active', i === index));
-      const p = playerFor(index);
-      if (p && typeof p.playVideo === 'function') {
-        if (muted && typeof p.mute === 'function') p.mute();
-        try { p.playVideo(); } catch (e) {}
-      }
-      players.forEach((p2, i) => {
-        if (i !== index && p2 && typeof p2.pauseVideo === 'function') {
-          try { p2.pauseVideo(); } catch (e) {}
-        }
-      });
-    }
-
-    function hideVideos() {
-      playerWraps.forEach(wrap => wrap.classList.remove('is-active'));
-      players.forEach(p => {
-        if (p && typeof p.pauseVideo === 'function') {
-          try { p.pauseVideo(); } catch (e) {}
-        }
-      });
-    }
-
     const engine = new MorphEngine(stage, {
       items,
       startIndex: 0,
@@ -573,21 +560,8 @@ void main() {
         index = newIndex;
         updateDots();
       },
-      onBusyChange: busy => {
-        if (busy) hideVideos();
-        else showActiveVideo();
-      }
+      onEnded: () => engine.next()
     });
-
-    function ready() {
-      showActiveVideo();
-    }
-    if (typeof YT !== 'undefined' && YT.Player) {
-      ready();
-    } else {
-      window.__morphSliderReady = window.__morphSliderReady || [];
-      window.__morphSliderReady.push(ready);
-    }
 
     if (prevBtn) prevBtn.addEventListener('click', () => engine.prev());
     if (nextBtn) nextBtn.addEventListener('click', () => engine.next());
@@ -595,11 +569,7 @@ void main() {
     if (unmuteBtn) {
       unmuteBtn.addEventListener('click', () => {
         muted = !muted;
-        const p = players[index];
-        if (p) {
-          if (muted && typeof p.mute === 'function') p.mute();
-          else if (typeof p.unMute === 'function') p.unMute();
-        }
+        engine.setMuted(muted);
         unmuteBtn.textContent = muted ? 'Unmute' : 'Mute';
       });
     }
@@ -635,25 +605,11 @@ void main() {
     };
     stage.addEventListener('pointerup', onUp);
     stage.addEventListener('pointercancel', onUp);
-
-    if (autoplaySlides) {
-      let hovering = false;
-      root.addEventListener('mouseenter', () => { hovering = true; });
-      root.addEventListener('mouseleave', () => { hovering = false; });
-      setInterval(() => {
-        if (!hovering) engine.next();
-      }, Math.max(autoplayDelay, 1) * 1000);
-    }
   }
 
   function bootAll() {
     document.querySelectorAll('.morph-slider').forEach(initSlider);
   }
-
-  window.onYouTubeIframeAPIReady = function () {
-    (window.__morphSliderReady || []).forEach(fn => fn());
-    window.__morphSliderReady = [];
-  };
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', bootAll);

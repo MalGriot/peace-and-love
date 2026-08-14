@@ -1,7 +1,7 @@
 /* MAL GRIOT — MorphSlider (react-bits) styling, ported for a fullscreen
-   YouTube-video slider. The WebGL canvas morphs between video thumbnails;
-   once a transition settles, a real YouTube player fades in on top and
-   plays. See morph-slider.js for the engine. */
+   self-hosted video slider. The WebGL canvas both plays and morphs between
+   each slide's <video> element directly — see morph-slider.js for the
+   engine. */
 
 html, body { height: 100%; background: #0c0c0e; }
 
@@ -34,43 +34,6 @@ html, body { height: 100%; background: #0c0c0e; }
   display: block;
   width: 100%;
   height: 100%;
-}
-
-/* Real YouTube players, stacked on top of the canvas. Only the active one
-   is visible/interactive; the rest sit muted and paused underneath. Each
-   iframe is oversized and centered to emulate object-fit: cover, since
-   iframes have no native cover behavior. */
-.morph-slider-videos {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.morph-slider-video {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.5s ease;
-}
-
-.morph-slider-video.is-active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.morph-slider-video iframe {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 100vw;
-  height: 56.25vw; /* 16:9 */
-  min-height: 100vh;
-  min-width: 177.78vh; /* 16:9 */
-  transform: translate(-50%, -50%);
-  border: 0;
 }
 
 .morph-slider-controls {
