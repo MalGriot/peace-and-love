@@ -9,10 +9,57 @@
 <link rel="apple-touch-icon" href="img/brand/apple-touch-icon.png">
 <link rel="stylesheet" href="shared.css">
 <link rel="stylesheet" href="morph-slider.css?v=4">
+<style>
+#static-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: #000;
+  transition: opacity 2s ease;
+}
+#static-intro video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+#static-intro.static-intro--out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.morph-slider-controls,
+.morph-slider-cta,
+.morph-slider-indicators,
+.morph-slider-unmute {
+  z-index: 50;
+}
+
+#chrome-nav,
+#chrome-chat,
+.morph-slider-controls,
+.morph-slider-cta,
+.morph-slider-indicators,
+.morph-slider-unmute {
+  opacity: 0;
+  transition: opacity 1.8s ease;
+}
+body.ui-in #chrome-nav,
+body.ui-in #chrome-chat,
+body.ui-in .morph-slider-controls,
+body.ui-in .morph-slider-cta,
+body.ui-in .morph-slider-indicators,
+body.ui-in .morph-slider-unmute {
+  opacity: 1;
+}
+</style>
 </head>
 <body>
 
 <div id="chrome-nav"></div>
+
+<div id="static-intro" aria-hidden="true">
+  <video id="static-intro-video" src="video/static-intro.mp4" autoplay muted playsinline></video>
+</div>
 
 <section
   id="hosting-slider"
@@ -54,7 +101,14 @@
   <div class="morph-slider-cta">
     <h2 id="hosting-cta-headline">Need a host who can actually perform?</h2>
     <p>MC, performer, poet, storyteller, and crowd facilitator — bringing presence, personality, and energy to your event.</p>
-    <a href="contact.html" class="btn btn-light">Book Mal to Host Your <span class="morph-slider-cta__word" id="hosting-cta-word">Event</span></a>
+    <a href="contact.html" class="btn morph-slider-cta__btn">
+      <img src="img/brand/nav-mark-gold.png" alt="" class="morph-slider-cta__mark">
+      <span class="morph-slider-cta__label">Book Mal to Host Your</span>
+      <span class="morph-slider-cta__word-slot"><span class="morph-slider-cta__word" id="hosting-cta-word">Event</span></span>
+      <span class="morph-slider-cta__arrow" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 12h14M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+    </a>
   </div>
 
   <div class="morph-slider-indicators" role="tablist" aria-label="Clips"></div>
@@ -70,6 +124,24 @@
 <script src="shared.js"></script>
 <script src="chat.js"></script>
 <script>renderChrome('hosting');</script>
+<script>
+(function () {
+  var intro = document.getElementById('static-intro');
+  var video = document.getElementById('static-intro-video');
+  if (!intro || !video) return;
+  document.body.classList.add('ui-in');
+
+  var done = false;
+  function fadeOut() {
+    if (done) return;
+    done = true;
+    intro.classList.add('static-intro--out');
+    setTimeout(function () { intro.remove(); }, 2000);
+  }
+
+  setTimeout(fadeOut, 1000);
+})();
+</script>
 <script>
 // CTA copy: headline tracks the reel's current slide (see morph-slider.js's
 // 'slide-change' event); the button's last word cycles independently on a
@@ -98,12 +170,12 @@
     'Fundraiser', 'Networking Event', 'Party'
   ];
 
-  // Warm accents from the Candlelit Velvet brand family (the same
-  // amber/ember tones voice.html already uses for its own hover accents,
-  // plus one deeper terracotta) — no black/near-black, and all legible
-  // against the light .btn-light pill (paper/gold are too low-contrast on
-  // the paper background itself, so they're left out here).
-  var COLORS = ['#c98a45', '#9a6044', '#7a4632'];
+  // Candlelit Velvet accents, chosen for contrast on the button's dark
+  // (--ink) pill: gold and parchment read clean against near-black, brass
+  // is the mid warm tone between them. (The old amber/terracotta set was
+  // picked for a light paper pill and would wash out now that the pill
+  // itself is dark — see morph-slider.css.)
+  var COLORS = ['#e0b26a', '#efe6d8', '#c98a45'];
 
   // Pin the word slot to the widest word's rendered width (same brand font
   // for every word) so "Book Mal to Host Your" never shifts as the last
