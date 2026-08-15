@@ -206,26 +206,119 @@ html, body { height: 100%; background: #0c0c0e; overflow: hidden; }
   text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
 }
 
-/* Keeps "Book Mal to Host Your [word]" on one line at any viewport width —
-   without this, the flex button (below) wraps the text and, worse, shrinks
-   the word span under its pinned width despite the explicit width set in
-   hosting.html's pinWordWidth(). Hover inverts to the site's dark ink so
-   the button feels alive; the cycling word switches to gold so it still
-   pops against that darker background instead of clashing with its own
-   per-word color. */
+/* Candlelit-Velvet "capsule" treatment: a near-black pill lit from inside
+   by a soft gold/brass glow (the brand kit's "warm radial glow suggesting
+   candlelight" motif — see MAL GRIOT BRAND KIT design doc), with a thin
+   gold rim that pulses rather than a flat border. The real logo mark sits
+   at the left (the artist's own "river mark" — no invented starburst icon,
+   which the brand kit explicitly rules out), and a capped circular arrow
+   at the right end gives it the "juicy" button-within-a-button read.
+   Keeps "Book Mal to Host Your [word]" on one line at any viewport width —
+   without this, the flex button wraps the text and, worse, shrinks the
+   word span under its pinned width despite the explicit width set in
+   hosting.html's pinWordWidth(). */
 .morph-slider-cta .btn {
   white-space: nowrap;
+  gap: 14px;
+  padding: 8px 8px 8px 20px;
+  color: var(--paper);
+  background:
+    radial-gradient(120% 160% at 15% 50%, rgba(224, 178, 106, 0.16), transparent 60%),
+    var(--ink);
+  border: 1.5px solid rgba(224, 178, 106, 0.75);
+  box-shadow: 0 0 0 1px rgba(224, 178, 106, 0.12), 0 4px 24px rgba(0, 0, 0, 0.45), 0 0 18px rgba(224, 178, 106, 0.28);
+  animation: mg-cta-glow 3.2s ease-in-out infinite;
 }
 
 .morph-slider-cta .btn:hover,
 .morph-slider-cta .btn:focus-visible {
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--gold);
+  color: var(--ink);
+  border-color: var(--gold);
+  box-shadow: 0 0 0 1px rgba(224, 178, 106, 0.3), 0 6px 28px rgba(0, 0, 0, 0.4), 0 0 30px rgba(224, 178, 106, 0.55);
+  animation-play-state: paused;
 }
 
 .morph-slider-cta .btn:hover .morph-slider-cta__word,
 .morph-slider-cta .btn:focus-visible .morph-slider-cta__word {
+  color: var(--ink);
+}
+
+@keyframes mg-cta-glow {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(224, 178, 106, 0.12), 0 4px 24px rgba(0, 0, 0, 0.45), 0 0 18px rgba(224, 178, 106, 0.28); }
+  50% { box-shadow: 0 0 0 1px rgba(224, 178, 106, 0.22), 0 4px 24px rgba(0, 0, 0, 0.45), 0 0 30px rgba(224, 178, 106, 0.5); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .morph-slider-cta .btn { animation: none; }
+}
+
+/* Logo mark — the artist's real approved mark (img/brand/nav-mark-gold.png),
+   not a decorative icon. A quiet breathing glow behind it (candlelight, per
+   the brand kit's motif rule), not a spin — the mark itself isn't animated. */
+.morph-slider-cta__mark {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 6px rgba(224, 178, 106, 0.55));
+  transition: filter 0.25s ease;
+}
+
+/* The mark is brushed gold on transparent — invisible once the pill itself
+   turns gold on hover, so it swaps to solid ink (brightness(0)) rather than
+   fading against its own color. */
+.morph-slider-cta .btn:hover .morph-slider-cta__mark,
+.morph-slider-cta .btn:focus-visible .morph-slider-cta__mark {
+  filter: brightness(0) saturate(100%);
+  animation: mg-mark-spin 1.6s linear infinite;
+}
+
+@keyframes mg-mark-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .morph-slider-cta .btn:hover .morph-slider-cta__mark,
+  .morph-slider-cta .btn:focus-visible .morph-slider-cta__mark { animation: none; }
+}
+
+.morph-slider-cta__label { display: inline-flex; align-items: baseline; flex-shrink: 0; }
+
+/* Takes up whatever room is left between the fixed label text and the arrow
+   cap, and centers the (fixed-width, per pinWordWidth()) cycling word
+   inside it — so the word reads as its own beat, not crammed against
+   "Your". */
+.morph-slider-cta__word-slot {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: baseline;
+  min-width: 0;
+}
+
+/* Circular arrow cap at the pill's trailing edge — sized to the pill's own
+   height so it reads as a button fused onto the button, echoing the
+   reference's "juicy" round arrow. Nudges right on hover/focus. */
+.morph-slider-cta__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(224, 178, 106, 0.75);
+  color: var(--paper);
+  transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.morph-slider-cta .btn:hover .morph-slider-cta__arrow,
+.morph-slider-cta .btn:focus-visible .morph-slider-cta__arrow {
+  transform: translateX(3px);
+  background: var(--ink);
   color: var(--gold);
+  border-color: var(--ink);
 }
 
 /* React Bits' <StarBorder/>, recolored to the Candlelit Velvet accent pair
@@ -303,7 +396,7 @@ html, body { height: 100%; background: #0c0c0e; overflow: hidden; }
 .morph-slider-cta__word {
   display: inline-block;
   flex-shrink: 0;
-  text-align: left;
+  text-align: center;
   white-space: nowrap;
   overflow: hidden;
   vertical-align: bottom;
@@ -351,16 +444,20 @@ html, body { height: 100%; background: #0c0c0e; overflow: hidden; }
 @media (max-width: 640px) {
   .morph-slider-cta .btn {
     font-size: 10.5px;
-    padding: 11px 18px;
-    gap: 6px;
+    padding: 6px 6px 6px 14px;
+    gap: 10px;
   }
+  .morph-slider-cta__mark { width: 19px; height: 19px; }
+  .morph-slider-cta__arrow { width: 32px; height: 32px; }
 }
 
 @media (max-width: 400px) {
   .morph-slider-cta .btn {
     font-size: 9.5px;
-    padding: 10px 14px;
+    padding: 5px 5px 5px 12px;
   }
+  .morph-slider-cta__mark { width: 17px; height: 17px; }
+  .morph-slider-cta__arrow { width: 28px; height: 28px; }
 }
 
 .morph-slider-cta p {

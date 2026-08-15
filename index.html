@@ -191,6 +191,14 @@
     text-shadow:0 1px 3px rgba(0,0,0,.9);opacity:0;transition:opacity .3s ease .15s;
   }
   .accordion.has-active .acc-item.is-active .acc-item__soon{opacity:1}
+  .acc-item__blurb{
+    position:absolute;z-index:3;left:clamp(18px,3vw,44px);right:clamp(18px,3vw,44px);
+    bottom:calc(clamp(20px,4vh,40px) + 34px);
+    font-size:11px;letter-spacing:.02em;line-height:1.45;color:rgba(255,255,255,.8);
+    text-shadow:0 1px 3px rgba(0,0,0,.9);opacity:0;transition:opacity .3s ease .15s;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  }
+  .accordion.has-active .acc-item.is-active .acc-item__blurb{opacity:1}
 
   /* stack vertically on narrow screens; tap expands height instead of width */
   @media (max-width:900px){
@@ -207,6 +215,7 @@
     .acc-item__mute{width:26px;height:26px}
     .acc-item__mute svg{width:13px;height:13px}
     .acc-item__soon{left:18px;bottom:44px}
+    .acc-item__blurb{left:18px;right:18px;bottom:60px}
     .home-mark{top:22px}
     .home-bar{
       top:auto;left:auto;transform:none;
@@ -282,7 +291,7 @@
       <video class="acc-item__video" src="video/music-hover.mp4" muted loop playsinline preload="none"></video>
       <div class="acc-item__scrim"></div>
       <span class="acc-item__title">Music<span class="acc-item__indicator"><span class="acc-item__timer" aria-hidden="true"><svg viewBox="0 0 32 32"><circle class="timer-track" cx="16" cy="16" r="13"/><circle class="timer-progress" cx="16" cy="16" r="13"/></svg></span><button class="acc-item__mute" type="button" aria-label="Unmute video"><svg viewBox="0 0 24 24"></svg></button></span></span>
-      <span class="acc-item__soon">Coming soon</span>
+      <span class="acc-item__blurb">Find something you love in MAL's discography. Spanning R&amp;B, House, Hip-hop, Rock, and Avant-garde, you can hire GRIOT to transform your music into a hit song.</span>
     </a>
 
     <a href="performance.html" class="acc-item" data-key="performance">
@@ -290,7 +299,7 @@
       <video class="acc-item__video" src="video/performance-hover.mp4" muted loop playsinline preload="none"></video>
       <div class="acc-item__scrim"></div>
       <span class="acc-item__title">Performance<span class="acc-item__indicator"><span class="acc-item__timer" aria-hidden="true"><svg viewBox="0 0 32 32"><circle class="timer-track" cx="16" cy="16" r="13"/><circle class="timer-progress" cx="16" cy="16" r="13"/></svg></span><button class="acc-item__mute" type="button" aria-label="Unmute video"><svg viewBox="0 0 24 24"></svg></button></span></span>
-      <span class="acc-item__soon">Coming soon</span>
+      <span class="acc-item__blurb">There are singers, and then there are ENTERTAINERS&hellip; You need a showman that will bring the heat and get the crowd moving. Guaranteed.</span>
     </a>
 
     <a href="hosting.html" class="acc-item" data-key="hosting">
@@ -298,7 +307,7 @@
       <video class="acc-item__video" src="video/hosting-hover.mp4" muted loop playsinline preload="none"></video>
       <div class="acc-item__scrim"></div>
       <span class="acc-item__title">Hosting<span class="acc-item__indicator"><span class="acc-item__timer" aria-hidden="true"><svg viewBox="0 0 32 32"><circle class="timer-track" cx="16" cy="16" r="13"/><circle class="timer-progress" cx="16" cy="16" r="13"/></svg></span><button class="acc-item__mute" type="button" aria-label="Unmute video"><svg viewBox="0 0 24 24"></svg></button></span></span>
-      <span class="acc-item__soon">Coming soon</span>
+      <span class="acc-item__blurb">Charismatic, quick-witted, sultry, and soulful. Your attendees don't want a talking mannequin. You need a host that does the most!</span>
     </a>
 
     <a href="poetry.html" class="acc-item" data-key="poetry">

@@ -51,6 +51,95 @@ body.ui-in .morph-slider-indicators,
 body.ui-in .morph-slider-unmute {
   opacity: 1;
 }
+
+/* Slide 4 (the image-only "end card" — no video src, so the slider just
+   rests there once reached, see morph-slider.js) gets a 3-state text
+   overlay above the existing CTA: what Mal does, why it matters, how to
+   start. The CTA block itself is untouched — this sits in the empty upper
+   two-thirds of the frame and cross-fades between states on a timer while
+   that slide is active. */
+.morph-slider-slide4-copy {
+  position: absolute;
+  left: clamp(20px, 6vw, 64px);
+  right: clamp(20px, 6vw, 64px);
+  top: clamp(96px, 16vh, 150px);
+  bottom: 264px;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+.morph-slider.is-slide4-active .morph-slider-slide4-copy { opacity: 1; }
+
+/* The overlay text can run wide enough on small screens to sit under the
+   prev/next arrows; swipe and the dot indicators still work (see
+   morph-slider.js's pointerdown/drag handling), so just step the arrows
+   out of the way rather than constraining the copy to dodge them. */
+.morph-slider.is-slide4-active .morph-slider-controls {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.morph-slider-slide4-copy::before {
+  content: "";
+  position: absolute;
+  inset: -12% -8%;
+  z-index: -1;
+  background: radial-gradient(ellipse 60% 55% at 50% 45%, rgba(12, 12, 14, 0.5), transparent 72%);
+}
+
+.s4-state {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.s4-state.is-active { opacity: 1; transform: translateY(0); }
+
+.s4-eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--brass);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
+}
+
+.s4-state p.scroll-float {
+  color: var(--paper);
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.55);
+  margin: 0;
+  font-size: clamp(1.05rem, 2.1vw, 1.5rem);
+  max-width: 46ch;
+}
+
+.s4-line {
+  font-size: clamp(14px, 1.8vw, 16px);
+  line-height: 1.6;
+  color: var(--paper-dim);
+  max-width: 40ch;
+  margin: 0;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 640px) {
+  .morph-slider-slide4-copy { top: clamp(84px, 14vh, 120px); bottom: 216px; left: 64px; right: 64px; }
+  .s4-state p.scroll-float { font-size: clamp(0.95rem, 4.2vw, 1.15rem); max-width: 30ch; }
+  .s4-line { max-width: 30ch; }
+}
+@media (max-width: 400px) {
+  .morph-slider-slide4-copy { bottom: 196px; left: 56px; right: 56px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .s4-state { transition: opacity 0.4s ease; transform: none !important; }
+}
 </style>
 </head>
 <body>
@@ -97,6 +186,21 @@ body.ui-in .morph-slider-unmute {
   </div>
 
   <div class="morph-slider-scrim"></div>
+
+  <div class="morph-slider-slide4-copy" id="hosting-slide4-copy">
+    <div class="s4-state is-active">
+      <span class="s4-eyebrow">Who I Am</span>
+      <p class="scroll-float">Mal is a maestro who brings the instincts of a performer to the craft of hosting: reading the room, telling stories, improvising, interacting with the crowd, and turning transitions into memorable moments of magic.</p>
+    </div>
+    <div class="s4-state">
+      <span class="s4-eyebrow">Why It Matters</span>
+      <p class="scroll-float">Your audience should feel something. You've already gathered the people. Now they need anchoring — a guide they can trust and feel. Mal's mission is clear: keep people present, informed, connected, and engaged from the first word to the last.</p>
+    </div>
+    <div class="s4-state">
+      <span class="s4-eyebrow">Getting Started</span>
+      <p class="s4-line">Click below, tell me a bit about your event, and let's start building the night.</p>
+    </div>
+  </div>
 
   <div class="morph-slider-cta">
     <h2 id="hosting-cta-headline">Need a host who can actually perform?</h2>
@@ -242,6 +346,64 @@ body.ui-in .morph-slider-unmute {
     wordIndex = (wordIndex + 1) % WORDS.length;
     foldIn(WORDS[wordIndex], COLORS[wordIndex % COLORS.length]);
   }, 1000);
+})();
+</script>
+<script>
+// Slide 4 is the image-only "end card" (no video src — see morph-slider.js),
+// so the slider just rests there once reached. While it's active, cycle its
+// overlay text through 3 states every 5s: what Mal does, why it matters,
+// how to start. Leaving slide 4 (via arrows/dots) stops the cycle and
+// resets it, so returning always starts from state 1.
+(function () {
+  var slider = document.getElementById('hosting-slider');
+  var copyRoot = document.getElementById('hosting-slide4-copy');
+  if (!slider || !copyRoot) return;
+
+  var states = Array.prototype.slice.call(copyRoot.querySelectorAll('.s4-state'));
+  var SLIDE4_INDEX = 3;
+  var STATE_MS = 5000;
+  var timer = null;
+  var stateIndex = 0;
+
+  function showState(i) {
+    states.forEach(function (el, idx) {
+      el.classList.toggle('is-active', idx === i);
+    });
+  }
+
+  function tick() {
+    stateIndex = (stateIndex + 1) % states.length;
+    showState(stateIndex);
+  }
+
+  function startCycle() {
+    stateIndex = 0;
+    showState(0);
+    slider.classList.add('is-slide4-active');
+    if (timer) clearInterval(timer);
+    timer = setInterval(tick, STATE_MS);
+  }
+
+  function stopCycle() {
+    if (timer) { clearInterval(timer); timer = null; }
+    slider.classList.remove('is-slide4-active');
+  }
+
+  slider.addEventListener('slide-change', function (e) {
+    if (e.detail.index === SLIDE4_INDEX) {
+      startCycle();
+    } else {
+      stopCycle();
+    }
+  });
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) {
+      if (timer) { clearInterval(timer); timer = null; }
+    } else if (slider.classList.contains('is-slide4-active') && !timer) {
+      timer = setInterval(tick, STATE_MS);
+    }
+  });
 })();
 </script>
 </body>
