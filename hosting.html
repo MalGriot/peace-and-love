@@ -280,7 +280,7 @@ body.ui-in .morph-slider-unmute {
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="vendor/ogl.js"></script>
-<script src="morph-slider.js?v=7"></script>
+<script src="morph-slider.js?v=10"></script>
 <script src="shared.js"></script>
 <script src="chat.js"></script>
 <script>renderChrome('hosting');</script>
@@ -432,17 +432,41 @@ body.ui-in .morph-slider-unmute {
     showState(stateIndex);
   }
 
+  // Slow Ken-Burns-style breathing on the end-card image itself: zoom in
+  // over 15s, hold 5s, zoom back out over 15s, hold 5s, loop — driven via
+  // the uZoom uniform morph-slider.js exposes as root.setIdleZoom().
+  var zoomTween = null;
+  var ZOOM_IN = 1.12;
+  function startZoom() {
+    if (!slider.setIdleZoom || typeof gsap === 'undefined') return;
+    stopZoom();
+    var zoomState = { z: 1 };
+    slider.setIdleZoom(1);
+    zoomTween = gsap.timeline({ repeat: -1 })
+      .to(zoomState, { z: ZOOM_IN, duration: 15, ease: 'sine.inOut', onUpdate: function () { slider.setIdleZoom(zoomState.z); } })
+      .to(zoomState, { z: ZOOM_IN, duration: 5 })
+      .to(zoomState, { z: 1, duration: 15, ease: 'sine.inOut', onUpdate: function () { slider.setIdleZoom(zoomState.z); } })
+      .to(zoomState, { z: 1, duration: 5 });
+  }
+
+  function stopZoom() {
+    if (zoomTween) { zoomTween.kill(); zoomTween = null; }
+    if (slider.setIdleZoom) slider.setIdleZoom(1);
+  }
+
   function startCycle() {
     stateIndex = 0;
     showState(0);
     slider.classList.add('is-slide4-active');
     if (timer) clearInterval(timer);
     timer = setInterval(tick, STATE_MS);
+    startZoom();
   }
 
   function stopCycle() {
     if (timer) { clearInterval(timer); timer = null; }
     slider.classList.remove('is-slide4-active');
+    stopZoom();
   }
 
   slider.addEventListener('slide-change', function (e) {

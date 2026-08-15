@@ -53,6 +53,7 @@ uniform float uAberration;
 uniform float uDrift;
 uniform float uTime;
 uniform float uReduce;
+uniform float uZoom;
 uniform vec2 uPointer;
 uniform vec3 uOverlay;
 
@@ -101,7 +102,7 @@ mat2 rot(float a) {
   return mat2(c, -s, s, c);
 }
 
-vec2 coverUV(vec2 uv, vec2 res, vec2 img, vec2 center) {
+vec2 coverUV(vec2 uv, vec2 res, vec2 img, vec2 center, float zoom) {
   float rA = res.x / max(res.y, 1.0);
   float iA = img.x / max(img.y, 1.0);
   vec2 s = vec2(1.0);
@@ -111,6 +112,7 @@ vec2 coverUV(vec2 uv, vec2 res, vec2 img, vec2 center) {
   } else {
     s.x = ratio;
   }
+  s /= max(zoom, 0.0001);
   return (uv - 0.5) * s + center;
 }
 
@@ -164,8 +166,8 @@ void main() {
     }
   }
 
-  vec2 sC = coverUV(uvC, uResolution, uCurrentSize, uCurrentCenter);
-  vec2 sN = coverUV(uvN, uResolution, uNextSize, uNextCenter);
+  vec2 sC = coverUV(uvC, uResolution, uCurrentSize, uCurrentCenter, uZoom);
+  vec2 sN = coverUV(uvN, uResolution, uNextSize, uNextCenter, 1.0);
 
   float ca = uReduce < 0.5 ? uAberration * env * 0.03 : 0.0;
 
@@ -274,6 +276,7 @@ void main() {
           uDrift: { value: opts.drift },
           uTime: { value: 0 },
           uReduce: { value: reducedMotion ? 1 : 0 },
+          uZoom: { value: 1 },
           uPointer: { value: [0.5, 0.5] },
           uOverlay: { value: hexToRgb(opts.overlayColor) }
         }
@@ -379,6 +382,7 @@ void main() {
       this.program.uniforms.uCurrentSize.value = this.sizes[target];
       this.program.uniforms.uCurrentCenter.value = this.centers[target];
       this.program.uniforms.uProgress.value = 0;
+      this.program.uniforms.uZoom.value = 1;
       this.animating = false;
       this.tween = null;
       this.announce(target);
@@ -673,6 +677,11 @@ void main() {
         else showActiveVideo();
       }
     });
+
+    // Exposed so page-level scripts can drive the idle end-card zoom (see
+    // hosting.html's slide-4 copy cycler) without this file needing to know
+    // about any particular page's slide content.
+    root.setIdleZoom = value => { engine.program.uniforms.uZoom.value = value; };
 
     showActiveVideo();
     root.dispatchEvent(new CustomEvent('slide-change', { detail: { index, total: items.length } }));
