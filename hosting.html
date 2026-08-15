@@ -55,13 +55,19 @@ body.ui-in .morph-slider-unmute {
 /* Slide 4 (the image-only "end card" — no video src, so the slider just
    rests there once reached, see morph-slider.js) gets a 3-state text
    overlay above the existing CTA: what Mal does, why it matters, how to
-   start. The CTA block itself is untouched — this sits in the empty upper
-   two-thirds of the frame and cross-fades between states on a timer while
-   that slide is active. */
+   start. The CTA block itself is untouched.
+
+   Mal himself sits roughly center-frame in this photo (object-position
+   51% 40%). States 1 and 2 land in the dark columns clear of him on either
+   side (left / right — verified against the actual photo); state 3 sits
+   centered, which does land over him, so it gets a solid card (.s4-box)
+   instead of relying on position to dodge him. On mobile the side margins
+   are too narrow for full sentences, so mobile shows a condensed one-line
+   variant per state (.s4-short) instead of the full paragraph (.s4-full). */
 .morph-slider-slide4-copy {
   position: absolute;
-  left: clamp(20px, 6vw, 64px);
-  right: clamp(20px, 6vw, 64px);
+  left: clamp(20px, 6vw, 56px);
+  right: clamp(20px, 6vw, 56px);
   top: clamp(96px, 16vh, 150px);
   bottom: 264px;
   z-index: 4;
@@ -81,28 +87,36 @@ body.ui-in .morph-slider-unmute {
   transition: opacity 0.4s ease;
 }
 
-.morph-slider-slide4-copy::before {
-  content: "";
-  position: absolute;
-  inset: -12% -8%;
-  z-index: -1;
-  background: radial-gradient(ellipse 60% 55% at 50% 45%, rgba(12, 12, 14, 0.5), transparent 72%);
-}
-
 .s4-state {
   position: absolute;
   inset: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   gap: 14px;
-  text-align: center;
   opacity: 0;
   transform: translateY(10px);
   transition: opacity 0.7s ease, transform 0.7s ease;
 }
 .s4-state.is-active { opacity: 1; transform: translateY(0); }
+
+.s4-state.s4-pos-left { align-items: flex-start; text-align: left; }
+.s4-state.s4-pos-right { align-items: flex-end; text-align: right; }
+.s4-state.s4-pos-center { align-items: center; text-align: center; }
+
+/* Left/right states get a soft directional vignette instead of a box —
+   the photo is already dark and empty on both sides, this just adds a
+   little extra contrast for the text. */
+.s4-pos-left::before,
+.s4-pos-right::before {
+  content: "";
+  position: absolute;
+  inset: -16% -20%;
+  z-index: -1;
+  pointer-events: none;
+}
+.s4-pos-left::before { background: radial-gradient(ellipse 60% 55% at 22% 45%, rgba(12, 12, 14, 0.5), transparent 68%); }
+.s4-pos-right::before { background: radial-gradient(ellipse 60% 55% at 78% 45%, rgba(12, 12, 14, 0.5), transparent 68%); }
 
 .s4-eyebrow {
   font-size: 12px;
@@ -112,30 +126,67 @@ body.ui-in .morph-slider-unmute {
   text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
 }
 
-.s4-state p.scroll-float {
+.s4-state p.scroll-float.s4-full {
   color: var(--paper);
   text-shadow: 0 2px 20px rgba(0, 0, 0, 0.55);
   margin: 0;
-  font-size: clamp(1.05rem, 2.1vw, 1.5rem);
-  max-width: 46ch;
+  font-size: clamp(1rem, 1.7vw, 1.35rem);
+  max-width: 30ch;
 }
 
-.s4-line {
+.s4-line.s4-full {
   font-size: clamp(14px, 1.8vw, 16px);
   line-height: 1.6;
   color: var(--paper-dim);
-  max-width: 40ch;
+  max-width: 26ch;
   margin: 0;
   text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
 }
 
+.s4-short {
+  display: none;
+  font-family: var(--font-display);
+  font-weight: 400;
+  color: var(--paper);
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.6);
+  margin: 0;
+  font-size: clamp(1rem, 4.8vw, 1.15rem);
+  line-height: 1.35;
+  max-width: 14ch;
+}
+
+/* State 3 (centered) sits over Mal, so — per direction — it earns a real
+   card rather than trying to dodge him: same dark-card language as the
+   site's other panels (.c-form / .chat-widget__panel), not a new pattern. */
+.s4-box {
+  background: rgba(23, 20, 18, 0.82);
+  border: 1px solid rgba(239, 230, 216, 0.14);
+  border-radius: 18px;
+  padding: 22px 30px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  max-width: 360px;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.35);
+}
+.s4-box .s4-eyebrow { text-shadow: none; }
+.s4-box .s4-line.s4-full { text-shadow: none; max-width: 30ch; }
+.s4-box .s4-short { text-shadow: none; max-width: 20ch; }
+
 @media (max-width: 640px) {
-  .morph-slider-slide4-copy { top: clamp(84px, 14vh, 120px); bottom: 216px; left: 64px; right: 64px; }
-  .s4-state p.scroll-float { font-size: clamp(0.95rem, 4.2vw, 1.15rem); max-width: 30ch; }
-  .s4-line { max-width: 30ch; }
+  .morph-slider-slide4-copy { top: clamp(84px, 14vh, 120px); bottom: 216px; left: 20px; right: 20px; }
+  .s4-full { display: none; }
+  .s4-short { display: block; }
+  .s4-pos-left, .s4-pos-right { max-width: none; }
+  .s4-box { padding: 16px 20px; border-radius: 14px; max-width: 220px; }
 }
 @media (max-width: 400px) {
-  .morph-slider-slide4-copy { bottom: 196px; left: 56px; right: 56px; }
+  .morph-slider-slide4-copy { bottom: 196px; }
+  .s4-short { font-size: 0.95rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .s4-state { transition: opacity 0.4s ease; transform: none !important; }
@@ -188,17 +239,22 @@ body.ui-in .morph-slider-unmute {
   <div class="morph-slider-scrim"></div>
 
   <div class="morph-slider-slide4-copy" id="hosting-slide4-copy">
-    <div class="s4-state is-active">
+    <div class="s4-state s4-pos-left is-active">
       <span class="s4-eyebrow">Who I Am</span>
-      <p class="scroll-float">Mal is a maestro who brings the instincts of a performer to the craft of hosting: reading the room, telling stories, improvising, interacting with the crowd, and turning transitions into memorable moments of magic.</p>
+      <p class="scroll-float s4-full">Mal is a maestro who brings the instincts of a performer to the craft of hosting: reading the room, telling stories, improvising, interacting with the crowd, and turning transitions into memorable moments of magic.</p>
+      <p class="s4-short">A performer who knows how to host.</p>
     </div>
-    <div class="s4-state">
+    <div class="s4-state s4-pos-right">
       <span class="s4-eyebrow">Why It Matters</span>
-      <p class="scroll-float">Your audience should feel something. You've already gathered the people. Now they need anchoring — a guide they can trust and feel. Mal's mission is clear: keep people present, informed, connected, and engaged from the first word to the last.</p>
+      <p class="scroll-float s4-full">Your audience should feel something. You've already gathered the people. Now they need anchoring — a guide they can trust and feel. Mal's mission is clear: keep people present, informed, connected, and engaged from the first word to the last.</p>
+      <p class="s4-short">Your guests need a guide they can feel.</p>
     </div>
-    <div class="s4-state">
-      <span class="s4-eyebrow">Getting Started</span>
-      <p class="s4-line">Click below, tell me a bit about your event, and let's start building the night.</p>
+    <div class="s4-state s4-pos-center">
+      <div class="s4-box">
+        <span class="s4-eyebrow">Getting Started</span>
+        <p class="s4-line s4-full">Click below, tell me a bit about your event, and let's start building the night.</p>
+        <p class="s4-short">Click below to get started.</p>
+      </div>
     </div>
   </div>
 
