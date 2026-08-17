@@ -687,6 +687,32 @@
     });
   });
 
+  // Swipe navigation (mobile) — the CSS collapses the reel to one tile at
+  // a time under 720px, with no visible way to move between clips besides
+  // waiting for autoplay handoff. A horizontal swipe on the reel jumps to
+  // the next/previous tile, same as tapping it (restarts, unmuted). Small
+  // or mostly-vertical drags (scrolling) are ignored via the distance/axis
+  // checks below.
+  var touchStartX = 0, touchStartY = 0, touchActive = false;
+  reel.addEventListener('touchstart', function (e) {
+    if (e.touches.length !== 1) return;
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    touchActive = true;
+  }, { passive: true });
+  reel.addEventListener('touchend', function (e) {
+    if (!touchActive) return;
+    touchActive = false;
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    var dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+    if (dx < 0 && active < tiles.length - 1) {
+      activate(active + 1, { restart: true, muted: false });
+    } else if (dx > 0 && active > 0) {
+      activate(active - 1, { restart: true, muted: false });
+    }
+  }, { passive: true });
+
   muteBtns.forEach(function (btn, i) {
     if (!btn) return;
     btn.addEventListener('click', function (e) {
