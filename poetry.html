@@ -210,35 +210,40 @@
   .poem__lyrics-close{display:flex}
 }
 
-/* ---------- 4. The Book — one CTA, no ambiguity ---------- */
+/* ---------- 4. The Book — an actual flip-through, not a flat cover shot.
+   vendor/page-flip.js (StPageFlip, self-hosted like vendor/ogl.js) renders
+   a draggable/click-to-turn page-flip on a canvas it builds inside
+   #po-book-flip; the "table" card below is just a resting surface for it
+   to sit on. Scans are the real interior of the book (page-flip.js reads
+   the array in flow order: front cover, interior pages, back cover). ---------- */
 .po-book{max-width:1000px;margin:0 auto}
-.po-book__inner{
-  display:grid;grid-template-columns:.9fr 1.1fr;gap:0;
-  background:#1c1815;border:1px solid rgba(239,230,216,.1);border-radius:20px;overflow:hidden;
-}
-.po-book__cover{
-  position:relative;aspect-ratio:3/4;background:
-    linear-gradient(155deg,var(--velvet-wine) 0%,var(--ink) 78%);
-  display:flex;align-items:center;justify-content:center;overflow:hidden;
-}
-.po-book__cover-img{
-  position:absolute;width:56%;aspect-ratio:619/875;object-fit:cover;border-radius:3px;
-  box-shadow:0 22px 50px rgba(0,0,0,.55);
-}
-.po-book__cover-img--page{
-  transform:rotate(-7deg) translate(-22%,4%);z-index:1;filter:brightness(.94);
-}
-.po-book__cover-img--front{
-  transform:rotate(4deg) translate(16%,-3%);z-index:2;
-  border:1px solid rgba(224,178,106,.35);
-}
-.po-book__body{padding:clamp(32px,4vw,56px);display:flex;flex-direction:column;justify-content:center;gap:18px}
+.po-book__head{text-align:center;max-width:560px;margin:0 auto clamp(28px,4vw,44px)}
 .po-book__eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass)}
-.po-book__title{font-family:var(--font-display);font-weight:400;font-size:clamp(26px,3.2vw,36px);margin:0;color:var(--paper)}
+.po-book__title{font-family:var(--font-display);font-weight:400;font-size:clamp(26px,3.2vw,36px);margin:14px 0 12px;color:var(--paper)}
 .po-book__desc{color:var(--paper-dim);font-size:14.5px;line-height:1.7;margin:0}
-@media (max-width:720px){
-  .po-book__inner{grid-template-columns:1fr}
-  .po-book__cover{aspect-ratio:16/9}
+
+.po-book__stage{
+  position:relative;display:flex;align-items:center;justify-content:center;gap:clamp(10px,2.4vw,22px);
+  padding:clamp(28px,5vw,56px) clamp(14px,3vw,32px);
+  background:#1c1815;border:1px solid rgba(239,230,216,.1);border-radius:20px;
+  background-image:radial-gradient(ellipse at 50% 0%,rgba(224,178,106,.06),transparent 60%);
+}
+.po-book__flip{width:100%;max-width:760px;filter:drop-shadow(0 26px 46px rgba(0,0,0,.5))}
+.po-book__flip-btn{
+  flex:none;width:44px;height:44px;border-radius:999px;
+  border:1px solid rgba(239,230,216,.25);background:rgba(18,16,15,.4);color:var(--paper);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:background .2s ease,border-color .2s ease,color .2s ease;
+}
+.po-book__flip-btn:hover{background:var(--gold);border-color:var(--gold);color:#12100f}
+.po-book__flip-btn:disabled{opacity:.3;cursor:default;background:rgba(18,16,15,.4);border-color:rgba(239,230,216,.25);color:var(--paper)}
+.po-book__flip-hint{
+  text-align:center;margin:16px 0 0;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--paper-faint);
+}
+.po-book__cta{display:flex;justify-content:center;margin-top:clamp(24px,4vw,36px)}
+@media (max-width:640px){
+  .po-book__flip-btn{width:36px;height:36px}
+  .po-book__stage{gap:8px;padding:22px 8px}
 }
 </style>
 </head>
@@ -416,22 +421,28 @@
 </section>
 
 <section class="po-section po-book" id="book">
-  <div class="po-book__inner reveal">
-    <div class="po-book__cover">
-      <img class="po-book__cover-img po-book__cover-img--page" src="img/book/a-moment.jpg" alt="A page from &quot;a moment,&quot; in falling under where">
-      <img class="po-book__cover-img po-book__cover-img--front" src="img/book/cover.jpg" alt="falling under where — into deeper beyond, poems by Mal Griot">
-    </div>
-    <div class="po-book__body">
-      <span class="po-book__eyebrow">The Book</span>
-      <h2 class="po-book__title">The poems, collected.</h2>
-      <p class="po-book__desc">The written pieces, gathered in one place. Available now.</p>
-      <div>
-        <a href="https://ko-fi.com/s/dc969df655" target="_blank" rel="noopener" class="po-cta po-cta--solid">
-          Get the book
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-      </div>
-    </div>
+  <div class="po-book__head reveal">
+    <span class="po-book__eyebrow">The Book</span>
+    <h2 class="po-book__title">The poems, collected.</h2>
+    <p class="po-book__desc">Flip through a few pages from “a moment,” then get your own copy.</p>
+  </div>
+
+  <div class="po-book__stage reveal">
+    <button type="button" class="po-book__flip-btn po-book__flip-btn--prev" aria-label="Previous page">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="po-book__flip" id="po-book-flip"></div>
+    <button type="button" class="po-book__flip-btn po-book__flip-btn--next" aria-label="Next page">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+  <p class="po-book__flip-hint">Drag a corner, or use the arrows</p>
+
+  <div class="po-book__cta">
+    <a href="https://ko-fi.com/s/dc969df655" target="_blank" rel="noopener" class="po-cta po-cta--solid">
+      Get the book
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
   </div>
 </section>
 
@@ -777,6 +788,74 @@
       }
     });
   });
+})();
+</script>
+<script src="vendor/page-flip.js"></script>
+<script>
+// The Book — a real page-flip (StPageFlip, vendor/page-flip.js), not a
+// static cover shot. Pages are the actual "a moment" scans, book-ended by
+// the cover front and back (showCover:true treats the first/last images as
+// a stiffer cover page rather than a normal leaf). usePortrait lets it
+// collapse to a single page per view on narrow screens instead of a
+// two-page spread.
+(function () {
+  var el = document.getElementById('po-book-flip');
+  if (!el || typeof St === 'undefined') return;
+
+  var pageFlip = new St.PageFlip(el, {
+    width: 340,
+    height: 480,
+    size: 'stretch',
+    minWidth: 220,
+    maxWidth: 620,
+    minHeight: 310,
+    maxHeight: 875,
+    maxShadowOpacity: 0.4,
+    showCover: true,
+    usePortrait: true,
+    mobileScrollSupport: false
+  });
+
+  // First = front cover, last = back cover (the book's actual back-cover
+  // page, extracted from the source PDF). In between: the real page scans.
+  pageFlip.loadFromImages([
+    'img/book/cover.jpg',
+    'img/book/pages/page-016.jpg',
+    'img/book/pages/page-017.jpg',
+    'img/book/pages/page-018.jpg',
+    'img/book/pages/page-019.jpg',
+    'img/book/pages/page-020.jpg',
+    'img/book/pages/page-021.jpg',
+    'img/book/pages/page-022.jpg',
+    'img/book/pages/page-023.jpg',
+    'img/book/pages/page-024.jpg',
+    'img/book/pages/page-025.jpg',
+    'img/book/pages/page-026.jpg',
+    'img/book/pages/page-027.jpg',
+    'img/book/pages/page-028.jpg',
+    'img/book/pages/page-029.jpg',
+    'img/book/back-cover.jpg'
+  ]);
+
+  var prevBtn = document.querySelector('.po-book__flip-btn--prev');
+  var nextBtn = document.querySelector('.po-book__flip-btn--next');
+
+  function syncNav() {
+    var count = pageFlip.getPageCount();
+    var current = pageFlip.getCurrentPageIndex();
+    if (prevBtn) prevBtn.disabled = current <= 0;
+    if (nextBtn) nextBtn.disabled = current >= count - 1;
+  }
+
+  // turnToNextPage/turnToPrevPage (a direct jump) rather than
+  // flipNext/flipPrev (a simulated corner-drag gesture) — the latter
+  // computes its drag target from the current spread geometry and can
+  // silently no-op from certain starting positions (e.g. right on the
+  // cover), where a direct turn always works.
+  if (prevBtn) prevBtn.addEventListener('click', function () { pageFlip.turnToPrevPage(); });
+  if (nextBtn) nextBtn.addEventListener('click', function () { pageFlip.turnToNextPage(); });
+  pageFlip.on('flip', syncNav);
+  pageFlip.on('init', syncNav);
 })();
 </script>
 </body>
