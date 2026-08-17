@@ -1,0 +1,29 @@
+/* MAL GRIOT — vanilla port of react-bits ScrollVelocity. Two full-bleed rows
+   of looping text drift in opposite directions at a lazy idle speed, and pick
+   up extra speed (capped) in whichever direction matches recent scroll
+   velocity — the signature "scrubs with your scroll" feel of the original.
+   Classic script, no build step: matches flowing-menu.js/morph-slider.js. */
+
+.sv-wrap{
+  overflow:hidden;padding:clamp(28px,5vw,56px) 0;
+  background:var(--ink);
+  border-top:1px solid rgba(239,230,216,.08);
+  border-bottom:1px solid rgba(239,230,216,.08);
+}
+.sv-row{
+  display:flex;flex-wrap:nowrap;white-space:nowrap;width:max-content;
+  will-change:transform;
+}
+.sv-row + .sv-row{margin-top:clamp(2px,1vw,10px)}
+.sv-item{
+  display:flex;align-items:center;flex:none;
+  font-family:var(--font-display);font-weight:400;
+  font-size:clamp(42px,9vw,108px);line-height:1;letter-spacing:-.01em;
+  color:transparent;-webkit-text-stroke:1px rgba(239,230,216,.55);
+  padding:0 clamp(20px,2.6vw,40px);
+}
+.sv-row--fill .sv-item{color:var(--gold);-webkit-text-stroke:0}
+
+@media (prefers-reduced-motion: reduce){
+  .sv-row{transform:none !important}
+}

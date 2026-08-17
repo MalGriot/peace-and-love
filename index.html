@@ -289,6 +289,11 @@
   }
   .accordion.has-active .acc-item.is-active .acc-item__blurb{opacity:1}
 
+  /* last tile's blurb can run under the fixed chat button (bottom-right,
+     ~56px + 32px margin) once its right edge lines up with the viewport
+     edge, so give it extra clearance the other tiles don't need */
+  .acc-item[data-key="about"] .acc-item__blurb{right:clamp(76px,10vw,104px)}
+
   /* stack vertically on narrow screens; tap expands height instead of width */
   @media (max-width:900px){
     .accordion{flex-direction:column;overflow-x:hidden;overflow-y:auto}
@@ -305,6 +310,7 @@
     .acc-item__mute svg{width:13px;height:13px}
     .acc-item__soon{left:18px;bottom:44px}
     .acc-item__blurb{left:18px;right:18px;bottom:60px}
+    .acc-item[data-key="about"] .acc-item__blurb{right:64px}
     .home-mark{top:22px}
     .home-bar{
       top:auto;left:auto;transform:none;
@@ -405,7 +411,7 @@
       <video class="acc-item__video" src="video/poetry-hover.mp4" muted loop playsinline preload="none"></video>
       <div class="acc-item__scrim"></div>
       <span class="acc-item__title">Poetry<span class="acc-item__indicator"><span class="acc-item__timer" aria-hidden="true"><svg viewBox="0 0 32 32"><circle class="timer-track" cx="16" cy="16" r="13"/><circle class="timer-progress" cx="16" cy="16" r="13"/></svg></span><button class="acc-item__mute" type="button" aria-label="Unmute video"><svg viewBox="0 0 24 24"></svg></button></span></span>
-      <span class="acc-item__soon">Coming soon</span>
+      <span class="acc-item__blurb">How language limits me when senses would explicitly expose my inner vision. Fathomless fantasies and emergent epiphanies for those who still read between the lines.</span>
     </a>
 
     <a href="acting.html" class="acc-item" data-key="acting">
@@ -450,10 +456,10 @@
 
     <a href="about.html" class="acc-item" data-key="about">
       <img class="acc-item__photo" src="img/about-home.jpg" alt="Portrait of Mal Griot" style="object-position:41% 23%;transform-origin:41% 23%">
-      <video class="acc-item__video" src="video/music-hover.mp4" muted loop playsinline preload="none"></video>
+      <video class="acc-item__video" src="video/about-hover.mp4" muted loop playsinline preload="none"></video>
       <div class="acc-item__scrim"></div>
       <span class="acc-item__title">About<span class="acc-item__indicator"><span class="acc-item__timer" aria-hidden="true"><svg viewBox="0 0 32 32"><circle class="timer-track" cx="16" cy="16" r="13"/><circle class="timer-progress" cx="16" cy="16" r="13"/></svg></span><button class="acc-item__mute" type="button" aria-label="Unmute video"><svg viewBox="0 0 24 24"></svg></button></span></span>
-      <span class="acc-item__soon">Coming soon</span>
+      <span class="acc-item__blurb">Just beyond the surface flow the waves of life. Behind the scenes beats a human heart with a hundred stories. Get to know the GRIOT.</span>
     </a>
 
   </div>

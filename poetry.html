@@ -73,12 +73,13 @@
    with no z-index — same tier problem the title/index text has, except
    native captions can't be given z-index individually since they aren't
    a separate box. This element can: it sits above the gradient like the
-   title does. Brand tokens: same Inter body font + rgba(18,16,15,.7) ink
-   chip already used by .poem__lyrics-toggle, so on-video captions read as
-   the same "system" as the lyrics UI. */
+   title does. Set in the brand display face (--font-display, matching the
+   title right above it) on the same rgba(18,16,15,.7) ink chip already
+   used by .poem__lyrics-toggle, so on-video captions read as the same
+   "system" as the lyrics UI. */
 .po-hero__tile-caption{
   position:absolute;left:16px;right:16px;bottom:50px;z-index:1;
-  font-family:var(--font-body);font-weight:400;font-size:clamp(12px,1.2vw,14px);line-height:1.5;
+  font-family:var(--font-display);font-weight:400;font-size:clamp(13px,1.3vw,15px);line-height:1.4;
   color:var(--paper);background:rgba(18,16,15,.7);
   padding:.25em .6em;border-radius:4px;display:inline-block;
   opacity:0;transition:opacity .2s ease;pointer-events:none;

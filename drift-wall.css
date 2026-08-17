@@ -1,0 +1,62 @@
+/* MAL GRIOT — vanilla port of react-bits DriftWall. A grid of tiles idles
+   with a slow, staggered float (each on its own phase/amplitude so the wall
+   never reads as a single unit), and lifts on hover. Hovering also arms a
+   delayed video reveal — same "hold to watch" pattern as the homepage
+   accordion (see index.html's VIDEO_DELAY), ported here as drift-wall.js. */
+
+.dw-grid{
+  display:grid;grid-template-columns:repeat(6,1fr);gap:clamp(10px,1.6vw,18px);
+  max-width:1180px;margin:0 auto;
+}
+.dw-tile{
+  position:relative;overflow:hidden;border-radius:6px;cursor:pointer;
+  border:1px solid rgba(239,230,216,.1);background:#1c1815;
+  aspect-ratio:3/4;
+  animation:dw-float 7s ease-in-out infinite;
+  animation-delay:var(--dw-delay,0s);
+  transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s ease;
+}
+.dw-tile:nth-child(2n){aspect-ratio:4/5}
+.dw-tile:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 24px 60px rgba(0,0,0,.4);animation-play-state:paused}
+
+@keyframes dw-float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(var(--dw-drift,-8px))}
+}
+.dw-tile:hover{transform:translateY(-6px) scale(1.02)}
+
+.dw-tile__media{position:absolute;inset:0}
+.dw-tile__media img, .dw-tile__media video{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  filter:saturate(.82) brightness(.86);
+}
+.dw-tile__media img{transition:opacity .5s ease}
+.dw-tile__media video{opacity:0;transition:opacity .5s ease}
+.dw-tile.is-playing .dw-tile__media img{opacity:0}
+.dw-tile.is-playing .dw-tile__media video{opacity:1}
+
+.dw-tile::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(0deg,rgba(18,16,15,.82) 0%,rgba(18,16,15,.1) 55%,transparent 75%);
+  pointer-events:none;
+}
+.dw-tile__label{
+  position:absolute;left:14px;right:14px;bottom:12px;z-index:2;
+  font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper);
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+}
+.dw-tile__timer{width:22px;height:22px;flex:none;opacity:0;transition:opacity .2s ease}
+.dw-tile.is-active:not(.is-playing) .dw-tile__timer{opacity:1}
+.dw-tile__timer svg{width:100%;height:100%;transform:rotate(-90deg)}
+.dw-tile__timer circle{fill:none;stroke-width:2}
+.dw-tile__timer .dw-timer-track{stroke:rgba(255,255,255,.3)}
+.dw-tile__timer .dw-timer-progress{stroke:var(--gold);stroke-dasharray:56.5;stroke-dashoffset:56.5;transition:stroke-dashoffset .1s linear}
+
+@media (max-width:900px){
+  .dw-grid{grid-template-columns:repeat(2,1fr)}
+  .dw-tile{animation:none}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .dw-tile{animation:none}
+}

@@ -65,6 +65,20 @@ body.ui-in .morph-slider-unmute {
    instead of relying on position to dodge him. On mobile the side margins
    are too narrow for full sentences, so mobile shows a condensed one-line
    variant per state (.s4-short) instead of the full paragraph (.s4-full). */
+.morph-slider-cta__brand {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(40px, 7vw, 88px);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  color: var(--paper);
+  margin: 0 0 6px;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.55);
+}
+.morph-slider.is-slide4-active .morph-slider-cta__brand {
+  display: none;
+}
+
 .morph-slider-slide4-copy {
   position: absolute;
   left: clamp(20px, 6vw, 56px);
@@ -443,6 +457,7 @@ body.bmd-open { overflow: hidden; }
   </div>
 
   <div class="morph-slider-cta">
+    <h1 class="morph-slider-cta__brand" id="hosting-cta-brand">Mal Griot</h1>
     <h2 id="hosting-cta-headline">Need a host who can actually perform?</h2>
     <p id="hosting-cta-tagline">MC, performer, poet, storyteller, and crowd facilitator who brings presence, personality, and energy to every event.</p>
     <button type="button" id="book-mal-trigger" class="btn morph-slider-cta__btn">

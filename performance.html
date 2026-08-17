@@ -10,6 +10,8 @@
 <link rel="apple-touch-icon" href="img/brand/apple-touch-icon.png">
 <link rel="stylesheet" href="shared.css">
 <link rel="stylesheet" href="effects.css">
+<link rel="stylesheet" href="scroll-velocity.css">
+<link rel="stylesheet" href="drift-wall.css">
 <style>
 /* ---------- Performance page — editorial, intimate, candlelit-velvet.
    Distinct from Hosting's full-screen video-reel treatment: one still
@@ -23,19 +25,24 @@
   min-height:92vh;padding:0;
 }
 .perf-hero__copy{
-  display:flex;flex-direction:column;justify-content:center;gap:26px;
-  padding:clamp(96px,10vw,140px) clamp(24px,6vw,72px) clamp(48px,6vw,72px);
+  display:flex;flex-direction:column;justify-content:flex-start;gap:22px;
+  padding:clamp(84px,9vw,120px) clamp(24px,6vw,72px) clamp(48px,6vw,72px);
 }
 .perf-hero__eyebrow{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--brass)}
 .perf-hero__title{
   font-family:var(--font-display);font-weight:400;line-height:.92;margin:0;
   font-size:clamp(48px,7.4vw,108px);letter-spacing:-.02em;color:var(--paper);
 }
-.perf-hero__title em{display:block;font-style:normal;color:var(--gold)}
+.perf-hero__title em{font-style:normal;color:var(--gold)}
 .perf-hero__desc{
   font-size:clamp(15px,1.3vw,17px);line-height:1.65;color:var(--paper-dim);
   max-width:38ch;margin:4px 0 6px;
 }
+.perf-hero__philosophy{
+  font-size:clamp(14px,1.15vw,15.5px);line-height:1.7;color:var(--paper-dim);
+  max-width:46ch;margin:0 0 4px;
+}
+.perf-hero__desc--mobile{display:none}
 .perf-cta{
   display:inline-flex;align-items:center;gap:10px;align-self:flex-start;
   font-family:var(--font-body);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;
@@ -86,10 +93,17 @@
 }
 
 @media (max-width:900px){
-  .perf-hero{grid-template-columns:1fr;min-height:auto}
-  .perf-hero__media{height:56vh}
-  .perf-hero__copy{padding:56px 22px 44px}
+  .perf-hero{grid-template-columns:1fr;min-height:auto;position:relative}
+  .perf-hero__media{height:100svh}
+  .perf-hero__copy{
+    position:absolute;left:0;right:0;bottom:0;z-index:2;
+    justify-content:flex-end;gap:16px;
+    padding:26vh 22px calc(env(safe-area-inset-bottom, 0px) + 36px);
+    background:linear-gradient(0deg, rgba(18,16,15,.94) 22%, rgba(18,16,15,.55) 58%, transparent 100%);
+  }
   .perf-hero__title{font-size:clamp(42px,13vw,64px)}
+  .perf-hero__desc--desktop, .perf-hero__philosophy{display:none}
+  .perf-hero__desc--mobile{display:block;max-width:32ch}
 }
 
 /* ---------- 2. The Live Practice ---------- */
@@ -211,50 +225,8 @@
 /* ---------- 5. Where It Fits ---------- */
 .perf-fits{max-width:1100px;margin:0 auto}
 .perf-fits__title{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,3.6vw,40px);margin:0 0 44px;color:var(--paper);text-align:center}
-.perf-fits__grid{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:2px;
-  background:rgba(239,230,216,.1);
-}
-.perf-fit{
-  background:var(--ink);padding:34px 18px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;
-}
-.perf-fit svg{color:var(--brass);opacity:.85}
-.perf-fit span{font-size:12.5px;letter-spacing:.06em;color:var(--paper-dim)}
 
-/* ---------- 6. Live Archive ---------- */
-.perf-archive{max-width:1180px;margin:0 auto}
-.perf-archive__head{max-width:640px;margin:0 0 44px}
-.perf-archive__sub{color:var(--paper-dim);font-size:14px;margin:14px 0 0;max-width:56ch}
-.perf-archive__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:3px;margin-bottom:56px}
-.perf-arch-item{
-  position:relative;aspect-ratio:4/5;overflow:hidden;background:#1c1815;
-  border:none;padding:0;cursor:pointer;display:block;width:100%;
-}
-.perf-arch-item img{width:100%;height:100%;object-fit:cover;filter:saturate(.8) brightness(.85);transition:transform .9s cubic-bezier(.16,1,.3,1),filter .5s ease}
-.perf-arch-item:hover img{transform:scale(1.06);filter:saturate(.95) brightness(.95)}
-.perf-arch-item__scrim{position:absolute;inset:0;background:linear-gradient(0deg,rgba(18,16,15,.88) 0%,rgba(18,16,15,.15) 55%,transparent 75%)}
-.perf-arch-item__meta{position:absolute;left:18px;right:18px;bottom:16px;text-align:left}
-.perf-arch-item__event{display:block;font-family:var(--font-display);font-size:19px;color:var(--paper)}
-.perf-arch-item__place{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);margin-top:5px}
-
-/* Prestige-ordered stage list — no dates, ranked by name recognition */
-.perf-stages__title{font-family:var(--font-display);font-weight:400;font-size:clamp(22px,2.6vw,28px);margin:0 0 6px;color:var(--paper)}
-.perf-stages__sub{color:var(--paper-dim);font-size:13.5px;margin:0 0 22px;max-width:56ch}
-.perf-stage-row{
-  display:flex;align-items:baseline;gap:22px;
-  padding:19px 0;border-top:1px solid rgba(239,230,216,.12);
-  transition:padding-left .35s ease;
-}
-.perf-stage-row:last-child{border-bottom:1px solid rgba(239,230,216,.12)}
-.perf-stage-row:hover{padding-left:10px}
-.perf-stage-row:hover .perf-stage-row__index{color:var(--gold)}
-.perf-stage-row__index{
-  font-family:var(--font-body);font-size:12px;letter-spacing:.04em;color:var(--paper-faint);
-  flex:none;width:24px;transition:color .3s ease;
-}
-.perf-stage-row__name{font-family:var(--font-display);font-weight:400;font-size:clamp(18px,2.2vw,24px);color:var(--paper)}
-
-/* ---------- 7. Music/Performance transition ---------- */
+/* ---------- 6. Music/Performance transition ---------- */
 .perf-transition{text-align:center;background:var(--velvet-wine);position:relative;overflow:hidden}
 .perf-transition::before{
   content:"";position:absolute;inset:0;pointer-events:none;
@@ -274,6 +246,184 @@
   font-size:clamp(38px,6vw,80px);margin:0 0 40px;color:var(--paper);letter-spacing:-.01em;
 }
 .perf-final__ctas{display:flex;flex-wrap:wrap;gap:18px 34px;align-items:center;justify-content:center}
+
+/* ---------- Book the Performance drawer ----------
+   Same slide-out mechanics/skin as Hosting's "Book Mal" drawer (bmd-*
+   classes reused verbatim — no collision, this page never loads
+   hosting.html), with fields swapped for a live-performance booking. */
+#book-performance-scrim {
+  position: fixed; inset: 0; z-index: 300;
+  background: rgba(18, 16, 15, .72);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  opacity: 0; pointer-events: none;
+  transition: opacity .28s ease;
+}
+#book-performance-scrim.is-open { opacity: 1; pointer-events: auto; }
+
+#book-performance-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 301;
+  width: 44vw; min-width: 480px; max-width: 640px;
+  background: #1c1815;
+  border-left: 1px solid rgba(239, 230, 216, .12);
+  display: flex; flex-direction: column;
+  transform: translateX(100%);
+  transition: transform .52s cubic-bezier(.22,.61,.36,1);
+  box-shadow: -30px 0 80px rgba(0,0,0,.5);
+}
+#book-performance-drawer.is-open { transform: translateX(0); }
+#book-performance-drawer::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(ellipse 60% 40% at 100% 0%, rgba(201,138,69,.22), transparent 65%);
+}
+
+@media (max-width: 860px) {
+  #book-performance-drawer { width: 100vw; min-width: 0; max-width: none; left: 0; border-left: none; transform: translateY(100%); }
+  #book-performance-drawer.is-open { transform: translateY(0); }
+  .bmd-section { margin-bottom: 26px; }
+  .bmd-heading { margin: 0 0 14px; }
+  .bmd-rail { gap: 6px; }
+  .bmd-rail-num { font-size: 9.5px; }
+  .bmd-row.bmd-row--contact { grid-template-columns: 1fr; }
+}
+
+.bmd-header {
+  flex: none; padding: 22px 26px 16px; border-bottom: 1px solid rgba(239,230,216,.12);
+  position: sticky; top: 0; background: #1c1815; z-index: 2;
+}
+.bmd-header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.bmd-title { font-family: var(--font-display); font-size: 20px; text-transform: uppercase; letter-spacing: -.03em; margin: 0; color: var(--paper); }
+.bmd-sub { font-size: 13px; color: var(--paper-dim); margin: 4px 0 0; }
+.bmd-close {
+  appearance: none; background: none; border: none; cursor: pointer;
+  font-size: 22px; line-height: 1; color: var(--paper-dim); width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center; flex: none;
+}
+.bmd-close:hover { color: var(--paper); }
+
+.bmd-rail { display: flex; align-items: center; gap: 10px; }
+.bmd-rail-step { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
+.bmd-rail-num { font-size: 11px; letter-spacing: .08em; color: var(--paper-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bmd-rail-step.is-complete .bmd-rail-num { color: var(--brass); }
+.bmd-rail-step.is-active .bmd-rail-num { color: var(--gold); }
+.bmd-rail-track { height: 1px; background: rgba(239,230,216,.16); position: relative; }
+.bmd-rail-track::after {
+  content: ""; position: absolute; inset: 0; background: var(--brass); transform-origin: left;
+  transform: scaleX(0); transition: transform .3s ease;
+}
+.bmd-rail-step.is-complete .bmd-rail-track::after,
+.bmd-rail-step.is-active .bmd-rail-track::after { transform: scaleX(1); }
+.bmd-rail-step.is-active .bmd-rail-track::after { background: var(--gold); }
+
+#bmd-form { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+.bmd-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 26px; }
+.bmd-step { display: none; }
+.bmd-step.is-active { display: block; }
+
+.bmd-section { margin-bottom: 32px; }
+.bmd-section:last-child { margin-bottom: 0; }
+.bmd-eyebrow { display: block; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--brass); margin-bottom: 8px; }
+.bmd-heading { font-family: var(--font-display); font-weight: 400; font-size: 19px; color: var(--paper); margin: 0 0 16px; }
+
+.bmd-field { margin-bottom: 16px; }
+.bmd-field:last-child { margin-bottom: 0; }
+.bmd-field label { display: block; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--paper-dim); margin-bottom: 8px; }
+.bmd-field input[type="text"], .bmd-field input[type="email"], .bmd-field input[type="tel"],
+.bmd-field input[type="date"], .bmd-field input[type="time"], .bmd-field textarea, .bmd-field select {
+  width: 100%; background: #12100f; border: 1px solid rgba(239,230,216,.14); border-radius: 12px;
+  padding: 14px; font: inherit; font-size: 14px; color: var(--paper);
+  outline: none; transition: border-color .2s ease;
+}
+.bmd-field select {
+  appearance: none; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23efe6d8' stroke-opacity='.5' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center; padding-right: 34px;
+}
+.bmd-field select option { background: #12100f; color: var(--paper); }
+.bmd-field input::placeholder, .bmd-field textarea::placeholder { color: rgba(239,230,216,.32); }
+.bmd-field input:focus, .bmd-field textarea:focus, .bmd-field select:focus { border-color: rgba(239,230,216,.4); }
+.bmd-field textarea { resize: vertical; min-height: 88px; line-height: 1.5; }
+.bmd-field textarea.bmd-vision { min-height: 140px; }
+.bmd-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+.bmd-inline-hint { display: none; margin: 8px 0 0; font-size: 12px; color: var(--gold); }
+.bmd-inline-hint.is-visible { display: block; }
+
+.bmd-field.has-error input, .bmd-field.has-error textarea, .bmd-field.has-error select { border-color: #d98a8a; }
+.bmd-field.has-error .bmd-pills .bmd-pill:not(.is-selected) { border-color: rgba(217,138,138,.5); }
+.bmd-field.has-error > label { color: #d98a8a; }
+
+.bmd-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.bmd-pill {
+  appearance: none; cursor: pointer; min-height: 36px; padding: 8px 16px;
+  border-radius: 999px; border: 1px solid rgba(239,230,216,.16); background: transparent;
+  color: var(--paper-dim); font: inherit; font-size: 13px; transition: background-color .15s ease, opacity .1s ease;
+}
+.bmd-pill:hover { background: #241f1b; }
+.bmd-pill:active { opacity: .55; }
+.bmd-pill.is-selected { background: var(--velvet-wine); border-color: var(--brass); color: var(--paper); }
+@media (max-width: 860px) { .bmd-pill { min-height: 44px; } }
+
+.bmd-conditional { max-height: 0; overflow: hidden; opacity: 0; margin-top: 0; transition: max-height .3s ease, opacity .25s ease, margin-top .3s ease; }
+.bmd-conditional.is-visible { max-height: 80px; opacity: 1; margin-top: 12px; }
+
+.bmd-slider-wrap { padding-top: 4px; }
+.bmd-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 2px; background: rgba(239,230,216,.16); border-radius: 999px; outline: none; }
+.bmd-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; background: var(--velvet-wine); border: 1px solid var(--brass); border-radius: 3px; cursor: pointer; }
+.bmd-slider::-moz-range-thumb { width: 14px; height: 14px; background: var(--velvet-wine); border: 1px solid var(--brass); border-radius: 3px; cursor: pointer; }
+.bmd-slider-track-glow {
+  height: 2px; border-radius: 999px; margin-top: -2px; pointer-events: none;
+  background: linear-gradient(90deg, var(--brass) var(--bmd-fill, 20%), transparent var(--bmd-fill, 20%));
+  filter: drop-shadow(0 0 var(--bmd-glow, 4px) rgba(201,138,69,var(--bmd-glow-op, .3)));
+}
+.bmd-slider-caption { margin-top: 12px; font-family: var(--font-display); font-size: 15px; color: var(--gold); }
+.bmd-slider-labels { display: flex; justify-content: space-between; margin-top: 10px; font-size: 11px; color: var(--paper-faint); }
+.bmd-slider-value { margin-top: 10px; font-family: var(--font-display); font-size: 15px; color: var(--gold); }
+.bmd-slider-help { margin: 6px 0 0; font-size: 12px; color: var(--paper-faint); }
+
+.bmd-elastic-track {
+  position: relative; height: 2px; background: rgba(239,230,216,.16); border-radius: 999px;
+  margin: 20px 7px 0; cursor: pointer;
+}
+.bmd-elastic-fill { position: absolute; top: 0; left: 0; height: 2px; width: 0%; background: var(--brass); border-radius: 999px; }
+.bmd-elastic-notch { position: absolute; top: 50%; width: 3px; height: 3px; border-radius: 999px; background: rgba(239,230,216,.3); transform: translate(-50%,-50%); }
+.bmd-elastic-thumb {
+  position: absolute; top: 50%; left: 0%; width: 14px; height: 14px;
+  background: var(--velvet-wine); border: 1px solid var(--brass); border-radius: 3px;
+  transform: translate(-50%, -50%); cursor: grab; touch-action: none;
+  transition: left .5s cubic-bezier(.34,1.56,.64,1), transform .4s cubic-bezier(.34,1.56,.64,1);
+}
+.bmd-elastic.is-dragging .bmd-elastic-thumb { cursor: grabbing; transition: none; }
+.bmd-elastic.is-dragging .bmd-elastic-fill { transition: none; }
+
+.bmd-segmented { display: inline-flex; border: 1px solid rgba(239,230,216,.16); border-radius: 999px; padding: 3px; }
+.bmd-seg-cell { appearance: none; cursor: pointer; border: none; background: transparent; color: var(--paper-dim); font: inherit; font-size: 13px; padding: 8px 18px; border-radius: 999px; }
+.bmd-seg-cell.is-selected { background: var(--velvet-wine); color: var(--paper); }
+
+.bmd-date-popover { margin-top: 12px; background: #12100f; border: 1px solid rgba(239,230,216,.14); border-radius: 12px; padding: 14px; }
+.bmd-date-month { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--paper-dim); }
+
+.bmd-footer {
+  flex: none; padding: 18px 26px; border-top: 1px solid rgba(239,230,216,.12); background: #1c1815;
+}
+.bmd-footer-nav { display: flex; gap: 12px; margin-bottom: 12px; }
+.bmd-btn-back {
+  appearance: none; cursor: pointer; background: transparent; border: 1px solid rgba(239,230,216,.16);
+  color: var(--paper-dim); border-radius: 999px; padding: 12px 22px; font: inherit; font-size: 13px;
+}
+.bmd-btn-back:hover { background: #241f1b; }
+.bmd-btn-next, .bmd-btn-submit {
+  appearance: none; cursor: pointer; flex: 1; background: var(--brass); border: none;
+  color: #12100f; border-radius: 999px; padding: 12px 22px; font-family: var(--font-display); font-size: 14px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.bmd-btn-next:hover, .bmd-btn-submit:hover { background: var(--gold); }
+.bmd-btn-submit:disabled { opacity: .6; cursor: not-allowed; }
+.bmd-footer-note { margin: 0; font-size: 12px; color: var(--paper-faint); }
+.bmd-footer-status { margin: 8px 0 0; font-size: 13px; line-height: 1.5; min-height: 1.4em; }
+.bmd-footer-status.is-success { color: #8fbf8f; }
+.bmd-footer-status.is-error { color: #d98a8a; }
+
+body.bmd-open { overflow: hidden; }
 </style>
 </head>
 <body>
@@ -283,13 +433,15 @@
 <section class="perf-hero">
   <div class="perf-hero__copy">
     <span class="perf-hero__eyebrow reveal">Performance</span>
-    <h1 class="perf-hero__title reveal">Mal<br><em>Griot</em></h1>
-    <p class="perf-hero__desc reveal">A live musical performance built from voice, rhythm, looping, poetry and improvisation.</p>
+    <h1 class="perf-hero__title reveal">Mal <em>Griot</em></h1>
+    <p class="perf-hero__desc perf-hero__desc--desktop reveal">A live musical performance built from voice, rhythm, looping, poetry and improvisation.</p>
+    <p class="perf-hero__philosophy reveal">Queens-raised, India-based, trails blazed. Original songs, covers, and spoken word all run through the same practice: voice, loop pedal, and a lifetime moving through different Western genres, arranged live and shaped to the room rather than played the same way twice. Presence over polish. The room finishes the song.</p>
+    <p class="perf-hero__desc perf-hero__desc--mobile reveal">Voice, rhythm, looping and poetry — built live, for the room, every time.</p>
     <div class="perf-hero__ctas reveal" style="display:flex;flex-wrap:wrap;gap:14px">
-      <a href="contact.html" class="perf-cta perf-cta--solid">
+      <button type="button" class="perf-cta perf-cta--solid book-performance-trigger">
         Book the performance
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
+      </button>
       <a href="#watch" class="perf-cta perf-cta--ghost">Watch a set</a>
     </div>
   </div>
@@ -298,101 +450,9 @@
   </div>
 </section>
 
-<section class="perf-section perf-practice">
-  <h2 class="perf-practice__head">
-    <span class="reveal">A song can be performed.</span>
-    <span class="reveal">A room can be performed with.</span>
-  </h2>
-  <p class="perf-practice__body reveal">Mal builds performances in real time — layering voice, rhythm, poetry and instinct into something that only exists for the people in the room.</p>
-</section>
-
-<section class="perf-section perf-fragments" id="fragments">
-  <div class="perf-fragments__head reveal">
-    <div>
-      <span class="perf-fragments__eyebrow">Fragments</span>
-      <h2 class="perf-fragments__title">From the archive</h2>
-    </div>
-    <a href="#watch" class="perf-cta">
-      Watch the live set
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </a>
-  </div>
-
-  <div class="perf-grid reveal" id="perf-fragment-grid">
-    <button type="button" class="perf-tile perf-tile--wide" data-full="img/performance/perf-movement.jpg">
-      <img src="img/performance/perf-movement.jpg" alt="Movement, rhythm and percussion on stage" loading="lazy">
-      <span class="perf-tile__tag">Movement</span>
-    </button>
-    <button type="button" class="perf-tile perf-tile--tall" data-full="img/performance/perf-voice.jpg">
-      <img src="img/performance/perf-voice.jpg" alt="Mal Griot mid-verse, close on the microphone" loading="lazy">
-      <span class="perf-tile__tag">Voice</span>
-    </button>
-    <button type="button" class="perf-tile" data-full="img/performance/perf-rhythm.jpg">
-      <img src="img/performance/perf-rhythm.jpg" alt="Hand drums and percussion under stage light" loading="lazy">
-      <span class="perf-tile__tag">Rhythm</span>
-    </button>
-    <button type="button" class="perf-tile perf-tile--play" data-full="video/performance-hover.mp4" data-type="video">
-      <video src="video/performance-hover.mp4" muted loop playsinline preload="metadata"></video>
-      <span class="perf-tile__tag">Live clip</span>
-    </button>
-    <button type="button" class="perf-tile" data-full="img/performance/perf-portrait.jpg">
-      <img src="img/performance/perf-portrait.jpg" alt="Portrait of Mal Griot backstage" loading="lazy">
-      <span class="perf-tile__tag">Portrait</span>
-    </button>
-    <button type="button" class="perf-tile perf-tile--wide" data-full="img/performance/perf-room.jpg">
-      <img src="img/performance/perf-room.jpg" alt="Mal Griot performing for a seated room at a Sofar Sounds Bombay show" loading="lazy">
-      <span class="perf-tile__tag">The room</span>
-    </button>
-    <button type="button" class="perf-tile perf-tile--tall" data-full="img/performance/perf-solo-blue.jpg">
-      <img src="img/performance/perf-solo-blue.jpg" alt="Mal Griot singing under a single stage light" loading="lazy">
-      <span class="perf-tile__tag">Solo</span>
-    </button>
-    <button type="button" class="perf-tile perf-tile--wide" data-full="img/performance/perf-ensemble.jpg">
-      <img src="img/performance/perf-ensemble.jpg" alt="Mal Griot on stage with a percussionist and a hand-drum player" loading="lazy">
-      <span class="perf-tile__tag">Full band</span>
-    </button>
-    <button type="button" class="perf-tile" data-full="img/performance/perf-address.jpg">
-      <img src="img/performance/perf-address.jpg" alt="Mal Griot addressing the room mid-set" loading="lazy">
-      <span class="perf-tile__tag">In the moment</span>
-    </button>
-    <button type="button" class="perf-tile" data-full="img/performance/perf-backstage.jpg">
-      <img src="img/performance/perf-backstage.jpg" alt="Mal Griot in the gear room before a Sofar Sounds Bombay set" loading="lazy">
-      <span class="perf-tile__tag">Before the set</span>
-    </button>
-    <button type="button" class="perf-tile perf-tile--wide" data-full="img/performance/perf-crowd.jpg">
-      <img src="img/performance/perf-crowd.jpg" alt="Wide view of Mal Griot performing for a full room at a Sofar Sounds Bombay show" loading="lazy">
-      <span class="perf-tile__tag">The crowd</span>
-    </button>
-    <button type="button" class="perf-tile perf-tile--tall" data-full="img/performance/perf-grit.jpg">
-      <img src="img/performance/perf-grit.jpg" alt="Mal Griot singing under red stage light" loading="lazy">
-      <span class="perf-tile__tag">Grit</span>
-    </button>
-    <button type="button" class="perf-tile" data-full="img/performance/perf-joy.jpg">
-      <img src="img/performance/perf-joy.jpg" alt="Mal Griot mid-performance, arm raised" loading="lazy">
-      <span class="perf-tile__tag">Joy</span>
-    </button>
-    <button type="button" class="perf-tile" data-full="img/performance/perf-openair.jpg">
-      <img src="img/performance/perf-openair.jpg" alt="Mal Griot performing outdoors under coloured light" loading="lazy">
-      <span class="perf-tile__tag">Open air</span>
-    </button>
-  </div>
-</section>
-
-<section class="perf-section perf-watch" id="watch">
-  <div class="perf-watch__head reveal">
-    <span class="perf-fragments__eyebrow">Watch</span>
-    <h2 class="perf-fragments__title">A set, in full</h2>
-  </div>
-  <div class="perf-watch__grid reveal">
-    <div class="perf-watch__main">
-      <video src="video/hosting-reel/sofar-6.mp4" poster="video/hosting-reel/sofar-6-poster.jpg" controls playsinline preload="none"></video>
-      <span class="perf-watch__label"><b>Sofar Sounds</b><span>Bombay</span></span>
-    </div>
-    <div class="perf-watch__side">
-      <video src="video/hosting-reel/deep-dawn.mp4" poster="video/hosting-reel/deep-dawn-poster.jpg" controls playsinline preload="none"></video>
-      <span class="perf-watch__label"><b>Full band</b><span>Live</span></span>
-    </div>
-  </div>
+<section class="sv-wrap" aria-label="Genres sung, created and covered">
+  <div class="sv-row" data-base-speed="-38" data-text="AFRO-HOUSE ✦ FUNK ✦ SOUL ✦ HIP-HOP ✦ NEO-SOUL ✦&nbsp;"></div>
+  <div class="sv-row sv-row--fill" data-base-speed="30" data-text="JAZZ ✦ R&amp;B ✦ SPOKEN WORD ✦ AMBIENT ✦ CINEMATIC ✦&nbsp;"></div>
 </section>
 
 <section class="perf-section perf-sets">
@@ -443,48 +503,144 @@
   </div>
 </section>
 
-<section class="perf-section perf-fits">
-  <h2 class="perf-fits__title reveal">Where it fits</h2>
-  <div class="perf-fits__grid reveal">
-    <div class="perf-fit">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 20l4-14 4 10 3-7 3 5 4-9"/></svg>
-      <span>Festivals</span>
+<section class="perf-section perf-practice">
+  <h2 class="perf-practice__head">
+    <span class="reveal">A song can be performed.</span>
+    <span class="reveal">A room can be performed with.</span>
+  </h2>
+  <p class="perf-practice__body reveal">Mal builds performances in real time — layering voice, rhythm, poetry and instinct into something that only exists for the people in the room.</p>
+</section>
+
+<section class="perf-section perf-fragments" id="fragments">
+  <div class="perf-fragments__head reveal">
+    <div>
+      <span class="perf-fragments__eyebrow">Fragments</span>
+      <h2 class="perf-fragments__title">From the archive</h2>
     </div>
-    <div class="perf-fit">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 18V6l16-3v15"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="16" r="2"/></svg>
-      <span>Concerts</span>
+    <a href="#watch" class="perf-cta">
+      Watch the live set
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+
+  <div class="perf-grid reveal" id="perf-fragment-grid">
+    <button type="button" class="perf-tile perf-tile--wide" data-full="img/performance/perf-movement.jpg">
+      <img src="img/performance/perf-movement.jpg" alt="Movement, rhythm and percussion on stage" loading="lazy">
+      <span class="perf-tile__tag">Movement</span>
+    </button>
+    <button type="button" class="perf-tile perf-tile--tall" data-full="img/performance/perf-voice.jpg">
+      <img src="img/performance/perf-voice.jpg" alt="Mal Griot mid-verse, close on the microphone" loading="lazy">
+      <span class="perf-tile__tag">Voice</span>
+    </button>
+    <button type="button" class="perf-tile" data-full="img/performance/perf-rhythm.jpg">
+      <img src="img/performance/perf-rhythm.jpg" alt="Hand drums and percussion under stage light" loading="lazy">
+      <span class="perf-tile__tag">Rhythm</span>
+    </button>
+    <button type="button" class="perf-tile perf-tile--play" data-full="video/performance-hover.mp4" data-type="video">
+      <video src="video/performance-hover.mp4" muted loop playsinline preload="metadata"></video>
+      <span class="perf-tile__tag">Live clip</span>
+    </button>
+    <button type="button" class="perf-tile" data-full="img/performance/perf-portrait.jpg">
+      <img src="img/performance/perf-portrait.jpg" alt="Portrait of Mal Griot backstage" loading="lazy">
+      <span class="perf-tile__tag">Portrait</span>
+    </button>
+    <button type="button" class="perf-tile perf-tile--wide" data-full="img/performance/perf-room.jpg">
+      <img src="img/performance/perf-room.jpg" alt="Mal Griot performing for a seated room at a Sofar Sounds Bombay show" loading="lazy">
+      <span class="perf-tile__tag">The room</span>
+    </button>
+    <button type="button" class="perf-tile perf-tile--tall" data-full="img/performance/perf-archive-nivid.jpg">
+      <img src="img/performance/perf-archive-nivid.jpg" alt="Mal Griot performing for a seated room at a Sofar Sounds Bombay show" loading="lazy">
+      <span class="perf-tile__tag">Bombay</span>
+    </button>
+    <button type="button" class="perf-tile perf-tile--wide" data-full="img/performance/perf-archive-kgl.jpg">
+      <img src="img/performance/perf-archive-kgl.jpg" alt="Mal Griot performing at Kalabhumi Goes Live, Auroville" loading="lazy">
+      <span class="perf-tile__tag">Auroville</span>
+    </button>
+    <button type="button" class="perf-tile" data-full="img/performance/perf-address.jpg">
+      <img src="img/performance/perf-address.jpg" alt="Mal Griot addressing the room mid-set" loading="lazy">
+      <span class="perf-tile__tag">In the moment</span>
+    </button>
+    <button type="button" class="perf-tile" data-full="img/performance/perf-backstage.jpg">
+      <img src="img/performance/perf-backstage.jpg" alt="Mal Griot in the gear room before a Sofar Sounds Bombay set" loading="lazy">
+      <span class="perf-tile__tag">Before the set</span>
+    </button>
+    <button type="button" class="perf-tile perf-tile--tall" data-full="img/performance/perf-grit.jpg">
+      <img src="img/performance/perf-grit.jpg" alt="Mal Griot singing under red stage light" loading="lazy">
+      <span class="perf-tile__tag">Grit</span>
+    </button>
+    <button type="button" class="perf-tile" data-full="img/performance/perf-joy.jpg">
+      <img src="img/performance/perf-joy.jpg" alt="Mal Griot mid-performance, arm raised" loading="lazy">
+      <span class="perf-tile__tag">Joy</span>
+    </button>
+    <button type="button" class="perf-tile" data-full="img/performance/perf-openair.jpg">
+      <img src="img/performance/perf-openair.jpg" alt="Mal Griot performing outdoors under coloured light" loading="lazy">
+      <span class="perf-tile__tag">Open air</span>
+    </button>
+  </div>
+</section>
+
+<section class="perf-section perf-watch" id="watch">
+  <div class="perf-watch__head reveal">
+    <span class="perf-fragments__eyebrow">Watch</span>
+    <h2 class="perf-fragments__title">A set, in full</h2>
+  </div>
+  <div class="perf-watch__grid reveal">
+    <div class="perf-watch__main">
+      <video src="video/hosting-reel/sofar-6.mp4" poster="video/hosting-reel/sofar-6-poster.jpg" controls playsinline preload="none"></video>
+      <span class="perf-watch__label"><b>Sofar Sounds</b><span>Bombay</span></span>
     </div>
-    <div class="perf-fit">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg>
-      <span>Cultural programmes</span>
-    </div>
-    <div class="perf-fit">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>
-      <span>Listening rooms</span>
-    </div>
-    <div class="perf-fit">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 15l5-10 5 6 3-4 5 8z"/></svg>
-      <span>Art spaces</span>
-    </div>
-    <div class="perf-fit">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3l2.6 5.6 6.1.6-4.6 4.2 1.3 6-5.4-3.2-5.4 3.2 1.3-6-4.6-4.2 6.1-.6z"/></svg>
-      <span>Private events</span>
+    <div class="perf-watch__side">
+      <video src="video/hosting-reel/deep-dawn.mp4" poster="video/hosting-reel/deep-dawn-poster.jpg" controls playsinline preload="none"></video>
+      <span class="perf-watch__label"><b>Full band</b><span>Live</span></span>
     </div>
   </div>
 </section>
 
-<section class="perf-section perf-archive" id="archive">
-  <div class="perf-archive__head reveal">
-    <span class="perf-fragments__eyebrow">Live archive</span>
-    <h2 class="perf-fragments__title">Where Mal has performed</h2>
-    <p class="perf-archive__sub">From a Nita Mukesh Ambani Cultural Centre stage to a Sofar Sounds room in Bombay — solo sets, full-band shows, and hosted nights across India, the US and Australia.</p>
-  </div>
-  <div class="perf-archive__grid reveal" id="perf-archive-grid"></div>
-
-  <div class="perf-stages reveal">
-    <h3 class="perf-stages__title">Also on the stage</h3>
-    <p class="perf-stages__sub">A partial list, ranked by name recognition rather than date.</p>
-    <ol class="perf-stages__list" id="perf-stages-list"></ol>
+<section class="perf-section perf-fits" id="fits">
+  <h2 class="perf-fits__title reveal">Where it fits</h2>
+  <div class="dw-grid reveal">
+    <button type="button" class="dw-tile">
+      <span class="dw-tile__media">
+        <img src="img/performance/perf-fit-festivals.jpg" alt="Mal Griot performing on a festival stage" loading="lazy">
+        <video src="video/hosting-reel/deep-dawn.mp4" muted loop playsinline preload="none"></video>
+      </span>
+      <span class="dw-tile__label"><span>Festivals</span><span class="dw-tile__timer"><svg viewBox="0 0 24 24"><circle class="dw-timer-track" cx="12" cy="12" r="9"/><circle class="dw-timer-progress" cx="12" cy="12" r="9"/></svg></span></span>
+    </button>
+    <button type="button" class="dw-tile">
+      <span class="dw-tile__media">
+        <img src="img/performance/perf-fit-concerts.jpg" alt="Mal Griot mid-verse on a concert stage" loading="lazy">
+        <video src="video/performance-hover.mp4" muted loop playsinline preload="none"></video>
+      </span>
+      <span class="dw-tile__label"><span>Concerts</span><span class="dw-tile__timer"><svg viewBox="0 0 24 24"><circle class="dw-timer-track" cx="12" cy="12" r="9"/><circle class="dw-timer-progress" cx="12" cy="12" r="9"/></svg></span></span>
+    </button>
+    <button type="button" class="dw-tile">
+      <span class="dw-tile__media">
+        <img src="img/performance/perf-fit-cultural.jpg" alt="Mal Griot performing for a seated room at a Sofar Sounds Bombay show" loading="lazy">
+        <video src="video/hosting-reel/sofar-6.mp4" muted loop playsinline preload="none"></video>
+      </span>
+      <span class="dw-tile__label"><span>Cultural programmes</span><span class="dw-tile__timer"><svg viewBox="0 0 24 24"><circle class="dw-timer-track" cx="12" cy="12" r="9"/><circle class="dw-timer-progress" cx="12" cy="12" r="9"/></svg></span></span>
+    </button>
+    <button type="button" class="dw-tile">
+      <span class="dw-tile__media">
+        <img src="img/performance/perf-fit-listening.jpg" alt="Close portrait of Mal Griot, quiet and intent" loading="lazy">
+        <video src="video/hosting-reel/deep-dawn.mp4" muted loop playsinline preload="none"></video>
+      </span>
+      <span class="dw-tile__label"><span>Listening rooms</span><span class="dw-tile__timer"><svg viewBox="0 0 24 24"><circle class="dw-timer-track" cx="12" cy="12" r="9"/><circle class="dw-timer-progress" cx="12" cy="12" r="9"/></svg></span></span>
+    </button>
+    <button type="button" class="dw-tile">
+      <span class="dw-tile__media">
+        <img src="img/performance/perf-fit-artspaces.jpg" alt="Mal Griot performing at Kalabhumi Goes Live, Auroville" loading="lazy">
+        <video src="video/performance-hover.mp4" muted loop playsinline preload="none"></video>
+      </span>
+      <span class="dw-tile__label"><span>Art spaces</span><span class="dw-tile__timer"><svg viewBox="0 0 24 24"><circle class="dw-timer-track" cx="12" cy="12" r="9"/><circle class="dw-timer-progress" cx="12" cy="12" r="9"/></svg></span></span>
+    </button>
+    <button type="button" class="dw-tile">
+      <span class="dw-tile__media">
+        <img src="img/performance/perf-fit-private.jpg" alt="Styled portrait of Mal Griot for a private booking" loading="lazy">
+        <video src="video/hosting-reel/sofar-6.mp4" muted loop playsinline preload="none"></video>
+      </span>
+      <span class="dw-tile__label"><span>Private events</span><span class="dw-tile__timer"><svg viewBox="0 0 24 24"><circle class="dw-timer-track" cx="12" cy="12" r="9"/><circle class="dw-timer-progress" cx="12" cy="12" r="9"/></svg></span></span>
+    </button>
   </div>
 </section>
 
@@ -502,11 +658,11 @@
 <section class="perf-section perf-final">
   <h2 class="perf-final__title reveal">See you in the room.</h2>
   <div class="perf-final__ctas reveal">
-    <a href="contact.html" class="perf-cta perf-cta--solid">
+    <button type="button" class="perf-cta perf-cta--solid book-performance-trigger">
       Book the performance
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </a>
-    <a href="#archive" class="perf-cta perf-cta--ghost">Where Mal has played</a>
+    </button>
+    <a href="#fits" class="perf-cta perf-cta--ghost">Where it fits</a>
   </div>
 </section>
 
@@ -516,12 +672,269 @@
   </div>
 </div>
 
+<div id="book-performance-scrim"></div>
+<aside id="book-performance-drawer" aria-hidden="true" aria-label="Book the performance">
+  <div class="bmd-header">
+    <div class="bmd-header-top">
+      <div>
+        <h2 class="bmd-title">Book the Performance</h2>
+        <p class="bmd-sub">A few details about the room and the night.</p>
+      </div>
+      <button type="button" class="bmd-close" id="bpd-close" aria-label="Close">&times;</button>
+    </div>
+    <div class="bmd-rail" id="bpd-rail">
+      <div class="bmd-rail-step is-active" data-step="1">
+        <span class="bmd-rail-num">01–02 The Set</span>
+        <div class="bmd-rail-track"></div>
+      </div>
+      <div class="bmd-rail-step" data-step="2">
+        <span class="bmd-rail-num">03 Audience</span>
+        <div class="bmd-rail-track"></div>
+      </div>
+      <div class="bmd-rail-step" data-step="3">
+        <span class="bmd-rail-num">04–05 Vision</span>
+        <div class="bmd-rail-track"></div>
+      </div>
+      <div class="bmd-rail-step" data-step="4">
+        <span class="bmd-rail-num">06–08 Booking</span>
+        <div class="bmd-rail-track"></div>
+      </div>
+    </div>
+  </div>
+
+  <form id="bmd-form" novalidate>
+    <input type="hidden" name="access_key" value="44f58f9f-ee75-4735-a37b-8b1caca96106">
+    <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+    <input type="hidden" name="subject" value="New booking request — Book the Performance">
+
+    <div class="bmd-body">
+      <div class="bmd-step is-active" data-step="1">
+        <div class="bmd-section">
+          <span class="bmd-eyebrow">§01</span>
+          <h3 class="bmd-heading">What's the performance for?</h3>
+          <div class="bmd-field">
+            <label for="bpd-event-type">Event type</label>
+            <select id="bpd-event-type" name="event_type" required>
+              <option value="" disabled selected>Select an event type</option>
+              <option>Concert</option>
+              <option>Festival</option>
+              <option>Club night / curated series</option>
+              <option>Listening room</option>
+              <option>Gallery / art space</option>
+              <option>Cultural programme</option>
+              <option>Spiritual / ceremonial gathering</option>
+              <option>Wedding ceremony</option>
+              <option>Wedding reception</option>
+              <option>Private party</option>
+              <option>Corporate event</option>
+              <option>Brand activation</option>
+              <option>Fundraiser / gala</option>
+              <option>Album release / listening party</option>
+              <option>Open mic / showcase</option>
+              <option>House concert</option>
+              <option>University / campus event</option>
+              <option>Other</option>
+            </select>
+            <p class="bmd-inline-hint" id="bpd-event-type-hint">Describe the event in the description field below.</p>
+          </div>
+          <div class="bmd-field">
+            <label for="bpd-event-name">Event name</label>
+            <input type="text" id="bpd-event-name" name="event_name" placeholder="What's it called?">
+          </div>
+          <div class="bmd-field">
+            <label for="bpd-event-desc">Description</label>
+            <textarea id="bpd-event-desc" name="event_description" placeholder="A few lines on what this is."></textarea>
+          </div>
+        </div>
+
+        <div class="bmd-section">
+          <span class="bmd-eyebrow">§02</span>
+          <h3 class="bmd-heading">Which set are they picturing?</h3>
+          <div class="bmd-field">
+            <label>Set format</label>
+            <div class="bmd-pills" data-pill-group="set_format" data-select="single">
+              <button type="button" class="bmd-pill">Solo live set</button>
+              <button type="button" class="bmd-pill">Acoustic / intimate</button>
+              <button type="button" class="bmd-pill">Full performance</button>
+              <button type="button" class="bmd-pill">Custom set</button>
+              <button type="button" class="bmd-pill">Not sure yet</button>
+            </div>
+            <input type="hidden" name="set_format">
+          </div>
+          <div class="bmd-field">
+            <label>How much energy should the set carry?</label>
+            <div class="bmd-elastic" id="bpd-energy" role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="4" aria-valuenow="2" aria-label="Set energy level">
+              <div class="bmd-elastic-track">
+                <div class="bmd-elastic-fill" id="bpd-energy-fill"></div>
+                <div class="bmd-elastic-notch" style="left:0%"></div>
+                <div class="bmd-elastic-notch" style="left:25%"></div>
+                <div class="bmd-elastic-notch" style="left:50%"></div>
+                <div class="bmd-elastic-notch" style="left:75%"></div>
+                <div class="bmd-elastic-notch" style="left:100%"></div>
+                <div class="bmd-elastic-thumb" id="bpd-energy-thumb"></div>
+              </div>
+              <p class="bmd-slider-caption" id="bpd-energy-caption">Lively</p>
+            </div>
+            <input type="hidden" name="energy" value="Lively">
+          </div>
+        </div>
+      </div>
+
+      <div class="bmd-step" data-step="2">
+        <div class="bmd-section">
+          <span class="bmd-eyebrow">§03</span>
+          <h3 class="bmd-heading">The crowd</h3>
+          <div class="bmd-field">
+            <label>Audience size</label>
+            <div class="bmd-slider-wrap">
+              <input type="range" class="bmd-slider" id="bpd-size" min="0" max="4" step="1" value="1">
+              <div class="bmd-slider-track-glow" id="bpd-size-glow"></div>
+              <div class="bmd-slider-labels"><span>Under 50</span><span>100</span><span>250</span><span>500</span><span>1,000+</span></div>
+            </div>
+            <input type="hidden" name="audience_size" value="100">
+          </div>
+          <div class="bmd-field">
+            <label>Audience context</label>
+            <div class="bmd-pills" data-pill-group="audience_context" data-select="single">
+              <button type="button" class="bmd-pill">Concert crowd</button>
+              <button type="button" class="bmd-pill">Festival crowd</button>
+              <button type="button" class="bmd-pill">Wedding guests</button>
+              <button type="button" class="bmd-pill">Private / invite-only</button>
+              <button type="button" class="bmd-pill">Listening room (seated)</button>
+              <button type="button" class="bmd-pill">Gallery / art crowd</button>
+              <button type="button" class="bmd-pill">Corporate</button>
+              <button type="button" class="bmd-pill">Cultural / community</button>
+              <button type="button" class="bmd-pill">Spiritual / ceremonial</button>
+              <button type="button" class="bmd-pill">Mixed public</button>
+            </div>
+            <input type="hidden" name="audience_context">
+          </div>
+        </div>
+      </div>
+
+      <div class="bmd-step" data-step="3">
+        <div class="bmd-section">
+          <span class="bmd-eyebrow">§04</span>
+          <h3 class="bmd-heading">What should the set feel like?</h3>
+          <div class="bmd-field">
+            <label for="bpd-vision">How do they see it going</label>
+            <textarea id="bpd-vision" name="vision" class="bmd-vision" placeholder="Mood, moments to hit, sound system / stage setup, anything they're picturing."></textarea>
+          </div>
+        </div>
+        <div class="bmd-section">
+          <span class="bmd-eyebrow">§05</span>
+          <h3 class="bmd-heading">How did they find Mal?</h3>
+          <div class="bmd-field">
+            <div class="bmd-pills" data-pill-group="referral" data-select="single">
+              <button type="button" class="bmd-pill">Instagram</button>
+              <button type="button" class="bmd-pill">Referral</button>
+              <button type="button" class="bmd-pill">Google search</button>
+              <button type="button" class="bmd-pill">Past show</button>
+              <button type="button" class="bmd-pill">Website</button>
+              <button type="button" class="bmd-pill">Other</button>
+            </div>
+            <input type="hidden" name="referral">
+            <div class="bmd-conditional" id="bpd-referral-who-wrap">
+              <input type="text" id="bpd-referral-who" name="referral_who" placeholder="Who?">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bmd-step" data-step="4">
+        <div class="bmd-section">
+          <span class="bmd-eyebrow">§06</span>
+          <h3 class="bmd-heading">When &amp; where</h3>
+          <div class="bmd-field">
+            <label>Date</label>
+            <div class="bmd-segmented" data-segment-group="date_flexible">
+              <button type="button" class="bmd-seg-cell is-selected" data-value="Fixed date">Fixed date</button>
+              <button type="button" class="bmd-seg-cell" data-value="Flexible">Flexible</button>
+            </div>
+            <input type="hidden" name="date_flexible" value="Fixed date">
+            <div class="bmd-date-popover">
+              <div class="bmd-date-month">Event date</div>
+              <input type="date" id="bpd-date" name="event_date" style="margin-top:10px">
+            </div>
+          </div>
+          <div class="bmd-row">
+            <div class="bmd-field">
+              <label for="bpd-start-time">Start time</label>
+              <input type="time" id="bpd-start-time" name="start_time">
+            </div>
+            <div class="bmd-field">
+              <label for="bpd-end-time">End time</label>
+              <input type="time" id="bpd-end-time" name="end_time">
+            </div>
+          </div>
+          <div class="bmd-field">
+            <label for="bpd-location">Location</label>
+            <input type="text" id="bpd-location" name="location" placeholder="Venue, city, or TBD">
+          </div>
+        </div>
+
+        <div class="bmd-section">
+          <span class="bmd-eyebrow">§07</span>
+          <h3 class="bmd-heading">Budget</h3>
+          <div class="bmd-field">
+            <div class="bmd-slider-wrap">
+              <input type="range" class="bmd-slider" id="bpd-budget" min="0" max="5" step="1" value="2">
+              <div class="bmd-slider-track-glow" id="bpd-budget-glow"></div>
+              <p class="bmd-slider-value" id="bpd-budget-value">$10K</p>
+            </div>
+            <p class="bmd-slider-help">Don't know yet? That's okay.</p>
+            <input type="hidden" name="budget" value="$10K">
+          </div>
+        </div>
+
+        <div class="bmd-section">
+          <span class="bmd-eyebrow">§08</span>
+          <h3 class="bmd-heading">Contact</h3>
+          <div class="bmd-row bmd-row--contact">
+            <div class="bmd-field">
+              <label for="bpd-name">Name</label>
+              <input type="text" id="bpd-name" name="name" placeholder="Full name" required>
+            </div>
+            <div class="bmd-field">
+              <label for="bpd-email">Email</label>
+              <input type="email" id="bpd-email" name="email" placeholder="you@example.com" required>
+            </div>
+          </div>
+          <div class="bmd-row bmd-row--contact">
+            <div class="bmd-field">
+              <label for="bpd-phone">Phone</label>
+              <input type="tel" id="bpd-phone" name="phone" placeholder="Optional">
+            </div>
+            <div class="bmd-field">
+              <label for="bpd-company">Company / organization</label>
+              <input type="text" id="bpd-company" name="company" placeholder="Optional">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bmd-footer">
+      <div class="bmd-footer-nav">
+        <button type="button" class="bmd-btn-back" id="bpd-back" style="display:none">Back</button>
+        <button type="button" class="bmd-btn-next" id="bpd-next">Next</button>
+        <button type="submit" class="bmd-btn-submit" id="bpd-submit" style="display:none">Let's make it happen →</button>
+      </div>
+      <p class="bmd-footer-note">Mal will get back to them with next steps.</p>
+      <p class="bmd-footer-status" id="bpd-status" role="status" aria-live="polite"></p>
+    </div>
+  </form>
+</aside>
+
 <div id="chrome-footer"></div>
 <div id="chrome-chat"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="shared.js"></script>
 <script src="chat.js"></script>
 <script src="effects.js"></script>
+<script src="scroll-velocity.js"></script>
+<script src="drift-wall.js"></script>
 <script>renderChrome('performance');</script>
 <script>
 // Fragments lightbox — click any tile to expand image/video full-size.
@@ -565,74 +978,366 @@
 })();
 </script>
 <script>
-// Live archive — rendered from small arrays so future performances can be
-// added without touching markup. Dates are deliberately omitted throughout
-// (per the artist's own call) — only venue/event and place are shown.
+// Book the Performance drawer — step wizard, pills, sliders, segmented
+// control, submit. Same mechanics as Hosting's "Book Mal" drawer, ported
+// to this page's own trigger/scrim/drawer ids and field set.
 (function () {
-  var grid = document.getElementById('perf-archive-grid');
-  if (!grid) return;
+  var triggers = document.querySelectorAll('.book-performance-trigger');
+  var scrim = document.getElementById('book-performance-scrim');
+  var drawer = document.getElementById('book-performance-drawer');
+  var closeBtn = document.getElementById('bpd-close');
+  var backBtn = document.getElementById('bpd-back');
+  var nextBtn = document.getElementById('bpd-next');
+  var submitBtn = document.getElementById('bpd-submit');
+  var form = document.getElementById('bmd-form');
+  var status = document.getElementById('bpd-status');
+  if (!triggers.length || !drawer || !form) return;
 
-  var PERFORMANCES = [
-    {
-      img: 'img/performance/perf-archive-sofar.jpg',
-      event: 'Sofar Sounds',
-      place: 'Bombay'
-    },
-    {
-      img: 'img/performance/perf-archive-kgl.jpg',
-      event: 'Kalabhumi Goes Live',
-      place: 'Auroville'
-    }
-  ];
+  var STEP_COUNT = 4;
+  var step = 1;
 
-  PERFORMANCES.forEach(function (p) {
-    var el = document.createElement('button');
-    el.type = 'button';
-    el.className = 'perf-arch-item';
-    el.innerHTML =
-      '<img src="' + p.img + '" alt="' + p.event + ', ' + p.place + '" loading="lazy">' +
-      '<span class="perf-arch-item__scrim"></span>' +
-      '<span class="perf-arch-item__meta">' +
-        '<span class="perf-arch-item__event">' + p.event + '</span>' +
-        '<span class="perf-arch-item__place">' + p.place + '</span>' +
-      '</span>';
-    el.addEventListener('click', function () {
-      var frame = document.getElementById('perf-lightbox-frame');
-      frame.querySelectorAll('img, video').forEach(function (n) { n.remove(); });
-      var img = document.createElement('img');
-      img.src = p.img; img.alt = p.event;
-      frame.appendChild(img);
-      document.getElementById('perf-lightbox').classList.add('is-open');
-    });
-    grid.appendChild(el);
+  var EMAILJS_PUBLIC_KEY = '7t9ZB4xchbX4LZxy2';
+  var EMAILJS_SERVICE_ID = 'service_0tadrgl';
+  var EMAILJS_TEMPLATE_ID = 'template_mtilkov';
+  if (window.emailjs) emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+  function openDrawer() {
+    scrim.classList.add('is-open');
+    drawer.classList.add('is-open');
+    drawer.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('bmd-open');
+  }
+  function closeDrawer() {
+    scrim.classList.remove('is-open');
+    drawer.classList.remove('is-open');
+    drawer.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('bmd-open');
+  }
+
+  triggers.forEach(function (t) { t.addEventListener('click', openDrawer); });
+  closeBtn.addEventListener('click', closeDrawer);
+  scrim.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && drawer.classList.contains('is-open')) closeDrawer();
   });
 
-  // Ranked by name recognition for a booker, not chronology — per the
-  // artist's own note that dates aren't the point here.
-  var STAGES = [
-    'NMACC, Mumbai',
-    'Soho House, Mumbai',
-    'New York City',
-    'Chicago',
-    'Atlanta',
-    'Australia',
-    'Jawaharlal Nehru Memorial Hall',
-    'CRIPA'
-  ];
+  function goToStep(n) {
+    step = Math.max(1, Math.min(STEP_COUNT, n));
+    form.querySelectorAll('.bmd-step').forEach(function (el) {
+      el.classList.toggle('is-active', Number(el.dataset.step) === step);
+    });
+    document.querySelectorAll('#bpd-rail .bmd-rail-step').forEach(function (el) {
+      var n2 = Number(el.dataset.step);
+      el.classList.toggle('is-active', n2 === step);
+      el.classList.toggle('is-complete', n2 < step);
+    });
+    backBtn.style.display = step === 1 ? 'none' : '';
+    nextBtn.style.display = step === STEP_COUNT ? 'none' : '';
+    submitBtn.style.display = step === STEP_COUNT ? '' : 'none';
+    form.querySelector('.bmd-body').scrollTop = 0;
+  }
+  backBtn.addEventListener('click', function () { goToStep(step - 1); });
 
-  var list = document.getElementById('perf-stages-list');
-  if (list) {
-    STAGES.forEach(function (name, i) {
-      var li = document.createElement('li');
-      li.className = 'perf-stage-row';
-      li.innerHTML =
-        '<span class="perf-stage-row__index">' + String(i + 1).padStart(2, '0') + '</span>' +
-        '<span class="perf-stage-row__name">' + name + '</span>';
-      list.appendChild(li);
+  // ---------- field-level error state ----------
+  function fieldWrap(el) { return el && el.closest('.bmd-field'); }
+  function markError(el) { var w = fieldWrap(el); if (w) w.classList.add('has-error'); }
+  function clearError(el) { var w = fieldWrap(el); if (w) w.classList.remove('has-error'); }
+
+  form.querySelectorAll('.bmd-body input, .bmd-body textarea, .bmd-body select').forEach(function (el) {
+    el.addEventListener('input', function () { clearError(el); });
+    el.addEventListener('change', function () { clearError(el); });
+  });
+
+  // ---------- pills — single- or multi-select per group ----------
+  form.querySelectorAll('[data-pill-group]').forEach(function (group) {
+    var name = group.dataset.pillGroup;
+    var multi = group.dataset.select === 'multi';
+    var hidden = group.parentElement.querySelector('input[type="hidden"][name="' + name + '"]');
+    group.querySelectorAll('.bmd-pill').forEach(function (pill) {
+      pill.addEventListener('click', function () {
+        if (multi) {
+          pill.classList.toggle('is-selected');
+        } else {
+          group.querySelectorAll('.bmd-pill').forEach(function (p) { p.classList.remove('is-selected'); });
+          pill.classList.add('is-selected');
+        }
+        var selected = Array.prototype.filter.call(group.querySelectorAll('.bmd-pill'), function (p) {
+          return p.classList.contains('is-selected');
+        }).map(function (p) { return p.textContent.trim(); });
+        if (hidden) hidden.value = selected.join(', ');
+        clearError(group);
+      });
+    });
+  });
+
+  // s01: choosing "Other" surfaces a hint pointing at the description field.
+  var eventType = document.getElementById('bpd-event-type');
+  var eventTypeHint = document.getElementById('bpd-event-type-hint');
+  if (eventType && eventTypeHint) {
+    eventType.addEventListener('change', function () {
+      eventTypeHint.classList.toggle('is-visible', eventType.value === 'Other');
+      clearError(eventType);
     });
   }
+
+  // s05: "Referral" or "Other" reveals a short "Who?" field beneath the
+  // pills; anything else retracts it. Optional — never validated.
+  var referralGroup = form.querySelector('[data-pill-group="referral"]');
+  var referralWhoWrap = document.getElementById('bpd-referral-who-wrap');
+  var referralWhoInput = document.getElementById('bpd-referral-who');
+  if (referralGroup && referralWhoWrap) {
+    referralGroup.addEventListener('click', function (e) {
+      if (!e.target.classList.contains('bmd-pill')) return;
+      var text = e.target.textContent.trim();
+      var show = text === 'Referral' || text === 'Other';
+      referralWhoWrap.classList.toggle('is-visible', show);
+      if (!show) referralWhoInput.value = '';
+    });
+  }
+
+  // ---------- segmented control (date flexible) ----------
+  form.querySelectorAll('[data-segment-group]').forEach(function (group) {
+    var hidden = group.parentElement.querySelector('input[type="hidden"][name="' + group.dataset.segmentGroup + '"]');
+    group.querySelectorAll('.bmd-seg-cell').forEach(function (cell) {
+      cell.addEventListener('click', function () {
+        group.querySelectorAll('.bmd-seg-cell').forEach(function (c) { c.classList.remove('is-selected'); });
+        cell.classList.add('is-selected');
+        if (hidden) hidden.value = cell.dataset.value;
+      });
+    });
+  });
+
+  // ---------- native range sliders (audience size, budget) ----------
+  function bindSlider(rangeId, glowId, opts) {
+    var range = document.getElementById(rangeId);
+    var glow = document.getElementById(glowId);
+    if (!range) return;
+    var hidden = form.querySelector('input[type="hidden"][name="' + opts.name + '"]');
+    var min = Number(range.min), max = Number(range.max);
+    function update() {
+      var v = Number(range.value);
+      var pct = ((v - min) / (max - min)) * 100;
+      if (glow) {
+        glow.style.setProperty('--bmd-fill', pct + '%');
+        glow.style.setProperty('--bmd-glow', (3 + pct / 12) + 'px');
+        glow.style.setProperty('--bmd-glow-op', (.2 + pct / 220).toFixed(2));
+      }
+      var label = opts.label(v);
+      if (opts.caption) opts.caption.textContent = label;
+      if (hidden) hidden.value = label;
+    }
+    range.addEventListener('input', update);
+    update();
+  }
+
+  bindSlider('bpd-size', 'bpd-size-glow', {
+    name: 'audience_size',
+    label: function (v) { return ['Under 50', '100', '250', '500', '1,000+'][v]; }
+  });
+  bindSlider('bpd-budget', 'bpd-budget-glow', {
+    name: 'budget',
+    caption: document.getElementById('bpd-budget-value'),
+    label: function (v) { return ['$1K', '$5K', '$10K', '$15K', '$20K', '$25K+'][v]; }
+  });
+
+  // ---------- energy slider — custom elastic drag ----------
+  (function initEnergySlider() {
+    var root = document.getElementById('bpd-energy');
+    var track = root && root.querySelector('.bmd-elastic-track');
+    var thumb = document.getElementById('bpd-energy-thumb');
+    var fill = document.getElementById('bpd-energy-fill');
+    var caption = document.getElementById('bpd-energy-caption');
+    var hidden = form.querySelector('input[type="hidden"][name="energy"]');
+    if (!root || !track || !thumb) return;
+
+    var LABELS = ['Intimate', 'Warm', 'Lively', 'Electrifying', 'Unhinged'];
+    var STEPS = LABELS.length;
+    var value = 2;
+    var dragging = false;
+
+    function pct(v) { return (v / (STEPS - 1)) * 100; }
+
+    function place(pctValue) {
+      thumb.style.left = pctValue + '%';
+      fill.style.width = Math.max(0, Math.min(100, pctValue)) + '%';
+    }
+
+    function commit(v) {
+      value = Math.max(0, Math.min(STEPS - 1, Math.round(v)));
+      place(pct(value));
+      var label = LABELS[value];
+      if (caption) caption.textContent = label;
+      if (hidden) hidden.value = label;
+      root.setAttribute('aria-valuenow', value);
+    }
+
+    function rawFromClientX(clientX) {
+      var r = track.getBoundingClientRect();
+      var raw = (clientX - r.left) / r.width;
+      return Math.max(-0.18, Math.min(1.18, raw));
+    }
+
+    function onMove(e) {
+      if (!dragging) return;
+      var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      var raw = rawFromClientX(clientX);
+      place(raw * 100);
+      var nearest = Math.round(Math.max(0, Math.min(1, raw)) * (STEPS - 1));
+      if (caption) caption.textContent = LABELS[nearest];
+      var overshoot = raw < 0 ? -raw : (raw > 1 ? raw - 1 : 0);
+      var scale = 1 + Math.min(overshoot, 0.3) * 0.7;
+      thumb.style.transform = 'translate(-50%, -50%) scale(' + scale.toFixed(2) + ')';
+    }
+
+    function onUp(e) {
+      if (!dragging) return;
+      dragging = false;
+      root.classList.remove('is-dragging');
+      document.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerup', onUp);
+      var clientX = (e && (e.touches ? e.touches[0].clientX : e.clientX)) || track.getBoundingClientRect().left;
+      var raw = Math.max(0, Math.min(1, rawFromClientX(clientX)));
+      thumb.style.transform = 'translate(-50%, -50%) scale(1)';
+      commit(raw * (STEPS - 1));
+    }
+
+    function onDown(e) {
+      dragging = true;
+      root.classList.add('is-dragging');
+      document.addEventListener('pointermove', onMove);
+      document.addEventListener('pointerup', onUp);
+      onMove(e);
+      e.preventDefault();
+    }
+
+    track.addEventListener('pointerdown', onDown);
+    thumb.addEventListener('pointerdown', onDown);
+
+    root.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowUp') { e.preventDefault(); commit(value + 1); }
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') { e.preventDefault(); commit(value - 1); }
+    });
+
+    commit(value);
+  })();
+
+  // ---------- per-step required-field validation ----------
+  function pillGroupFilled(name) {
+    var hidden = form.querySelector('input[type="hidden"][name="' + name + '"]');
+    return !!(hidden && hidden.value.trim());
+  }
+
+  var REQUIRED_BY_STEP = {
+    1: [
+      { kind: 'select', id: 'bpd-event-type' },
+      { kind: 'text', id: 'bpd-event-name' },
+      { kind: 'text', id: 'bpd-event-desc' },
+      { kind: 'pillgroup', name: 'set_format' }
+    ],
+    2: [
+      { kind: 'pillgroup', name: 'audience_context' }
+    ],
+    3: [
+      { kind: 'text', id: 'bpd-vision' }
+      // §05 how-they-found-Mal is intentionally optional.
+    ],
+    4: [
+      { kind: 'text', id: 'bpd-date' },
+      { kind: 'text', id: 'bpd-start-time' },
+      { kind: 'text', id: 'bpd-end-time' },
+      { kind: 'text', id: 'bpd-location' },
+      { kind: 'text', id: 'bpd-name' },
+      { kind: 'text', id: 'bpd-email' }
+    ]
+  };
+
+  function validateStep(n) {
+    var rules = REQUIRED_BY_STEP[n] || [];
+    var firstInvalid = null;
+    rules.forEach(function (rule) {
+      var ok, target;
+      if (rule.kind === 'pillgroup') {
+        ok = pillGroupFilled(rule.name);
+        target = form.querySelector('[data-pill-group="' + rule.name + '"]');
+      } else {
+        var el = document.getElementById(rule.id);
+        if (!el) return;
+        ok = el.value.trim().length > 0;
+        target = el;
+      }
+      if (!ok) {
+        markError(target);
+        if (!firstInvalid) firstInvalid = target;
+      } else {
+        clearError(target);
+      }
+    });
+    if (firstInvalid) {
+      var wrap = fieldWrap(firstInvalid) || firstInvalid;
+      wrap.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }
+    return !firstInvalid;
+  }
+
+  nextBtn.addEventListener('click', function () {
+    if (!validateStep(step)) {
+      status.textContent = 'Fill in the highlighted fields to continue.';
+      status.className = 'bmd-footer-status is-error';
+      return;
+    }
+    status.textContent = '';
+    status.className = 'bmd-footer-status';
+    goToStep(step + 1);
+  });
+
+  // ---------- submit — notifies Mal by email (Web3Forms) and confirms to
+  // the requester. ----------
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    if (!validateStep(4)) {
+      status.textContent = 'Fill in the highlighted fields to continue.';
+      status.className = 'bmd-footer-status is-error';
+      return;
+    }
+    status.className = 'bmd-footer-status';
+    status.textContent = '';
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+    try {
+      var res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(Object.fromEntries(new FormData(form)))
+      });
+      var data = await res.json();
+      if (data.success) {
+        status.textContent = "Sent — they'll hear back soon.";
+        status.classList.add('is-success');
+
+        if (window.emailjs) {
+          var fields = Object.fromEntries(new FormData(form));
+          emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+            to_name: fields.name,
+            to_email: fields.email,
+            event_name: fields.event_name || fields.event_type || 'the event',
+            message: "Thanks for reaching out about " + (fields.event_name || 'your event') + " — Mal will get back to you with next steps."
+          }).catch(function (err) { console.warn('Confirmation email failed to send:', err); });
+        }
+
+        form.reset();
+        setTimeout(function () { closeDrawer(); goToStep(1); }, 1400);
+      } else {
+        throw new Error(data.message || 'Send failed');
+      }
+    } catch (err) {
+      status.textContent = "Couldn't send — try again, or email yep.that.malcolm@gmail.com directly.";
+      status.classList.add('is-error');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Let's make it happen →";
+    }
+  });
 })();
 </script>
 </body>
 </html>
-</content>

@@ -143,8 +143,10 @@ a{color:inherit}
 }
 .sm-panel-itemLabel{
   display:inline-block;
+  transform-origin:left center;
   color:color-mix(in srgb, var(--gold) calc(var(--effect,0) * 100%), var(--paper-dim));
-  transform:translateX(calc(var(--effect,0) * 16px));
+  font-weight:calc(400 + (var(--effect,0) * 300));
+  transform:translateX(calc(var(--effect,0) * 16px)) scale(calc(1 + var(--effect,0) * 0.1));
 }
 .sm-panel-item.is-active{
   border-bottom-color:var(--gold);
@@ -157,7 +159,7 @@ a{color:inherit}
   color:var(--gold);
   font-weight:700;
   text-shadow:0 0 16px rgba(224,178,106,.5);
-  transform:translateX(22px);
+  transform:translateX(22px) scale(1.12);
 }
 
 .sm-socials{flex:0 0 auto}
