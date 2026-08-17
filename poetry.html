@@ -64,6 +64,11 @@
   opacity:1;transition:opacity .4s ease;pointer-events:none;
 }
 .po-hero__tile.is-playing .po-hero__tile-title{opacity:0}
+.po-hero__tile-subtitle{
+  display:block;margin-top:4px;
+  font-family:var(--font-body,inherit);font-weight:400;line-height:1.3;
+  font-size:clamp(11px,1.1vw,13px);letter-spacing:.01em;color:var(--paper-dim,rgba(239,230,216,.72));
+}
 
 /* Subtitles — a custom overlay driven off the <track>'s cues (JS sets
    textContent on 'cuechange'; the native cue box itself is disabled via
@@ -279,12 +284,12 @@
 
 <section class="po-hero">
   <div class="po-hero__reel" id="po-hero-reel">
-    <div class="po-hero__tile is-active" data-tile="0" role="button" tabindex="0" aria-label="Play clip 1 — Improv jazz concert, Auroville">
+    <div class="po-hero__tile is-active" data-tile="0" role="button" tabindex="0" aria-label="Play clip 1 — In My Bones, MOMENTS Improv Jazz Concert, CRIPA Auroville">
       <video src="video/poetry-hero-1.mp4" poster="img/poetry-hero-1-poster.jpg" autoplay muted playsinline preload="auto">
         <track kind="subtitles" srclang="en" label="English" src="captions/poetry-hero-1.vtt">
       </video>
       <img class="po-hero__tile-thumb" src="img/poetry-hero-1-poster.jpg" alt="" aria-hidden="true">
-      <span class="po-hero__tile-title">Improv Jazz — Auroville</span>
+      <span class="po-hero__tile-title">&ldquo;In My Bones&rdquo;<span class="po-hero__tile-subtitle">MOMENTS - An Improv Jazz Concert | CRIPA, Auroville</span></span>
       <span class="po-hero__tile-caption" aria-hidden="true"></span>
       <span class="po-hero__tile-index"><span class="po-hero__tile-bar"><i></i></span> 01</span>
       <button type="button" class="po-hero__tile-mute" aria-label="Unmute clip 1" aria-pressed="true">
@@ -292,12 +297,12 @@
         <svg class="po-hero__tile-mute-icon po-hero__tile-mute-icon--muted" width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/><path d="M16 9l6 6M22 9l-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
       </button>
     </div>
-    <div class="po-hero__tile" data-tile="1" role="button" tabindex="0" aria-label="Play clip 2 — NMACC performance">
+    <div class="po-hero__tile" data-tile="1" role="button" tabindex="0" aria-label="Play clip 2 — Unlock the Key, Light Into Space Art Exhibition, NMACC Mumbai">
       <video src="video/poetry-hero-2.mp4" poster="img/poetry-hero-2-poster.jpg" muted playsinline preload="auto">
         <track kind="subtitles" srclang="en" label="English" src="captions/poetry-hero-2.vtt">
       </video>
       <img class="po-hero__tile-thumb" src="img/poetry-hero-2-poster.jpg" alt="" aria-hidden="true">
-      <span class="po-hero__tile-title">NMACC Performance</span>
+      <span class="po-hero__tile-title">&ldquo;Unlock the Key&rdquo;<span class="po-hero__tile-subtitle">Light Into Space Art Exhibition | NMACC, Mumbai</span></span>
       <span class="po-hero__tile-caption" aria-hidden="true"></span>
       <span class="po-hero__tile-index"><span class="po-hero__tile-bar"><i></i></span> 02</span>
       <button type="button" class="po-hero__tile-mute" aria-label="Unmute clip 2" aria-pressed="true">
@@ -305,12 +310,12 @@
         <svg class="po-hero__tile-mute-icon po-hero__tile-mute-icon--muted" width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/><path d="M16 9l6 6M22 9l-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
       </button>
     </div>
-    <div class="po-hero__tile" data-tile="2" role="button" tabindex="0" aria-label="Play clip 3 — Studio session">
+    <div class="po-hero__tile" data-tile="2" role="button" tabindex="0" aria-label="Play clip 3 — Precious Delights, MOMENTS II Rehearsal, R&amp;B Studio Bombay">
       <video src="video/poetry-hero-3.mp4" poster="img/poetry-hero-3-poster.jpg" muted playsinline preload="auto">
         <track kind="subtitles" srclang="en" label="English" src="captions/poetry-hero-3.vtt">
       </video>
       <img class="po-hero__tile-thumb" src="img/poetry-hero-3-poster.jpg" alt="" aria-hidden="true">
-      <span class="po-hero__tile-title">Studio Session</span>
+      <span class="po-hero__tile-title">&ldquo;Precious Delights&rdquo;<span class="po-hero__tile-subtitle">MOMENTS II Rehearsal | R&amp;B Studio, Bombay</span></span>
       <span class="po-hero__tile-caption" aria-hidden="true"></span>
       <span class="po-hero__tile-index"><span class="po-hero__tile-bar"><i></i></span> 03</span>
       <button type="button" class="po-hero__tile-mute" aria-label="Unmute clip 3" aria-pressed="true">
@@ -321,7 +326,7 @@
   </div>
   <div class="po-hero__copy">
     <span class="po-hero__eyebrow reveal">Poetry</span>
-    <h1 class="po-hero__title reveal">Words, said out loud.</h1>
+    <h1 class="po-hero__title reveal">Poetry is born on the tongue</h1>
     <p class="po-hero__desc reveal">Spoken-word pieces on video and audio, and a book collecting the ones that outgrew the mic.</p>
     <div class="po-hero__ctas reveal">
       <a href="#listen" class="po-cta po-cta--solid">
@@ -452,8 +457,8 @@
 <section class="po-section po-book" id="book">
   <div class="po-book__head reveal">
     <span class="po-book__eyebrow">The Book</span>
-    <h2 class="po-book__title">The poems, collected.</h2>
-    <p class="po-book__desc">Flip through a few pages from “a moment,” then get your own copy.</p>
+    <h2 class="po-book__title">Collection of Poems</h2>
+    <p class="po-book__desc">Flip through a few pages from “f a l l i n g under where,” then get your own copy.</p>
   </div>
 
   <div class="po-book__stage reveal">
