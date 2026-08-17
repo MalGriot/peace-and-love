@@ -58,7 +58,7 @@
 /* Title — visible at rest (idle/paused/ended), fades out while its clip
    is actively playing so it doesn't compete with the footage. */
 .po-hero__tile-title{
-  position:absolute;left:16px;right:16px;bottom:44px;z-index:1;
+  position:absolute;left:16px;right:16px;bottom:80px;z-index:1;
   font-family:var(--font-display);font-weight:400;line-height:1.2;
   font-size:clamp(15px,1.6vw,19px);color:var(--paper);
   opacity:1;transition:opacity .4s ease;pointer-events:none;
@@ -77,7 +77,7 @@
    chip already used by .poem__lyrics-toggle, so on-video captions read as
    the same "system" as the lyrics UI. */
 .po-hero__tile-caption{
-  position:absolute;left:16px;right:16px;bottom:14px;z-index:1;
+  position:absolute;left:16px;right:16px;bottom:50px;z-index:1;
   font-family:var(--font-body);font-weight:400;font-size:clamp(12px,1.2vw,14px);line-height:1.5;
   color:var(--paper);background:rgba(18,16,15,.7);
   padding:.25em .6em;border-radius:4px;display:inline-block;
@@ -92,7 +92,7 @@
 }
 .po-hero__tile.is-active::after{opacity:.55}
 .po-hero__tile-index{
-  position:absolute;top:16px;left:16px;z-index:1;
+  position:absolute;bottom:16px;left:16px;z-index:1;
   font-family:var(--font-body);font-size:11px;letter-spacing:.14em;color:var(--paper-dim);
   display:flex;align-items:center;gap:8px;pointer-events:none;
 }
@@ -102,7 +102,7 @@
 @keyframes po-bar-fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 
 .po-hero__tile-mute{
-  position:absolute;top:12px;right:12px;z-index:2;
+  position:absolute;bottom:12px;right:12px;z-index:2;
   width:32px;height:32px;border-radius:999px;
   background:rgba(18,16,15,.55);border:1px solid rgba(239,230,216,.3);
   display:flex;align-items:center;justify-content:center;color:var(--paper);
