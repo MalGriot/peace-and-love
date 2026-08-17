@@ -65,18 +65,25 @@
 }
 .po-hero__tile.is-playing .po-hero__tile-title{opacity:0}
 
-/* Subtitles — native <track> cues, styled to match the brand and sit in
-   the gradient's dark band at the bottom of the tile. */
-/* Brand tokens: Inter body font, ink/paper palette — same rgba(18,16,15,.7)
-   chip background already used by .poem__lyrics-toggle elsewhere on this
-   page, so on-video captions read as the same "system" as the lyrics UI.
-   Note: ::cue only reliably supports color/background/font/text-shadow
-   across browsers — border-radius/padding on it are silently ignored, so
-   they're left off rather than implying control that doesn't exist. */
-.po-hero__tile video::cue{
+/* Subtitles — a custom overlay driven off the <track>'s cues (JS sets
+   textContent on 'cuechange'; the native cue box itself is disabled via
+   track.mode='hidden') rather than relying on browser-native ::cue
+   rendering. Native cues paint *inside* the video element, and the
+   .po-hero__tile::after gradient (below) sits in front of the whole tile
+   with no z-index — same tier problem the title/index text has, except
+   native captions can't be given z-index individually since they aren't
+   a separate box. This element can: it sits above the gradient like the
+   title does. Brand tokens: same Inter body font + rgba(18,16,15,.7) ink
+   chip already used by .poem__lyrics-toggle, so on-video captions read as
+   the same "system" as the lyrics UI. */
+.po-hero__tile-caption{
+  position:absolute;left:16px;right:16px;bottom:14px;z-index:1;
   font-family:var(--font-body);font-weight:400;font-size:clamp(12px,1.2vw,14px);line-height:1.5;
-  background:rgba(18,16,15,.7);color:var(--paper);
+  color:var(--paper);background:rgba(18,16,15,.7);
+  padding:.25em .6em;border-radius:4px;display:inline-block;
+  opacity:0;transition:opacity .2s ease;pointer-events:none;
 }
+.po-hero__tile-caption.is-active{opacity:1}
 
 .po-hero__tile::after{
   content:"";position:absolute;inset:0;
@@ -245,6 +252,24 @@
   .po-book__flip-btn{width:36px;height:36px}
   .po-book__stage{gap:8px;padding:22px 8px}
 }
+
+/* ---------- Ko-fi checkout modal — clicking "Get the book" opens the
+   shop item in an in-page overlay (iframe) instead of navigating away.
+   ?embed=true is Ko-fi's supported param for iframe-embedding a shop/
+   checkout page. ---------- */
+.kofi-modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.kofi-modal.is-open{display:flex}
+.kofi-modal__backdrop{position:absolute;inset:0;background:rgba(18,16,15,.82);backdrop-filter:blur(2px)}
+.kofi-modal__panel{position:relative;width:100%;max-width:680px;height:min(80vh,760px);background:#1c1815;border:1px solid rgba(239,230,216,.14);border-radius:12px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.5)}
+.kofi-modal__frame{width:100%;height:100%;border:none;display:block}
+.kofi-modal__close{
+  position:absolute;top:10px;right:10px;z-index:1;
+  width:34px;height:34px;border-radius:999px;
+  background:rgba(18,16,15,.7);border:1px solid rgba(239,230,216,.3);color:var(--paper);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;line-height:1;
+  transition:background .2s ease,border-color .2s ease,color .2s ease;
+}
+.kofi-modal__close:hover{background:var(--gold);border-color:var(--gold);color:#12100f}
 </style>
 </head>
 <body>
@@ -255,10 +280,11 @@
   <div class="po-hero__reel" id="po-hero-reel">
     <div class="po-hero__tile is-active" data-tile="0" role="button" tabindex="0" aria-label="Play clip 1 — Improv jazz concert, Auroville">
       <video src="video/poetry-hero-1.mp4" poster="img/poetry-hero-1-poster.jpg" autoplay muted playsinline preload="auto">
-        <track kind="subtitles" srclang="en" label="English" src="captions/poetry-hero-1.vtt" default>
+        <track kind="subtitles" srclang="en" label="English" src="captions/poetry-hero-1.vtt">
       </video>
       <img class="po-hero__tile-thumb" src="img/poetry-hero-1-poster.jpg" alt="" aria-hidden="true">
       <span class="po-hero__tile-title">Improv Jazz — Auroville</span>
+      <span class="po-hero__tile-caption" aria-hidden="true"></span>
       <span class="po-hero__tile-index"><span class="po-hero__tile-bar"><i></i></span> 01</span>
       <button type="button" class="po-hero__tile-mute" aria-label="Unmute clip 1" aria-pressed="true">
         <svg class="po-hero__tile-mute-icon po-hero__tile-mute-icon--unmuted" width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/><path d="M16 8.5c1.2 1 1.2 6 0 7M18.5 6c2.2 2.2 2.2 9.8 0 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
@@ -267,10 +293,11 @@
     </div>
     <div class="po-hero__tile" data-tile="1" role="button" tabindex="0" aria-label="Play clip 2 — NMACC performance">
       <video src="video/poetry-hero-2.mp4" poster="img/poetry-hero-2-poster.jpg" muted playsinline preload="auto">
-        <track kind="subtitles" srclang="en" label="English" src="captions/poetry-hero-2.vtt" default>
+        <track kind="subtitles" srclang="en" label="English" src="captions/poetry-hero-2.vtt">
       </video>
       <img class="po-hero__tile-thumb" src="img/poetry-hero-2-poster.jpg" alt="" aria-hidden="true">
       <span class="po-hero__tile-title">NMACC Performance</span>
+      <span class="po-hero__tile-caption" aria-hidden="true"></span>
       <span class="po-hero__tile-index"><span class="po-hero__tile-bar"><i></i></span> 02</span>
       <button type="button" class="po-hero__tile-mute" aria-label="Unmute clip 2" aria-pressed="true">
         <svg class="po-hero__tile-mute-icon po-hero__tile-mute-icon--unmuted" width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/><path d="M16 8.5c1.2 1 1.2 6 0 7M18.5 6c2.2 2.2 2.2 9.8 0 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
@@ -279,10 +306,11 @@
     </div>
     <div class="po-hero__tile" data-tile="2" role="button" tabindex="0" aria-label="Play clip 3 — Studio session">
       <video src="video/poetry-hero-3.mp4" poster="img/poetry-hero-3-poster.jpg" muted playsinline preload="auto">
-        <track kind="subtitles" srclang="en" label="English" src="captions/poetry-hero-3.vtt" default>
+        <track kind="subtitles" srclang="en" label="English" src="captions/poetry-hero-3.vtt">
       </video>
       <img class="po-hero__tile-thumb" src="img/poetry-hero-3-poster.jpg" alt="" aria-hidden="true">
       <span class="po-hero__tile-title">Studio Session</span>
+      <span class="po-hero__tile-caption" aria-hidden="true"></span>
       <span class="po-hero__tile-index"><span class="po-hero__tile-bar"><i></i></span> 03</span>
       <button type="button" class="po-hero__tile-mute" aria-label="Unmute clip 3" aria-pressed="true">
         <svg class="po-hero__tile-mute-icon po-hero__tile-mute-icon--unmuted" width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/><path d="M16 8.5c1.2 1 1.2 6 0 7M18.5 6c2.2 2.2 2.2 9.8 0 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
@@ -439,15 +467,55 @@
   <p class="po-book__flip-hint">Drag a corner, or use the arrows</p>
 
   <div class="po-book__cta">
-    <a href="https://ko-fi.com/s/dc969df655" target="_blank" rel="noopener" class="po-cta po-cta--solid">
+    <button type="button" class="po-cta po-cta--solid" id="kofi-book-open">
       Get the book
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </a>
+    </button>
   </div>
 </section>
 
+<div class="kofi-modal" id="kofi-book-modal" role="dialog" aria-modal="true" aria-label="Buy the book on Ko-fi">
+  <div class="kofi-modal__backdrop"></div>
+  <div class="kofi-modal__panel">
+    <button type="button" class="kofi-modal__close" aria-label="Close">&times;</button>
+    <iframe class="kofi-modal__frame" id="kofi-book-frame" data-src="https://ko-fi.com/s/dc969df655?embed=true" title="Buy the book on Ko-fi"></iframe>
+  </div>
+</div>
+
 <div id="chrome-footer"></div>
 <div id="chrome-chat"></div>
+<script>
+// Ko-fi checkout modal — lazy-loads the iframe on first open (not on page
+// load) so the Ko-fi embed never fires an extra request for visitors who
+// never click "Get the book". Falls back to opening the shop link in a new
+// tab if the iframe fails to load (some ad-blockers block ko-fi.com frames).
+(function () {
+  var openBtn = document.getElementById('kofi-book-open');
+  var modal = document.getElementById('kofi-book-modal');
+  if (!openBtn || !modal) return;
+  var closeBtn = modal.querySelector('.kofi-modal__close');
+  var backdrop = modal.querySelector('.kofi-modal__backdrop');
+  var frame = document.getElementById('kofi-book-frame');
+  var loaded = false;
+
+  function open() {
+    if (!loaded) { frame.src = frame.dataset.src; loaded = true; }
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+  function close() {
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  openBtn.addEventListener('click', open);
+  closeBtn.addEventListener('click', close);
+  backdrop.addEventListener('click', close);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && modal.classList.contains('is-open')) close();
+  });
+})();
+</script>
 
 <script src="shared.js"></script>
 <script src="chat.js"></script>
@@ -474,6 +542,7 @@
   var tiles = Array.prototype.slice.call(reel.querySelectorAll('.po-hero__tile'));
   var videos = tiles.map(function (t) { return t.querySelector('video'); });
   var muteBtns = tiles.map(function (t) { return t.querySelector('.po-hero__tile-mute'); });
+  var captionEls = tiles.map(function (t) { return t.querySelector('.po-hero__tile-caption'); });
   var mutedState = videos.map(function () { return true; });
   var active = 0;
 
@@ -483,6 +552,37 @@
     btn.setAttribute('aria-pressed', mutedState[i] ? 'true' : 'false');
     btn.setAttribute('aria-label', (mutedState[i] ? 'Unmute' : 'Mute') + ' clip ' + (i + 1));
   }
+
+  // Drive captions ourselves instead of native ::cue rendering — see the
+  // .po-hero__tile-caption CSS comment for why (the gradient overlay sits
+  // in front of native cues with no way to re-stack them individually).
+  // Setting mode='hidden' isn't enough by itself: the browser's own
+  // auto-select-a-caption-track behavior flips it back to 'showing'
+  // asynchronously at some point after this script runs (observed even
+  // after the <track> element's own 'load' event), so it's reasserted on
+  // a short interval until it holds, rather than relying on one event
+  // whose exact timing isn't reliable across browsers.
+  videos.forEach(function (v, i) {
+    var el = captionEls[i];
+    var trackEl = v.querySelector('track');
+    if (!el || !v.textTracks[0] || !trackEl) return;
+    var track = v.textTracks[0];
+    track.mode = 'hidden';
+    var guardTries = 0;
+    var guard = setInterval(function () {
+      if (track.mode !== 'hidden') track.mode = 'hidden';
+      if (++guardTries > 40) clearInterval(guard); // ~4s, then trust it's settled
+    }, 100);
+    track.addEventListener('cuechange', function () {
+      var cue = track.activeCues && track.activeCues[0];
+      if (cue) {
+        el.textContent = cue.text;
+        el.classList.add('is-active');
+      } else {
+        el.classList.remove('is-active');
+      }
+    });
+  });
 
   function activate(idx, opts) {
     opts = opts || {};
