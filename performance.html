@@ -4,27 +4,487 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Performance — Mal Griot</title>
-<meta name="description" content="Live sets, festivals and stage work by Mal Griot.">
+<meta name="description" content="Book a live Mal Griot performance — voice, rhythm, looping, poetry and improvisation, built new for every room.">
+<link rel="canonical" href="https://malgriot.github.io/peace-and-love/performance.html">
 <link rel="icon" href="img/brand/favicon.ico">
 <link rel="apple-touch-icon" href="img/brand/apple-touch-icon.png">
 <link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="effects.css">
+<style>
+/* ---------- Performance page — editorial, intimate, candlelit-velvet.
+   Distinct from Hosting's full-screen video-reel treatment: one still
+   image in the hero, quiet typography, a contact-sheet fragments grid. ---------- */
+
+.perf-section{padding:clamp(64px,10vw,140px) clamp(20px,6vw,64px)}
+
+/* ---------- 1. Hero ---------- */
+.perf-hero{
+  display:grid;grid-template-columns:1.05fr 0.95fr;align-items:stretch;
+  min-height:92vh;padding:0;
+}
+.perf-hero__copy{
+  display:flex;flex-direction:column;justify-content:center;gap:26px;
+  padding:clamp(96px,10vw,140px) clamp(24px,6vw,72px) clamp(48px,6vw,72px);
+}
+.perf-hero__eyebrow{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--brass)}
+.perf-hero__title{
+  font-family:var(--font-display);font-weight:400;line-height:.92;margin:0;
+  font-size:clamp(48px,7.4vw,108px);letter-spacing:-.02em;color:var(--paper);
+}
+.perf-hero__title em{display:block;font-style:normal;color:var(--gold)}
+.perf-hero__desc{
+  font-size:clamp(15px,1.3vw,17px);line-height:1.65;color:var(--paper-dim);
+  max-width:38ch;margin:4px 0 6px;
+}
+.perf-cta{
+  display:inline-flex;align-items:center;gap:10px;align-self:flex-start;
+  font-family:var(--font-body);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;
+  color:var(--paper);text-decoration:none;padding:4px 0 8px;border-bottom:1px solid rgba(239,230,216,.32);
+  transition:border-color .3s ease,gap .3s ease,color .3s ease;
+}
+.perf-cta:hover{border-color:var(--brass);gap:16px;color:var(--gold)}
+.perf-cta svg{flex:none;transition:transform .3s ease}
+.perf-cta:hover svg{transform:translateX(3px)}
+.perf-cta--gold{color:var(--gold);border-color:rgba(224,178,106,.4)}
+
+.perf-hero__media{position:relative;overflow:hidden;background:var(--ink)}
+.perf-hero__media img{
+  width:100%;height:100%;object-fit:cover;object-position:50% 22%;
+  filter:saturate(.86) contrast(1.05);
+}
+.perf-hero__media::after{
+  content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(100deg, rgba(18,16,15,.55) 0%, rgba(18,16,15,0) 30%),
+    linear-gradient(0deg, rgba(18,16,15,.6), transparent 40%),
+    radial-gradient(ellipse 80% 70% at 50% 40%, rgba(74,31,34,.22), transparent 70%);
+  pointer-events:none;
+}
+
+@media (max-width:900px){
+  .perf-hero{grid-template-columns:1fr;min-height:auto}
+  .perf-hero__media{height:56vh}
+  .perf-hero__copy{padding:56px 22px 44px}
+  .perf-hero__title{font-size:clamp(42px,13vw,64px)}
+}
+
+/* ---------- 2. The Live Practice ---------- */
+.perf-practice{text-align:center;max-width:900px;margin:0 auto}
+.perf-practice__head{
+  font-family:var(--font-display);font-weight:400;line-height:1.16;
+  font-size:clamp(28px,4.6vw,52px);color:var(--paper);margin:0 0 28px;
+}
+.perf-practice__head span{display:block}
+.perf-practice__body{
+  font-size:clamp(15px,1.4vw,18px);line-height:1.75;color:var(--paper-dim);
+  max-width:56ch;margin:0 auto;
+}
+
+/* ---------- 3. Performance Fragments ---------- */
+.perf-fragments__head{
+  display:flex;align-items:flex-end;justify-content:space-between;gap:24px;
+  max-width:1180px;margin:0 auto 34px;flex-wrap:wrap;
+}
+.perf-fragments__eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);margin-bottom:12px;display:block}
+.perf-fragments__title{font-family:var(--font-display);font-weight:400;font-size:clamp(30px,4vw,46px);margin:0;color:var(--paper)}
+
+.perf-grid{
+  max-width:1180px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:120px;gap:10px;
+}
+.perf-tile{
+  position:relative;overflow:hidden;border-radius:4px;cursor:pointer;
+  border:1px solid rgba(239,230,216,.08);background:#1c1815;
+  appearance:none;padding:0;display:block;width:100%;height:100%;
+}
+.perf-tile img, .perf-tile video{
+  width:100%;height:100%;object-fit:cover;
+  filter:saturate(.82) brightness(.92);
+  transition:transform 1.1s cubic-bezier(.16,1,.3,1),filter .6s ease;
+}
+.perf-tile:hover img, .perf-tile:hover video{transform:scale(1.055);filter:saturate(1) brightness(1)}
+.perf-tile__tag{
+  position:absolute;left:12px;bottom:10px;z-index:2;
+  font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--paper-dim);
+  opacity:0;transform:translateY(6px);transition:opacity .35s ease,transform .35s ease;
+}
+.perf-tile:hover .perf-tile__tag{opacity:1;transform:translateY(0)}
+.perf-tile::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(0deg,rgba(18,16,15,.55),transparent 55%);
+  pointer-events:none;
+}
+.perf-tile--play::before{
+  content:"";position:absolute;z-index:2;left:14px;top:14px;width:26px;height:26px;border-radius:999px;
+  border:1px solid rgba(239,230,216,.5);background:rgba(18,16,15,.4);
+}
+.perf-tile--wide{grid-column:span 2;grid-row:span 2}
+.perf-tile--tall{grid-row:span 2}
+
+@media (max-width:760px){
+  .perf-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:44vw}
+  .perf-tile--wide{grid-column:span 2;grid-row:span 1}
+}
+
+/* lightbox */
+.perf-lightbox{
+  position:fixed;inset:0;z-index:400;background:rgba(12,10,9,.92);
+  display:flex;align-items:center;justify-content:center;padding:6vh 4vw;
+  opacity:0;pointer-events:none;transition:opacity .3s ease;
+}
+.perf-lightbox.is-open{opacity:1;pointer-events:auto}
+.perf-lightbox__frame{position:relative;max-width:min(920px,92vw);max-height:88vh}
+.perf-lightbox__frame img, .perf-lightbox__frame video{
+  max-width:100%;max-height:88vh;display:block;border-radius:4px;
+  box-shadow:0 30px 90px rgba(0,0,0,.5);
+}
+.perf-lightbox__close{
+  position:absolute;top:-42px;right:0;background:none;border:none;color:var(--paper-dim);
+  font-size:26px;line-height:1;cursor:pointer;padding:6px;
+}
+.perf-lightbox__close:hover{color:var(--paper)}
+
+/* ---------- 4. The Sets ---------- */
+.perf-sets{max-width:900px;margin:0 auto}
+.perf-sets__title{font-family:var(--font-display);font-weight:400;font-size:clamp(30px,4vw,46px);margin:0 0 12px;color:var(--paper)}
+.perf-sets__sub{color:var(--paper-dim);font-size:14px;margin:0 0 44px;max-width:52ch}
+.perf-set-row{
+  display:grid;grid-template-columns:2fr 3fr;gap:24px;align-items:baseline;
+  padding:26px 0;border-top:1px solid rgba(239,230,216,.12);
+  transition:padding-left .35s ease;
+}
+.perf-set-row:last-child{border-bottom:1px solid rgba(239,230,216,.12)}
+.perf-set-row:hover{padding-left:10px}
+.perf-set-row__name{font-family:var(--font-display);font-weight:400;font-size:clamp(19px,2.2vw,25px);color:var(--paper)}
+.perf-set-row__desc{color:var(--paper-dim);font-size:14.5px;line-height:1.6}
+@media (max-width:640px){
+  .perf-set-row{grid-template-columns:1fr;gap:8px}
+}
+
+/* ---------- 5. Where It Fits ---------- */
+.perf-fits{max-width:1100px;margin:0 auto}
+.perf-fits__title{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,3.6vw,40px);margin:0 0 44px;color:var(--paper);text-align:center}
+.perf-fits__grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:2px;
+  background:rgba(239,230,216,.1);
+}
+.perf-fit{
+  background:var(--ink);padding:34px 18px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;
+}
+.perf-fit svg{color:var(--brass);opacity:.85}
+.perf-fit span{font-size:12.5px;letter-spacing:.06em;color:var(--paper-dim)}
+
+/* ---------- 6. Live Archive ---------- */
+.perf-archive{max-width:1180px;margin:0 auto}
+.perf-archive__head{max-width:640px;margin:0 0 44px}
+.perf-archive__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:2px}
+.perf-arch-item{
+  position:relative;aspect-ratio:4/5;overflow:hidden;background:#1c1815;
+  border:none;padding:0;cursor:pointer;display:block;width:100%;
+}
+.perf-arch-item img{width:100%;height:100%;object-fit:cover;filter:saturate(.8) brightness(.85);transition:transform .9s cubic-bezier(.16,1,.3,1),filter .5s ease}
+.perf-arch-item:hover img{transform:scale(1.06);filter:saturate(.95) brightness(.95)}
+.perf-arch-item__scrim{position:absolute;inset:0;background:linear-gradient(0deg,rgba(18,16,15,.88) 0%,rgba(18,16,15,.15) 55%,transparent 75%)}
+.perf-arch-item__meta{position:absolute;left:16px;right:16px;bottom:14px;text-align:left}
+.perf-arch-item__year{display:block;font-size:11px;letter-spacing:.14em;color:var(--gold);margin-bottom:6px}
+.perf-arch-item__event{display:block;font-family:var(--font-display);font-size:16px;color:var(--paper)}
+.perf-arch-item__place{display:block;font-size:12px;color:var(--paper-dim);margin-top:3px}
+.perf-arch-item--placeholder{
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  border:1px dashed rgba(239,230,216,.16);cursor:default;padding:20px;
+}
+.perf-arch-item--placeholder span{font-size:12px;letter-spacing:.06em;color:var(--paper-faint);max-width:20ch}
+
+/* ---------- 7. Music/Performance transition ---------- */
+.perf-transition{text-align:center;background:var(--velvet-wine);position:relative;overflow:hidden}
+.perf-transition::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 60% 55% at 50% 30%, rgba(201,138,69,.14), transparent 68%);
+}
+.perf-transition__head{
+  position:relative;font-family:var(--font-display);font-weight:400;line-height:1.2;
+  font-size:clamp(26px,4vw,44px);color:var(--paper);margin:0 0 30px;
+}
+.perf-transition__head span{display:block}
+.perf-transition__head span:last-child{color:var(--gold)}
+
+/* ---------- 8. Final CTA ---------- */
+.perf-final{text-align:center}
+.perf-final__title{
+  font-family:var(--font-display);font-weight:400;
+  font-size:clamp(38px,6vw,80px);margin:0 0 40px;color:var(--paper);letter-spacing:-.01em;
+}
+.perf-final__ctas{display:flex;flex-wrap:wrap;gap:18px 34px;align-items:center;justify-content:center}
+</style>
 </head>
 <body>
 
 <div id="chrome-nav"></div>
 
-<section class="soon">
-  <span class="soon__eyebrow">Performance</span>
-  <h1 class="soon__title">Coming Soon</h1>
-  <p class="soon__desc">Live sets, festivals and stage work — details dropping soon.</p>
-  <a href="index.html" class="btn btn-outline">Back Home</a>
+<section class="perf-hero">
+  <div class="perf-hero__copy">
+    <span class="perf-hero__eyebrow reveal">Performance</span>
+    <h1 class="perf-hero__title reveal">Mal<br><em>Griot</em></h1>
+    <p class="perf-hero__desc reveal">A live musical performance built from voice, rhythm, looping, poetry and improvisation.</p>
+    <a href="contact.html" class="perf-cta perf-cta--gold reveal">
+      Book the performance
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+  <div class="perf-hero__media">
+    <img src="img/performance-home.jpg" alt="Mal Griot mid-performance, close to the microphone">
+  </div>
 </section>
+
+<section class="perf-section perf-practice">
+  <h2 class="perf-practice__head">
+    <span class="reveal">A song can be performed.</span>
+    <span class="reveal">A room can be performed with.</span>
+  </h2>
+  <p class="perf-practice__body reveal">Mal builds performances in real time — layering voice, rhythm, poetry and instinct into something that only exists for the people in the room.</p>
+</section>
+
+<section class="perf-section perf-fragments" id="fragments">
+  <div class="perf-fragments__head reveal">
+    <div>
+      <span class="perf-fragments__eyebrow">Fragments</span>
+      <h2 class="perf-fragments__title">From the archive</h2>
+    </div>
+    <a href="#fragments" class="perf-cta" id="watch-live-set">
+      Watch the live set
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+
+  <div class="perf-grid reveal" id="perf-fragment-grid">
+    <button type="button" class="perf-tile perf-tile--wide" data-full="img/performance/perf-movement.jpg">
+      <img src="img/performance/perf-movement.jpg" alt="Movement, rhythm and percussion on stage" loading="lazy">
+      <span class="perf-tile__tag">Movement</span>
+    </button>
+    <button type="button" class="perf-tile perf-tile--tall" data-full="img/performance/perf-voice.jpg">
+      <img src="img/performance/perf-voice.jpg" alt="Mal Griot mid-verse, close on the microphone" loading="lazy">
+      <span class="perf-tile__tag">Voice</span>
+    </button>
+    <button type="button" class="perf-tile" data-full="img/performance/perf-rhythm.jpg">
+      <img src="img/performance/perf-rhythm.jpg" alt="Hand drums and percussion under stage light" loading="lazy">
+      <span class="perf-tile__tag">Rhythm</span>
+    </button>
+    <button type="button" class="perf-tile perf-tile--play" data-full="video/performance-hover.mp4" data-type="video">
+      <video src="video/performance-hover.mp4" muted loop playsinline preload="metadata"></video>
+      <span class="perf-tile__tag">Live clip</span>
+    </button>
+    <button type="button" class="perf-tile" data-full="img/performance/perf-portrait.jpg">
+      <img src="img/performance/perf-portrait.jpg" alt="Portrait of Mal Griot backstage" loading="lazy">
+      <span class="perf-tile__tag">Portrait</span>
+    </button>
+    <button type="button" class="perf-tile perf-tile--wide" data-full="img/performance/perf-room.jpg">
+      <img src="img/performance/perf-room.jpg" alt="Mal Griot performing for a seated room at a Sofar Sounds Bombay show" loading="lazy">
+      <span class="perf-tile__tag">The room</span>
+    </button>
+  </div>
+</section>
+
+<section class="perf-section perf-sets">
+  <h2 class="perf-sets__title reveal">The sets</h2>
+  <p class="perf-sets__sub reveal">Different forms of the same practice — shaped to the room, not sold off a menu.</p>
+
+  <div class="perf-set-row reveal">
+    <span class="perf-set-row__name">Solo live set</span>
+    <span class="perf-set-row__desc">Original music, looping, rhythm and voice.</span>
+  </div>
+  <div class="perf-set-row reveal">
+    <span class="perf-set-row__name">Acoustic / intimate</span>
+    <span class="perf-set-row__desc">Voice-led performance for smaller spaces.</span>
+  </div>
+  <div class="perf-set-row reveal">
+    <span class="perf-set-row__name">Full performance</span>
+    <span class="perf-set-row__desc">A developed set with movement, rhythm and audience connection.</span>
+  </div>
+  <div class="perf-set-row reveal">
+    <span class="perf-set-row__name">Custom set</span>
+    <span class="perf-set-row__desc">A performance shaped around a particular theme, programme or space.</span>
+  </div>
+</section>
+
+<section class="perf-section perf-fits">
+  <h2 class="perf-fits__title reveal">Where it fits</h2>
+  <div class="perf-fits__grid reveal">
+    <div class="perf-fit">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 20l4-14 4 10 3-7 3 5 4-9"/></svg>
+      <span>Festivals</span>
+    </div>
+    <div class="perf-fit">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 18V6l16-3v15"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="16" r="2"/></svg>
+      <span>Concerts</span>
+    </div>
+    <div class="perf-fit">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg>
+      <span>Cultural programmes</span>
+    </div>
+    <div class="perf-fit">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>
+      <span>Listening rooms</span>
+    </div>
+    <div class="perf-fit">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 15l5-10 5 6 3-4 5 8z"/></svg>
+      <span>Art spaces</span>
+    </div>
+    <div class="perf-fit">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3l2.6 5.6 6.1.6-4.6 4.2 1.3 6-5.4-3.2-5.4 3.2 1.3-6-4.6-4.2 6.1-.6z"/></svg>
+      <span>Private events</span>
+    </div>
+  </div>
+</section>
+
+<section class="perf-section perf-archive" id="archive">
+  <div class="perf-archive__head reveal">
+    <span class="perf-fragments__eyebrow">Live archive</span>
+    <h2 class="perf-fragments__title">Where Mal has performed</h2>
+  </div>
+  <div class="perf-archive__grid reveal" id="perf-archive-grid"></div>
+</section>
+
+<section class="perf-section perf-transition">
+  <h2 class="perf-transition__head reveal">
+    <span>The records are one version.</span>
+    <span>The stage is another.</span>
+  </h2>
+  <a href="music.html" class="perf-cta perf-cta--gold reveal">
+    Hear the records
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+</section>
+
+<section class="perf-section perf-final">
+  <h2 class="perf-final__title reveal">See you in the room.</h2>
+  <div class="perf-final__ctas reveal">
+    <a href="contact.html" class="perf-cta perf-cta--gold">
+      Book the performance
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <a href="#archive" class="perf-cta">
+      Upcoming performances
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</section>
+
+<div class="perf-lightbox" id="perf-lightbox">
+  <div class="perf-lightbox__frame" id="perf-lightbox-frame">
+    <button type="button" class="perf-lightbox__close" id="perf-lightbox-close" aria-label="Close">&times;</button>
+  </div>
+</div>
 
 <div id="chrome-footer"></div>
 <div id="chrome-chat"></div>
 
 <script src="shared.js"></script>
 <script src="chat.js"></script>
+<script src="effects.js"></script>
 <script>renderChrome('performance');</script>
+<script>
+// Fragments lightbox — click any tile to expand image/video full-size.
+// Video tiles autoplay muted on hover; the lightbox unmutes so the "watch
+// the live set" clip actually plays with sound once activated on purpose.
+(function () {
+  var lightbox = document.getElementById('perf-lightbox');
+  var frame = document.getElementById('perf-lightbox-frame');
+  var closeBtn = document.getElementById('perf-lightbox-close');
+  var grid = document.getElementById('perf-fragment-grid');
+  if (!lightbox || !grid) return;
+
+  grid.querySelectorAll('.perf-tile[data-full]').forEach(function (tile) {
+    var vid = tile.querySelector('video');
+    if (vid) {
+      tile.addEventListener('mouseenter', function () { vid.play().catch(function () {}); });
+      tile.addEventListener('mouseleave', function () { vid.pause(); vid.currentTime = 0; });
+    }
+    tile.addEventListener('click', function () {
+      var src = tile.dataset.full;
+      var isVideo = tile.dataset.type === 'video';
+      frame.querySelectorAll('img, video').forEach(function (el) { el.remove(); });
+      var el = document.createElement(isVideo ? 'video' : 'img');
+      if (isVideo) {
+        el.src = src; el.controls = true; el.autoplay = true; el.playsInline = true;
+      } else {
+        el.src = src; el.alt = '';
+      }
+      frame.appendChild(el);
+      lightbox.classList.add('is-open');
+    });
+  });
+
+  var watchLink = document.getElementById('watch-live-set');
+  if (watchLink) {
+    watchLink.addEventListener('click', function (e) {
+      e.preventDefault();
+      var clip = grid.querySelector('.perf-tile--play');
+      if (clip) clip.click();
+    });
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('is-open');
+    frame.querySelectorAll('video').forEach(function (v) { v.pause(); });
+  }
+  closeBtn.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', function (e) { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeLightbox(); });
+})();
+</script>
+<script>
+// Live archive — rendered from a small array so future performances can be
+// added here without touching markup. Only documented dates/venues from the
+// site's own photo library are used; anything unconfirmed stays a clearly
+// marked placeholder rather than an invented event.
+(function () {
+  var grid = document.getElementById('perf-archive-grid');
+  if (!grid) return;
+
+  var PERFORMANCES = [
+    {
+      img: 'img/performance/perf-archive-nivid.jpg',
+      event: 'Nivid Queendom',
+      place: 'Sofar Sounds, Bombay',
+      year: '2026'
+    },
+    {
+      img: 'img/performance/perf-archive-kgl.jpg',
+      event: 'Live set',
+      place: 'August 2024',
+      year: '2024'
+    }
+  ];
+
+  PERFORMANCES.forEach(function (p) {
+    var el = document.createElement('button');
+    el.type = 'button';
+    el.className = 'perf-arch-item';
+    el.innerHTML =
+      '<img src="' + p.img + '" alt="' + p.event + ', ' + p.place + '" loading="lazy">' +
+      '<span class="perf-arch-item__scrim"></span>' +
+      '<span class="perf-arch-item__meta">' +
+        '<span class="perf-arch-item__year">' + p.year + '</span>' +
+        '<span class="perf-arch-item__event">' + p.event + '</span>' +
+        '<span class="perf-arch-item__place">' + p.place + '</span>' +
+      '</span>';
+    el.addEventListener('click', function () {
+      var frame = document.getElementById('perf-lightbox-frame');
+      frame.querySelectorAll('img, video').forEach(function (n) { n.remove(); });
+      var img = document.createElement('img');
+      img.src = p.img; img.alt = p.event;
+      frame.appendChild(img);
+      document.getElementById('perf-lightbox').classList.add('is-open');
+    });
+    grid.appendChild(el);
+  });
+
+  var placeholder = document.createElement('div');
+  placeholder.className = 'perf-arch-item perf-arch-item--placeholder';
+  placeholder.innerHTML = '<span>More performances added as they’re booked</span>';
+  grid.appendChild(placeholder);
+})();
+</script>
 </body>
 </html>
+</content>

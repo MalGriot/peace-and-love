@@ -27,6 +27,7 @@ function renderChrome(active) {
     ['meditation.html', 'Meditation', 'meditation'],
     ['soundscapes.html', 'Soundscapes', 'wellness'],
     ['about.html', 'About', 'about'],
+    ['press.html', 'Press', 'press'],
     ['contact.html', 'Contact', 'contact'],
   ];
   const menuItemHtml = menuItems
@@ -637,6 +638,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initEmberField();
   if (typeof initScrollReveal === 'function') initScrollReveal();
   if (typeof initScrollFloat === 'function') initScrollFloat();
+  if (typeof initVariableProximity === 'function') initVariableProximity();
 });
 
 // Rising ember/ash field: small points that drift upward and flicker in

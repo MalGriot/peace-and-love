@@ -178,6 +178,17 @@
      here; .listen__gap-fix / the releases section's own border supplies the
      visual separation instead. */
   .listen--hero{border-bottom:none}
+
+  /* .warp-text's shared min-height:220px (shared.css) is much taller than
+     the glyphs it vertically centers, and the hero-collapse script's
+     gsap.set(...,{clearProps:'all'}) strips the inline clamp() height on
+     load, so that 220px min-height is what actually governs the box —
+     leaving a big empty gap below the visible title that the JS then
+     used to lock "fall into the sky…" far from it. Tighten the box on
+     mobile so its bottom edge sits close to the visible text. */
+  @media (max-width:640px){
+    .listen--hero .warp-text{height:100px !important;min-height:100px !important}
+  }
 </style>
 </head>
 <body>
@@ -206,7 +217,7 @@
     data-letter-spacing="-0.06em"
     data-line-height="0.9"
   ></h1>
-  <p class="scroll-float" data-base-opacity="0" data-base-rotation="5" data-blur-strength="10">Fall into the sky with us. Float on up through heightened sights. MAL GRIOT's latest exhaled odyssey is a collection of songs about love, loss, longing, and learning to let go that will take you through it. Straight up.</p>
+  <p class="scroll-float variable-proximity" data-manual-float="true" data-base-opacity="0" data-base-rotation="5" data-blur-strength="10" data-radius="90" data-from-font-variation-settings="'wght' 100" data-to-font-variation-settings="'wght' 900">Fall into the sky with us. Float on up through heightened sights. MAL GRIOT's latest exhaled odyssey is a collection of songs about love, loss, longing, and learning to let go that will take you through it. Straight up.</p>
 
   <div class="listen__stage" id="listenStage" role="button" tabindex="0" aria-label="Play breathe love d e e p">
     <div class="listen__vinyl" id="listenVinyl">
@@ -244,7 +255,7 @@
             <span class="release__disc__hole"></span>
           </div>
         </div>
-        <img class="release__art" src="https://images.pexels.com/photos/9257184/pexels-photo-9257184.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+        <img class="release__art" src="https://images.pexels.com/photos/9257184/pexels-photo-9257184.jpeg?cs=tinysrgb&dpr=2&w=300" alt="breathe love d e e p — Mal Griot album art">
       </div>
       <div>
         <h3 class="release__title"><span class="nb">breathe love d e e p</span></h3>
@@ -265,7 +276,7 @@
             <span class="release__disc__hole"></span>
           </div>
         </div>
-        <img class="release__art" src="https://images.pexels.com/photos/13532875/pexels-photo-13532875.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+        <img class="release__art" src="https://images.pexels.com/photos/13532875/pexels-photo-13532875.jpeg?cs=tinysrgb&dpr=2&w=300" alt="I Tried It — Mal Griot album art">
       </div>
       <div>
         <h3 class="release__title">I Tried It</h3>
@@ -287,7 +298,7 @@
             <span class="release__disc__hole"></span>
           </div>
         </div>
-        <img class="release__art" src="https://images.pexels.com/photos/13532875/pexels-photo-13532875.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+        <img class="release__art" src="https://images.pexels.com/photos/13532875/pexels-photo-13532875.jpeg?cs=tinysrgb&dpr=2&w=300" alt="The Call of the Jungle (Overmind) — Mal Griot album art">
       </div>
       <div>
         <h3 class="release__title">The Call of the Jungle (Overmind)</h3>
@@ -309,7 +320,7 @@
             <span class="release__disc__hole"></span>
           </div>
         </div>
-        <img class="release__art" src="https://images.pexels.com/photos/9258252/pexels-photo-9258252.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+        <img class="release__art" src="https://images.pexels.com/photos/9258252/pexels-photo-9258252.jpeg?cs=tinysrgb&dpr=2&w=300" alt="Free Fall — Mal Griot album art">
       </div>
       <div>
         <h3 class="release__title">Free Fall</h3>
@@ -331,7 +342,7 @@
             <span class="release__disc__hole"></span>
           </div>
         </div>
-        <img class="release__art" src="https://images.pexels.com/photos/9257184/pexels-photo-9257184.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+        <img class="release__art" src="https://images.pexels.com/photos/9257184/pexels-photo-9257184.jpeg?cs=tinysrgb&dpr=2&w=300" alt="Helicopter Man — Mal Griot album art">
       </div>
       <div>
         <h3 class="release__title">Helicopter Man</h3>
@@ -353,7 +364,7 @@
             <span class="release__disc__hole"></span>
           </div>
         </div>
-        <img class="release__art" src="https://images.pexels.com/photos/16944874/pexels-photo-16944874/free-photo-of-vinyl-records-collection.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+        <img class="release__art" src="https://images.pexels.com/photos/16944874/pexels-photo-16944874/free-photo-of-vinyl-records-collection.jpeg?cs=tinysrgb&dpr=2&w=300" alt="Toxic Baby — Mal Griot album art">
       </div>
       <div>
         <h3 class="release__title">Toxic Baby</h3>
@@ -375,7 +386,7 @@
             <span class="release__disc__hole"></span>
           </div>
         </div>
-        <img class="release__art" src="https://images.pexels.com/photos/18430331/pexels-photo-18430331/free-photo-of-close-up-of-a-gramophone-playing-music.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+        <img class="release__art" src="https://images.pexels.com/photos/18430331/pexels-photo-18430331/free-photo-of-close-up-of-a-gramophone-playing-music.jpeg?cs=tinysrgb&dpr=2&w=300" alt="Truly Higher — Mal Griot album art">
       </div>
       <div>
         <h3 class="release__title">Truly Higher</h3>
@@ -396,7 +407,7 @@
             <span class="release__disc__hole"></span>
           </div>
         </div>
-        <img class="release__art" src="https://images.pexels.com/photos/9258252/pexels-photo-9258252.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+        <img class="release__art" src="https://images.pexels.com/photos/9258252/pexels-photo-9258252.jpeg?cs=tinysrgb&dpr=2&w=300" alt="Sun Burna — Mal Griot album art">
       </div>
       <div>
         <h3 class="release__title">Sun Burna</h3>
@@ -417,7 +428,7 @@
             <span class="release__disc__hole"></span>
           </div>
         </div>
-        <img class="release__art" src="https://images.pexels.com/photos/9009605/pexels-photo-9009605.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+        <img class="release__art" src="https://images.pexels.com/photos/9009605/pexels-photo-9009605.jpeg?cs=tinysrgb&dpr=2&w=300" alt="sumthn — Mal Griot album art">
       </div>
       <div>
         <h3 class="release__title">sumthn</h3>
@@ -438,7 +449,7 @@
             <span class="release__disc__hole"></span>
           </div>
         </div>
-        <img class="release__art" src="https://images.pexels.com/photos/30042523/pexels-photo-30042523/free-photo-of-vintage-record-player-with-spinning-vinyl.jpeg?cs=tinysrgb&dpr=2&w=300" alt="">
+        <img class="release__art" src="https://images.pexels.com/photos/30042523/pexels-photo-30042523/free-photo-of-vintage-record-player-with-spinning-vinyl.jpeg?cs=tinysrgb&dpr=2&w=300" alt="PeRiOdYsSiUs — Mal Griot album art">
       </div>
       <div>
         <h3 class="release__title">PeRiOdYsSiUs</h3>
@@ -887,9 +898,13 @@
         // Locked "subtitle" spot: right beneath the title, tight gap.
         const copyLockTop = titleRect.bottom + 16;
         const copyLockY = copyLockTop - copyRect.top;
-        const copyStartY = copyLockY + 46; // sits a bit lower/hidden pre-float
 
-        gsap.set(copy, { y: copyStartY, opacity: 0, clipPath: 'inset(0 0 0% 0)' });
+        // Copy itself sits at its locked position throughout phase 1 — the
+        // "floats up" motion happens per-word (below) rather than as one
+        // block, so each word rises into place on its own beat.
+        gsap.set(copy, { y: copyLockY, opacity: 1, clipPath: 'inset(0 0 0% 0)' });
+        const copyWords = copy.querySelectorAll('.word');
+        gsap.set(copyWords, { y: 26, opacity: 0 });
 
         // Phase 4: bring the CTA + track row up to sit just under the
         // album's new resting spot, so the "rest of the page" rises as one.
@@ -900,11 +915,21 @@
           belowDeltaY = desiredTop - firstRect.top;
         }
 
+        // Phase 3 (album rise) and phase 4 (CTA + tracks, which pulls in
+        // "All Releases" behind them) each take half the scroll distance
+        // they used to — same local durations, halved — and the pin's
+        // total scroll length shrinks to match so there's no leftover
+        // pinned scroll once they finish. Phases 1/1.5/2 (copy + title)
+        // keep their original pace.
+        const phase3Dur = 0.25;
+        const phase4Gap = 0.025;
+        const phase4Dur = 0.15;
+
         tl = gsap.timeline({
           scrollTrigger: {
             trigger: section,
             start: 'top top',
-            end: '+=260%',
+            end: '+=210%',
             scrub: 0.5,
             pin: true,
             anticipatePin: 1,
@@ -912,8 +937,12 @@
           }
         });
 
-        // Phase 1: copy fades in + floats up to lock beneath the title.
-        tl.to(copy, { y: copyLockY, opacity: 1, duration: 0.4, ease: 'none' }, 0);
+        // Phase 1: copy's words float up + fade in one at a time. Stagger
+        // uses a fixed total "amount" (not a fixed per-word gap) so the
+        // whole reveal still finishes inside the same budget regardless of
+        // word count — a fixed gap here made 39 words blow past phase 2's
+        // start and get wiped before the last ones ever appeared.
+        tl.to(copyWords, { y: 0, opacity: 1, duration: 0.15, stagger: { amount: 0.25, from: 'start' }, ease: 'none' }, 0);
         // Phase 1.5: held pause (nothing tweened) — more scroll before the
         // title/copy move again. Next phase starts well after phase 1 ends.
         const phase2Start = 0.9;
@@ -925,7 +954,6 @@
           .to(copy, { clipPath: 'inset(0 0 100% 0)', opacity: 0, duration: phase2Dur, ease: 'none' }, phase2Start);
         // Phase 3: only now does the album rise.
         const phase3Start = phase2Start + phase2Dur;
-        const phase3Dur = 0.5;
         tl.to(stage, { y: stageDeltaY, duration: phase3Dur, ease: 'none' }, phase3Start);
         // Phase 4: CTA + tracks rise to follow the album. Their box in
         // normal document flow doesn't actually shrink just because we
@@ -936,8 +964,7 @@
         // pin logic actively resets that every frame; this sibling div,
         // outside the pin-spacer, isn't touched by it.)
         if (belowGroup.length) {
-          const phase4Start = phase3Start + phase3Dur + 0.05;
-          const phase4Dur = 0.3;
+          const phase4Start = phase3Start + phase3Dur + phase4Gap;
           tl.to(belowGroup, { y: belowDeltaY, duration: phase4Dur, ease: 'none' }, phase4Start);
           if (gapFix) {
             tl.to(gapFix, { marginTop: belowDeltaY, duration: phase4Dur, ease: 'none' }, phase4Start);

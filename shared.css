@@ -2,7 +2,7 @@
    Each satellite page layers its own signature-texture styles on top of this.
    Palette/type: "Candlelit Velvet" brand kit (see MAL GRIOT BRAND KIT/). */
 
-@import url('https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&family=Inter:wght@100..900&display=swap');
 
 :root{
   --ink: #12100f;
@@ -557,3 +557,9 @@ a{color:inherit}
   max-width:52ch;
 }
 .scroll-float .word{display:inline-block}
+
+/* ---------- accessibility / SEO: visually hidden but present in DOM ---------- */
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
+}
