@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Soundscapes — Mal Griot</title>
+<meta name="description" content="Soundscapes and sound design by Mal Griot.">
+<meta property="og:title" content="Soundscapes — Mal Griot">
+<meta property="og:description" content="Soundscapes and sound design by Mal Griot.">
+<meta property="og:image" content="https://malgriot.github.io/peace-and-love/img/og/share-soundscapes.png">
+<meta property="og:url" content="https://malgriot.github.io/peace-and-love/soundscapes.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://malgriot.github.io/peace-and-love/img/og/share-soundscapes.png">
+<link rel="canonical" href="https://malgriot.github.io/peace-and-love/soundscapes.html">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Mal Griot",
+  "alternateName": "MAL GRIOT",
+  "jobTitle": "Vocalist, Spoken-Word Artist, MC/Host, Voice Actor",
+  "url": "https://malgriot.github.io/peace-and-love/",
+  "image": "https://malgriot.github.io/peace-and-love/img/og/share-contact.png",
+  "sameAs": [
+    "https://instagram.com/yep.that.malcolm",
+    "https://www.linkedin.com/in/malgriot/",
+    "https://open.spotify.com/artist/61bgVlMQw2S0t6d8mVPVIS",
+    "https://soundcloud.com/mal-griot",
+    "https://music.apple.com/us/artist/mal-griot/1773454818",
+    "https://music.youtube.com/channel/UC2ouYdd3qmP9vSvLpKD8-CQ",
+    "https://music.amazon.com/artists/B0DTP5MFVP/mal-griot",
+    "https://tidal.com/artist/53475605",
+    "https://www.youtube.com/@MalGriot"
+  ]
+}
+</script>
+<link rel="icon" href="img/brand/favicon.ico">
+<link rel="apple-touch-icon" href="img/brand/apple-touch-icon.png">
+<link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="effects.css">
+<style>
+  :root{
+    --linen:#ece3d3;
+    --linen-deep:#d9cbb0;
+    --marble-vein:#b9a583;
+    --ink-soft:#2b241c;
+    --terracotta:#b46a4a;
+    --sage:#7c8567;
+  }
+  body{background-color:var(--linen);color:var(--ink-soft);background-image:var(--stars-svg);background-repeat:repeat;background-attachment:fixed}
+  .sm-logo{color:var(--ink-soft)}
+  .sm-toggle{color:var(--ink-soft);background:rgba(236,227,211,.6);border-color:rgba(43,36,28,.25)}
+  .sm-toggle:hover{border-color:var(--terracotta)}
+
+  .w-hero{
+    position:relative;min-height:92vh;display:flex;align-items:center;overflow:hidden;
+    background:
+      radial-gradient(60% 80% at 85% 15%, rgba(255,255,255,.5), transparent 60%),
+      linear-gradient(160deg, var(--linen) 0%, var(--linen-deep) 60%, var(--marble-vein) 130%);
+  }
+  .w-hero__veins{position:absolute;inset:0;opacity:.35;pointer-events:none;mix-blend-mode:multiply;
+    background-image:
+      radial-gradient(1px 140px at 20% -10%, rgba(43,36,28,.25), transparent),
+      radial-gradient(1px 200px at 70% 110%, rgba(43,36,28,.2), transparent),
+      radial-gradient(1px 160px at 45% 40%, rgba(43,36,28,.15), transparent);
+    transform:rotate(8deg) scale(1.4);
+  }
+  .w-hero__grid{position:relative;z-index:2;width:100%;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;
+    padding:170px clamp(20px,5vw,64px) 90px;align-items:center}
+  .w-hero__eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--terracotta);margin-bottom:18px;font-weight:600}
+  .w-hero__title{font-family:var(--font-display);font-weight:400;font-size:clamp(42px,6vw,80px);line-height:1;margin:0 0 22px;color:var(--ink-soft)}
+  .w-hero__desc{font-size:16px;line-height:1.7;color:rgba(43,36,28,.75);max-width:44ch;margin-bottom:32px}
+  .w-hero__photo-wrap{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:4/5;box-shadow:0 30px 70px rgba(43,36,28,.25)}
+  .w-hero__photo-wrap img{width:100%;height:100%;object-fit:cover;object-position:37% 18%}
+  .btn-terra{background:var(--terracotta);color:#fdf6ee}
+  .btn-terra:hover{background:#a35a3d}
+  .btn-outline-dark{background:transparent;color:var(--ink-soft);border:1px solid rgba(43,36,28,.3)}
+  .btn-outline-dark:hover{border-color:var(--ink-soft)}
+  @media (max-width:820px){.w-hero__grid{grid-template-columns:1fr}.w-hero__photo-wrap{order:-1}}
+
+  /* offerings */
+  .offerings{padding:100px clamp(20px,5vw,64px);background:var(--linen)}
+  .offerings__head{text-align:center;max-width:56ch;margin:0 auto 56px}
+  .offerings__head .eyebrow{color:var(--terracotta);display:block;margin-bottom:14px}
+  .offerings__head h2{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,3.6vw,42px);margin:0;color:var(--ink-soft)}
+  .offer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+  .offer{background:#fdf9f2;border:1px solid rgba(43,36,28,.08);border-radius:14px;padding:36px 30px}
+  .offer .icon{width:44px;height:44px;border-radius:999px;background:rgba(180,106,74,.12);display:flex;align-items:center;justify-content:center;color:var(--terracotta);margin-bottom:20px}
+  .offer h3{font-family:var(--font-display);font-weight:500;font-size:20px;margin:0 0 10px;color:var(--ink-soft)}
+  .offer p{font-size:14px;line-height:1.65;color:rgba(43,36,28,.7);margin:0}
+  @media (max-width:860px){.offer-grid{grid-template-columns:1fr}}
+
+  /* gallery */
+  .w-gallery{padding:0 clamp(20px,5vw,64px) 100px;display:grid;grid-template-columns:1.3fr 1fr;gap:20px}
+  .w-gallery img{width:100%;height:100%;object-fit:cover;border-radius:14px}
+  .w-gallery .tall{aspect-ratio:3/4}
+  .w-gallery .stack{display:grid;grid-template-rows:1fr 1fr;gap:20px}
+  .w-gallery .stack img{aspect-ratio:16/10}
+  @media (max-width:760px){.w-gallery{grid-template-columns:1fr}}
+
+  /* quote */
+  .w-quote{padding:90px clamp(20px,5vw,64px);text-align:center;background:var(--linen-deep)}
+  .w-quote blockquote{font-family:var(--font-display);font-weight:400;font-style:italic;font-size:clamp(22px,3vw,32px);max-width:26ch;margin:0 auto 18px;line-height:1.35;color:var(--ink-soft)}
+  .w-quote cite{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:rgba(43,36,28,.6);font-style:normal}
+
+  .w-cta{padding:100px clamp(20px,5vw,64px);text-align:center;background:var(--linen)}
+  .w-cta h2{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,4vw,44px);margin:0 0 24px;color:var(--ink-soft)}
+
+  .site-footer{background:var(--ink-soft)}
+</style>
+</head>
+<body>
+
+<div id="chrome-nav"></div>
+
+<header class="w-hero">
+  <div class="w-hero__veins"></div>
+  <div class="w-hero__grid">
+    <div>
+      <span class="w-hero__eyebrow">Sound Facilitation · Songwriting Coaching</span>
+      <h1 class="w-hero__title">Come Find Your Voice</h1>
+      <p class="w-hero__desc">Sound facilitation and songwriting coaching that use the voice as an instrument for regulation and expression — not performance. Sound baths, sonorium sessions, guided meditation, and songwriting all draw on that same practice, carrying both therapeutic and artistic qualities.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap">
+        <a href="#offerings" class="btn btn-terra">Explore Offerings</a>
+        <a href="contact.html" class="btn btn-outline-dark">Book a Session</a>
+      </div>
+    </div>
+    <div class="w-hero__photo-wrap">
+      <img src="img/1722241513419.jpg" alt="Mal Griot, quiet portrait">
+    </div>
+  </div>
+</header>
+
+<section class="offerings" id="offerings">
+  <div class="offerings__head">
+    <span class="eyebrow">What's Offered</span>
+    <h2>Two ways to find your voice.</h2>
+  </div>
+  <div class="offer-grid">
+    <div class="offer">
+      <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 12a4 4 0 0 1 8 0"/><path d="M12 8v.01"/></svg></div>
+      <h3>Sound Facilitation</h3>
+      <p>1:1 and group sessions using voice and singing bowls to calm the nervous system and open the breath.</p>
+    </div>
+    <div class="offer">
+      <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M12 10C12 6 9 4 5 4c0 4 2 6 7 6zM12 10c0-4 3-6 7-6 0 4-2 6-7 6z"/></svg></div>
+      <h3>Songwriting Coaching</h3>
+      <p>Guided sessions for writers and vocalists working through blocks, tone, and finding an authentic voice on the page and in the room.</p>
+    </div>
+    <div class="offer">
+      <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4v16M4 4l16 4-16 4"/></svg></div>
+      <h3>Workshops</h3>
+      <p>Small-group sessions blending both practices for teams, retreats, and creative communities.</p>
+    </div>
+  </div>
+</section>
+
+<section class="w-gallery">
+  <img class="tall" src="https://images.pexels.com/photos/6252088/pexels-photo-6252088.jpeg?cs=tinysrgb&dpr=2&w=1000" alt="">
+  <div class="stack">
+    <img src="https://images.pexels.com/photos/4098262/pexels-photo-4098262.jpeg?cs=tinysrgb&dpr=2&w=1000" alt="">
+    <img src="https://images.pexels.com/photos/5699481/pexels-photo-5699481.jpeg?cs=tinysrgb&dpr=2&w=1000" alt="">
+  </div>
+</section>
+
+<section class="w-quote">
+  <blockquote>"The voice doesn't lie. Sessions here just make room for it to speak."</blockquote>
+  <cite>— session participant</cite>
+</section>
+
+<section class="w-cta">
+  <h2>Ready to begin?</h2>
+  <a href="contact.html" class="btn btn-terra">Book a Session</a>
+</section>
+
+<div id="chrome-footer"></div>
+<div id="chrome-chat"></div>
+<div id="chrome-player"></div>
+
+<script src="shared.js"></script>
+<script src="effects.js"></script>
+<script src="chat.js"></script>
+<script>renderChrome('wellness');</script>
+</body>
+</html>

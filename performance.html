@@ -47,6 +47,30 @@
 .perf-cta:hover svg{transform:translateX(3px)}
 .perf-cta--gold{color:var(--gold);border-color:rgba(224,178,106,.4)}
 
+/* Solid primary button — reserved for the one or two asks-that-matter per
+   section (book), so it stands apart from the quieter underline links. */
+.perf-cta--solid{
+  background:var(--gold);color:var(--ink);border:1px solid var(--gold);
+  padding:15px 26px;border-radius:2px;gap:10px;
+}
+.perf-cta--solid:hover{background:var(--paper);border-color:var(--paper);color:var(--ink);gap:14px}
+.perf-cta--ghost{
+  background:transparent;color:var(--paper);border:1px solid rgba(239,230,216,.32);
+  padding:14px 25px;border-radius:2px;
+}
+.perf-cta--ghost:hover{border-color:var(--gold);color:var(--gold);background:rgba(224,178,106,.06)}
+
+/* Staggered on-load entrance for the hero copy — each line arrives a beat
+   after the last instead of the whole block fading in as one flat unit. */
+.perf-hero__eyebrow.reveal{transition-delay:.05s}
+.perf-hero__title.reveal{transition-delay:.18s}
+.perf-hero__desc.reveal{transition-delay:.36s}
+.perf-hero__ctas.reveal{transition-delay:.5s}
+
+@keyframes perf-hero-kenburns{from{transform:scale(1.1)}to{transform:scale(1)}}
+.perf-hero__media img{animation:perf-hero-kenburns 5s cubic-bezier(.16,1,.3,1) both}
+@media (prefers-reduced-motion: reduce){.perf-hero__media img{animation:none}}
+
 .perf-hero__media{position:relative;overflow:hidden;background:var(--ink)}
 .perf-hero__media img{
   width:100%;height:100%;object-fit:cover;object-position:50% 22%;
@@ -90,7 +114,7 @@
 
 .perf-grid{
   max-width:1180px;margin:0 auto;
-  display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:120px;gap:10px;
+  display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:120px;grid-auto-flow:dense;gap:10px;
 }
 .perf-tile{
   position:relative;overflow:hidden;border-radius:4px;cursor:pointer;
@@ -144,22 +168,45 @@
 }
 .perf-lightbox__close:hover{color:var(--paper)}
 
+/* ---------- 3b. Watch a set ---------- */
+.perf-watch{max-width:1180px;margin:0 auto}
+.perf-watch__head{max-width:640px;margin:0 0 34px}
+.perf-watch__grid{display:grid;grid-template-columns:1.4fr 1fr;gap:3px}
+.perf-watch__main, .perf-watch__side{position:relative;overflow:hidden;background:#000;aspect-ratio:16/10}
+.perf-watch__side{aspect-ratio:auto}
+.perf-watch__main video, .perf-watch__side video{width:100%;height:100%;object-fit:cover;display:block}
+.perf-watch__label{
+  position:absolute;left:18px;bottom:16px;z-index:2;display:flex;flex-direction:column;gap:2px;
+  pointer-events:none;
+}
+.perf-watch__label b{font-family:var(--font-display);font-weight:400;font-size:18px;color:var(--paper)}
+.perf-watch__label span{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.perf-watch__main::before, .perf-watch__side::before{
+  content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(0deg,rgba(18,16,15,.85) 0%,transparent 45%);pointer-events:none;
+}
+@media (max-width:820px){
+  .perf-watch__grid{grid-template-columns:1fr}
+  .perf-watch__side{aspect-ratio:16/10}
+}
+
 /* ---------- 4. The Sets ---------- */
-.perf-sets{max-width:900px;margin:0 auto}
+.perf-sets{max-width:1180px;margin:0 auto}
 .perf-sets__title{font-family:var(--font-display);font-weight:400;font-size:clamp(30px,4vw,46px);margin:0 0 12px;color:var(--paper)}
 .perf-sets__sub{color:var(--paper-dim);font-size:14px;margin:0 0 44px;max-width:52ch}
-.perf-set-row{
-  display:grid;grid-template-columns:2fr 3fr;gap:24px;align-items:baseline;
-  padding:26px 0;border-top:1px solid rgba(239,230,216,.12);
-  transition:padding-left .35s ease;
+.perf-sets__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px;background:rgba(239,230,216,.1)}
+.perf-set-card{background:var(--ink);display:flex;flex-direction:column}
+.perf-set-card__media{position:relative;aspect-ratio:4/5;overflow:hidden;background:#1c1815}
+.perf-set-card__media img{width:100%;height:100%;object-fit:cover;filter:saturate(.82) brightness(.86);transition:transform 1s cubic-bezier(.16,1,.3,1)}
+.perf-set-card:hover .perf-set-card__media img{transform:scale(1.05)}
+.perf-set-card__media::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(18,16,15,.75) 0%,transparent 50%)}
+.perf-set-card__body{padding:22px 20px 28px}
+.perf-set-card__name{font-family:var(--font-display);font-weight:400;font-size:clamp(19px,2vw,23px);color:var(--paper);display:block}
+.perf-set-card__format{
+  display:block;font-family:var(--font-body);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--brass);margin:7px 0 12px;
 }
-.perf-set-row:last-child{border-bottom:1px solid rgba(239,230,216,.12)}
-.perf-set-row:hover{padding-left:10px}
-.perf-set-row__name{font-family:var(--font-display);font-weight:400;font-size:clamp(19px,2.2vw,25px);color:var(--paper)}
-.perf-set-row__desc{color:var(--paper-dim);font-size:14.5px;line-height:1.6}
-@media (max-width:640px){
-  .perf-set-row{grid-template-columns:1fr;gap:8px}
-}
+.perf-set-card__desc{color:var(--paper-dim);font-size:13.5px;line-height:1.62}
 
 /* ---------- 5. Where It Fits ---------- */
 .perf-fits{max-width:1100px;margin:0 auto}
@@ -177,7 +224,8 @@
 /* ---------- 6. Live Archive ---------- */
 .perf-archive{max-width:1180px;margin:0 auto}
 .perf-archive__head{max-width:640px;margin:0 0 44px}
-.perf-archive__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:2px}
+.perf-archive__sub{color:var(--paper-dim);font-size:14px;margin:14px 0 0;max-width:56ch}
+.perf-archive__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:3px;margin-bottom:56px}
 .perf-arch-item{
   position:relative;aspect-ratio:4/5;overflow:hidden;background:#1c1815;
   border:none;padding:0;cursor:pointer;display:block;width:100%;
@@ -185,15 +233,26 @@
 .perf-arch-item img{width:100%;height:100%;object-fit:cover;filter:saturate(.8) brightness(.85);transition:transform .9s cubic-bezier(.16,1,.3,1),filter .5s ease}
 .perf-arch-item:hover img{transform:scale(1.06);filter:saturate(.95) brightness(.95)}
 .perf-arch-item__scrim{position:absolute;inset:0;background:linear-gradient(0deg,rgba(18,16,15,.88) 0%,rgba(18,16,15,.15) 55%,transparent 75%)}
-.perf-arch-item__meta{position:absolute;left:16px;right:16px;bottom:14px;text-align:left}
-.perf-arch-item__year{display:block;font-size:11px;letter-spacing:.14em;color:var(--gold);margin-bottom:6px}
-.perf-arch-item__event{display:block;font-family:var(--font-display);font-size:16px;color:var(--paper)}
-.perf-arch-item__place{display:block;font-size:12px;color:var(--paper-dim);margin-top:3px}
-.perf-arch-item--placeholder{
-  display:flex;align-items:center;justify-content:center;text-align:center;
-  border:1px dashed rgba(239,230,216,.16);cursor:default;padding:20px;
+.perf-arch-item__meta{position:absolute;left:18px;right:18px;bottom:16px;text-align:left}
+.perf-arch-item__event{display:block;font-family:var(--font-display);font-size:19px;color:var(--paper)}
+.perf-arch-item__place{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);margin-top:5px}
+
+/* Prestige-ordered stage list — no dates, ranked by name recognition */
+.perf-stages__title{font-family:var(--font-display);font-weight:400;font-size:clamp(22px,2.6vw,28px);margin:0 0 6px;color:var(--paper)}
+.perf-stages__sub{color:var(--paper-dim);font-size:13.5px;margin:0 0 22px;max-width:56ch}
+.perf-stage-row{
+  display:flex;align-items:baseline;gap:22px;
+  padding:19px 0;border-top:1px solid rgba(239,230,216,.12);
+  transition:padding-left .35s ease;
 }
-.perf-arch-item--placeholder span{font-size:12px;letter-spacing:.06em;color:var(--paper-faint);max-width:20ch}
+.perf-stage-row:last-child{border-bottom:1px solid rgba(239,230,216,.12)}
+.perf-stage-row:hover{padding-left:10px}
+.perf-stage-row:hover .perf-stage-row__index{color:var(--gold)}
+.perf-stage-row__index{
+  font-family:var(--font-body);font-size:12px;letter-spacing:.04em;color:var(--paper-faint);
+  flex:none;width:24px;transition:color .3s ease;
+}
+.perf-stage-row__name{font-family:var(--font-display);font-weight:400;font-size:clamp(18px,2.2vw,24px);color:var(--paper)}
 
 /* ---------- 7. Music/Performance transition ---------- */
 .perf-transition{text-align:center;background:var(--velvet-wine);position:relative;overflow:hidden}
@@ -226,10 +285,13 @@
     <span class="perf-hero__eyebrow reveal">Performance</span>
     <h1 class="perf-hero__title reveal">Mal<br><em>Griot</em></h1>
     <p class="perf-hero__desc reveal">A live musical performance built from voice, rhythm, looping, poetry and improvisation.</p>
-    <a href="contact.html" class="perf-cta perf-cta--gold reveal">
-      Book the performance
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </a>
+    <div class="perf-hero__ctas reveal" style="display:flex;flex-wrap:wrap;gap:14px">
+      <a href="contact.html" class="perf-cta perf-cta--solid">
+        Book the performance
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#watch" class="perf-cta perf-cta--ghost">Watch a set</a>
+    </div>
   </div>
   <div class="perf-hero__media">
     <img src="img/performance-home.jpg" alt="Mal Griot mid-performance, close to the microphone">
@@ -250,7 +312,7 @@
       <span class="perf-fragments__eyebrow">Fragments</span>
       <h2 class="perf-fragments__title">From the archive</h2>
     </div>
-    <a href="#fragments" class="perf-cta" id="watch-live-set">
+    <a href="#watch" class="perf-cta">
       Watch the live set
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </a>
@@ -281,28 +343,103 @@
       <img src="img/performance/perf-room.jpg" alt="Mal Griot performing for a seated room at a Sofar Sounds Bombay show" loading="lazy">
       <span class="perf-tile__tag">The room</span>
     </button>
+    <button type="button" class="perf-tile perf-tile--tall" data-full="img/performance/perf-solo-blue.jpg">
+      <img src="img/performance/perf-solo-blue.jpg" alt="Mal Griot singing under a single stage light" loading="lazy">
+      <span class="perf-tile__tag">Solo</span>
+    </button>
+    <button type="button" class="perf-tile perf-tile--wide" data-full="img/performance/perf-ensemble.jpg">
+      <img src="img/performance/perf-ensemble.jpg" alt="Mal Griot on stage with a percussionist and a hand-drum player" loading="lazy">
+      <span class="perf-tile__tag">Full band</span>
+    </button>
+    <button type="button" class="perf-tile" data-full="img/performance/perf-address.jpg">
+      <img src="img/performance/perf-address.jpg" alt="Mal Griot addressing the room mid-set" loading="lazy">
+      <span class="perf-tile__tag">In the moment</span>
+    </button>
+    <button type="button" class="perf-tile" data-full="img/performance/perf-backstage.jpg">
+      <img src="img/performance/perf-backstage.jpg" alt="Mal Griot in the gear room before a Sofar Sounds Bombay set" loading="lazy">
+      <span class="perf-tile__tag">Before the set</span>
+    </button>
+    <button type="button" class="perf-tile perf-tile--wide" data-full="img/performance/perf-crowd.jpg">
+      <img src="img/performance/perf-crowd.jpg" alt="Wide view of Mal Griot performing for a full room at a Sofar Sounds Bombay show" loading="lazy">
+      <span class="perf-tile__tag">The crowd</span>
+    </button>
+    <button type="button" class="perf-tile perf-tile--tall" data-full="img/performance/perf-grit.jpg">
+      <img src="img/performance/perf-grit.jpg" alt="Mal Griot singing under red stage light" loading="lazy">
+      <span class="perf-tile__tag">Grit</span>
+    </button>
+    <button type="button" class="perf-tile" data-full="img/performance/perf-joy.jpg">
+      <img src="img/performance/perf-joy.jpg" alt="Mal Griot mid-performance, arm raised" loading="lazy">
+      <span class="perf-tile__tag">Joy</span>
+    </button>
+    <button type="button" class="perf-tile" data-full="img/performance/perf-openair.jpg">
+      <img src="img/performance/perf-openair.jpg" alt="Mal Griot performing outdoors under coloured light" loading="lazy">
+      <span class="perf-tile__tag">Open air</span>
+    </button>
+  </div>
+</section>
+
+<section class="perf-section perf-watch" id="watch">
+  <div class="perf-watch__head reveal">
+    <span class="perf-fragments__eyebrow">Watch</span>
+    <h2 class="perf-fragments__title">A set, in full</h2>
+  </div>
+  <div class="perf-watch__grid reveal">
+    <div class="perf-watch__main">
+      <video src="video/hosting-reel/sofar-6.mp4" poster="video/hosting-reel/sofar-6-poster.jpg" controls playsinline preload="none"></video>
+      <span class="perf-watch__label"><b>Sofar Sounds</b><span>Bombay</span></span>
+    </div>
+    <div class="perf-watch__side">
+      <video src="video/hosting-reel/deep-dawn.mp4" poster="video/hosting-reel/deep-dawn-poster.jpg" controls playsinline preload="none"></video>
+      <span class="perf-watch__label"><b>Full band</b><span>Live</span></span>
+    </div>
   </div>
 </section>
 
 <section class="perf-section perf-sets">
   <h2 class="perf-sets__title reveal">The sets</h2>
-  <p class="perf-sets__sub reveal">Different forms of the same practice — shaped to the room, not sold off a menu.</p>
+  <p class="perf-sets__sub reveal">Four formats built from the same practice — chosen by room size and brief, not sold off a fixed menu.</p>
 
-  <div class="perf-set-row reveal">
-    <span class="perf-set-row__name">Solo live set</span>
-    <span class="perf-set-row__desc">Original music, looping, rhythm and voice.</span>
-  </div>
-  <div class="perf-set-row reveal">
-    <span class="perf-set-row__name">Acoustic / intimate</span>
-    <span class="perf-set-row__desc">Voice-led performance for smaller spaces.</span>
-  </div>
-  <div class="perf-set-row reveal">
-    <span class="perf-set-row__name">Full performance</span>
-    <span class="perf-set-row__desc">A developed set with movement, rhythm and audience connection.</span>
-  </div>
-  <div class="perf-set-row reveal">
-    <span class="perf-set-row__name">Custom set</span>
-    <span class="perf-set-row__desc">A performance shaped around a particular theme, programme or space.</span>
+  <div class="perf-sets__grid reveal">
+    <div class="perf-set-card">
+      <div class="perf-set-card__media">
+        <img src="img/performance/perf-solo-blue.jpg" alt="Mal Griot performing a solo live set" loading="lazy">
+      </div>
+      <div class="perf-set-card__body">
+        <span class="perf-set-card__name">Solo live set</span>
+        <span class="perf-set-card__format">Solo — voice, loop pedal, keys</span>
+        <p class="perf-set-card__desc">Original music built in real time: vocals, a loop pedal and keys stacking into full arrangements with nothing pre-recorded. The core format for club nights, curated series and festival slots.</p>
+      </div>
+    </div>
+    <div class="perf-set-card">
+      <div class="perf-set-card__media">
+        <img src="img/performance/perf-archive-sofar.jpg" alt="Mal Griot performing an intimate voice-led set" loading="lazy">
+      </div>
+      <div class="perf-set-card__body">
+        <span class="perf-set-card__name">Acoustic / intimate</span>
+        <span class="perf-set-card__format">Solo or duo — voice-led</span>
+        <p class="perf-set-card__desc">Stripped back for smaller rooms and seated audiences — voice up front, minimal rig, built for listening rather than volume. Right for listening rooms, private events and gallery bills.</p>
+      </div>
+    </div>
+    <div class="perf-set-card">
+      <div class="perf-set-card__media">
+        <img src="img/performance/perf-ensemble.jpg" alt="Mal Griot performing a full band set with percussion" loading="lazy">
+      </div>
+      <div class="perf-set-card__body">
+        <span class="perf-set-card__name">Full performance</span>
+        <span class="perf-set-card__format">Full band — voice, percussion, additional players</span>
+        <p class="perf-set-card__desc">The developed version: percussion and additional musicians alongside Mal, movement, and a set arc built for a longer, headline-length slot on a proper stage.</p>
+      </div>
+    </div>
+    <div class="perf-set-card">
+      <div class="perf-set-card__media">
+        <img src="img/performance/perf-crowd.jpg" alt="Mal Griot performing a custom set built for the room" loading="lazy">
+      </div>
+      <div class="perf-set-card__body">
+        <span class="perf-set-card__name">Custom set</span>
+        <span class="perf-set-card__format">Scaled to the brief</span>
+        <p class="perf-set-card__desc">Built around a specific theme, programme or space — from a themed festival commission to a private booking with its own requirements. Lineup and length are set case by case.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -340,8 +477,15 @@
   <div class="perf-archive__head reveal">
     <span class="perf-fragments__eyebrow">Live archive</span>
     <h2 class="perf-fragments__title">Where Mal has performed</h2>
+    <p class="perf-archive__sub">From a Nita Mukesh Ambani Cultural Centre stage to a Sofar Sounds room in Bombay — solo sets, full-band shows, and hosted nights across India, the US and Australia.</p>
   </div>
   <div class="perf-archive__grid reveal" id="perf-archive-grid"></div>
+
+  <div class="perf-stages reveal">
+    <h3 class="perf-stages__title">Also on the stage</h3>
+    <p class="perf-stages__sub">A partial list, ranked by name recognition rather than date.</p>
+    <ol class="perf-stages__list" id="perf-stages-list"></ol>
+  </div>
 </section>
 
 <section class="perf-section perf-transition">
@@ -358,14 +502,11 @@
 <section class="perf-section perf-final">
   <h2 class="perf-final__title reveal">See you in the room.</h2>
   <div class="perf-final__ctas reveal">
-    <a href="contact.html" class="perf-cta perf-cta--gold">
+    <a href="contact.html" class="perf-cta perf-cta--solid">
       Book the performance
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </a>
-    <a href="#archive" class="perf-cta">
-      Upcoming performances
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </a>
+    <a href="#archive" class="perf-cta perf-cta--ghost">Where Mal has played</a>
   </div>
 </section>
 
@@ -384,8 +525,8 @@
 <script>renderChrome('performance');</script>
 <script>
 // Fragments lightbox — click any tile to expand image/video full-size.
-// Video tiles autoplay muted on hover; the lightbox unmutes so the "watch
-// the live set" clip actually plays with sound once activated on purpose.
+// Video tiles autoplay muted on hover; the lightbox unmutes so the clip
+// actually plays with sound once activated on purpose.
 (function () {
   var lightbox = document.getElementById('perf-lightbox');
   var frame = document.getElementById('perf-lightbox-frame');
@@ -414,15 +555,6 @@
     });
   });
 
-  var watchLink = document.getElementById('watch-live-set');
-  if (watchLink) {
-    watchLink.addEventListener('click', function (e) {
-      e.preventDefault();
-      var clip = grid.querySelector('.perf-tile--play');
-      if (clip) clip.click();
-    });
-  }
-
   function closeLightbox() {
     lightbox.classList.remove('is-open');
     frame.querySelectorAll('video').forEach(function (v) { v.pause(); });
@@ -433,26 +565,23 @@
 })();
 </script>
 <script>
-// Live archive — rendered from a small array so future performances can be
-// added here without touching markup. Only documented dates/venues from the
-// site's own photo library are used; anything unconfirmed stays a clearly
-// marked placeholder rather than an invented event.
+// Live archive — rendered from small arrays so future performances can be
+// added without touching markup. Dates are deliberately omitted throughout
+// (per the artist's own call) — only venue/event and place are shown.
 (function () {
   var grid = document.getElementById('perf-archive-grid');
   if (!grid) return;
 
   var PERFORMANCES = [
     {
-      img: 'img/performance/perf-archive-nivid.jpg',
-      event: 'Nivid Queendom',
-      place: 'Sofar Sounds, Bombay',
-      year: '2026'
+      img: 'img/performance/perf-archive-sofar.jpg',
+      event: 'Sofar Sounds',
+      place: 'Bombay'
     },
     {
       img: 'img/performance/perf-archive-kgl.jpg',
-      event: 'Live set',
-      place: 'August 2024',
-      year: '2024'
+      event: 'Kalabhumi Goes Live',
+      place: 'Auroville'
     }
   ];
 
@@ -464,7 +593,6 @@
       '<img src="' + p.img + '" alt="' + p.event + ', ' + p.place + '" loading="lazy">' +
       '<span class="perf-arch-item__scrim"></span>' +
       '<span class="perf-arch-item__meta">' +
-        '<span class="perf-arch-item__year">' + p.year + '</span>' +
         '<span class="perf-arch-item__event">' + p.event + '</span>' +
         '<span class="perf-arch-item__place">' + p.place + '</span>' +
       '</span>';
@@ -479,10 +607,30 @@
     grid.appendChild(el);
   });
 
-  var placeholder = document.createElement('div');
-  placeholder.className = 'perf-arch-item perf-arch-item--placeholder';
-  placeholder.innerHTML = '<span>More performances added as they’re booked</span>';
-  grid.appendChild(placeholder);
+  // Ranked by name recognition for a booker, not chronology — per the
+  // artist's own note that dates aren't the point here.
+  var STAGES = [
+    'NMACC, Mumbai',
+    'Soho House, Mumbai',
+    'New York City',
+    'Chicago',
+    'Atlanta',
+    'Australia',
+    'Jawaharlal Nehru Memorial Hall',
+    'CRIPA'
+  ];
+
+  var list = document.getElementById('perf-stages-list');
+  if (list) {
+    STAGES.forEach(function (name, i) {
+      var li = document.createElement('li');
+      li.className = 'perf-stage-row';
+      li.innerHTML =
+        '<span class="perf-stage-row__index">' + String(i + 1).padStart(2, '0') + '</span>' +
+        '<span class="perf-stage-row__name">' + name + '</span>';
+      list.appendChild(li);
+    });
+  }
 })();
 </script>
 </body>

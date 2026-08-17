@@ -100,7 +100,8 @@ a{color:inherit}
 .staggered-menu-panel{
   position:fixed;top:0;right:0;bottom:0;z-index:9;width:clamp(280px,38vw,420px);
   background:var(--velvet-deep);border-left:1px solid rgba(239,230,216,.12);
-  padding:100px clamp(24px,3vw,40px) 40px;overflow-y:auto;
+  padding:clamp(60px,12vh,100px) clamp(24px,3vw,40px) clamp(20px,4vh,40px);
+  overflow:hidden;display:flex;flex-direction:column;
   transform:translateX(100%);transition:transform .5s cubic-bezier(.22,.9,.3,1);
   pointer-events:none;
 }
@@ -115,23 +116,52 @@ a{color:inherit}
 }
 .sm-panel-close:hover{border-color:var(--brass);transform:rotate(90deg)}
 
-.sm-panel-list{list-style:none;margin:0 0 40px;padding:0;display:flex;flex-direction:column;gap:2px;counter-reset:sm}
-.sm-panel-itemWrap{overflow:hidden}
+.sm-panel-list{
+  list-style:none;margin:0 0 clamp(12px,3vh,40px);padding:0;
+  display:flex;flex-direction:column;justify-content:space-evenly;
+  flex:1 1 auto;min-height:0;counter-reset:sm;
+}
+.sm-panel-itemWrap{overflow:hidden;flex:0 1 auto}
 .sm-panel-item{
+  --effect:0;
   position:relative;display:flex;align-items:baseline;gap:14px;
-  font-family:var(--font-display);font-size:clamp(20px,2.6vw,28px);color:var(--paper-dim);
-  text-decoration:none;padding:9px 0;border-bottom:1px solid rgba(239,230,216,.08);
+  font-family:var(--font-display);font-size:clamp(13px,2.3vh,28px);color:var(--paper-dim);
+  text-decoration:none;padding:clamp(2px,.9vh,9px) 0;
+  border-bottom:1px solid color-mix(in srgb, var(--gold) calc(var(--effect,0) * 55%), rgba(239,230,216,.08));
   transform:translateY(16px);opacity:0;
-  transition:color .25s ease,transform .5s cubic-bezier(.22,.9,.3,1) var(--sm-delay,0s),opacity .5s ease var(--sm-delay,0s);
+  transition:border-color .12s ease,transform .5s cubic-bezier(.22,.9,.3,1) var(--sm-delay,0s),opacity .5s ease var(--sm-delay,0s);
 }
 .staggered-menu-wrapper.is-open .sm-panel-item{transform:translateY(0);opacity:1}
+/* line-sidebar (react-bits) proximity effect: --effect (0..1) is driven per
+   item by a rAF lerp in initLineSidebarEffect(), tracking cursor distance to
+   each item as the pointer moves over the panel list. */
 .sm-panel-item::before{
   counter-increment:sm;content:counter(sm,decimal-leading-zero);
-  font-family:var(--font-body);font-size:11px;color:var(--brass);letter-spacing:.05em;
+  font-family:var(--font-body);font-size:11px;letter-spacing:.05em;
+  color:color-mix(in srgb, var(--gold) calc(var(--effect,0) * 100%), var(--brass));
+  opacity:calc(.7 + var(--effect,0) * .3);
 }
-.sm-panel-item:hover,.sm-panel-item.is-active{color:var(--paper)}
+.sm-panel-itemLabel{
+  display:inline-block;
+  color:color-mix(in srgb, var(--gold) calc(var(--effect,0) * 100%), var(--paper-dim));
+  transform:translateX(calc(var(--effect,0) * 16px));
+}
+.sm-panel-item.is-active{
+  border-bottom-color:var(--gold);
+  box-shadow:inset 3px 0 0 0 var(--gold);
+  padding-left:12px;
+  margin-left:-12px;
+}
+.sm-panel-item.is-active::before{color:var(--gold);opacity:1}
+.sm-panel-item.is-active .sm-panel-itemLabel{
+  color:var(--gold);
+  font-weight:700;
+  text-shadow:0 0 16px rgba(224,178,106,.5);
+  transform:translateX(22px);
+}
 
-.sm-socials-title{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--paper-faint);margin:0 0 12px}
+.sm-socials{flex:0 0 auto}
+.sm-socials-title{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--paper-faint);margin:0 0 clamp(6px,1.5vh,12px)}
 .sm-socials-list{display:flex;gap:16px;flex-wrap:wrap}
 .sm-socials-list a{font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--paper-dim);text-decoration:none;transition:color .2s}
 .sm-socials-list a:hover{color:var(--brass)}
