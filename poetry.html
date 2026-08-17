@@ -4,22 +4,435 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Poetry — Mal Griot</title>
-<meta name="description" content="Spoken-word and poetry by Mal Griot.">
+<meta name="description" content="Spoken-word poetry by Mal Griot — clips, audio, and the book.">
+<meta property="og:title" content="Poetry — Mal Griot">
+<meta property="og:description" content="Spoken-word poetry by Mal Griot — clips, audio, and the book.">
+<meta property="og:image" content="https://malgriot.github.io/peace-and-love/img/og/share-contact.png">
+<meta property="og:url" content="https://malgriot.github.io/peace-and-love/poetry.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://malgriot.github.io/peace-and-love/img/og/share-contact.png">
 <link rel="canonical" href="https://malgriot.github.io/peace-and-love/poetry.html">
-<meta name="robots" content="noindex, follow">
 <link rel="icon" href="img/brand/favicon.ico">
 <link rel="apple-touch-icon" href="img/brand/apple-touch-icon.png">
 <link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="effects.css">
+<link rel="stylesheet" href="flowing-menu.css">
+<style>
+/* ---------- Poetry page — editorial, page not stage. No booking CTA
+   anywhere on this page; the two asks are "watch/listen" and "buy the book". ---------- */
+
+.po-section{padding:clamp(64px,10vw,140px) clamp(20px,6vw,64px)}
+
+/* ---------- 1. Hero — self-hosted loop, same asset already used on the
+   homepage accordion tile, now full-bleed. ---------- */
+.po-hero{position:relative;min-height:60vh;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;background:var(--ink)}
+
+/* ---------- 1a. Three portrait video tiles, side by side. Each plays
+   muted; they hand off to one another in sequence (1 -> 2 -> 3 -> loop),
+   and a click on any tile jumps playback to it and brings it forward.
+   Tiles are sized by aspect-ratio (matching the portrait source clips)
+   rather than stretched to fill leftover flex space — the latter squashed
+   them into a near-landscape box on desktop, forcing object-fit:cover to
+   zoom in hard and crop out most of the frame. ---------- */
+.po-hero__reel{position:relative;z-index:0;display:grid;grid-template-columns:repeat(3,1fr);gap:2px;flex:none;background:#000}
+.po-hero__tile{
+  position:relative;overflow:hidden;cursor:pointer;background:var(--ink);
+  outline:none;border:none;padding:0;aspect-ratio:3/4;
+}
+.po-hero__tile video{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 22%;
+  opacity:.55;filter:grayscale(1);transition:opacity .5s ease,filter .5s ease;
+}
+.po-hero__tile.is-active video{opacity:1;filter:grayscale(0)}
+
+/* Thumbnail card — swaps in over the video once a clip finishes, instead
+   of leaving it frozen on its last frame. Clicking it again replays. */
+.po-hero__tile-thumb{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 22%;
+  opacity:0;transition:opacity .5s ease;pointer-events:none;
+}
+.po-hero__tile.is-ended .po-hero__tile-thumb{opacity:1}
+.po-hero__tile.is-ended video{opacity:0}
+
+/* Title — visible at rest (idle/paused/ended), fades out while its clip
+   is actively playing so it doesn't compete with the footage. */
+.po-hero__tile-title{
+  position:absolute;left:16px;right:16px;bottom:44px;z-index:1;
+  font-family:var(--font-display);font-weight:400;line-height:1.2;
+  font-size:clamp(15px,1.6vw,19px);color:var(--paper);
+  opacity:1;transition:opacity .4s ease;pointer-events:none;
+}
+.po-hero__tile.is-playing .po-hero__tile-title{opacity:0}
+
+/* Subtitles — native <track> cues, styled to match the brand and sit in
+   the gradient's dark band at the bottom of the tile. */
+/* Brand tokens: Inter body font, ink/paper palette — same rgba(18,16,15,.7)
+   chip background already used by .poem__lyrics-toggle elsewhere on this
+   page, so on-video captions read as the same "system" as the lyrics UI.
+   Note: ::cue only reliably supports color/background/font/text-shadow
+   across browsers — border-radius/padding on it are silently ignored, so
+   they're left off rather than implying control that doesn't exist. */
+.po-hero__tile video::cue{
+  font-family:var(--font-body);font-weight:400;font-size:clamp(12px,1.2vw,14px);line-height:1.5;
+  background:rgba(18,16,15,.7);color:var(--paper);
+}
+
+.po-hero__tile::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(0deg,rgba(18,16,15,.88) 0%,rgba(18,16,15,.1) 55%,rgba(18,16,15,.28) 100%);
+  pointer-events:none;transition:opacity .4s ease;opacity:1;
+}
+.po-hero__tile.is-active::after{opacity:.55}
+.po-hero__tile-index{
+  position:absolute;top:16px;left:16px;z-index:1;
+  font-family:var(--font-body);font-size:11px;letter-spacing:.14em;color:var(--paper-dim);
+  display:flex;align-items:center;gap:8px;pointer-events:none;
+}
+.po-hero__tile-bar{width:26px;height:2px;background:rgba(239,230,216,.28);position:relative;overflow:hidden}
+.po-hero__tile-bar i{position:absolute;inset:0;background:var(--gold);transform:scaleX(0);transform-origin:0 50%}
+.po-hero__tile.is-active .po-hero__tile-bar i{animation:po-bar-fill linear forwards}
+@keyframes po-bar-fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+.po-hero__tile-mute{
+  position:absolute;top:12px;right:12px;z-index:2;
+  width:32px;height:32px;border-radius:999px;
+  background:rgba(18,16,15,.55);border:1px solid rgba(239,230,216,.3);
+  display:flex;align-items:center;justify-content:center;color:var(--paper);
+  cursor:pointer;opacity:0;transition:opacity .3s ease,background .2s ease,border-color .2s ease,color .2s ease;
+}
+.po-hero__tile.is-active .po-hero__tile-mute,.po-hero__tile:hover .po-hero__tile-mute,.po-hero__tile:focus-within .po-hero__tile-mute{opacity:1}
+.po-hero__tile-mute:hover{background:var(--gold);border-color:var(--gold);color:#12100f}
+.po-hero__tile-mute-icon{display:none}
+.po-hero__tile-mute[aria-pressed="false"] .po-hero__tile-mute-icon--unmuted{display:block}
+.po-hero__tile-mute[aria-pressed="true"] .po-hero__tile-mute-icon--muted{display:block}
+@media (max-width:720px){
+  .po-hero{min-height:auto}
+  .po-hero__reel{grid-template-columns:1fr;aspect-ratio:9/16;flex:none}
+  .po-hero__tile{display:none;aspect-ratio:auto}
+  .po-hero__tile.is-active{display:block}
+}
+
+.po-hero__copy{position:relative;z-index:1;padding:clamp(32px,5vw,56px) clamp(24px,6vw,72px) clamp(40px,6vw,64px);max-width:820px}
+.po-hero__eyebrow{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--brass)}
+.po-hero__title{
+  font-family:var(--font-display);font-weight:400;line-height:.98;margin:14px 0 20px;
+  font-size:clamp(40px,6.4vw,84px);letter-spacing:-.02em;color:var(--paper);
+}
+.po-hero__desc{font-size:clamp(15px,1.3vw,17px);line-height:1.65;color:var(--paper-dim);max-width:48ch;margin:0 0 30px}
+.po-hero__ctas{display:flex;flex-wrap:wrap;gap:14px}
+
+.po-cta{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--font-body);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;
+  color:var(--paper);text-decoration:none;padding:4px 0 8px;border-bottom:1px solid rgba(239,230,216,.32);
+  transition:border-color .3s ease,gap .3s ease,color .3s ease;
+}
+.po-cta:hover{border-color:var(--brass);gap:16px;color:var(--gold)}
+.po-cta svg{flex:none;transition:transform .3s ease}
+.po-cta:hover svg{transform:translateX(3px)}
+.po-cta--solid{background:var(--gold);color:var(--ink);border:1px solid var(--gold);padding:15px 26px;border-radius:2px;gap:10px}
+.po-cta--solid:hover{background:var(--paper);border-color:var(--paper);color:var(--ink);gap:14px}
+.po-cta--ghost{background:transparent;color:var(--paper);border:1px solid rgba(239,230,216,.32);padding:14px 25px;border-radius:2px}
+.po-cta--ghost:hover{border-color:var(--gold);color:var(--gold);background:rgba(224,178,106,.06)}
+
+/* ---------- 2. The practice ---------- */
+.po-practice{text-align:center;max-width:820px;margin:0 auto}
+.po-practice__head{
+  font-family:var(--font-display);font-weight:400;line-height:1.16;
+  font-size:clamp(26px,4.2vw,46px);color:var(--paper);margin:0 0 26px;
+}
+.po-practice__head span{display:block}
+.po-practice__body{font-size:clamp(15px,1.4vw,18px);line-height:1.75;color:var(--paper-dim);max-width:54ch;margin:0 auto}
+
+/* ---------- 3. Clips & audio — react-bits Flowing Menu (flowing-menu.css/
+   .js), retitled for poems: hover a row and a gold band sweeps in from the
+   edge the cursor entered on, with the title scrolling across it beside a
+   thumbnail. Click opens the shared player panel below the list. ---------- */
+.po-listen{max-width:900px;margin:0 auto}
+.po-listen__head{padding:0 0 30px;border-bottom:1px solid rgba(239,230,216,.1)}
+.po-listen__head h2{font-family:var(--font-display);font-weight:400;font-size:clamp(24px,2.6vw,32px);margin:0}
+.po-listen__sub{color:var(--paper-dim);font-size:13.5px;margin:10px 0 0}
+
+.poem__panel{max-height:0;opacity:0;overflow:hidden;transition:max-height .4s ease,opacity .3s ease,margin-top .4s ease;margin-top:0}
+.poem__panel.is-open{max-height:640px;opacity:1;margin-top:4px}
+.poem__panel-inner{
+  border-top:2px solid var(--gold);background:rgba(74,31,34,.18);border-radius:8px;padding:16px;
+  position:relative;display:flex;gap:16px;align-items:flex-start;
+}
+.poem__media-wrap{flex:1 1 auto;min-width:0;position:relative}
+.poem__embed{width:100%;height:340px;border:none;border-radius:6px;display:block}
+.poem__embed--audio{height:120px}
+
+/* ---------- Lyrics: toggle button on the player, timed auto-scroll
+   panel. Desktop docks beside the player; mobile overlays it full-bleed
+   with an explicit close. ---------- */
+.poem__lyrics-toggle{
+  position:absolute;top:10px;right:10px;z-index:2;
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(18,16,15,.7);border:1px solid rgba(239,230,216,.3);border-radius:999px;
+  color:var(--paper);font-family:var(--font-body);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  padding:7px 13px;cursor:pointer;transition:background .2s,border-color .2s,color .2s;
+}
+.poem__lyrics-toggle:hover{background:var(--gold);border-color:var(--gold);color:#12100f}
+.poem__lyrics-toggle.is-active{background:var(--gold);border-color:var(--gold);color:#12100f}
+
+.poem__lyrics{
+  display:none;flex-direction:column;flex:0 0 280px;width:280px;max-height:340px;
+  background:#1c1815;border:1px solid rgba(239,230,216,.14);border-radius:8px;overflow:hidden;
+}
+.poem__lyrics.is-open{display:flex}
+.poem__lyrics-head{
+  display:flex;align-items:center;justify-content:space-between;padding:10px 14px;
+  border-bottom:1px solid rgba(239,230,216,.1);flex:none;
+}
+.poem__lyrics-head span{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass)}
+.poem__lyrics-close{
+  display:none;align-items:center;justify-content:center;width:26px;height:26px;border-radius:999px;
+  background:none;border:1px solid rgba(239,230,216,.25);color:var(--paper);cursor:pointer;font-size:15px;line-height:1;
+}
+.poem__lyrics-close:hover{border-color:var(--gold);color:var(--gold)}
+.poem__lyrics-scroll{overflow-y:auto;padding:18px 16px;scroll-behavior:smooth}
+.poem__lyrics-line{
+  font-size:14px;line-height:1.6;color:rgba(239,230,216,.4);margin:0 0 14px;
+  transition:color .35s ease,transform .35s ease;transform-origin:left center;
+}
+.poem__lyrics-line.is-active{color:var(--gold);transform:scale(1.02)}
+.poem__lyrics-line.is-past{color:rgba(239,230,216,.62)}
+.poem__lyrics-empty{font-size:13px;color:var(--paper-dim);line-height:1.6}
+
+@media (max-width:760px){
+  .poem__panel-inner{flex-direction:column}
+  .poem__lyrics{
+    position:absolute;inset:0;z-index:5;flex:none;width:auto;max-height:none;
+    border-radius:6px;background:rgba(18,16,15,.97);
+  }
+  .poem__lyrics-close{display:flex}
+}
+
+/* ---------- 4. The Book — one CTA, no ambiguity ---------- */
+.po-book{max-width:1000px;margin:0 auto}
+.po-book__inner{
+  display:grid;grid-template-columns:.9fr 1.1fr;gap:0;
+  background:#1c1815;border:1px solid rgba(239,230,216,.1);border-radius:20px;overflow:hidden;
+}
+.po-book__cover{
+  position:relative;aspect-ratio:3/4;background:
+    linear-gradient(155deg,var(--velvet-wine) 0%,var(--ink) 78%);
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.po-book__cover-img{
+  position:absolute;width:56%;aspect-ratio:619/875;object-fit:cover;border-radius:3px;
+  box-shadow:0 22px 50px rgba(0,0,0,.55);
+}
+.po-book__cover-img--page{
+  transform:rotate(-7deg) translate(-22%,4%);z-index:1;filter:brightness(.94);
+}
+.po-book__cover-img--front{
+  transform:rotate(4deg) translate(16%,-3%);z-index:2;
+  border:1px solid rgba(224,178,106,.35);
+}
+.po-book__body{padding:clamp(32px,4vw,56px);display:flex;flex-direction:column;justify-content:center;gap:18px}
+.po-book__eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass)}
+.po-book__title{font-family:var(--font-display);font-weight:400;font-size:clamp(26px,3.2vw,36px);margin:0;color:var(--paper)}
+.po-book__desc{color:var(--paper-dim);font-size:14.5px;line-height:1.7;margin:0}
+@media (max-width:720px){
+  .po-book__inner{grid-template-columns:1fr}
+  .po-book__cover{aspect-ratio:16/9}
+}
+</style>
 </head>
 <body>
 
 <div id="chrome-nav"></div>
 
-<section class="soon">
-  <span class="soon__eyebrow">Poetry</span>
-  <h1 class="soon__title">Coming Soon</h1>
-  <p class="soon__desc">Spoken-word and poetry — pieces and performances, coming soon.</p>
-  <a href="index.html" class="btn btn-outline">Back Home</a>
+<section class="po-hero">
+  <div class="po-hero__reel" id="po-hero-reel">
+    <div class="po-hero__tile is-active" data-tile="0" role="button" tabindex="0" aria-label="Play clip 1 — Improv jazz concert, Auroville">
+      <video src="video/poetry-hero-1.mp4" poster="img/poetry-hero-1-poster.jpg" autoplay muted playsinline preload="auto">
+        <track kind="subtitles" srclang="en" label="English" src="captions/poetry-hero-1.vtt" default>
+      </video>
+      <img class="po-hero__tile-thumb" src="img/poetry-hero-1-poster.jpg" alt="" aria-hidden="true">
+      <span class="po-hero__tile-title">Improv Jazz — Auroville</span>
+      <span class="po-hero__tile-index"><span class="po-hero__tile-bar"><i></i></span> 01</span>
+      <button type="button" class="po-hero__tile-mute" aria-label="Unmute clip 1" aria-pressed="true">
+        <svg class="po-hero__tile-mute-icon po-hero__tile-mute-icon--unmuted" width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/><path d="M16 8.5c1.2 1 1.2 6 0 7M18.5 6c2.2 2.2 2.2 9.8 0 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <svg class="po-hero__tile-mute-icon po-hero__tile-mute-icon--muted" width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/><path d="M16 9l6 6M22 9l-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="po-hero__tile" data-tile="1" role="button" tabindex="0" aria-label="Play clip 2 — NMACC performance">
+      <video src="video/poetry-hero-2.mp4" poster="img/poetry-hero-2-poster.jpg" muted playsinline preload="auto">
+        <track kind="subtitles" srclang="en" label="English" src="captions/poetry-hero-2.vtt" default>
+      </video>
+      <img class="po-hero__tile-thumb" src="img/poetry-hero-2-poster.jpg" alt="" aria-hidden="true">
+      <span class="po-hero__tile-title">NMACC Performance</span>
+      <span class="po-hero__tile-index"><span class="po-hero__tile-bar"><i></i></span> 02</span>
+      <button type="button" class="po-hero__tile-mute" aria-label="Unmute clip 2" aria-pressed="true">
+        <svg class="po-hero__tile-mute-icon po-hero__tile-mute-icon--unmuted" width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/><path d="M16 8.5c1.2 1 1.2 6 0 7M18.5 6c2.2 2.2 2.2 9.8 0 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <svg class="po-hero__tile-mute-icon po-hero__tile-mute-icon--muted" width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/><path d="M16 9l6 6M22 9l-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="po-hero__tile" data-tile="2" role="button" tabindex="0" aria-label="Play clip 3 — Studio session">
+      <video src="video/poetry-hero-3.mp4" poster="img/poetry-hero-3-poster.jpg" muted playsinline preload="auto">
+        <track kind="subtitles" srclang="en" label="English" src="captions/poetry-hero-3.vtt" default>
+      </video>
+      <img class="po-hero__tile-thumb" src="img/poetry-hero-3-poster.jpg" alt="" aria-hidden="true">
+      <span class="po-hero__tile-title">Studio Session</span>
+      <span class="po-hero__tile-index"><span class="po-hero__tile-bar"><i></i></span> 03</span>
+      <button type="button" class="po-hero__tile-mute" aria-label="Unmute clip 3" aria-pressed="true">
+        <svg class="po-hero__tile-mute-icon po-hero__tile-mute-icon--unmuted" width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/><path d="M16 8.5c1.2 1 1.2 6 0 7M18.5 6c2.2 2.2 2.2 9.8 0 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <svg class="po-hero__tile-mute-icon po-hero__tile-mute-icon--muted" width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/><path d="M16 9l6 6M22 9l-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="po-hero__copy">
+    <span class="po-hero__eyebrow reveal">Poetry</span>
+    <h1 class="po-hero__title reveal">Words, said out loud.</h1>
+    <p class="po-hero__desc reveal">Spoken-word pieces on video and audio, and a book collecting the ones that outgrew the mic.</p>
+    <div class="po-hero__ctas reveal">
+      <a href="#listen" class="po-cta po-cta--solid">
+        Watch &amp; listen
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#book" class="po-cta po-cta--ghost">Get the book</a>
+    </div>
+  </div>
+</section>
+
+<section class="po-section po-practice">
+  <h2 class="po-practice__head">
+    <span class="reveal">A poem can live on a page.</span>
+    <span class="reveal">It can also live in a voice.</span>
+  </h2>
+  <p class="po-practice__body reveal">This is where both versions sit — clips and recordings you can watch or listen to right here, and the book for the pieces that ask for more room than a stage or a screen gives them.</p>
+</section>
+
+<section class="po-section po-listen" id="listen">
+  <div class="po-listen__head reveal">
+    <h2>Clips &amp; Audio</h2>
+    <p class="po-listen__sub">A running set — video pieces and recorded audio, added as they're ready. Links below are placeholders until the real clips are dropped in.</p>
+  </div>
+
+  <div class="po-flow-wrap reveal">
+    <!-- Each row: data-platform="youtube" data-id="<video id>" OR
+         data-platform="soundcloud" data-url="<full soundcloud track url>".
+         Swap the placeholder IDs/URLs for the real ones, and data-img for a
+         real thumbnail — layout, hover reveal, and expand/collapse all just
+         work once they're real. Markup shape (item > link + marquee seed)
+         is required by flowing-menu.js, which fills in the repeated
+         marquee copies at runtime. -->
+    <nav class="po-flow" id="poem-list">
+      <div class="po-flow__item" data-platform="youtube" data-id="REPLACE_YOUTUBE_ID_1" data-lyrics="1">
+        <button type="button" class="po-flow__link">
+          <span class="po-flow__title">Untitled Piece I</span>
+          <span class="po-flow__meta">
+            <span class="po-flow__type">Video</span>
+            <span class="po-flow__play">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            </span>
+          </span>
+        </button>
+        <div class="po-flow__marquee">
+          <div class="po-flow__marquee-inner-wrap">
+            <div class="po-flow__marquee-inner">
+              <div class="po-flow__marquee-part">
+                <span>Untitled Piece I</span>
+                <div class="po-flow__marquee-img" data-bg="img/poetry-hero-1-poster.jpg"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="po-flow__item" data-platform="youtube" data-id="REPLACE_YOUTUBE_ID_2" data-lyrics="2">
+        <button type="button" class="po-flow__link">
+          <span class="po-flow__title">Untitled Piece II</span>
+          <span class="po-flow__meta">
+            <span class="po-flow__type">Video</span>
+            <span class="po-flow__play">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            </span>
+          </span>
+        </button>
+        <div class="po-flow__marquee">
+          <div class="po-flow__marquee-inner-wrap">
+            <div class="po-flow__marquee-inner">
+              <div class="po-flow__marquee-part">
+                <span>Untitled Piece II</span>
+                <div class="po-flow__marquee-img" data-bg="img/poetry-hero-2-poster.jpg"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="po-flow__item" data-platform="soundcloud" data-url="https://soundcloud.com/mal-griot/moment" data-lyrics="3">
+        <button type="button" class="po-flow__link">
+          <span class="po-flow__title">There Will Be a Moment</span>
+          <span class="po-flow__meta">
+            <span class="po-flow__type">Audio</span>
+            <span class="po-flow__play">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            </span>
+          </span>
+        </button>
+        <div class="po-flow__marquee">
+          <div class="po-flow__marquee-inner-wrap">
+            <div class="po-flow__marquee-inner">
+              <div class="po-flow__marquee-part">
+                <span>There Will Be a Moment</span>
+                <div class="po-flow__marquee-img" data-bg="img/poetry-hero-3-poster.jpg"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="po-flow__item" data-platform="soundcloud" data-url="https://soundcloud.com/mal-griot/REPLACE_SOUNDCLOUD_SLUG_2" data-lyrics="4">
+        <button type="button" class="po-flow__link">
+          <span class="po-flow__title">Untitled Piece IV</span>
+          <span class="po-flow__meta">
+            <span class="po-flow__type">Audio</span>
+            <span class="po-flow__play">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            </span>
+          </span>
+        </button>
+        <div class="po-flow__marquee">
+          <div class="po-flow__marquee-inner-wrap">
+            <div class="po-flow__marquee-inner">
+              <div class="po-flow__marquee-part">
+                <span>Untitled Piece IV</span>
+                <div class="po-flow__marquee-img" data-bg="img/poetry-home.jpg"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <div class="poem__panel" id="poem-active-panel"></div>
+</section>
+
+<section class="po-section po-book" id="book">
+  <div class="po-book__inner reveal">
+    <div class="po-book__cover">
+      <img class="po-book__cover-img po-book__cover-img--page" src="img/book/a-moment.jpg" alt="A page from &quot;a moment,&quot; in falling under where">
+      <img class="po-book__cover-img po-book__cover-img--front" src="img/book/cover.jpg" alt="falling under where — into deeper beyond, poems by Mal Griot">
+    </div>
+    <div class="po-book__body">
+      <span class="po-book__eyebrow">The Book</span>
+      <h2 class="po-book__title">The poems, collected.</h2>
+      <p class="po-book__desc">The written pieces, gathered in one place. Available now.</p>
+      <div>
+        <a href="https://ko-fi.com/s/dc969df655" target="_blank" rel="noopener" class="po-cta po-cta--solid">
+          Get the book
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
 </section>
 
 <div id="chrome-footer"></div>
@@ -27,6 +440,344 @@
 
 <script src="shared.js"></script>
 <script src="chat.js"></script>
+<script src="effects.js"></script>
 <script>renderChrome('poetry');</script>
+<script>
+// Hero reel — three portrait clips that hand off to one another in
+// sequence (1 -> 2 -> 3, stopping after the last one — no loop back to 1).
+// Only the active tile plays and shows in color; the others sit paused and
+// greyscale (see .po-hero__tile video filter in CSS). Each tile also
+// carries: a title that's visible at rest and fades out while that clip is
+// actively playing (.is-playing, toggled off the video's own play/pause
+// events); a thumbnail image that swaps in once a clip finishes
+// (.is-ended, cleared the moment it plays again); and subtitles via a
+// native <track> element, styled in the <style> block above.
+//
+// Click behavior on a tile: switch to it if it isn't active; if it's
+// active and playing, pause in place; if it's active and paused
+// mid-clip, resume; if it's active and finished (showing its thumbnail),
+// replay from the start.
+(function () {
+  var reel = document.getElementById('po-hero-reel');
+  if (!reel) return;
+  var tiles = Array.prototype.slice.call(reel.querySelectorAll('.po-hero__tile'));
+  var videos = tiles.map(function (t) { return t.querySelector('video'); });
+  var muteBtns = tiles.map(function (t) { return t.querySelector('.po-hero__tile-mute'); });
+  var mutedState = videos.map(function () { return true; });
+  var active = 0;
+
+  function syncMuteButton(i) {
+    var btn = muteBtns[i];
+    if (!btn) return;
+    btn.setAttribute('aria-pressed', mutedState[i] ? 'true' : 'false');
+    btn.setAttribute('aria-label', (mutedState[i] ? 'Unmute' : 'Mute') + ' clip ' + (i + 1));
+  }
+
+  function activate(idx, opts) {
+    opts = opts || {};
+    if (idx === active && !opts.restart) return;
+    active = idx;
+    tiles.forEach(function (t, i) {
+      t.classList.toggle('is-active', i === idx);
+      var v = videos[i];
+      if (i === idx) {
+        if (typeof opts.muted === 'boolean') mutedState[i] = opts.muted;
+        v.muted = mutedState[i];
+        syncMuteButton(i);
+        if (opts.restart) { try { v.currentTime = 0; } catch (e) {} }
+        var p = v.play();
+        if (p && p.catch) p.catch(function () {});
+      } else {
+        v.pause();
+      }
+    });
+    var bar = tiles[idx].querySelector('.po-hero__tile-bar i');
+    if (bar) {
+      bar.style.animation = 'none';
+      void bar.offsetWidth;
+      bar.style.animationDuration = (videos[idx].duration || 60) + 's';
+      bar.style.animation = '';
+    }
+  }
+
+  videos.forEach(function (v, i) {
+    v.addEventListener('play', function () {
+      tiles[i].classList.add('is-playing');
+      tiles[i].classList.remove('is-ended');
+    });
+    v.addEventListener('pause', function () {
+      tiles[i].classList.remove('is-playing');
+    });
+    v.addEventListener('ended', function () {
+      if (i !== active) return;
+      tiles[i].classList.add('is-ended');
+      if (i === tiles.length - 1) return; // last clip — stop, don't loop back to the first
+      activate(i + 1, { restart: true, muted: true });
+    });
+    v.addEventListener('loadedmetadata', function () {
+      if (i === active) {
+        var bar = tiles[i].querySelector('.po-hero__tile-bar i');
+        if (bar) bar.style.animationDuration = (v.duration || 60) + 's';
+      }
+    });
+  });
+
+  function handleTileActivate(i) {
+    var v = videos[i];
+    if (i !== active) {
+      activate(i, { restart: true, muted: false });
+      return;
+    }
+    if (tiles[i].classList.contains('is-ended')) {
+      activate(i, { restart: true, muted: false }); // finished — click replays
+    } else if (!v.paused) {
+      v.pause(); // active and playing — click pauses in place
+    } else {
+      var p = v.play(); // active and paused mid-clip — click resumes
+      if (p && p.catch) p.catch(function () {});
+    }
+  }
+
+  tiles.forEach(function (tile, i) {
+    tile.addEventListener('click', function () { handleTileActivate(i); });
+    tile.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleTileActivate(i);
+      }
+    });
+  });
+
+  muteBtns.forEach(function (btn, i) {
+    if (!btn) return;
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (i === active) {
+        mutedState[i] = !videos[i].muted;
+        videos[i].muted = mutedState[i];
+        syncMuteButton(i);
+      } else {
+        activate(i, { restart: true, muted: false });
+      }
+    });
+  });
+
+  var first = videos[0];
+  var startMuted = function () { activate(0, { restart: false, muted: true }); };
+  if (first.readyState >= 1) startMuted();
+  else first.addEventListener('loadedmetadata', startMuted, { once: true });
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="flowing-menu.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
+<script src="https://w.soundcloud.com/player/api.js"></script>
+<script>
+// Clip/audio rows (react-bits Flowing Menu, see flowing-menu.css/.js for the
+// hover reveal) — click a row to expand an inline YouTube or SoundCloud
+// embed in the single shared panel below the list, one open at a time.
+// Mirrors the release-row pattern on music.html but simplified (no
+// tracklist, no mini-player mirroring).
+//
+// Lyrics: each poem can carry a set of timed lines (LYRICS below, keyed by
+// data-lyrics id on the row). When a panel opens with lyrics available, a
+// "Lyrics" button appears on the player. Toggling it opens a synced panel
+// (docked beside the player on desktop, full overlay with a close button
+// on mobile) that auto-scrolls to the active line as playback advances —
+// via the YouTube IFrame API for video, the SoundCloud Widget API for audio.
+(function () {
+  var list = document.getElementById('poem-list');
+  var panel = document.getElementById('poem-active-panel');
+  if (!list || !panel) return;
+
+  // Placeholder lyric sets, one per data-lyrics id above — swap the text
+  // and timestamps (seconds) for the real transcriptions once available.
+  var LYRICS = {
+    '1': [
+      { t: 0,  text: 'Untitled Piece I — lyrics placeholder.' },
+      { t: 6,  text: 'Swap this block for the real, timed transcription.' },
+      { t: 13, text: 'Each line carries a start time in seconds.' },
+      { t: 20, text: 'The active line highlights and scrolls into view as the clip plays.' }
+    ],
+    '2': [
+      { t: 0,  text: 'Untitled Piece II — lyrics placeholder.' },
+      { t: 6,  text: 'Swap this block for the real, timed transcription.' },
+      { t: 13, text: 'Each line carries a start time in seconds.' },
+      { t: 20, text: 'The active line highlights and scrolls into view as the clip plays.' }
+    ],
+    '3': [
+      { t: 0,  text: 'There Will Be a Moment — lyrics placeholder.' },
+      { t: 6,  text: 'Swap this block for the real, timed transcription.' },
+      { t: 13, text: 'Each line carries a start time in seconds.' },
+      { t: 20, text: 'The active line highlights and scrolls into view as the track plays.' }
+    ],
+    '4': [
+      { t: 0,  text: 'Untitled Piece IV — lyrics placeholder.' },
+      { t: 6,  text: 'Swap this block for the real, timed transcription.' },
+      { t: 13, text: 'Each line carries a start time in seconds.' },
+      { t: 20, text: 'The active line highlights and scrolls into view as the track plays.' }
+    ]
+  };
+
+  var activeRow = null;
+  var ytPlayer = null;
+  var ytPollTimer = null;
+  var scWidget = null;
+  var lyricsLines = [];
+  var lyricsScroll = null;
+
+  function stopSync() {
+    if (ytPollTimer) { clearInterval(ytPollTimer); ytPollTimer = null; }
+    if (ytPlayer && ytPlayer.destroy) { try { ytPlayer.destroy(); } catch (e) {} }
+    ytPlayer = null;
+    scWidget = null;
+    lyricsLines = [];
+    lyricsScroll = null;
+  }
+
+  function closeActive() {
+    if (!activeRow) return;
+    stopSync();
+    panel.classList.remove('is-open');
+    activeRow.classList.remove('is-open');
+    activeRow.querySelector('.po-flow__link').setAttribute('aria-expanded', 'false');
+    setTimeout(function () { if (!activeRow) panel.innerHTML = ''; }, 400);
+    activeRow = null;
+  }
+
+  function buildEmbed(row, mediaId) {
+    var platform = row.dataset.platform;
+    var title = (row.querySelector('.po-flow__title') || {}).textContent || '';
+    if (platform === 'youtube') {
+      var id = row.dataset.id;
+      return '<iframe id="' + mediaId + '" class="poem__embed" src="https://www.youtube.com/embed/' + encodeURIComponent(id) +
+        '?enablejsapi=1" title="' + title + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+    }
+    if (platform === 'soundcloud') {
+      var url = row.dataset.url;
+      return '<iframe id="' + mediaId + '" class="poem__embed poem__embed--audio" scrolling="no" frameborder="no" allow="autoplay" ' +
+        'src="https://w.soundcloud.com/player/?url=' + encodeURIComponent(url) + '&color=%23e0b26a&auto_play=false&show_comments=false&visual=false"></iframe>';
+    }
+    return '';
+  }
+
+  function buildLyricsPanel(lines) {
+    if (!lines || !lines.length) {
+      return '<div class="poem__lyrics-head"><span>Lyrics</span><button type="button" class="poem__lyrics-close" aria-label="Close lyrics">&times;</button></div>' +
+        '<div class="poem__lyrics-scroll"><p class="poem__lyrics-empty">Lyrics for this piece aren’t up yet.</p></div>';
+    }
+    var html = '<div class="poem__lyrics-head"><span>Lyrics</span><button type="button" class="poem__lyrics-close" aria-label="Close lyrics">&times;</button></div><div class="poem__lyrics-scroll">';
+    lines.forEach(function (line, i) {
+      html += '<p class="poem__lyrics-line" data-t="' + line.t + '" data-i="' + i + '">' + line.text.replace(/</g, '&lt;') + '</p>';
+    });
+    html += '</div>';
+    return html;
+  }
+
+  function updateActiveLine(currentTime) {
+    if (!lyricsLines.length || !lyricsScroll) return;
+    var activeIdx = -1;
+    for (var i = 0; i < lyricsLines.length; i++) {
+      if (currentTime + 0.05 >= parseFloat(lyricsLines[i].dataset.t)) activeIdx = i;
+    }
+    lyricsLines.forEach(function (el, i) {
+      el.classList.toggle('is-active', i === activeIdx);
+      el.classList.toggle('is-past', i < activeIdx);
+    });
+    if (activeIdx >= 0) {
+      var el = lyricsLines[activeIdx];
+      var target = el.offsetTop - (lyricsScroll.clientHeight / 2) + (el.clientHeight / 2);
+      lyricsScroll.scrollTo({ top: Math.max(0, target), behavior: 'smooth' });
+    }
+  }
+
+  function wireYouTubeSync(mediaId) {
+    if (typeof YT === 'undefined' || !YT.Player) {
+      // API script still loading — retry shortly.
+      setTimeout(function () { if (activePanel) wireYouTubeSync(mediaId); }, 300);
+      return;
+    }
+    ytPlayer = new YT.Player(mediaId, {
+      events: {
+        onStateChange: function (e) {
+          if (ytPollTimer) { clearInterval(ytPollTimer); ytPollTimer = null; }
+          if (e.data === YT.PlayerState.PLAYING) {
+            ytPollTimer = setInterval(function () {
+              if (ytPlayer && ytPlayer.getCurrentTime) updateActiveLine(ytPlayer.getCurrentTime());
+            }, 250);
+          }
+        }
+      }
+    });
+  }
+
+  function wireSoundCloudSync(mediaId) {
+    if (typeof SC === 'undefined' || !SC.Widget) return;
+    var iframe = document.getElementById(mediaId);
+    if (!iframe) return;
+    scWidget = SC.Widget(iframe);
+    scWidget.bind(SC.Widget.Events.PLAY_PROGRESS, function (e) {
+      updateActiveLine(e.currentPosition / 1000);
+    });
+  }
+
+  list.querySelectorAll('.po-flow__item').forEach(function (row, idx) {
+    var link = row.querySelector('.po-flow__link');
+    link.setAttribute('aria-expanded', 'false');
+    link.setAttribute('aria-controls', 'poem-active-panel');
+
+    link.addEventListener('click', function () {
+      var wasOpen = activeRow === row;
+      closeActive();
+      if (wasOpen) return;
+
+      var lyricsKey = row.dataset.lyrics;
+      var lines = lyricsKey ? LYRICS[lyricsKey] : null;
+      var mediaId = 'poem-media-' + idx;
+
+      var inner = document.createElement('div');
+      inner.className = 'poem__panel-inner';
+      inner.innerHTML =
+        '<div class="poem__media-wrap">' + buildEmbed(row, mediaId) +
+        '<button type="button" class="poem__lyrics-toggle">' +
+          '<svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h10M4 18h13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>' +
+          'Lyrics' +
+        '</button>' +
+        '</div>' +
+        '<div class="poem__lyrics">' + buildLyricsPanel(lines) + '</div>';
+      panel.innerHTML = '';
+      panel.appendChild(inner);
+      panel.classList.add('is-open');
+      link.setAttribute('aria-expanded', 'true');
+      row.classList.add('is-open');
+      activeRow = row;
+
+      var lyricsPanelEl = inner.querySelector('.poem__lyrics');
+      var toggleBtn = inner.querySelector('.poem__lyrics-toggle');
+      var closeBtn = inner.querySelector('.poem__lyrics-close');
+      lyricsScroll = inner.querySelector('.poem__lyrics-scroll');
+      lyricsLines = Array.prototype.slice.call(inner.querySelectorAll('.poem__lyrics-line'));
+
+      toggleBtn.addEventListener('click', function () {
+        var open = lyricsPanelEl.classList.toggle('is-open');
+        toggleBtn.classList.toggle('is-active', open);
+      });
+      if (closeBtn) {
+        closeBtn.addEventListener('click', function () {
+          lyricsPanelEl.classList.remove('is-open');
+          toggleBtn.classList.remove('is-active');
+        });
+      }
+
+      if (row.dataset.platform === 'youtube') {
+        wireYouTubeSync(mediaId);
+      } else if (row.dataset.platform === 'soundcloud') {
+        // SoundCloud widget script needs the iframe to exist; give it a tick.
+        setTimeout(function () { wireSoundCloudSync(mediaId); }, 200);
+      }
+    });
+  });
+})();
+</script>
 </body>
 </html>

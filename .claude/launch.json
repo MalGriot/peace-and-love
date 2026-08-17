@@ -3,9 +3,10 @@
   "configurations": [
     {
       "name": "mal-griot-trifold",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8757"],
-      "port": 8757
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "python3 -m http.server \"$PORT\""],
+      "port": 8757,
+      "autoPort": true
     }
   ]
 }

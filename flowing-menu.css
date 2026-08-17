@@ -1,0 +1,53 @@
+/* MAL GRIOT — vanilla port of react-bits FlowingMenu (Codrops-style hover
+   marquee reveal). Ported as a themeable BEM block (.po-flow*) rather than
+   the library's generic .menu* names, sized for an inline content list
+   instead of a full-viewport nav — see flowing-menu.js for the interaction
+   logic (gsap-driven edge-aware reveal + auto-scrolling marquee). */
+
+.po-flow-wrap{position:relative;border-radius:12px;overflow:hidden;background:#1c1815;border:1px solid rgba(239,230,216,.1)}
+
+.po-flow{display:flex;flex-direction:column;margin:0;padding:0;list-style:none}
+
+.po-flow__item{position:relative;overflow:hidden;border-top:1px solid rgba(239,230,216,.1)}
+.po-flow__item:first-child{border-top:none}
+
+.po-flow__link{
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  width:100%;height:clamp(84px,11vw,116px);padding:0 clamp(20px,4vw,40px);
+  position:relative;z-index:1;cursor:pointer;background:none;border:none;text-align:left;
+  font-family:var(--font-display);color:var(--paper);
+}
+.po-flow__title{
+  font-weight:400;font-size:clamp(20px,3vw,34px);letter-spacing:-.01em;line-height:1.05;
+  transition:mix-blend-mode .2s;
+}
+.po-flow__meta{display:flex;align-items:center;gap:16px;flex:none}
+.po-flow__type{font-family:var(--font-body);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass)}
+.po-flow__play{
+  width:38px;height:38px;border-radius:999px;border:1px solid rgba(239,230,216,.25);
+  display:flex;align-items:center;justify-content:center;color:var(--paper);flex:none;
+  transition:background .2s,border-color .2s,color .2s;
+}
+.po-flow__item.is-open .po-flow__play{background:var(--gold);border-color:var(--gold);color:#12100f}
+
+/* The marquee band sits above the link (z-index) but ignores pointer events,
+   so hover/click still reads from the link beneath it. It starts parked
+   101% off whichever edge the cursor entered from; JS slides it to 0%. */
+.po-flow__marquee{
+  position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:2;
+  background:var(--gold);transform:translate3d(0,101%,0);
+}
+.po-flow__marquee-inner-wrap{height:100%;width:100%;overflow:hidden}
+.po-flow__marquee-inner{display:flex;align-items:center;position:relative;height:100%;width:fit-content;will-change:transform}
+.po-flow__marquee-part{display:flex;align-items:center;flex-shrink:0;height:100%}
+.po-flow__marquee-part span{
+  white-space:nowrap;text-transform:uppercase;font-family:var(--font-display);font-weight:400;
+  font-size:clamp(20px,3vw,34px);line-height:1;padding:0 1.5vw;color:#12100f;
+}
+.po-flow__marquee-img{width:100px;height:52%;margin:0 1.5vw;border-radius:10px;background-size:cover;background-position:50% 50%;flex:none}
+
+@media (max-width:560px){
+  .po-flow__link{padding:0 18px}
+  .po-flow__meta{gap:10px}
+  .po-flow__type{display:none}
+}
