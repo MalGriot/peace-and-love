@@ -15,10 +15,15 @@ const CHAT_TYPING_PER_WORD_MS = 40;
 const CHAT_TYPING_MAX_DELAY_MS = 2200;
 const CHAT_REACTION_EMOJI = ['🙌🏾', '🫶🏾', '👌🏾', '🤘🏾', '🙏🏾', '💪🏾', '👍🏾', '🤝🏾', '👊🏾', '🤙🏾'];
 const CHAT_MAX_VISITOR_MESSAGES = 10;
+// A gap this long since the visitor's last message counts as a new
+// conversation for rate-limit purposes: the 10-message cap resets and a
+// disabled input re-enables, rather than staying locked for the rest of
+// the tab session just because it was hit once, hours or days ago.
+const CHAT_LIMIT_RESET_MS = 3 * 60 * 60 * 1000; // 3 hours
 const CHAT_LIMIT_REDIRECTS = [
-  "Peace and love, we've covered a lot. Can we continue this conversation on WhatsApp?",
+  "We've covered a lot. Can we continue this conversation on WhatsApp?",
   "Actually, can we continue this conversation on WhatsApp? Hit me up from there.",
-  "Peace and love, let's keep going on WhatsApp from here.",
+  "Let's keep going on WhatsApp from here.",
 ];
 
 let chatMessages = [];
@@ -28,6 +33,7 @@ let chatVisitorMessageCount = 0;
 let chatTypingVisible = false;
 let chatDisabled = false;
 let chatIsOpen = false;
+let chatLastMessageAt = 0;
 
 function chatGenerateId() {
   return 'm' + (chatNextId++) + '-' + Date.now().toString(36);
@@ -44,6 +50,7 @@ function chatSaveState() {
       visitorMessageCount: chatVisitorMessageCount,
       disabled: chatDisabled,
       isOpen: chatIsOpen,
+      lastMessageAt: chatLastMessageAt,
     }));
   } catch {
     // Storage unavailable (private browsing, quota) — chat just won't persist.
@@ -67,6 +74,31 @@ function chatEscapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+// Escapes text and turns any bare URLs within it into clickable links,
+// so message bubbles never leak raw HTML from user/bot text.
+function chatLinkify(text) {
+  const urlRegex = /(https?:\/\/[^\s<]+|www\.[^\s<]+)/gi;
+  let result = '';
+  let lastIndex = 0;
+  let match;
+  while ((match = urlRegex.exec(text)) !== null) {
+    result += chatEscapeHtml(text.slice(lastIndex, match.index));
+    let url = match[0];
+    let trailing = '';
+    const trailingMatch = url.match(/[.,;:!?)'"]+$/);
+    if (trailingMatch) {
+      trailing = trailingMatch[0];
+      url = url.slice(0, -trailing.length);
+    }
+    const href = /^https?:\/\//i.test(url) ? url : `https://${url}`;
+    result += `<a href="${chatEscapeHtml(href)}" target="_blank" rel="noopener noreferrer">${chatEscapeHtml(url)}</a>`;
+    result += chatEscapeHtml(trailing);
+    lastIndex = match.index + match[0].length;
+  }
+  result += chatEscapeHtml(text.slice(lastIndex));
+  return result;
 }
 
 function chatTypingDelayMs(text) {
@@ -168,7 +200,14 @@ function initChat() {
     chatMessages = Array.isArray(saved.messages) ? saved.messages : [];
     chatNextId = typeof saved.nextId === 'number' ? saved.nextId : chatNextId;
     chatVisitorMessageCount = typeof saved.visitorMessageCount === 'number' ? saved.visitorMessageCount : 0;
-    if (saved.disabled) chatDisableInput();
+    chatLastMessageAt = typeof saved.lastMessageAt === 'number' ? saved.lastMessageAt : 0;
+
+    const idleTooLong = chatLastMessageAt && Date.now() - chatLastMessageAt > CHAT_LIMIT_RESET_MS;
+    if (idleTooLong) {
+      chatVisitorMessageCount = 0;
+    } else if (saved.disabled) {
+      chatDisableInput();
+    }
     if (saved.isOpen) chatOpen();
     chatRender();
   }
@@ -221,6 +260,7 @@ function chatSendUserMessage(text) {
   chatMessages.push(message);
   chatCancelReply();
   chatVisitorMessageCount++;
+  chatLastMessageAt = Date.now();
   chatRender();
 
   if (chatVisitorMessageCount >= CHAT_MAX_VISITOR_MESSAGES) {
@@ -293,6 +333,18 @@ function chatDisableInput() {
   chatSaveState();
 }
 
+// The model occasionally leaks one of its own JSON field names/values into
+// the "text" field itself (e.g. a reply literally ending in "offerContact:
+// true.") instead of only setting the real JSON field. Strip anything
+// shaped like that back out before it ever reaches the chat bubble.
+function chatStripLeakedFields(text) {
+  return text
+    .replace(/\(?\b(offerContact|replyToId|reaction)\s*[:=]\s*("[^"]*"|'[^']*'|true|false|[^\s).,]+)\)?[.,]?/gi, '')
+    .replace(/\s+/g, ' ')
+    .replace(/\s+([.,!?])/g, '$1')
+    .trim();
+}
+
 function chatAppendBotMessage(data) {
   if (data.reaction) {
     const replyTarget = data.replyToId && chatFindMessage(data.replyToId);
@@ -302,11 +354,18 @@ function chatAppendBotMessage(data) {
 
   // The bot's very first message in a session always opens with "Peace and
   // love!" — guaranteed here rather than left purely to the model, since
-  // there's no more canned client-side greeting to fall back on.
+  // there's no more canned client-side greeting to fall back on. Every
+  // message after that has any "peace and love" the model slips in
+  // stripped back out, since the phrase is meant to open the conversation
+  // once, not recur throughout it.
   const isFirstBotMessage = !chatMessages.some((m) => m.role === 'bot');
-  const text = isFirstBotMessage && !/^peace and love!?/i.test(data.text.trim())
-    ? `Peace and love! ${data.text}`
-    : data.text;
+  let text = chatStripLeakedFields(data.text) || data.text;
+  if (isFirstBotMessage) {
+    if (!/^peace and love!?/i.test(text.trim())) text = `Peace and love! ${text}`;
+  } else {
+    text = text.replace(/,?\s*peace and love[,!.]?\s*/gi, ' ').replace(/\s+/g, ' ').trim();
+    if (!text) text = data.text;
+  }
 
   chatMessages.push({
     id: chatGenerateId(),
@@ -381,7 +440,7 @@ function chatRenderRow(message) {
     : '';
   const bubbleHtml = `
       <div class="msg-wrap">
-        <div class="msg msg--${isBot ? 'bot' : 'user'}">${quoteHtml}${chatEscapeHtml(message.text)}</div>
+        <div class="msg msg--${isBot ? 'bot' : 'user'}">${quoteHtml}${chatLinkify(message.text)}</div>
         ${reactionHtml}
       </div>`;
   const controlsHtml = `

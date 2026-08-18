@@ -252,10 +252,12 @@ a{color:inherit}
 .msg-row{display:flex;gap:8px;align-items:center;position:relative}
 .msg-row--user{justify-content:flex-end}
 .msg-row__avatar{width:22px;height:22px;border-radius:999px;object-fit:cover;flex-shrink:0}
-.msg-wrap{position:relative;max-width:78%}
-.msg{font-size:13px;line-height:1.5}
+.msg-wrap{position:relative;max-width:78%;min-width:0}
+.msg{font-size:13px;line-height:1.5;overflow-wrap:anywhere;word-break:break-word}
 .msg--bot{background:rgba(239,230,216,.06);border:1px solid rgba(239,230,216,.1);color:var(--paper);padding:9px 12px;border-radius:12px 12px 12px 3px}
 .msg--user{background:var(--brass);color:#12100f;padding:9px 12px;border-radius:12px 12px 3px 12px;font-weight:500}
+.msg a{color:inherit;text-decoration:underline;text-underline-offset:2px;overflow-wrap:anywhere;word-break:break-all}
+.msg--user a{color:#12100f}
 
 .msg--typing{display:flex;gap:4px;padding:10px 12px;background:rgba(239,230,216,.06);border:1px solid rgba(239,230,216,.1);border-radius:12px 12px 12px 3px}
 .msg--typing span{width:5px;height:5px;border-radius:999px;background:var(--paper-dim);animation:mg-typing-blink 1.2s infinite ease-in-out}
