@@ -76,10 +76,23 @@ function chatEscapeHtml(str) {
     .replace(/'/g, '&#39;');
 }
 
+// The facts the bot draws from (see worker/src/systemPrompt.js) give it bare
+// domains with no "http://" or "www." in front, e.g. "soundcloud.com/mal-griot",
+// so a plain-URL regex never matches them. List the actual domains Mal's
+// facts mention so those get linkified too, without turning every stray
+// "e.g." or decimal-looking word in a reply into a fake link.
+const CHAT_LINK_DOMAINS = [
+  'soundcloud\\.com', 'open\\.spotify\\.com', 'music\\.apple\\.com',
+  'music\\.youtube\\.com', 'music\\.amazon\\.com', 'tidal\\.com', 'instagram\\.com',
+];
+
 // Escapes text and turns any bare URLs within it into clickable links,
 // so message bubbles never leak raw HTML from user/bot text.
 function chatLinkify(text) {
-  const urlRegex = /(https?:\/\/[^\s<]+|www\.[^\s<]+)/gi;
+  const urlRegex = new RegExp(
+    `(https?://[^\\s<]+|www\\.[^\\s<]+|(?:${CHAT_LINK_DOMAINS.join('|')})(?:/[^\\s<]*)?)`,
+    'gi'
+  );
   let result = '';
   let lastIndex = 0;
   let match;
@@ -361,6 +374,10 @@ function chatStripLeakedFields(text) {
   const opens = (cleaned.match(/\(/g) || []).length;
   const closes = (cleaned.match(/\)/g) || []).length;
   if (opens !== closes) cleaned = cleaned.replace(/[()]/g, '');
+  // Whatever was stripped from the tail (a leaked field, a phone number)
+  // often leaves the comma or colon that used to introduce it dangling at
+  // the very end of the sentence.
+  cleaned = cleaned.replace(/[,;:]+$/, '').trim();
   return cleaned.replace(/\s+/g, ' ').trim();
 }
 
