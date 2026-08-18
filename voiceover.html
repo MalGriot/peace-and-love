@@ -4,29 +4,1053 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Voice Over — Mal Griot</title>
-<meta name="description" content="Character voice acting and narration work by Mal Griot.">
+<meta name="description" content="Mal Griot — voice over artist. Audiobook narration, character voice and book-trailer reads. Press play and hear the voice, then book a narration.">
+<meta property="og:title" content="Voice Over — Mal Griot">
+<meta property="og:description" content="Mal Griot — voice over artist. Audiobook narration, character voice and book-trailer reads. Press play and hear the voice, then book a narration.">
+<meta property="og:image" content="https://malgriot.github.io/peace-and-love/img/voiceover-home.jpg">
+<meta property="og:url" content="https://malgriot.github.io/peace-and-love/voiceover.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://malgriot.github.io/peace-and-love/img/voiceover-home.jpg">
 <link rel="canonical" href="https://malgriot.github.io/peace-and-love/voiceover.html">
-<meta name="robots" content="noindex, follow">
 <link rel="icon" href="img/brand/favicon.ico">
 <link rel="apple-touch-icon" href="img/brand/apple-touch-icon.png">
+<script>document.documentElement.className+=' js';</script>
 <link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="effects.css">
+<style>
+.vo-section{padding:clamp(64px,10vw,140px) clamp(20px,6vw,64px);position:relative}
+.vo-eyebrow{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--brass)}
+
+/* ============ shared cta button ============ */
+.vo-cta{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--font-body);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;
+  text-decoration:none;transition:border-color .3s ease,gap .3s ease,color .3s ease,background .2s ease;
+  border:none;cursor:pointer;
+}
+.vo-cta svg{flex:none;transition:transform .3s ease}
+.vo-cta:hover svg{transform:translateX(3px)}
+.vo-cta--solid{background:var(--gold);color:var(--ink);border:1px solid var(--gold);padding:15px 26px;border-radius:2px;gap:10px}
+.vo-cta--solid:hover{background:var(--paper);border-color:var(--paper);color:var(--ink);gap:14px}
+.vo-cta--ghost{background:transparent;color:var(--paper);border:1px solid rgba(239,230,216,.32);padding:14px 25px;border-radius:2px}
+.vo-cta--ghost:hover{border-color:var(--gold);color:var(--gold);background:rgba(224,178,106,.06)}
+.vo-cta--play{background:transparent;color:var(--gold);border:none;padding:0;gap:10px}
+.vo-cta--play .vo-cta__ring{
+  width:46px;height:46px;border-radius:999px;border:1px solid rgba(224,178,106,.55);
+  display:flex;align-items:center;justify-content:center;transition:background .25s ease,transform .25s ease;flex:none;
+}
+.vo-cta--play:hover .vo-cta__ring{background:var(--gold);color:var(--ink);transform:scale(1.06)}
+
+/* ============ 1. HERO ============ */
+.vo-hero{
+  position:relative;min-height:84vh;display:flex;align-items:flex-end;overflow:hidden;background:var(--ink);
+}
+.vo-hero__media{position:absolute;inset:0;overflow:hidden}
+.vo-hero__media img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 38%;
+  animation:vo-kenburns 16s cubic-bezier(.16,1,.3,1) both;
+}
+@keyframes vo-kenburns{from{transform:scale(1.1)}to{transform:scale(1)}}
+@media (prefers-reduced-motion: reduce){.vo-hero__media img{animation:none}}
+.vo-hero::before{
+  content:"";position:absolute;inset:0;z-index:0;
+  background:linear-gradient(0deg,rgba(18,16,15,.96) 0%,rgba(18,16,15,.4) 46%,rgba(18,16,15,.6) 100%);
+}
+/* faint frequency line threaded across the hero — the page's one motif,
+   not a literal waveform-of-audio, just a signal that this is a listening
+   room rather than a portfolio page */
+.vo-hero__freq{position:absolute;left:0;right:0;bottom:0;height:120px;z-index:0;opacity:.5;pointer-events:none}
+.vo-hero__copy{position:relative;z-index:1;padding:clamp(32px,5vw,56px) clamp(24px,6vw,72px) clamp(44px,7vw,72px);max-width:860px}
+.vo-hero__kicker{font-family:var(--font-display);font-weight:400;font-size:clamp(40px,7vw,90px);line-height:.96;letter-spacing:-.02em;color:var(--paper);margin:0}
+.vo-hero__kicker em{display:block;font-style:normal;color:var(--gold)}
+.vo-hero__line{font-size:clamp(16px,1.6vw,20px);line-height:1.6;color:var(--paper-dim);max-width:44ch;margin:22px 0 34px}
+.vo-hero__ctas{display:flex;flex-wrap:wrap;align-items:center;gap:28px}
+.vo-hero__name.reveal{transition-delay:.05s}
+.vo-hero__line.reveal{transition-delay:.2s}
+.vo-hero__ctas.reveal{transition-delay:.36s}
+
+/* ============ 2. THE DEMO — big player ============ */
+.vo-player-wrap{max-width:920px;margin:0 auto}
+.vo-player-head{text-align:center;max-width:640px;margin:0 auto clamp(30px,4vw,44px)}
+.vo-player-head h2{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,3.6vw,42px);margin:14px 0 12px;color:var(--paper)}
+.vo-player-head p{color:var(--paper-dim);font-size:14.5px;line-height:1.7;margin:0}
+
+.vo-player{
+  background:linear-gradient(165deg,#201a17,#161211);
+  border:1px solid rgba(239,230,216,.12);border-radius:20px;
+  padding:clamp(22px,4vw,36px);box-shadow:0 30px 80px rgba(0,0,0,.5);
+}
+.vo-player__top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+.vo-player__tag{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass)}
+.vo-player__title{font-family:var(--font-display);font-weight:400;font-size:clamp(22px,3vw,30px);color:var(--paper);margin:8px 0 4px;line-height:1.15}
+.vo-player__by{font-size:12.5px;color:var(--paper-dim);letter-spacing:.03em}
+.vo-player__expand{
+  flex:none;width:38px;height:38px;border-radius:999px;border:1px solid rgba(239,230,216,.2);background:transparent;
+  color:var(--paper-dim);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s,color .2s;
+}
+.vo-player__expand:hover{border-color:var(--gold);color:var(--gold)}
+
+.vo-wave{position:relative;height:min(180px,26vw);display:flex;align-items:flex-end;gap:3px;cursor:pointer;padding:0 2px;touch-action:none}
+.vo-wave__bar{flex:1 1 0;min-width:2px;border-radius:2px 2px 0 0;background:rgba(239,230,216,.16);transform-origin:bottom;transition:background .25s ease,transform .5s ease}
+.vo-wave__bar.is-played{background:var(--brass);transform:scaleY(1.05)}
+.vo-player.is-playing .vo-wave__bar.is-played{background:var(--gold)}
+.vo-wave__cursor{position:absolute;top:0;bottom:0;width:2px;background:var(--paper);pointer-events:none;box-shadow:0 0 10px rgba(239,230,216,.6);transition:left .1s linear}
+
+.vo-player__controls{display:flex;align-items:center;gap:18px;margin-top:20px}
+.vo-player__playbtn{
+  flex:none;width:60px;height:60px;border-radius:999px;border:none;background:var(--gold);color:var(--ink);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .2s ease,background .2s ease;
+}
+.vo-player__playbtn:hover{transform:scale(1.06)}
+.vo-player__playbtn .ic-pause{display:none}
+.vo-player.is-playing .vo-player__playbtn .ic-play{display:none}
+.vo-player.is-playing .vo-player__playbtn .ic-pause{display:block}
+.vo-player__time{font-size:11.5px;color:var(--paper-dim);letter-spacing:.03em;font-variant-numeric:tabular-nums;flex:none}
+.vo-player__scrub{flex:1 1 auto;position:relative;height:3px;background:rgba(239,230,216,.14);border-radius:999px;cursor:pointer}
+.vo-player__scrub-fill{position:absolute;left:0;top:0;bottom:0;width:0%;background:var(--gold);border-radius:999px}
+.vo-player__scrub-knob{position:absolute;top:50%;width:11px;height:11px;border-radius:999px;background:var(--paper);left:0%;transform:translate(-50%,-50%);box-shadow:0 0 0 3px rgba(224,178,106,.25)}
+.vo-player__hint{margin-top:16px;font-size:11.5px;color:var(--paper-faint);text-align:center}
+
+/* expanded / "fullscreen" listening mode */
+.vo-lightbox{position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(10,9,8,.88);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .3s ease}
+.vo-lightbox.is-open{opacity:1;pointer-events:auto}
+.vo-lightbox__panel{width:min(920px,100%);max-height:92vh;overflow:auto}
+.vo-lightbox__close{position:absolute;top:22px;right:24px;width:42px;height:42px;border-radius:999px;border:1px solid rgba(239,230,216,.25);background:rgba(18,16,15,.6);color:var(--paper);display:flex;align-items:center;justify-content:center;cursor:pointer}
+
+/* ============ 3. FIND YOUR VOICE — category browser ============ */
+.vo-browse{max-width:1080px;margin:0 auto}
+.vo-browse__head{text-align:center;max-width:640px;margin:0 auto clamp(28px,4vw,40px)}
+.vo-browse__head h2{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,3.6vw,42px);margin:14px 0 12px;color:var(--paper)}
+.vo-browse__head p{color:var(--paper-dim);font-size:14.5px;line-height:1.7;margin:0}
+
+.vo-tabs{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:clamp(26px,4vw,38px)}
+.vo-tab{
+  appearance:none;background:transparent;border:1px solid rgba(239,230,216,.22);color:var(--paper-dim);
+  font-family:var(--font-body);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;
+  padding:11px 20px;border-radius:999px;cursor:pointer;transition:border-color .2s,color .2s,background .2s;white-space:nowrap;
+}
+.vo-tab:hover{border-color:var(--gold);color:var(--paper)}
+.vo-tab.is-active{background:var(--gold);border-color:var(--gold);color:#12100f}
+@media (max-width:640px){
+  .vo-tabs{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;-webkit-overflow-scrolling:touch;padding-bottom:4px;margin-left:-20px;margin-right:-20px;padding-left:20px;padding-right:20px}
+  .vo-tabs::-webkit-scrollbar{display:none}
+}
+
+.vo-tabpanel{display:none}
+.vo-tabpanel.is-active{display:block}
+.vo-tabpanel__note{text-align:center;color:var(--paper-faint);font-size:12.5px;margin:0 0 26px;max-width:56ch;margin-left:auto;margin-right:auto}
+
+.vo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media (max-width:900px){.vo-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.vo-grid{grid-template-columns:1fr}}
+
+.vo-card{
+  position:relative;background:#1c1815;border:1px solid rgba(239,230,216,.1);border-radius:12px;
+  padding:16px 16px 16px 14px;display:flex;align-items:center;gap:14px;cursor:pointer;text-align:left;width:100%;
+  font-family:inherit;color:inherit;transition:border-color .2s ease,background .2s ease;
+}
+.vo-card:hover{border-color:rgba(224,178,106,.4);background:#221c19}
+.vo-card.is-playing{border-color:var(--gold);background:rgba(224,178,106,.08)}
+.vo-card__play{
+  flex:none;width:40px;height:40px;border-radius:999px;border:1px solid rgba(239,230,216,.28);
+  display:flex;align-items:center;justify-content:center;color:var(--paper);transition:background .2s,border-color .2s,color .2s;
+}
+.vo-card:hover .vo-card__play,.vo-card.is-playing .vo-card__play{background:var(--gold);border-color:var(--gold);color:#12100f}
+.vo-card.is-playing .vo-card__play .ic-play{display:none}
+.vo-card.is-playing .vo-card__play .ic-pause{display:block}
+.vo-card__play .ic-pause{display:none}
+.vo-card__body{min-width:0}
+.vo-card__title{font-size:14px;color:var(--paper);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vo-card__by{font-size:11.5px;color:var(--paper-dim);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vo-card__dur{position:absolute;top:14px;right:14px;font-size:10.5px;color:var(--paper-faint);font-variant-numeric:tabular-nums}
+
+.vo-book-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:640px){.vo-book-grid{grid-template-columns:1fr}}
+.vo-book{background:#1c1815;border:1px solid rgba(239,230,216,.1);border-radius:14px;overflow:hidden;transition:border-color .2s ease}
+.vo-book.is-playing{border-color:var(--gold)}
+.vo-book__art{position:relative;aspect-ratio:16/9;overflow:hidden;background:#000}
+.vo-book__art img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
+.vo-book:hover .vo-book__art img{transform:scale(1.04)}
+.vo-book__art::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(18,16,15,.85) 0%,rgba(18,16,15,.05) 60%)}
+.vo-book__chapters{position:absolute;left:16px;bottom:14px;z-index:1;color:var(--paper);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.vo-book__body{padding:20px 22px 24px}
+.vo-book__eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass)}
+.vo-book__title{font-family:var(--font-display);font-weight:400;font-size:clamp(19px,2vw,23px);color:var(--paper);margin:8px 0 8px;line-height:1.15}
+.vo-book__desc{font-size:13.5px;line-height:1.65;color:var(--paper-dim);margin:0 0 16px}
+.vo-book__btn{
+  display:inline-flex;align-items:center;gap:10px;appearance:none;background:transparent;border:1px solid rgba(239,230,216,.32);color:var(--paper);
+  font-family:var(--font-body);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
+  padding:11px 18px;border-radius:2px;cursor:pointer;transition:border-color .2s,color .2s,background .2s;
+}
+.vo-book__btn:hover,.vo-book.is-playing .vo-book__btn{border-color:var(--gold);color:var(--gold);background:rgba(224,178,106,.06)}
+.vo-book__btn .ic-pause{display:none}
+.vo-book.is-playing .vo-book__btn .ic-play{display:none}
+.vo-book.is-playing .vo-book__btn .ic-pause{display:block}
+.vo-book__all{margin-top:14px;font-size:11.5px}
+.vo-book__all a{color:var(--paper-dim);text-decoration:underline;text-underline-offset:3px;transition:color .2s}
+.vo-book__all a:hover{color:var(--gold)}
+
+/* ============ 4. THE VOICE — instrument attributes ============ */
+.vo-instrument{max-width:1000px;margin:0 auto}
+.vo-instrument__head{text-align:center;max-width:640px;margin:0 auto clamp(30px,4vw,44px)}
+.vo-instrument__head h2{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,3.6vw,42px);margin:14px 0 12px;color:var(--paper)}
+.vo-instrument__head p{color:var(--paper-dim);font-size:14.5px;line-height:1.7;margin:0}
+.vo-attrs{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:rgba(239,230,216,.1);border:1px solid rgba(239,230,216,.1);border-radius:14px;overflow:hidden}
+@media (max-width:700px){.vo-attrs{grid-template-columns:1fr}}
+.vo-attr{background:#1c1815;padding:clamp(26px,3.6vw,38px);display:flex;flex-direction:column;gap:14px}
+.vo-attr__num{font-size:11px;letter-spacing:.14em;color:var(--brass);text-transform:uppercase}
+.vo-attr__title{font-family:var(--font-display);font-weight:400;font-size:clamp(22px,2.6vw,28px);color:var(--paper);margin:0}
+.vo-attr__range{font-size:13px;color:var(--paper-dim);line-height:1.6;margin:0}
+.vo-attr__sample{
+  display:inline-flex;align-items:center;gap:8px;align-self:flex-start;margin-top:4px;
+  background:transparent;border:none;color:var(--gold);font-family:var(--font-body);font-size:11.5px;letter-spacing:.1em;
+  text-transform:uppercase;cursor:pointer;padding:0;
+}
+.vo-attr__sample svg{transition:transform .25s ease}
+.vo-attr__sample:hover svg{transform:translateX(3px)}
+.vo-attr.is-playing{background:rgba(224,178,106,.06)}
+.vo-attr.is-playing .vo-attr__sample{color:var(--paper)}
+
+/* ============ 5. WHAT I CAN VOICE ============ */
+.vo-services{max-width:1080px;margin:0 auto}
+.vo-services__head{text-align:center;max-width:640px;margin:0 auto clamp(30px,4vw,44px)}
+.vo-services__head h2{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,3.6vw,42px);margin:14px 0 12px;color:var(--paper)}
+.vo-services__head p{color:var(--paper-dim);font-size:14.5px;line-height:1.7;margin:0}
+.vo-svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:820px){.vo-svc-grid{grid-template-columns:1fr}}
+.vo-svc{background:#1c1815;border:1px solid rgba(239,230,216,.1);border-radius:14px;padding:26px 24px}
+.vo-svc__title{font-family:var(--font-display);font-weight:400;font-size:19px;color:var(--paper);margin:0 0 10px}
+.vo-svc__desc{font-size:13.5px;line-height:1.65;color:var(--paper-dim);margin:0}
+.vo-services__more{text-align:center;color:var(--paper-dim);font-size:13.5px;line-height:1.7;margin:clamp(26px,4vw,36px) auto 0;max-width:56ch}
+.vo-services__more a{color:var(--gold);text-decoration:underline;text-underline-offset:3px}
+
+/* ============ 6. WHY MAL ============ */
+.vo-why{max-width:880px;margin:0 auto;text-align:center}
+.vo-why h2{font-family:var(--font-display);font-weight:400;font-size:clamp(26px,3.4vw,38px);color:var(--paper);margin:14px 0 22px}
+.vo-why p{font-size:clamp(15px,1.4vw,17.5px);line-height:1.75;color:var(--paper-dim);margin:0 0 20px}
+.vo-why__roles{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:26px 0 8px}
+.vo-why__role{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);border:1px solid rgba(201,138,69,.4);border-radius:999px;padding:8px 16px}
+
+/* ============ 7. PROCESS ============ */
+.vo-process{max-width:1000px;margin:0 auto}
+.vo-process__head{text-align:center;max-width:600px;margin:0 auto clamp(30px,4vw,44px)}
+.vo-process__head h2{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,3.6vw,42px);margin:14px 0 12px;color:var(--paper)}
+.vo-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(239,230,216,.1);border:1px solid rgba(239,230,216,.1);border-radius:14px;overflow:hidden}
+@media (max-width:820px){.vo-steps{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.vo-steps{grid-template-columns:1fr}}
+.vo-step{background:#1c1815;padding:26px 22px}
+.vo-step__num{font-family:var(--font-display);font-size:34px;color:rgba(224,178,106,.35);margin:0 0 12px}
+.vo-step__title{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper);margin:0 0 10px}
+.vo-step__desc{font-size:13px;line-height:1.6;color:var(--paper-dim);margin:0}
+
+/* ============ 8. WORK / SELECTED CLIENTS ============ */
+.vo-work{max-width:1080px;margin:0 auto}
+.vo-work__head{text-align:center;max-width:620px;margin:0 auto clamp(28px,4vw,40px)}
+.vo-work__head h2{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,3.6vw,42px);margin:14px 0 12px;color:var(--paper)}
+.vo-work__head p{color:var(--paper-dim);font-size:14.5px;line-height:1.7;margin:0}
+.vo-work-list{display:flex;flex-direction:column;border-top:1px solid rgba(239,230,216,.1)}
+.vo-work-row{
+  display:grid;grid-template-columns:40px 1fr auto auto;align-items:center;gap:18px;
+  padding:16px 6px;border-bottom:1px solid rgba(239,230,216,.1);cursor:pointer;background:none;border-left:none;border-right:none;border-top:none;
+  width:100%;text-align:left;color:inherit;font-family:inherit;transition:background .2s ease;
+}
+.vo-work-row:hover,.vo-work-row.is-playing{background:rgba(224,178,106,.06)}
+.vo-work-row__play{
+  width:34px;height:34px;border-radius:999px;border:1px solid rgba(239,230,216,.25);display:flex;align-items:center;justify-content:center;
+  color:var(--paper);flex:none;transition:background .2s,border-color .2s,color .2s;
+}
+.vo-work-row:hover .vo-work-row__play,.vo-work-row.is-playing .vo-work-row__play{background:var(--gold);border-color:var(--gold);color:#12100f}
+.vo-work-row.is-playing .vo-work-row__play .ic-play{display:none}
+.vo-work-row.is-playing .vo-work-row__play .ic-pause{display:block}
+.vo-work-row__play .ic-pause{display:none}
+.vo-work-row__title{font-size:15px;color:var(--paper)}
+.vo-work-row__title span{display:block;font-size:11.5px;color:var(--paper-dim);margin-top:2px;font-weight:400}
+.vo-work-row__type{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--paper-faint);white-space:nowrap}
+.vo-work-row__dur{font-size:11.5px;color:var(--paper-faint);font-variant-numeric:tabular-nums;white-space:nowrap}
+@media (max-width:640px){
+  .vo-work-row{grid-template-columns:34px 1fr auto}
+  .vo-work-row__type{display:none}
+}
+
+/* ============ 9. BOOKING / BRIEF ============ */
+.vo-brief{max-width:900px;margin:0 auto}
+.vo-brief__head{text-align:center;max-width:600px;margin:0 auto clamp(30px,4vw,40px)}
+.vo-brief__head h2{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,3.8vw,44px);margin:14px 0 12px;color:var(--paper)}
+.vo-brief__head p{color:var(--paper-dim);font-size:14.5px;line-height:1.7;margin:0}
+.vo-brief-form{background:#1c1815;border:1px solid rgba(239,230,216,.1);border-radius:18px;padding:clamp(24px,4vw,40px)}
+.vo-brief-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px 24px}
+@media (max-width:680px){.vo-brief-grid{grid-template-columns:1fr}}
+.vo-field{display:flex;flex-direction:column;gap:8px}
+.vo-field--full{grid-column:1/-1}
+.vo-field label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--paper-dim)}
+.vo-field input,.vo-field select,.vo-field textarea{
+  background:rgba(239,230,216,.05);border:1px solid rgba(239,230,216,.16);border-radius:8px;
+  padding:12px 14px;color:var(--paper);font-family:var(--font-body);font-size:13.5px;outline:none;transition:border-color .2s;
+}
+.vo-field input:focus,.vo-field select:focus,.vo-field textarea:focus{border-color:var(--brass)}
+.vo-field textarea{resize:vertical;min-height:90px}
+.vo-field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23efe6d8' stroke-width='1.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+.vo-toggle{display:flex;align-items:center;gap:10px;cursor:pointer}
+.vo-toggle input{width:18px;height:18px;accent-color:var(--brass);margin:0}
+.vo-toggle span{font-size:13px;color:var(--paper)}
+.vo-brief-form button[type="submit"]{width:100%;justify-content:center;margin-top:22px}
+.vo-brief-status{font-size:13px;line-height:1.6;margin:14px 0 0;min-height:1.6em;text-align:center}
+.vo-brief-status.is-success{color:#8fbf8f}
+.vo-brief-status.is-error{color:#d98a8a}
+
+/* ============ 10. FINAL CTA ============ */
+.vo-final{position:relative;min-height:70vh;display:flex;align-items:center;justify-content:center;overflow:hidden;text-align:center}
+.vo-final__media{position:absolute;inset:0;overflow:hidden}
+.vo-final__media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 22%;filter:grayscale(.15)}
+.vo-final::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(18,16,15,.55) 0%,rgba(18,16,15,.92) 78%)}
+.vo-final__copy{position:relative;z-index:1;padding:40px 24px}
+.vo-final__title{font-family:var(--font-display);font-weight:400;font-size:clamp(34px,6vw,68px);color:var(--paper);margin:0 0 30px;line-height:1.05}
+.vo-final__ctas{display:flex;flex-wrap:wrap;gap:16px;justify-content:center}
+
+/* visually-hidden host for the YouTube iframe player that actually plays
+   the audio — kept in the DOM (never display:none) so playback stays
+   reliable, but invisible and out of the tab order. */
+#vo-yt-host{position:fixed;left:-9999px;top:-9999px;width:2px;height:2px;overflow:hidden;opacity:0;pointer-events:none}
+
+/* persistent mini-strip once listening has started */
+.vo-mini{
+  position:fixed;left:50%;bottom:18px;translate:-50% 0;z-index:180;max-width:calc(100vw - 28px);
+  display:flex;align-items:center;gap:12px;padding:9px 16px 9px 9px;border-radius:999px;
+  background:rgba(17,16,19,.78);backdrop-filter:blur(16px) saturate(1.3);
+  border:1px solid rgba(239,230,216,.14);box-shadow:0 20px 50px rgba(0,0,0,.5);
+  opacity:0;transform:translateY(10px) scale(.96);pointer-events:none;transition:opacity .3s ease,transform .3s ease;
+}
+.vo-mini.is-visible{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+.vo-mini__btn{flex:none;width:38px;height:38px;border-radius:999px;background:var(--gold);color:#12100f;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.vo-mini__btn .ic-pause{display:none}
+.vo-mini.is-playing .vo-mini__btn .ic-play{display:none}
+.vo-mini.is-playing .vo-mini__btn .ic-pause{display:block}
+.vo-mini__info{min-width:0;max-width:34vw}
+.vo-mini__title{font-size:12.5px;color:var(--paper);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vo-mini__by{font-size:10.5px;color:var(--paper-faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vo-mini__close{flex:none;width:26px;height:26px;border-radius:999px;border:none;background:transparent;color:var(--paper-dim);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.vo-mini__close:hover{color:var(--paper)}
+@media (max-width:520px){.vo-mini__info{max-width:42vw}}
+</style>
 </head>
 <body>
 
 <div id="chrome-nav"></div>
 
-<section class="soon">
-  <span class="soon__eyebrow">Voice Over</span>
-  <h1 class="soon__title">Coming Soon</h1>
-  <p class="soon__desc">Character voice acting and narration work — coming soon.</p>
-  <a href="index.html" class="btn btn-outline">Back Home</a>
+<!-- ============ 1. HERO ============ -->
+<section class="vo-hero">
+  <div class="vo-hero__media"><img src="img/voiceover-home.jpg" alt="Mal Griot, voice over artist"></div>
+  <svg class="vo-hero__freq" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 60 Q30 20 60 60 T120 60 T180 30 T240 60 T300 90 T360 60 T420 40 T480 60 T540 70 T600 60 T660 20 T720 60 T780 80 T840 60 T900 45 T960 60 T1020 75 T1080 60 T1140 35 T1200 60" fill="none" stroke="#e0b26a" stroke-width="1" opacity=".5"/>
+  </svg>
+  <div class="vo-hero__copy">
+    <span class="vo-eyebrow vo-hero__name reveal">Mal Griot</span>
+    <h1 class="vo-hero__kicker vo-hero__name reveal">Voice<br><em>Over.</em></h1>
+    <p class="vo-hero__line reveal">A voice with presence, texture and range. Warm when it needs to be. Dangerous when it isn't.</p>
+    <div class="vo-hero__ctas reveal">
+      <button type="button" class="vo-cta vo-cta--play" data-play-hero>
+        <span class="vo-cta__ring">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+        Hear the Voice
+      </button>
+      <a href="#brief" class="vo-cta vo-cta--ghost">Book Mal</a>
+    </div>
+  </div>
 </section>
+
+<!-- ============ 2. THE DEMO ============ -->
+<section class="vo-section" id="demo">
+  <div class="vo-player-wrap">
+    <div class="vo-player-head reveal">
+      <span class="vo-eyebrow">The Demo</span>
+      <h2>Press play. This is the instrument.</h2>
+      <p>One reel, front and center — everything below is more of the same voice, sorted by what you're making.</p>
+    </div>
+
+    <div class="vo-player reveal" id="voPlayer" data-video-id="acrHxSQZTx0" data-title="Homework" data-by="Immersive Audio — Mal Griot">
+      <div class="vo-player__top">
+        <div>
+          <span class="vo-player__tag">Voice Reel</span>
+          <h3 class="vo-player__title" id="voPlayerTitle">Homework</h3>
+          <span class="vo-player__by" id="voPlayerBy">Immersive Audio — Mal Griot</span>
+        </div>
+        <button type="button" class="vo-player__expand" id="voExpandBtn" aria-label="Expand listening mode">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+        </button>
+      </div>
+
+      <div class="vo-wave" id="voWave" role="slider" aria-label="Seek" tabindex="0">
+        <div class="vo-wave__cursor" id="voWaveCursor" style="left:0%"></div>
+      </div>
+
+      <div class="vo-player__controls">
+        <button type="button" class="vo-player__playbtn" id="voPlayBtn" aria-label="Play">
+          <svg class="ic-play" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="ic-pause" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+        </button>
+        <span class="vo-player__time" id="voTimeCurrent">0:00</span>
+        <div class="vo-player__scrub" id="voScrub">
+          <div class="vo-player__scrub-fill" id="voScrubFill"></div>
+          <div class="vo-player__scrub-knob" id="voScrubKnob"></div>
+        </div>
+        <span class="vo-player__time" id="voTimeTotal">–:–</span>
+      </div>
+      <p class="vo-player__hint">Click anywhere on the wave to jump — the mini-player keeps this going as you scroll.</p>
+    </div>
+  </div>
+</section>
+
+<div class="vo-lightbox" id="voLightbox">
+  <button type="button" class="vo-lightbox__close" id="voLightboxClose" aria-label="Close">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>
+  </button>
+  <div class="vo-lightbox__panel" id="voLightboxPanel"></div>
+</div>
+
+<!-- ============ 3. FIND YOUR VOICE ============ -->
+<section class="vo-section vo-browse" id="find">
+  <div class="vo-browse__head reveal">
+    <span class="vo-eyebrow">Find Your Voice</span>
+    <h2>What are you making?</h2>
+    <p>Every clip here is a real narration Mal has recorded — sorted, not staged. Only the categories with an actual sample behind them are listed.</p>
+  </div>
+
+  <div class="vo-tabs reveal" id="voTabs" role="tablist">
+    <button type="button" class="vo-tab is-active" data-tab="reel" role="tab" aria-selected="true">Character &amp; Story Reel</button>
+    <button type="button" class="vo-tab" data-tab="books" role="tab" aria-selected="false">Full-Length Audiobooks</button>
+  </div>
+
+  <div class="vo-tabpanel is-active reveal" data-tabpanel="reel">
+    <p class="vo-tabpanel__note">Book-trailer narrations from &ldquo;Movies In Your Mind&rdquo; — one character read per author, click to play.</p>
+    <div class="vo-grid" id="voReelGrid"></div>
+  </div>
+
+  <div class="vo-tabpanel reveal" data-tabpanel="books">
+    <p class="vo-tabpanel__note">Two complete productions, start to finish. Play the opening chapter here, or open the full chapter list.</p>
+    <div class="vo-book-grid" id="voBookGrid"></div>
+  </div>
+</section>
+
+<!-- ============ 4. THE VOICE ============ -->
+<section class="vo-section vo-instrument">
+  <div class="vo-instrument__head reveal">
+    <span class="vo-eyebrow">The Voice</span>
+    <h2>The instrument, described.</h2>
+    <p>Four qualities, four samples. Hear it, then decide if it's what your project needs.</p>
+  </div>
+  <div class="vo-attrs reveal" id="voAttrs"></div>
+</section>
+
+<!-- ============ 5. WHAT I CAN VOICE ============ -->
+<section class="vo-section vo-services">
+  <div class="vo-services__head reveal">
+    <span class="vo-eyebrow">What I Can Voice</span>
+    <h2>Where this voice works.</h2>
+  </div>
+  <div class="vo-svc-grid reveal">
+    <div class="vo-svc">
+      <h3 class="vo-svc__title">Audiobooks</h3>
+      <p class="vo-svc__desc">Long-form narration across genres — full novels and nonfiction, cover to cover, chapter by chapter.</p>
+    </div>
+    <div class="vo-svc">
+      <h3 class="vo-svc__title">Book Trailers &amp; Promo Narration</h3>
+      <p class="vo-svc__desc">Short-form narrated reads built for authors and publishers to promote a release.</p>
+    </div>
+    <div class="vo-svc">
+      <h3 class="vo-svc__title">Character Voice</h3>
+      <p class="vo-svc__desc">Distinct, held-together characters inside a single narration — not just one flat reading voice.</p>
+    </div>
+  </div>
+  <p class="vo-services__more">Also open to commercial, corporate, documentary and e-learning narration — no demo reel for those yet, so send a script and a sample read comes back with the reply via <a href="#brief">the brief below</a>.</p>
+</section>
+
+<!-- ============ 6. WHY MAL ============ -->
+<section class="vo-section vo-why">
+  <span class="vo-eyebrow reveal">Why Mal</span>
+  <h2 class="reveal">Not just a voice for hire. A voice that's spent a life on rhythm, character and timing.</h2>
+  <p class="reveal">A voice actor reads a script. Mal treats it like a piece of music — where the phrase breathes, where the beat lands, when a line goes quiet instead of loud. That comes from years spent as a singer, a poet, a live performer and an MC, not from a voice booth alone.</p>
+  <p class="reveal">It's the difference between a voice that sounds correct and one that sounds like someone is actually in the room, talking to you.</p>
+  <div class="vo-why__roles reveal">
+    <span class="vo-why__role">Musician</span>
+    <span class="vo-why__role">Poet</span>
+    <span class="vo-why__role">Actor</span>
+    <span class="vo-why__role">Performer</span>
+    <span class="vo-why__role">Storyteller</span>
+  </div>
+</section>
+
+<!-- ============ 7. THE PROCESS ============ -->
+<section class="vo-section vo-process">
+  <div class="vo-process__head reveal">
+    <span class="vo-eyebrow">The Process</span>
+    <h2>Hiring a voice, made simple.</h2>
+  </div>
+  <div class="vo-steps reveal">
+    <div class="vo-step">
+      <div class="vo-step__num">01</div>
+      <div class="vo-step__title">Send the Brief</div>
+      <p class="vo-step__desc">Script, word count, where the voice will be used, and your deadline.</p>
+    </div>
+    <div class="vo-step">
+      <div class="vo-step__num">02</div>
+      <div class="vo-step__title">Find the Voice</div>
+      <p class="vo-step__desc">Pricing and tone come back with the reply, aligned to your brief.</p>
+    </div>
+    <div class="vo-step">
+      <div class="vo-step__num">03</div>
+      <div class="vo-step__title">Record</div>
+      <p class="vo-step__desc">Professional recording of the script, directed toward what the project needs.</p>
+    </div>
+    <div class="vo-step">
+      <div class="vo-step__num">04</div>
+      <div class="vo-step__title">Deliver</div>
+      <p class="vo-step__desc">Clean, edited files in the format your project requires.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8. WORK / SELECTED CLIENTS ============ -->
+<section class="vo-section vo-work" id="work">
+  <div class="vo-work__head reveal">
+    <span class="vo-eyebrow">Selected Work</span>
+    <h2>Authors and titles Mal has narrated.</h2>
+    <p>Every row plays the real narration.</p>
+  </div>
+  <div class="vo-work-list reveal" id="voWorkList"></div>
+</section>
+
+<!-- ============ 9. BOOKING / BRIEF ============ -->
+<section class="vo-section vo-brief" id="brief">
+  <div class="vo-brief__head reveal">
+    <span class="vo-eyebrow">Booking</span>
+    <h2>Tell me what you're making.</h2>
+    <p>The more detail here, the faster pricing and a sample direction come back.</p>
+  </div>
+
+  <form class="vo-brief-form reveal" id="voBriefForm">
+    <input type="hidden" name="access_key" value="44f58f9f-ee75-4735-a37b-8b1caca96106">
+    <input type="hidden" name="subject" value="New Voice Over Brief — malgriot.com">
+    <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+    <div class="vo-brief-grid">
+      <div class="vo-field">
+        <label for="voName">Your Name</label>
+        <input id="voName" name="name" type="text" placeholder="Your name" required>
+      </div>
+      <div class="vo-field">
+        <label for="voEmail">Email</label>
+        <input id="voEmail" name="email" type="email" placeholder="you@studio.com" required>
+      </div>
+      <div class="vo-field">
+        <label for="voProjectType">Project Type</label>
+        <select id="voProjectType" name="project_type">
+          <option>Audiobook</option>
+          <option>Book Trailer / Promo</option>
+          <option>Character Voice</option>
+          <option>Commercial</option>
+          <option>Documentary / Narration</option>
+          <option>Corporate / E-Learning</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="vo-field">
+        <label for="voUsage">Usage &amp; Platform</label>
+        <input id="voUsage" name="usage_platform" type="text" placeholder="e.g. YouTube, broadcast, Audible, internal">
+      </div>
+      <div class="vo-field">
+        <label for="voWordCount">Script / Word Count</label>
+        <input id="voWordCount" name="word_count" type="text" placeholder="Paste script link, or approx. word count">
+      </div>
+      <div class="vo-field">
+        <label for="voTone">Tone / Direction</label>
+        <input id="voTone" name="tone" type="text" placeholder="e.g. warm, cinematic, playful, grounded">
+      </div>
+      <div class="vo-field">
+        <label for="voDeadline">Deadline</label>
+        <input id="voDeadline" name="deadline" type="text" placeholder="When do you need this delivered">
+      </div>
+      <div class="vo-field">
+        <label for="voFormat">Delivery Format</label>
+        <input id="voFormat" name="delivery_format" type="text" placeholder="e.g. WAV 48k, MP3, broadcast spec">
+      </div>
+      <div class="vo-field vo-field--full">
+        <label for="voRef">Reference Voices / Links</label>
+        <input id="voRef" name="reference_voices" type="text" placeholder="Anything that sounds like the direction you want">
+      </div>
+      <div class="vo-field">
+        <label for="voBudget">Budget Range</label>
+        <input id="voBudget" name="budget_range" type="text" placeholder="Ballpark is fine">
+      </div>
+      <div class="vo-field">
+        <label class="vo-toggle" style="margin-top:8px">
+          <input type="checkbox" name="live_direction" value="Yes — need live direction">
+          <span>Need a live-directed session?</span>
+        </label>
+      </div>
+      <div class="vo-field vo-field--full">
+        <label for="voMessage">Anything else</label>
+        <textarea id="voMessage" name="message" placeholder="Tell me a bit more about the project"></textarea>
+      </div>
+    </div>
+    <button type="submit" class="vo-cta vo-cta--solid" style="justify-content:center">
+      Book Mal
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <p class="vo-brief-status" role="status" aria-live="polite" id="voBriefStatus"></p>
+  </form>
+</section>
+
+<!-- ============ 10. FINAL CTA ============ -->
+<section class="vo-final">
+  <div class="vo-final__media"><img src="img/voiceover-home.jpg" alt=""></div>
+  <div class="vo-final__copy">
+    <h2 class="vo-final__title reveal">Words need<br>a voice.</h2>
+    <div class="vo-final__ctas reveal">
+      <a href="#brief" class="vo-cta vo-cta--solid">
+        Book Mal
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#demo" class="vo-cta vo-cta--ghost" id="voListenAgain">Listen Again →</a>
+    </div>
+  </div>
+</section>
+
+<div id="vo-yt-host"><div id="vo-yt-player"></div></div>
+
+<div class="vo-mini" id="voMini">
+  <button type="button" class="vo-mini__btn" id="voMiniBtn" aria-label="Play/pause">
+    <svg class="ic-play" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    <svg class="ic-pause" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+  </button>
+  <div class="vo-mini__info">
+    <div class="vo-mini__title" id="voMiniTitle">—</div>
+    <div class="vo-mini__by" id="voMiniBy">—</div>
+  </div>
+  <button type="button" class="vo-mini__close" id="voMiniClose" aria-label="Stop">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>
+  </button>
+</div>
 
 <div id="chrome-footer"></div>
 <div id="chrome-chat"></div>
 
 <script src="shared.js"></script>
 <script src="chat.js"></script>
+<script src="effects.js"></script>
 <script>renderChrome('voiceover');</script>
+<script>
+// ---------------------------------------------------------------------
+// MAL GRIOT — Voice Over page audio engine.
+//
+// Every track below is a real YouTube narration already published (see
+// the "Selected Work" credits) — there is no separate audio host, so a
+// single hidden YouTube IFrame player (#vo-yt-player) supplies playback
+// for every trigger on the page: the hero CTA, the big reel player, the
+// category grid, the instrument-attribute samples, and the work list.
+// The waveform bars are a deterministic-per-track decorative pattern
+// (seeded from the video id), not an extraction of the real audio —
+// there's no way to pull true waveform data from a YouTube stream, so
+// this is styled to *feel* like part of the system rather than claim
+// to be literal. Progress/duration displayed against it are real,
+// pulled live from the YouTube player once each video is cued.
+(function () {
+  var REEL = [
+    { id: 'FuHX5wwS3JQ', title: 'Glass Flower', by: 'David Procaccino' },
+    { id: '9CDC44s4b-8', title: 'The Blue Iris — Part 1', by: 'Rachel Stone' },
+    { id: 'Pn1ZZcLFWb0', title: 'If Someday Comes', by: 'David Calloway' },
+    { id: 'ncC3eutfCDo', title: 'First Token', by: 'Howard Zoldessy' },
+    { id: '1eq5RGQE0d4', title: 'Dark Bloom', by: 'Molly Macabre' },
+    { id: 'GY5f2PA6HQk', title: "Dylan's Dilemma", by: 'Kathleen Troy' },
+    { id: 'QRc79HXc0uo', title: 'Heartwarming Short Stories For Seniors', by: 'Heartfelt Reads Press' },
+    { id: '_dDLtMxRCIs', title: 'Captivating Stories for Curious Kids', by: 'Chris Munoz' },
+    { id: 'SID5bUo2K-U', title: 'The Blue Iris — Part 2', by: 'Rachel Stone' },
+    { id: 'acrHxSQZTx0', title: 'Homework', by: 'Immersive Audio — Mal Griot' },
+    { id: 'QuTEfHoITF0', title: "Dragonfly's Kiss", by: 'Drgnflyy Laureate' },
+    { id: '1EhVQrCahfs', title: 'Fruitful Finds', by: 'Leona Wolff' },
+    { id: 'gZaomTuTqZg', title: "Outlaw's Promise", by: 'Helena Newbury' },
+    { id: 'OW-uXZLrzSw', title: 'Poison — Part 4', by: 'Emilia Rose' }
+  ];
+  var BOOKS = [
+    { id: '_pxgIrXIp3k', list: 'PLr_svG2XXWi4D0moRTla2PCZC1jmOUKG6', title: 'The Mother — A Short Biography', by: 'Sri Aurobindo Ashram', chapters: '20 chapters', desc: 'Full narration of the biography of The Mother of Sri Aurobindo Ashram — preface through eighteen chapters.' },
+    { id: 'zI99yiH7x_c', list: 'PLr_svG2XXWi4MqSvUU7taytN-Kw_dLwr_', title: 'On Women', by: 'Sri Aurobindo &amp; The Mother', chapters: '16 chapters', desc: 'Compiled from the writings of Sri Aurobindo and The Mother — a full narration across fourteen chapters.' }
+  ];
+  var ATTRS = [
+    { num: 'Texture', title: 'Rich, grainy, capable of going smooth or raw', range: 'From a close, textured whisper to a full-chested read — the grain stays even at both ends.', track: '1eq5RGQE0d4' },
+    { num: 'Energy', title: 'Calm, conversational, commanding or playful', range: 'The same voice sits back for a quiet scene and steps forward for a pitch — on command, not by accident.', track: 'GY5f2PA6HQk' },
+    { num: 'Range', title: 'Intimate to cinematic, narrator to character', range: 'From a single narrator’s voice to a full cast of characters inside one read.', track: 'FuHX5wwS3JQ' },
+    { num: 'Pace', title: 'Measured, rhythmic, conversational or dynamic', range: 'Phrasing built from years as a musician — where a line breathes and where it drives forward.', track: 'ncC3eutfCDo' }
+  ];
+  var iconPlay = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+  var iconPause = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+
+  function fmtTime(s) {
+    if (!isFinite(s) || s < 0) return '–:–';
+    s = Math.floor(s);
+    var m = Math.floor(s / 60), r = s % 60;
+    return m + ':' + (r < 10 ? '0' : '') + r;
+  }
+
+  // deterministic pseudo-random bar heights per track id, so each card's
+  // decorative waveform has a consistent, distinct shape on every load
+  function seededBars(seed, count) {
+    var h = 0;
+    for (var i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
+    var out = [];
+    for (var j = 0; j < count; j++) {
+      h = (h * 1103515245 + 12345) >>> 0;
+      var v = (h % 1000) / 1000;
+      out.push(18 + v * 82);
+    }
+    return out;
+  }
+
+  function buildWaveBars(container, id, count) {
+    var heights = seededBars(id, count);
+    var frag = document.createDocumentFragment();
+    heights.forEach(function (h) {
+      var bar = document.createElement('div');
+      bar.className = 'vo-wave__bar';
+      bar.style.height = h + '%';
+      frag.appendChild(bar);
+    });
+    var cursor = container.querySelector('.vo-wave__cursor');
+    container.innerHTML = '';
+    container.appendChild(frag);
+    if (cursor) container.appendChild(cursor);
+    return container.querySelectorAll('.vo-wave__bar');
+  }
+
+  var voWaveEl = document.getElementById('voWave');
+  var voWaveBars = buildWaveBars(voWaveEl, 'acrHxSQZTx0', 64);
+
+  // ---------------- playback engine ----------------
+  var ytPlayer = null;
+  var ytReady = false;
+  var current = { id: null, title: '', by: '' };
+  var pendingPlayId = null;
+  var isPlaying = false;
+  var pollTimer = null;
+  var duration = 0;
+
+  var voPlayer = document.getElementById('voPlayer');
+  var voPlayerTitle = document.getElementById('voPlayerTitle');
+  var voPlayerBy = document.getElementById('voPlayerBy');
+  var voPlayBtn = document.getElementById('voPlayBtn');
+  var voTimeCurrent = document.getElementById('voTimeCurrent');
+  var voTimeTotal = document.getElementById('voTimeTotal');
+  var voScrubFill = document.getElementById('voScrubFill');
+  var voScrubKnob = document.getElementById('voScrubKnob');
+  var voScrub = document.getElementById('voScrub');
+  var voWaveCursor = document.getElementById('voWaveCursor');
+
+  var voMini = document.getElementById('voMini');
+  var voMiniBtn = document.getElementById('voMiniBtn');
+  var voMiniTitle = document.getElementById('voMiniTitle');
+  var voMiniBy = document.getElementById('voMiniBy');
+  var voMiniClose = document.getElementById('voMiniClose');
+
+  var allCardEls = []; // {el, id} for every clickable track UI across the page
+
+  function registerCardEl(el, id) { allCardEls.push({ el: el, id: id }); }
+
+  function refreshActiveStates() {
+    allCardEls.forEach(function (c) {
+      var active = isPlaying && current.id === c.id;
+      c.el.classList.toggle('is-playing', active);
+    });
+    voPlayer.classList.toggle('is-playing', isPlaying && current.id === voPlayer.dataset.videoId);
+  }
+
+  function loadYT() {
+    var tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+  }
+  window.onYouTubeIframeAPIReady = function () {
+    ytPlayer = new YT.Player('vo-yt-player', {
+      height: '1', width: '1',
+      playerVars: { playsinline: 1, controls: 0, rel: 0 },
+      events: {
+        onReady: function () {
+          ytReady = true;
+          if (pendingPlayId) { var t = pendingPlayId; pendingPlayId = null; playTrack(t.id, t.title, t.by, t.autoplay); }
+        },
+        onStateChange: function (e) {
+          if (e.data === YT.PlayerState.PLAYING) {
+            isPlaying = true;
+            duration = ytPlayer.getDuration() || duration;
+            voTimeTotal.textContent = fmtTime(duration);
+            startPoll();
+          } else if (e.data === YT.PlayerState.PAUSED) {
+            isPlaying = false;
+            stopPoll();
+          } else if (e.data === YT.PlayerState.ENDED) {
+            isPlaying = false;
+            stopPoll();
+            setProgress(0);
+          }
+          refreshActiveStates();
+          syncButtons();
+          syncMini();
+        }
+      }
+    });
+  };
+  loadYT();
+
+  function syncButtons() {
+    voPlayBtn.setAttribute('aria-label', isPlaying ? 'Pause' : 'Play');
+  }
+  var everPlayed = false;
+  function syncMini() {
+    if (isPlaying) everPlayed = true;
+    if (current.id && everPlayed) {
+      voMiniTitle.textContent = current.title;
+      voMiniBy.textContent = current.by;
+      voMini.classList.add('is-visible');
+      voMini.classList.toggle('is-playing', isPlaying);
+    }
+  }
+
+  function setProgress(frac) {
+    frac = Math.max(0, Math.min(1, frac));
+    var pct = (frac * 100).toFixed(2) + '%';
+    voScrubFill.style.width = pct;
+    voScrubKnob.style.left = pct;
+    voWaveCursor.style.left = pct;
+    voTimeCurrent.textContent = fmtTime(frac * duration);
+    var playedCount = Math.round(frac * voWaveBars.length);
+    voWaveBars.forEach(function (b, i) { b.classList.toggle('is-played', i < playedCount); });
+  }
+
+  function startPoll() {
+    stopPoll();
+    pollTimer = setInterval(function () {
+      if (!ytPlayer || !ytPlayer.getCurrentTime) return;
+      var d = ytPlayer.getDuration() || duration;
+      if (d) { duration = d; voTimeTotal.textContent = fmtTime(duration); }
+      var c = ytPlayer.getCurrentTime() || 0;
+      if (duration) setProgress(c / duration);
+    }, 250);
+  }
+  function stopPoll() { if (pollTimer) { clearInterval(pollTimer); pollTimer = null; } }
+
+  function updatePlayerPanel(id, title, by) {
+    voPlayer.dataset.videoId = id;
+    voPlayerTitle.textContent = title;
+    voPlayerBy.textContent = by;
+    voWaveBars = buildWaveBars(voWaveEl, id, 64);
+    voTimeTotal.textContent = '–:–';
+    setProgress(0);
+  }
+
+  function playTrack(id, title, by, autoplay) {
+    current = { id: id, title: title, by: by };
+    if (voPlayer.dataset.videoId !== id) updatePlayerPanel(id, title, by);
+    if (!ytReady || !ytPlayer || !ytPlayer.loadVideoById) {
+      pendingPlayId = { id: id, title: title, by: by, autoplay: autoplay !== false };
+      return;
+    }
+    duration = 0;
+    if (autoplay === false) {
+      ytPlayer.cueVideoById(id);
+      isPlaying = false;
+    } else {
+      ytPlayer.loadVideoById(id);
+      isPlaying = true;
+    }
+    refreshActiveStates();
+    syncButtons();
+    syncMini();
+  }
+
+  function togglePlay(id, title, by) {
+    if (current.id === id && ytReady) {
+      if (isPlaying) ytPlayer.pauseVideo(); else ytPlayer.playVideo();
+      return;
+    }
+    playTrack(id, title, by, true);
+  }
+
+  // cue (don't autoplay) the flagship track so the panel shows real info on load
+  playTrack(voPlayer.dataset.videoId, voPlayer.dataset.title, voPlayer.dataset.by, false);
+
+  // ---------------- big player controls ----------------
+  voPlayBtn.addEventListener('click', function () {
+    togglePlay(voPlayer.dataset.videoId, voPlayerTitle.textContent, voPlayerBy.textContent);
+  });
+  registerCardEl(voPlayer, voPlayer.dataset.videoId);
+
+  function scrubTo(clientX, el) {
+    var rect = el.getBoundingClientRect();
+    var frac = (clientX - rect.left) / rect.width;
+    frac = Math.max(0, Math.min(1, frac));
+    if (ytReady && duration) ytPlayer.seekTo(frac * duration, true);
+    setProgress(frac);
+  }
+  voScrub.addEventListener('click', function (e) { scrubTo(e.clientX, voScrub); });
+  voWaveEl.addEventListener('click', function (e) { scrubTo(e.clientX, voWaveEl); });
+
+  // ---------------- hero CTA ----------------
+  document.querySelector('[data-play-hero]').addEventListener('click', function () {
+    document.getElementById('demo').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    togglePlay(voPlayer.dataset.videoId, voPlayerTitle.textContent, voPlayerBy.textContent);
+  });
+  document.getElementById('voListenAgain').addEventListener('click', function (e) {
+    e.preventDefault();
+    document.getElementById('demo').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    playTrack(voPlayer.dataset.videoId, voPlayerTitle.textContent, voPlayerBy.textContent, true);
+  });
+
+  // ---------------- expand / lightbox ----------------
+  var lightbox = document.getElementById('voLightbox');
+  var lightboxPanel = document.getElementById('voLightboxPanel');
+  document.getElementById('voExpandBtn').addEventListener('click', function () {
+    lightboxPanel.innerHTML = '<iframe style="width:100%;aspect-ratio:16/9;border:none;border-radius:12px" src="https://www.youtube.com/embed/' + encodeURIComponent(voPlayer.dataset.videoId) + '?autoplay=1" title="' + voPlayerTitle.textContent + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+    lightbox.classList.add('is-open');
+    if (ytReady && isPlaying) ytPlayer.pauseVideo();
+  });
+  function closeLightbox() { lightbox.classList.remove('is-open'); lightboxPanel.innerHTML = ''; }
+  document.getElementById('voLightboxClose').addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', function (e) { if (e.target === lightbox) closeLightbox(); });
+
+  // ---------------- 3. category tabs + grid ----------------
+  var tabs = document.querySelectorAll('.vo-tab');
+  var panels = document.querySelectorAll('.vo-tabpanel');
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      tabs.forEach(function (t) { t.classList.toggle('is-active', t === tab); t.setAttribute('aria-selected', t === tab ? 'true' : 'false'); });
+      panels.forEach(function (p) { p.classList.toggle('is-active', p.dataset.tabpanel === tab.dataset.tab); });
+    });
+  });
+
+  var reelGrid = document.getElementById('voReelGrid');
+  REEL.forEach(function (t) {
+    var card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'vo-card';
+    card.innerHTML =
+      '<span class="vo-card__play">' + iconPlay + iconPause + '</span>' +
+      '<span class="vo-card__body"><span class="vo-card__title">' + t.title + '</span><span class="vo-card__by">' + t.by + '</span></span>';
+    card.addEventListener('click', function () { togglePlay(t.id, t.title, t.by); });
+    reelGrid.appendChild(card);
+    registerCardEl(card, t.id);
+  });
+
+  var bookGrid = document.getElementById('voBookGrid');
+  BOOKS.forEach(function (b) {
+    var card = document.createElement('div');
+    card.className = 'vo-book';
+    card.innerHTML =
+      '<div class="vo-book__art"><img src="https://i.ytimg.com/vi/' + b.id + '/hqdefault.jpg" alt="' + b.title + ' audiobook cover art"><span class="vo-book__chapters">' + b.chapters + '</span></div>' +
+      '<div class="vo-book__body">' +
+        '<span class="vo-book__eyebrow">Audiobook</span>' +
+        '<h3 class="vo-book__title">' + b.title + '</h3>' +
+        '<p class="vo-book__desc">' + b.desc + '</p>' +
+        '<button type="button" class="vo-book__btn">' + iconPlay + iconPause + '<span class="vo-book__btn-label">Play Opening Chapter</span></button>' +
+        '<p class="vo-book__all"><a href="https://www.youtube.com/playlist?list=' + b.list + '" target="_blank" rel="noopener">Browse all ' + b.chapters + ' on YouTube →</a></p>' +
+      '</div>';
+    var btn = card.querySelector('.vo-book__btn');
+    var label = card.querySelector('.vo-book__btn-label');
+    btn.addEventListener('click', function () { togglePlay(b.id, b.title + ' — Opening Chapter', b.by); });
+    bookGrid.appendChild(card);
+    registerCardEl(card, b.id);
+    var origRefresh = refreshActiveStates;
+  });
+
+  // keep the audiobook "Play/Pause" label in sync too
+  var _refresh = refreshActiveStates;
+  refreshActiveStates = function () {
+    _refresh();
+    document.querySelectorAll('.vo-book').forEach(function (card) {
+      var label = card.querySelector('.vo-book__btn-label');
+      if (label) label.textContent = card.classList.contains('is-playing') ? 'Pause' : 'Play Opening Chapter';
+    });
+  };
+
+  // ---------------- 4. instrument attributes ----------------
+  var attrsWrap = document.getElementById('voAttrs');
+  ATTRS.forEach(function (a) {
+    var track = REEL.filter(function (r) { return r.id === a.track; })[0];
+    var row = document.createElement('div');
+    row.className = 'vo-attr';
+    row.innerHTML =
+      '<span class="vo-attr__num">' + a.num + '</span>' +
+      '<h3 class="vo-attr__title">' + a.title + '</h3>' +
+      '<p class="vo-attr__range">' + a.range + '</p>' +
+      '<button type="button" class="vo-attr__sample">Sample: ' + (track ? track.title : '') +
+        '<svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
+    row.querySelector('.vo-attr__sample').addEventListener('click', function () {
+      togglePlay(a.track, track ? track.title : '', track ? track.by : '');
+    });
+    attrsWrap.appendChild(row);
+    registerCardEl(row, a.track);
+  });
+
+  // ---------------- 8. selected work list ----------------
+  var workList = document.getElementById('voWorkList');
+  var workItems = REEL.map(function (t) { return { id: t.id, title: t.title, by: t.by, type: 'Book Trailer' }; })
+    .concat(BOOKS.map(function (b) { return { id: b.id, title: b.title, by: b.by, type: 'Full Audiobook', sub: b.chapters }; }));
+  workItems.forEach(function (item) {
+    var row = document.createElement('button');
+    row.type = 'button';
+    row.className = 'vo-work-row';
+    row.innerHTML =
+      '<span class="vo-work-row__play">' + iconPlay + iconPause + '</span>' +
+      '<span class="vo-work-row__title">' + item.title + (item.sub ? '<span>' + item.by + ' · ' + item.sub + '</span>' : '<span>' + item.by + '</span>') + '</span>' +
+      '<span class="vo-work-row__type">' + item.type + '</span>';
+    row.addEventListener('click', function () { togglePlay(item.id, item.title, item.by); });
+    workList.appendChild(row);
+    registerCardEl(row, item.id);
+  });
+
+  // ---------------- mini-player ----------------
+  voMiniBtn.addEventListener('click', function () {
+    if (!current.id) return;
+    if (isPlaying) ytPlayer.pauseVideo(); else ytPlayer.playVideo();
+  });
+  voMiniClose.addEventListener('click', function () {
+    if (ytReady) ytPlayer.pauseVideo();
+    voMini.classList.remove('is-visible', 'is-playing');
+  });
+
+  // ---------------- 9. booking / brief form ----------------
+  (function () {
+    var form = document.getElementById('voBriefForm');
+    var button = form.querySelector('button[type="submit"]');
+    var status = document.getElementById('voBriefStatus');
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      status.className = 'vo-brief-status';
+      status.textContent = '';
+      button.disabled = true;
+      var origLabel = button.innerHTML;
+      button.textContent = 'Sending…';
+      try {
+        var res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(Object.fromEntries(new FormData(form)))
+        });
+        var data = await res.json();
+        if (data.success) {
+          status.textContent = "Brief sent — you'll hear back with pricing and direction soon.";
+          status.classList.add('is-success');
+          form.reset();
+        } else {
+          throw new Error(data.message || 'Send failed');
+        }
+      } catch (err) {
+        status.textContent = "Couldn't send — try again, or email yep.that.malcolm@gmail.com directly.";
+        status.classList.add('is-error');
+      } finally {
+        button.disabled = false;
+        button.innerHTML = origLabel;
+      }
+    });
+  })();
+})();
+</script>
 </body>
 </html>
