@@ -111,12 +111,45 @@
     transition:max-height .35s ease,opacity .3s ease,margin-top .35s ease,visibility 0s linear .35s;
   }
   .release:hover .release__credits{max-height:40px;opacity:1;visibility:visible;margin-top:2px;transition-delay:0s}
+  .release__actions{display:flex;align-items:center;gap:10px;flex:none}
   .release__play{
     width:38px;height:38px;border-radius:999px;border:1px solid rgba(239,230,216,.25);
     display:flex;align-items:center;justify-content:center;color:var(--paper);flex:none;
     transition:background .2s,border-color .2s;
   }
   .release:hover .release__play{background:var(--release-accent, var(--brass));border-color:var(--release-accent, var(--brass));color:#12100f}
+  .release__cart{
+    width:38px;height:38px;border-radius:999px;border:1px solid rgba(239,230,216,.25);
+    display:flex;align-items:center;justify-content:center;color:var(--paper);flex:none;
+    background:none;padding:0;cursor:pointer;transition:background .2s,border-color .2s,color .2s;
+    font-family:inherit;
+  }
+  .release__cart:hover,.release__cart:focus-visible{background:var(--release-accent, var(--brass));border-color:var(--release-accent, var(--brass));color:#12100f}
+
+  /* ---- buy modal: launched from a release's cart button, hosts whatever
+     purchase embed (Beatport / Apple Music / Bandcamp) that release links to ---- */
+  .buy-modal{
+    position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;
+    padding:24px;background:rgba(10,8,7,.78);backdrop-filter:blur(6px);
+    opacity:0;pointer-events:none;transition:opacity .25s ease;
+  }
+  .buy-modal.is-open{opacity:1;pointer-events:auto}
+  .buy-modal__panel{
+    position:relative;max-width:680px;width:100%;max-height:88vh;overflow:auto;
+    background:#1c1815;border:1px solid rgba(239,230,216,.14);border-radius:16px;padding:20px;
+    transform:translateY(12px);transition:transform .25s ease;
+  }
+  .buy-modal.is-open .buy-modal__panel{transform:translateY(0)}
+  .buy-modal__head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
+  .buy-modal__title{font-family:var(--font-display);font-weight:400;font-size:18px;margin:0;color:var(--paper)}
+  .buy-modal__close{
+    width:32px;height:32px;border-radius:999px;border:1px solid rgba(239,230,216,.25);
+    background:none;color:var(--paper);display:flex;align-items:center;justify-content:center;
+    cursor:pointer;flex:none;transition:background .2s,border-color .2s,color .2s;
+  }
+  .buy-modal__close:hover{background:var(--brass);border-color:var(--brass);color:#12100f}
+  .buy-modal__body{display:block}
+  .buy-modal__body iframe{max-width:100%}
   @media (max-width:640px){
     .release{grid-template-columns:1fr auto;grid-template-areas:"main play" "year year"}
     .release__year{grid-area:year;padding-top:8px}
@@ -156,6 +189,116 @@
   .release__panel-embed{width:100%;border:none;border-radius:6px;display:block}
   .release__panel-fallback{margin-top:16px}
 
+  /* ---- Jungli feature: crediting the win — "The Call of the Jungle"
+     adopted as Jungli the Nomad Village's official sonic identity. This is
+     Mal's achievement, so the album art and copy carry the section; Jungli's
+     mark rides in the corner of the album art itself (a small credit
+     badge, not a headline logo), and their hero video is demoted to a
+     small proof-of-placement thumbnail — muted, no autoplay, not the
+     backdrop — so it reads as a credit line, not a Jungli ad.
+     Sits noticeably further from the album hero above than from "All
+     Releases" below, so it reads as that section's lead-in rather than a
+     stray card wedged under the hero. An aurora wash (react-bits Aurora)
+     drifts behind the content and a slow rotating conic-gradient ring
+     (react-bits BorderGlow) traces the card's edge — both looping,
+     GPU-cheap CSS, no canvas/WebGL needed for a card this size. ---- */
+  @property --jungli-angle{
+    syntax:'<angle>';
+    inherits:false;
+    initial-value:0deg;
+  }
+  .jungli-feature{
+    padding:clamp(64px,10vw,120px) clamp(20px,5vw,64px) clamp(8px,2vw,20px);
+    max-width:1200px;margin:0 auto;
+  }
+  .jungli-feature__glow{
+    --jungli-angle:0deg;
+    position:relative;border-radius:22px;padding:1.5px;
+    background:conic-gradient(from var(--jungli-angle), #fbd010, #0c4605 30%, #c98a45 55%, #fbd010 85%, #fbd010);
+    animation:jungli-border-spin 8s linear infinite;
+  }
+  @keyframes jungli-border-spin{ to{ --jungli-angle:360deg; } }
+  @media (prefers-reduced-motion: reduce){
+    .jungli-feature__glow{animation:none}
+  }
+  .jungli-feature__card{
+    position:relative;border-radius:20px;overflow:hidden;isolation:isolate;
+    display:grid;grid-template-columns:auto 1fr;gap:clamp(24px,4vw,48px);align-items:center;
+    background:linear-gradient(160deg,#1c1815 0%,#150f0d 60%,#0f1a0c 100%);
+    padding:clamp(28px,4.5vw,52px);
+  }
+  .jungli-feature__aurora{
+    position:absolute;inset:-30%;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(closest-side, rgba(251,208,16,.4), transparent 70%) 18% 28% / 46% 60% no-repeat,
+      radial-gradient(closest-side, rgba(12,70,5,.65), transparent 70%) 82% 18% / 55% 65% no-repeat,
+      radial-gradient(closest-side, rgba(201,138,69,.4), transparent 70%) 65% 82% / 50% 55% no-repeat;
+    filter:blur(60px);
+    opacity:.85;mix-blend-mode:screen;
+    animation:jungli-aurora 16s ease-in-out infinite alternate;
+  }
+  @keyframes jungli-aurora{
+    0%{transform:translate(0,0) rotate(0deg) scale(1)}
+    50%{transform:translate(3%,-4%) rotate(8deg) scale(1.1)}
+    100%{transform:translate(-4%,3%) rotate(-6deg) scale(1.05)}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .jungli-feature__aurora{animation:none}
+  }
+  .jungli-feature__art-wrap{
+    position:relative;z-index:1;flex:none;display:block;
+    width:clamp(140px,20vw,220px);height:clamp(140px,20vw,220px);
+  }
+  .jungli-feature__art{
+    display:block;width:100%;height:100%;
+    border-radius:12px;object-fit:cover;box-shadow:0 16px 40px rgba(0,0,0,.5);
+    transition:transform .35s ease,filter .35s ease;
+  }
+  .jungli-feature__art-wrap:hover .jungli-feature__art{transform:scale(1.04);filter:brightness(.7)}
+  .jungli-feature__art-logo{
+    position:absolute;left:10px;bottom:10px;height:22px;width:auto;z-index:2;
+    filter:drop-shadow(0 2px 6px rgba(0,0,0,.65));
+  }
+  .jungli-feature__art-play{
+    position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;gap:6px;
+    color:#12100f;font-family:var(--font-body);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;
+    opacity:0;transition:opacity .25s ease,transform .25s ease;transform:scale(.92);
+  }
+  .jungli-feature__art-play span{
+    display:inline-flex;align-items:center;gap:6px;
+    background:#fbd010;border-radius:999px;padding:9px 16px;box-shadow:0 8px 20px rgba(0,0,0,.4);
+  }
+  .jungli-feature__art-wrap:hover .jungli-feature__art-play{opacity:1;transform:scale(1)}
+  .jungli-feature__content{position:relative;z-index:1;min-width:0}
+  .jungli-feature__eyebrow{
+    display:inline-block;font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;
+    color:#fbd010;margin-bottom:16px;font-family:var(--font-body);font-weight:600;
+  }
+  .jungli-feature__title{
+    font-family:var(--font-display);font-weight:400;line-height:1.12;
+    font-size:clamp(24px,3.2vw,38px);margin:0 0 16px;color:var(--paper);
+  }
+  .jungli-feature__title span{display:block;color:var(--paper-dim);font-size:.55em;letter-spacing:.02em;margin-top:6px}
+  .jungli-feature__copy{color:var(--paper-dim);font-size:15px;line-height:1.65;margin:0 0 24px;max-width:56ch}
+  .jungli-feature__copy strong{color:#fbd010;font-weight:600}
+  .jungli-feature__row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .jungli-feature__proof{
+    display:inline-flex;align-items:center;gap:10px;text-decoration:none;
+    color:var(--paper-dim);font-family:var(--font-body);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;
+    border:1px solid rgba(239,230,216,.18);border-radius:999px;padding:6px 14px 6px 6px;
+    transition:border-color .2s ease,color .2s ease;
+  }
+  .jungli-feature__proof:hover{border-color:#fbd010;color:var(--paper)}
+  .jungli-feature__proof video{
+    width:40px;height:40px;border-radius:999px;object-fit:cover;flex:none;
+  }
+  @media (max-width:640px){
+    .jungli-feature__card{grid-template-columns:1fr;text-align:center;padding:28px 24px}
+    .jungli-feature__art-wrap{margin:0 auto;width:160px;height:160px}
+    .jungli-feature__art-logo{left:50%;transform:translateX(-86px)}
+    .jungli-feature__row{justify-content:center}
+  }
+
   .d-cta{padding:0 clamp(20px,5vw,64px) 120px;max-width:1200px;margin:0 auto;text-align:center}
   .d-cta__inner{background:#1c1815;border:1px solid rgba(239,230,216,.1);border-radius:20px;padding:56px 32px}
   .d-cta h2{font-family:var(--font-display);font-weight:400;font-size:clamp(26px,3.4vw,36px);margin:0 0 14px}
@@ -186,8 +329,45 @@
      leaving a big empty gap below the visible title that the JS then
      used to lock "fall into the sky…" far from it. Tighten the box on
      mobile so its bottom edge sits close to the visible text. */
+  /* ---- scroll nudge: if the visitor stops scrolling for a few seconds
+     mid-page, a small bouncing down-arrow prompts them to keep going. Sits
+     just above the mini-player so the two never overlap. ---- */
+  .scroll-nudge{
+    position:fixed;left:50%;bottom:104px;translate:-50% 0;z-index:140;
+    width:36px;height:36px;border-radius:999px;border:1px solid rgba(239,230,216,.25);
+    background:rgba(17,16,19,.6);backdrop-filter:blur(10px);
+    display:flex;align-items:center;justify-content:center;color:var(--paper-dim);
+    opacity:0;pointer-events:none;transition:opacity .5s ease;
+  }
+  .scroll-nudge.is-visible{opacity:1;animation:scroll-nudge-bounce 1.4s ease-in-out infinite}
+  @keyframes scroll-nudge-bounce{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(6px)}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .scroll-nudge{display:none}
+  }
+
   @media (max-width:640px){
     .listen--hero .warp-text{height:100px !important;min-height:100px !important}
+    /* The locked copy block was tall enough on short mobile viewports (real
+       phones, with browser chrome eating vertical space) that its last lines
+       sat behind the fixed mini-player bar. Tighten type to shrink the block
+       so it clears the player with room to spare. */
+    .listen--hero .scroll-float{font-size:1rem;line-height:1.42}
+  }
+
+  /* ---- copy fade-in guard: without this, the paragraph's un-animated text
+     briefly flashes at full opacity (its default state) while gsap/ScrollTrigger
+     are still downloading/initializing, then vanishes once initHeroCollapse's
+     first gsap.set() runs — an ugly flash-then-hide. Start it hidden via CSS
+     (scoped to the very-early '.js' class set at the top of <head>, so this
+     never fires for no-JS visitors) and let the hero-collapse timeline's own
+     gsap.set(copy,{opacity:1,...}) reveal it once it's actually ready to
+     animate word-by-word. Reduced-motion visitors skip the JS timeline
+     entirely, so they're excluded here too or the text would stay invisible. */
+  @media (prefers-reduced-motion: no-preference){
+    .js .listen--hero .scroll-float{opacity:0}
   }
 </style>
 </head>
@@ -242,6 +422,33 @@
 
 <div class="listen__gap-fix" id="listenGapFix"></div>
 
+<section class="jungli-feature reveal">
+  <div class="jungli-feature__glow">
+  <div class="jungli-feature__card">
+    <div class="jungli-feature__aurora" aria-hidden="true"></div>
+    <a class="jungli-feature__art-wrap" href="https://open.spotify.com/album/2IHKGSoXq9EUbaomNYdG88" target="_blank" rel="noopener" aria-label="Hear The Call of the Jungle (Overmind) on Spotify">
+      <img class="jungli-feature__art" src="epk/art/overmind.jpg" alt="The Call of the Jungle (Overmind) — Mal Griot album art">
+      <img class="jungli-feature__art-logo" src="https://junglithenomad.com/logo/full-logo-white.png" alt="Jungli — The Nomad Village">
+      <span class="jungli-feature__art-play" aria-hidden="true"><span>Hear the Track ↗</span></span>
+    </a>
+    <div class="jungli-feature__content">
+      <span class="jungli-feature__eyebrow">Brand Work</span>
+      <h2 class="jungli-feature__title">"The Call of the Jungle" <span>is the official sonic identity of Jungli, the Nomad Village</span></h2>
+      <p class="jungli-feature__copy"><em>"The Call of the Jungle"</em> (aka "Overmind") by Mal Griot × Diveakssh Schae has been officially adopted as the resident sound of <strong>Jungli, the Nomad Village</strong> — where wifi meets wildlife. Jungli is a coliving village in Karnataka, India. This track signifies a fruitful partnership, and an expansion of both brands deeper into their respective industries.</p>
+      <div class="jungli-feature__row">
+        <a class="jungli-feature__proof" href="https://junglithenomad.com/" target="_blank" rel="noopener" aria-label="See it playing on Jungli's own homepage">
+          <video muted loop playsinline preload="metadata" poster="https://junglithenomad.com/video/hero-loop-poster.jpg">
+            <source src="https://customer-c258i3f5n3rdf99s.cloudflarestream.com/1aaaf5040853c1f197eaacd1d6baf741/downloads/default.mp4" type="video/mp4">
+          </video>
+          Seen playing at junglithenomad.com ↗
+        </a>
+        <a href="contact.html" class="btn btn-outline">Hire Mal for Brand Work</a>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+
 <section class="d-releases">
   <div class="d-releases__head reveal"><h2>All Releases</h2></div>
 
@@ -266,7 +473,7 @@
     </span>
   </a>
 
-  <a class="release reveal" href="https://open.spotify.com/track/5uvEb58GBUWOo8bfxhCy8v" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+  <a class="release reveal" href="https://open.spotify.com/track/5uvEb58GBUWOo8bfxhCy8v" target="_blank" rel="noopener" style="text-decoration:none;color:inherit" data-buy="i-tried-it">
     <span class="release__year">2025</span>
     <div class="release__main">
       <div class="release__art-stage">
@@ -283,12 +490,17 @@
         <span class="release__credits">Mal Griot &amp; Unnayanaa — Wind Horse Records</span>
       </div>
     </div>
-    <span class="release__play">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-    </span>
+    <div class="release__actions">
+      <button type="button" class="release__cart" aria-label="Buy I Tried It">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      </button>
+      <span class="release__play">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      </span>
+    </div>
   </a>
 
-  <a class="release reveal" href="https://open.spotify.com/album/2IHKGSoXq9EUbaomNYdG88" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+  <a class="release reveal" href="https://open.spotify.com/album/2IHKGSoXq9EUbaomNYdG88" target="_blank" rel="noopener" style="text-decoration:none;color:inherit" data-buy="call-of-the-jungle">
     <span class="release__year">2026</span>
     <div class="release__main">
       <div class="release__art-stage">
@@ -305,12 +517,17 @@
         <span class="release__credits">Mal Griot &amp; Diveakssh Schae — Diveakssh Schae Records</span>
       </div>
     </div>
-    <span class="release__play">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-    </span>
+    <div class="release__actions">
+      <button type="button" class="release__cart" aria-label="Buy The Call of the Jungle (Overmind)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      </button>
+      <span class="release__play">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      </span>
+    </div>
   </a>
 
-  <a class="release reveal" href="https://open.spotify.com/album/0mG2qACRHS8sHoyiniieFp" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+  <a class="release reveal" href="https://open.spotify.com/album/0mG2qACRHS8sHoyiniieFp" target="_blank" rel="noopener" style="text-decoration:none;color:inherit" data-buy="free-fall">
     <span class="release__year">2026</span>
     <div class="release__main">
       <div class="release__art-stage">
@@ -327,12 +544,17 @@
         <span class="release__credits">Mal Griot &amp; Stalvart John — Dynamite Disco Club</span>
       </div>
     </div>
-    <span class="release__play">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-    </span>
+    <div class="release__actions">
+      <button type="button" class="release__cart" aria-label="Buy Free Fall">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      </button>
+      <span class="release__play">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      </span>
+    </div>
   </a>
 
-  <a class="release reveal" href="https://open.spotify.com/track/3u1kmOSbXQtWsYg3q8KFMj" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+  <a class="release reveal" href="https://open.spotify.com/track/3u1kmOSbXQtWsYg3q8KFMj" target="_blank" rel="noopener" style="text-decoration:none;color:inherit" data-buy="helicopter-man">
     <span class="release__year">2026</span>
     <div class="release__main">
       <div class="release__art-stage">
@@ -349,12 +571,17 @@
         <span class="release__credits">Mal Griot &amp; Deep Dawn — Hangar 18 Studio</span>
       </div>
     </div>
-    <span class="release__play">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-    </span>
+    <div class="release__actions">
+      <button type="button" class="release__cart" aria-label="Buy Helicopter Man">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      </button>
+      <span class="release__play">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      </span>
+    </div>
   </a>
 
-  <a class="release reveal" href="https://open.spotify.com/album/6oilUaIrr7oAbkiXLKc00h" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+  <a class="release reveal" href="https://open.spotify.com/album/6oilUaIrr7oAbkiXLKc00h" target="_blank" rel="noopener" style="text-decoration:none;color:inherit" data-buy="toxic-baby">
     <span class="release__year">2026</span>
     <div class="release__main">
       <div class="release__art-stage">
@@ -371,9 +598,14 @@
         <span class="release__credits">Mal Griot &amp; Deep Dawn — Hangar 18 Studio</span>
       </div>
     </div>
-    <span class="release__play">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-    </span>
+    <div class="release__actions">
+      <button type="button" class="release__cart" aria-label="Buy Toxic Baby">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      </button>
+      <span class="release__play">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      </span>
+    </div>
   </a>
 
   <a class="release reveal" href="https://soundcloud.com/mal-griot/sets/truly-higher" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
@@ -439,7 +671,7 @@
     </span>
   </a>
 
-  <a class="release reveal" href="https://soundcloud.com/mal-griot/sets/periodyssius" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+  <a class="release reveal" href="https://soundcloud.com/mal-griot/sets/periodyssius" target="_blank" rel="noopener" style="text-decoration:none;color:inherit" data-buy="periodyssius">
     <span class="release__year">2025</span>
     <div class="release__main">
       <div class="release__art-stage">
@@ -455,9 +687,14 @@
         <h3 class="release__title">PeRiOdYsSiUs</h3>
       </div>
     </div>
-    <span class="release__play">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-    </span>
+    <div class="release__actions">
+      <button type="button" class="release__cart" aria-label="Buy PeRiOdYsSiUs">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      </button>
+      <span class="release__play">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      </span>
+    </div>
   </a>
 </section>
 
@@ -474,6 +711,21 @@
 <div id="chrome-footer"></div>
 <div id="chrome-chat"></div>
 <div id="chrome-player"></div>
+<button class="scroll-nudge" id="scrollNudge" aria-hidden="true" tabindex="-1">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+</button>
+
+<div class="buy-modal" id="buyModal" aria-hidden="true">
+  <div class="buy-modal__panel" role="dialog" aria-modal="true" aria-labelledby="buyModalTitle">
+    <div class="buy-modal__head">
+      <h3 class="buy-modal__title" id="buyModalTitle"></h3>
+      <button type="button" class="buy-modal__close" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="buy-modal__body"></div>
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
@@ -640,6 +892,16 @@
   var releaseReadyHandler = null;  // bound only while a SoundCloud panel is open
   var loadTimeoutId = null;        // "couldn't load" fallback timer for the open SoundCloud panel
 
+  // Play button doubles as the panel's close control: a triangle while
+  // closed, an X the moment its dropdown is open — same as clicking the
+  // album art, since both live inside the same clickable row.
+  var PLAY_ICON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+  var STOP_ICON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+  function setRowIcon(anchor, isOpen){
+    var btn = anchor && anchor.querySelector('.release__play');
+    if(btn) btn.innerHTML = isOpen ? STOP_ICON : PLAY_ICON;
+  }
+
   // Spotify's official iFrame Controller API — loaded once, lazily, the first
   // time a Spotify release panel opens. Lets the panel's embedded player be
   // driven (and its play/pause state read) from outside the iframe, which is
@@ -677,6 +939,7 @@
     var panel = activePanel;
     panel.classList.remove('is-open');
     activeAnchor.setAttribute('aria-expanded', 'false');
+    setRowIcon(activeAnchor, false);
     if(releaseReadyHandler){
       window.removeEventListener('griot:release-ready', releaseReadyHandler);
       releaseReadyHandler = null;
@@ -685,8 +948,12 @@
       clearTimeout(loadTimeoutId);
       loadTimeoutId = null;
     }
-    if(activePlatform === 'spotify' && window.griotMiniPlayer){
-      window.griotMiniPlayer.clearExternal();
+    // Stop whatever's actually playing, not just visually close the panel.
+    if(activePlatform === 'spotify'){
+      if(panel._spotifyController) panel._spotifyController.pause();
+      if(window.griotMiniPlayer) window.griotMiniPlayer.clearExternal();
+    } else {
+      window.dispatchEvent(new CustomEvent('griot:pause-mini-player'));
     }
     activePlatform = null;
     // Clear the panel's content once the collapse transition finishes (removes
@@ -711,6 +978,7 @@
 
     var loading = panel.querySelector('.release__panel-loading');
     var list = panel.querySelector('.release__tracks');
+    var autoplayed = false; // only kick off playback the first time this panel's tracklist hydrates
 
     // If the SoundCloud Widget API script never loads (blocked/slow/offline),
     // griot:release-ready never fires. Give up after 8s and show a terminal
@@ -745,6 +1013,10 @@
         li.appendChild(row);
         list.appendChild(li);
       });
+      if(!autoplayed){
+        autoplayed = true;
+        window.dispatchEvent(new CustomEvent('griot:play-track-index', { detail: { index: 0 } }));
+      }
     };
     window.addEventListener('griot:release-ready', releaseReadyHandler);
   }
@@ -777,10 +1049,11 @@
             window.griotMiniPlayer.setExternal({
               title: title,
               art: art,
-              isPlaying: false,
+              isPlaying: true,
               onToggle: function(){ controller.togglePlay(); }
             });
           }
+          controller.play();
         });
       });
     });
@@ -801,6 +1074,7 @@
 
     panel.classList.add('is-open');
     anchor.setAttribute('aria-expanded', 'true');
+    setRowIcon(anchor, true);
     activePanel = panel;
     activeAnchor = anchor;
   }
@@ -821,6 +1095,62 @@
       var wasOpen = activePanel === panel;
       closeActivePanel();
       if(!wasOpen) openPanel(anchor, panel, info);
+    });
+  });
+})();
+</script>
+<script>
+(function(){
+  // Buy modal: the cart button next to a buyable release's play button opens
+  // its purchase embed (Beatport / Apple Music / Bandcamp) in a lightbox,
+  // instead of leaving the site. Separate from the play-dropdown above — the
+  // cart button stops its click from reaching the row's own anchor handler,
+  // so opening the store never also triggers the sample player.
+  var BUY_EMBEDS = {
+    'i-tried-it': '<iframe src="https://embed.beatport.com/?id=4905541&type=release" width="100%" height="362" frameborder="0" scrolling="no" style="max-width:600px;"></iframe>',
+    'free-fall': '<iframe src="https://embed.beatport.com/?id=29046067&type=track" width="100%" height="162" frameborder="0" scrolling="no" style="max-width:600px;"></iframe>',
+    'helicopter-man': '<iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" frameborder="0" height="450" style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="https://embed.music.apple.com/in/album/helicopter-man-single/1774171819"></iframe>',
+    'toxic-baby': '<iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" frameborder="0" height="450" style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="https://embed.music.apple.com/in/album/toxic-baby-single/6778007705"></iframe>',
+    'periodyssius': '<iframe style="border: 0; width: 100%; height: 42px;" src="https://bandcamp.com/EmbeddedPlayer/album=323264688/size=small/bgcol=ffffff/linkcol=0687f5/transparent=true/" seamless><a href="https://malgriot.bandcamp.com/album/periodyssius">PeRiOdYsSiUs by Mal Griot</a></iframe>',
+    'call-of-the-jungle': '<iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" frameborder="0" height="450" style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="https://embed.music.apple.com/in/album/the-call-of-the-jungle-overmind-feat-mal-griot-single/6784079021"></iframe>'
+  };
+
+  var modal = document.getElementById('buyModal');
+  if(!modal) return;
+  var titleEl = document.getElementById('buyModalTitle');
+  var bodyEl = modal.querySelector('.buy-modal__body');
+  var closeBtn = modal.querySelector('.buy-modal__close');
+  var clearBodyTimeout = null;
+
+  function openBuyModal(key, title){
+    var html = BUY_EMBEDS[key];
+    if(!html) return;
+    if(clearBodyTimeout){ clearTimeout(clearBodyTimeout); clearBodyTimeout = null; }
+    titleEl.textContent = title ? 'Get "' + title + '"' : 'Get this track';
+    bodyEl.innerHTML = html;
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+  }
+  function closeBuyModal(){
+    if(!modal.classList.contains('is-open')) return;
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    clearBodyTimeout = setTimeout(function(){ bodyEl.innerHTML = ''; }, 250);
+  }
+  closeBtn.addEventListener('click', closeBuyModal);
+  modal.addEventListener('click', function(e){ if(e.target === modal) closeBuyModal(); });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && modal.classList.contains('is-open')) closeBuyModal();
+  });
+
+  document.querySelectorAll('.release__cart').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      var anchor = btn.closest('.release');
+      var key = anchor && anchor.getAttribute('data-buy');
+      var titleNode = anchor && anchor.querySelector('.release__title');
+      openBuyModal(key, titleNode ? titleNode.textContent.trim() : '');
     });
   });
 })();
@@ -929,7 +1259,7 @@
           scrollTrigger: {
             trigger: section,
             start: 'top top',
-            end: '+=210%',
+            end: '+=105%',
             scrub: 0.5,
             pin: true,
             anticipatePin: 1,
@@ -983,6 +1313,37 @@
 
     if (document.readyState === 'complete') initHeroCollapse();
     else window.addEventListener('load', initHeroCollapse);
+  })();
+</script>
+<script>
+  // Scroll nudge: if the visitor stops scrolling for 3s anywhere short of
+  // the bottom of the page, bounce a down-arrow to prompt them onward.
+  // Any scroll movement hides it immediately and restarts the 3s idle timer.
+  (function () {
+    const nudge = document.getElementById('scrollNudge');
+    if (!nudge) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const IDLE_MS = 3000;
+    const NEAR_BOTTOM_PX = 80;
+    let idleTimer = null;
+
+    function nearBottom() {
+      return window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - NEAR_BOTTOM_PX;
+    }
+
+    function show() {
+      if (!nearBottom()) nudge.classList.add('is-visible');
+    }
+
+    function scheduleIdle() {
+      clearTimeout(idleTimer);
+      nudge.classList.remove('is-visible');
+      idleTimer = setTimeout(show, IDLE_MS);
+    }
+
+    window.addEventListener('scroll', scheduleIdle, { passive: true });
+    scheduleIdle();
   })();
 </script>
 </body>

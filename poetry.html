@@ -241,7 +241,32 @@
   background:#1c1815;border:1px solid rgba(239,230,216,.1);border-radius:20px;
   background-image:radial-gradient(ellipse at 50% 0%,rgba(224,178,106,.06),transparent 60%);
 }
-.po-book__flip{width:100%;max-width:760px;filter:drop-shadow(0 26px 46px rgba(0,0,0,.5))}
+.po-book__flip{position:relative;width:100%;max-width:760px;filter:drop-shadow(0 26px 46px rgba(0,0,0,.5))}
+
+/* Periodic drag hint — a small triangular "peel" tugs at the top-right
+   corner every 10s (see the page-flip init script) to suggest the page
+   can be dragged open: two short pulls, the second reaching a little
+   deeper into the page, then a full retreat. Purely decorative — sits
+   above the canvas but never intercepts pointer events. Named
+   po-book__corner-tease (not po-book__flip-hint) — that name's already
+   taken by the static "Drag a corner, or use the arrows" caption below
+   the book. */
+.po-book__corner-tease{position:absolute;top:0;right:0;width:18%;max-width:110px;aspect-ratio:1;z-index:6;pointer-events:none;overflow:visible}
+.po-book__corner-tease::before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(135deg,transparent 50%,rgba(239,230,216,.6) 50%,rgba(239,230,216,.22) 62%,rgba(0,0,0,.32) 100%);
+  clip-path:polygon(100% 0,100% 100%,0 0);
+  transform-origin:100% 0%;transform:scale(0);opacity:0;
+}
+.po-book__corner-tease.is-active::before{animation:po-book-hint-fold 1.8s ease-in-out}
+@keyframes po-book-hint-fold{
+  0%{transform:scale(0);opacity:0}
+  14%{transform:scale(.85);opacity:1}
+  28%{transform:scale(.4);opacity:1}
+  45%{transform:scale(1.25);opacity:1}
+  62%{transform:scale(1.25);opacity:1}
+  100%{transform:scale(0);opacity:0}
+}
 .po-book__flip-btn{
   flex:none;width:44px;height:44px;border-radius:999px;
   border:1px solid rgba(239,230,216,.25);background:rgba(18,16,15,.4);color:var(--paper);
@@ -324,26 +349,32 @@
       </button>
     </div>
   </div>
-  <div class="po-hero__copy">
-    <span class="po-hero__eyebrow reveal">Poetry</span>
-    <h1 class="po-hero__title reveal">Poetry is born on the tongue</h1>
-    <p class="po-hero__desc reveal">Spoken-word pieces on video and audio, and a book collecting the ones that outgrew the mic.</p>
-    <div class="po-hero__ctas reveal">
-      <a href="#listen" class="po-cta po-cta--solid">
-        Watch &amp; listen
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-      <a href="#book" class="po-cta po-cta--ghost">Get the book</a>
-    </div>
-  </div>
 </section>
 
-<section class="po-section po-practice">
-  <h2 class="po-practice__head">
-    <span class="reveal">A poem can live on a page.</span>
-    <span class="reveal">It can also live in a voice.</span>
-  </h2>
-  <p class="po-practice__body reveal">This is where both versions sit — clips and recordings you can watch or listen to right here, and the book for the pieces that ask for more room than a stage or a screen gives them.</p>
+<section class="po-section po-book" id="book">
+  <div class="po-book__head reveal">
+    <span class="po-book__eyebrow">New Book</span>
+    <h2 class="po-book__title"><strong>f a l l i n g under where</strong></h2>
+    <p class="po-book__desc">Order your own copy of Mal Griot's latest collection of poetry and lyrics compiled in way that makes every page a finished work of art.</p>
+  </div>
+
+  <div class="po-book__stage reveal">
+    <button type="button" class="po-book__flip-btn po-book__flip-btn--prev" aria-label="Previous page">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="po-book__flip" id="po-book-flip"></div>
+    <button type="button" class="po-book__flip-btn po-book__flip-btn--next" aria-label="Next page">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+  <p class="po-book__flip-hint">Drag a corner, or use the arrows</p>
+
+  <div class="po-book__cta">
+    <button type="button" class="po-cta po-cta--solid" id="kofi-book-open">
+      Get the book
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
 </section>
 
 <section class="po-section po-listen" id="listen">
@@ -452,32 +483,6 @@
   </div>
 
   <div class="poem__panel" id="poem-active-panel"></div>
-</section>
-
-<section class="po-section po-book" id="book">
-  <div class="po-book__head reveal">
-    <span class="po-book__eyebrow">The Book</span>
-    <h2 class="po-book__title">Collection of Poems</h2>
-    <p class="po-book__desc">Flip through a few pages from “f a l l i n g under where,” then get your own copy.</p>
-  </div>
-
-  <div class="po-book__stage reveal">
-    <button type="button" class="po-book__flip-btn po-book__flip-btn--prev" aria-label="Previous page">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <div class="po-book__flip" id="po-book-flip"></div>
-    <button type="button" class="po-book__flip-btn po-book__flip-btn--next" aria-label="Next page">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-  </div>
-  <p class="po-book__flip-hint">Drag a corner, or use the arrows</p>
-
-  <div class="po-book__cta">
-    <button type="button" class="po-cta po-cta--solid" id="kofi-book-open">
-      Get the book
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-  </div>
 </section>
 
 <div class="kofi-modal" id="kofi-book-modal" role="dialog" aria-modal="true" aria-label="Buy the book on Ko-fi">
@@ -994,12 +999,46 @@
   var prevBtn = document.querySelector('.po-book__flip-btn--prev');
   var nextBtn = document.querySelector('.po-book__flip-btn--next');
 
+  // The front cover is a lone "hard" page (showCover:true) — in landscape/
+  // spread mode StPageFlip renders it alone on the right and leaves the
+  // paired left half blank. That blank half isn't transparent: the
+  // library's own render loop clears the whole canvas to opaque white
+  // every frame before drawing pages into it, so anything left undrawn
+  // (the blank half at rest, and the exposed strip behind the page while
+  // it's mid-drag) shows through as flat white — a DOM overlay can only
+  // mask the "at rest" case, since during a drag the animated page has to
+  // paint on top of that same canvas region, not under an overlay div.
+  // Patching the clear color directly fixes both at the source.
+  var flipRender = pageFlip.getRender && pageFlip.getRender();
+  if (flipRender && typeof flipRender.clear === 'function') {
+    flipRender.clear = function () {
+      this.ctx.fillStyle = '#1c1815';
+      this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    };
+  }
+
   function syncNav() {
     var count = pageFlip.getPageCount();
     var current = pageFlip.getCurrentPageIndex();
     if (prevBtn) prevBtn.disabled = current <= 0;
     if (nextBtn) nextBtn.disabled = current >= count - 1;
   }
+
+  // Periodic "you can drag this" hint — every 10s, a small corner peels in
+  // and back out at the top-right of whatever page is currently on top
+  // (purely a CSS pulse on an overlay, not a real page-flip drag, so it
+  // can't leave the book in a half-turned state). Skipped whenever the
+  // book isn't at rest, so it never fights an in-progress user drag.
+  var flipHint = document.createElement('div');
+  flipHint.className = 'po-book__corner-tease';
+  el.appendChild(flipHint);
+  setInterval(function () {
+    var fc = pageFlip.getFlipController && pageFlip.getFlipController();
+    if (fc && fc.getState && fc.getState() !== 'read') return;
+    flipHint.classList.remove('is-active');
+    void flipHint.offsetWidth;
+    flipHint.classList.add('is-active');
+  }, 10000);
 
   // turnToNextPage/turnToPrevPage (a direct jump) rather than
   // flipNext/flipPrev (a simulated corner-drag gesture) — the latter
