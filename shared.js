@@ -709,6 +709,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMiniPlayer();
   initAnimatedFavicon();
   initEmberField();
+  initScrollCue();
   if (typeof initScrollReveal === 'function') initScrollReveal();
   if (typeof initScrollFloat === 'function') initScrollFloat();
   if (typeof initVariableProximity === 'function') initVariableProximity();
@@ -792,4 +793,47 @@ function initAnimatedFavicon() {
   }
 
   mark.onload = () => requestAnimationFrame(draw);
+}
+
+// Site-wide "keep scrolling" cue: fades in after 5s of no scroll/pointer/
+// key activity, on any page tall enough to actually scroll. Hides again the
+// moment the visitor moves, and stops offering it once they're near the
+// bottom of the page. Docked above the mini-player's bottom-center slot so
+// the two never overlap.
+function initScrollCue() {
+  const cue = document.createElement('div');
+  cue.className = 'scroll-cue';
+  cue.setAttribute('aria-hidden', 'true');
+  cue.innerHTML = '<span class="scroll-cue__line"></span>Scroll';
+  document.body.appendChild(cue);
+
+  const IDLE_DELAY = 5000;
+  let idleTimer;
+
+  // Measured live (not once at init) so a page whose height only settles
+  // after images/fonts load still gets the cue, and a page that isn't
+  // scrollable never shows it.
+  function isScrollable() {
+    return document.documentElement.scrollHeight > window.innerHeight + 80;
+  }
+
+  function nearBottom() {
+    return window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 40;
+  }
+
+  function showCue() {
+    if (isScrollable() && !nearBottom()) cue.classList.add('is-visible');
+  }
+
+  function resetIdleTimer() {
+    cue.classList.remove('is-visible');
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(showCue, IDLE_DELAY);
+  }
+
+  ['scroll', 'mousemove', 'touchstart', 'keydown', 'wheel'].forEach((evt) => {
+    window.addEventListener(evt, resetIdleTimer, { passive: true });
+  });
+
+  resetIdleTimer();
 }

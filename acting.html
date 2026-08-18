@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>document.documentElement.className+=' js';</script>
 <title>Acting — Mal Griot</title>
-<meta name="description" content="Mal Griot, actor — presence first, character follows. Watch the reel, see the range, and get in touch about casting.">
+<meta name="description" content="Mal Griot, actor — presence first, character follows. Watch his latest roles, view his measurements, and cast him through DYT.">
 <meta property="og:title" content="Acting — Mal Griot">
-<meta property="og:description" content="Mal Griot, actor — presence first, character follows. Watch the reel, see the range, and get in touch about casting.">
+<meta property="og:description" content="Mal Griot, actor — presence first, character follows. Watch his latest roles, view his measurements, and cast him through DYT.">
 <meta property="og:image" content="https://malgriot.github.io/peace-and-love/img/acting-home.jpg">
 <meta property="og:url" content="https://malgriot.github.io/peace-and-love/acting.html">
 <meta property="og:type" content="website">
@@ -50,13 +50,14 @@
 .ac-hero{
   position:relative;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;background:var(--ink);
 }
-.ac-hero__media{position:absolute;inset:0;width:100%;height:100%;overflow:hidden}
+.ac-hero__media{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;background:#000}
 .ac-hero__media img{
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%;
-  animation:ac-hero-kenburns 14s cubic-bezier(.16,1,.3,1) both;
+  opacity:0;transition:opacity 1.8s ease;
 }
-@keyframes ac-hero-kenburns{from{transform:scale(1.12)}to{transform:scale(1)}}
-@media (prefers-reduced-motion: reduce){.ac-hero__media img{animation:none}}
+.ac-hero__media img.is-active{opacity:1;animation:ac-hero-kenburns 9s cubic-bezier(.16,1,.3,1) both}
+@keyframes ac-hero-kenburns{from{transform:scale(1.12)}to{transform:scale(1.02)}}
+@media (prefers-reduced-motion: reduce){.ac-hero__media img.is-active{animation:none}}
 .ac-hero::before{
   content:"";position:absolute;inset:0;z-index:0;
   background:linear-gradient(0deg,rgba(18,16,15,.96) 0%,rgba(18,16,15,.28) 46%,rgba(18,16,15,.5) 100%);
@@ -80,15 +81,6 @@
 .ac-hero__role.reveal{transition-delay:.16s}
 .ac-hero__edge.reveal{transition-delay:.34s}
 .ac-hero__ctas.reveal{transition-delay:.48s}
-
-.ac-hero__scroll{
-  position:absolute;z-index:1;left:50%;bottom:26px;transform:translateX(-50%);
-  display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--paper-faint);
-  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
-}
-.ac-hero__scroll-line{width:1px;height:34px;background:linear-gradient(180deg,var(--gold),transparent);animation:ac-scroll-pulse 2.4s ease-in-out infinite}
-@keyframes ac-scroll-pulse{0%,100%{opacity:.35}50%{opacity:1}}
-@media (prefers-reduced-motion: reduce){.ac-hero__scroll-line{animation:none}}
 
 /* ---------- 2. Reel — the premiere ---------- */
 .ac-reel{max-width:1100px;margin:0 auto}
@@ -143,67 +135,74 @@
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media (max-width:640px){.ac-filmstrip{flex-direction:column}}
 
-/* ---------- 3. Range — the taxonomy ---------- */
-.ac-range{max-width:1180px;margin:0 auto}
-.ac-range__head{text-align:center;max-width:680px;margin:0 auto clamp(36px,5vw,56px)}
-.ac-range__title{font-family:var(--font-display);font-weight:400;font-size:clamp(30px,4.4vw,52px);margin:14px 0 12px;color:var(--paper)}
-.ac-range__desc{color:var(--paper-dim);font-size:14.5px;line-height:1.7;margin:0}
+/* ---------- 3. Measurements — the vitals ---------- */
+.ac-measure{max-width:1180px;margin:0 auto}
+.ac-measure__head{text-align:center;max-width:680px;margin:0 auto clamp(36px,5vw,56px)}
+.ac-measure__title{font-family:var(--font-display);font-weight:400;font-size:clamp(30px,4.4vw,52px);margin:14px 0 12px;color:var(--paper)}
+.ac-measure__desc{color:var(--paper-dim);font-size:14.5px;line-height:1.7;margin:0}
 
-.ac-range__stage{
-  display:grid;grid-template-columns:0.86fr 1.14fr;gap:clamp(24px,4vw,56px);align-items:stretch;
+.ac-measure__stage{
+  display:grid;grid-template-columns:0.7fr 1.3fr;gap:clamp(24px,4vw,64px);align-items:center;
 }
-.ac-range__list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;border-top:1px solid rgba(239,230,216,.12)}
-.ac-range__item{border-bottom:1px solid rgba(239,230,216,.12)}
-.ac-range__btn{
-  appearance:none;background:none;border:none;width:100%;text-align:left;cursor:pointer;
-  display:flex;align-items:baseline;gap:16px;padding:18px 4px;color:var(--paper-dim);
-}
-.ac-range__num{font-size:11px;letter-spacing:.06em;color:var(--paper-faint);flex:none;transition:color .25s ease}
-.ac-range__label{flex:1;min-width:0}
-.ac-range__name{
-  display:block;font-family:var(--font-display);font-weight:400;font-size:clamp(19px,2vw,25px);
-  color:var(--paper-dim);transition:color .25s ease,transform .25s ease;
-}
-.ac-range__tag{display:block;font-size:12.5px;color:var(--paper-faint);margin-top:4px;line-height:1.5;
-  max-height:0;opacity:0;overflow:hidden;transition:max-height .35s ease,opacity .3s ease,margin-top .3s ease}
-.ac-range__item.is-active .ac-range__name{color:var(--gold);transform:translateX(6px)}
-.ac-range__item.is-active .ac-range__num{color:var(--gold)}
-.ac-range__item.is-active .ac-range__tag{max-height:60px;opacity:1;margin-top:6px}
-.ac-range__item:hover .ac-range__name{color:var(--paper)}
+.ac-measure__figure{position:relative;display:flex;justify-content:center}
+.ac-measure__figure svg{width:100%;max-width:320px;height:auto;overflow:visible}
+.ac-measure__dot{fill:var(--paper-faint);stroke:rgba(18,16,15,.7);stroke-width:2;transition:fill .25s ease,r .25s ease;cursor:pointer}
+.ac-measure__dot.is-lit{fill:var(--gold)}
+.ac-measure__glow{fill:var(--gold);opacity:0;transition:opacity .3s ease;filter:blur(6px)}
+.ac-measure__glow.is-lit{opacity:.55}
+.ac-measure__silhouette{fill:rgba(239,230,216,.05);stroke:rgba(239,230,216,.16);stroke-width:1.5}
 
-.ac-range__view{position:relative;border-radius:8px;overflow:hidden;background:#1c1815;min-height:340px;
-  box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 0 1px rgba(239,230,216,.08);}
-.ac-range__view img{
-  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 22%;
-  opacity:0;transition:opacity .55s ease;filter:saturate(.9) contrast(1.03);
+.ac-measure__list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:0 28px;
+  border-top:1px solid rgba(239,230,216,.12);max-height:520px;overflow-y:auto}
+.ac-measure__row{
+  grid-column:span 1;display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+  padding:12px 2px;border-bottom:1px solid rgba(239,230,216,.1);cursor:pointer;transition:background .2s ease;
 }
-.ac-range__view img.is-shown{opacity:1}
-.ac-range__view::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(18,16,15,.78) 0%,transparent 42%);pointer-events:none}
-.ac-range__view-cap{position:absolute;left:22px;bottom:20px;z-index:1;font-family:var(--font-display);font-size:clamp(20px,2.6vw,28px);color:var(--paper)}
+.ac-measure__row:hover,.ac-measure__row.is-lit{background:rgba(224,178,106,.06)}
+.ac-measure__label{font-size:11.5px;letter-spacing:.05em;color:var(--paper-dim);transition:color .2s ease}
+.ac-measure__row.is-lit .ac-measure__label{color:var(--gold)}
+.ac-measure__value{font-size:12.5px;color:var(--paper);text-align:right;white-space:nowrap;flex:none}
+.ac-measure__value small{color:var(--paper-faint);font-size:10.5px}
+.ac-measure__wear{margin-top:26px;padding-top:20px;border-top:1px solid rgba(239,230,216,.12)}
+.ac-measure__wear-title{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);display:block;margin-bottom:14px}
+.ac-measure__wear-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
+.ac-measure__wear-item{border:1px solid rgba(239,230,216,.14);border-radius:4px;padding:10px 12px;text-align:center}
+.ac-measure__wear-k{display:block;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-faint);margin-bottom:4px}
+.ac-measure__wear-v{display:block;font-family:var(--font-display);font-size:16px;color:var(--paper)}
 
 @media (max-width:820px){
-  .ac-range__stage{grid-template-columns:1fr}
-  .ac-range__view{aspect-ratio:4/5;min-height:0;order:-1}
+  .ac-measure__stage{grid-template-columns:1fr}
+  .ac-measure__list{max-height:none;grid-template-columns:1fr 1fr}
 }
+@media (max-width:480px){.ac-measure__list{grid-template-columns:1fr}}
 
-/* ---------- 4. Credits ---------- */
-.ac-credits{max-width:900px;margin:0 auto}
-.ac-credits__head{text-align:center;max-width:640px;margin:0 auto clamp(30px,4vw,48px)}
-.ac-credits__title{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,3.8vw,44px);margin:14px 0 12px;color:var(--paper)}
-.ac-credits__desc{color:var(--paper-dim);font-size:14.5px;line-height:1.7;margin:0}
-.ac-credits__cat{font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);display:block;margin:0 0 18px}
-.ac-credits__list{list-style:none;margin:0;padding:0;border-top:1px solid rgba(239,230,216,.12)}
-.ac-credits__row{
-  display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:16px;align-items:baseline;
-  padding:22px 4px;border-bottom:1px solid rgba(239,230,216,.12);
+/* ---------- 4. Intro / Audition tape ---------- */
+.ac-tape{max-width:820px;margin:0 auto}
+.ac-tape__head{text-align:center;max-width:620px;margin:0 auto clamp(28px,4vw,44px)}
+.ac-tape__title{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,3.8vw,44px);margin:14px 0 12px;color:var(--paper)}
+.ac-tape__desc{color:var(--paper-dim);font-size:14.5px;line-height:1.7;margin:0}
+.ac-tape__frame{position:relative;max-width:340px;margin:0 auto;border-radius:14px;overflow:hidden;
+  background:#000;box-shadow:0 40px 100px rgba(0,0,0,.6),0 0 0 1px rgba(239,230,216,.08);aspect-ratio:9/16}
+.ac-tape__frame video{width:100%;height:100%;object-fit:cover;display:block}
+.ac-tape__note{text-align:center;font-size:12.5px;color:var(--paper-faint);margin-top:18px;max-width:52ch;margin-left:auto;margin-right:auto;line-height:1.7}
+
+/* ---------- 5. Representation — DYT ---------- */
+.ac-rep{max-width:900px;margin:0 auto}
+.ac-rep__wrap{
+  display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,64px);
+  border-top:1px solid rgba(239,230,216,.12);padding-top:clamp(32px,4vw,48px);align-items:start;
 }
-.ac-credits__project{font-family:var(--font-display);font-weight:400;font-size:clamp(18px,2vw,22px);color:var(--paper)}
-.ac-credits__role{font-size:12.5px;letter-spacing:.04em;color:var(--paper-dim)}
-.ac-credits__prod{font-size:12.5px;color:var(--paper-faint);text-align:right}
-@media (max-width:640px){
-  .ac-credits__row{grid-template-columns:1fr;gap:6px}
-  .ac-credits__prod{text-align:left}
-}
+.ac-rep__title{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,3.8vw,42px);color:var(--paper);margin:14px 0 16px}
+.ac-rep__body{font-size:14px;line-height:1.75;color:var(--paper-dim);margin:0 0 18px}
+.ac-rep__body strong{color:var(--paper);font-weight:500}
+.ac-rep-facts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
+.ac-rep-facts li{display:flex;justify-content:space-between;gap:16px;font-size:13px;line-height:1.6;
+  border-bottom:1px solid rgba(239,230,216,.08);padding-bottom:12px}
+.ac-rep-facts__label{color:var(--paper-faint);letter-spacing:.06em;text-transform:uppercase;font-size:11px;flex:none;padding-top:2px}
+.ac-rep-facts__value{color:var(--paper);text-align:right;max-width:26ch}
+.ac-rep-facts__value a{color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(224,178,106,.35)}
+.ac-rep-facts__value a:hover{border-color:var(--gold)}
+@media (max-width:640px){.ac-rep__wrap{grid-template-columns:1fr}}
 
 /* ---------- 5. Gallery — the archive ---------- */
 .ac-archive{max-width:1180px;margin:0 auto}
@@ -244,12 +243,6 @@
 .ac-lightbox__close{position:absolute;top:-42px;right:0;background:none;border:none;color:var(--paper-dim);font-size:26px;line-height:1;cursor:pointer;padding:6px}
 .ac-lightbox__close:hover{color:var(--paper)}
 
-/* ---------- 6. About the actor ---------- */
-.ac-about{max-width:840px;margin:0 auto;text-align:center}
-.ac-about__title{font-family:var(--font-display);font-weight:400;line-height:1.2;font-size:clamp(26px,3.8vw,42px);color:var(--paper);margin:14px 0 24px}
-.ac-about__body{font-size:clamp(15px,1.3vw,17px);line-height:1.75;color:var(--paper-dim);max-width:62ch;margin:0 auto}
-.ac-about__body strong{color:var(--paper);font-weight:500}
-
 /* ---------- 7. Casting information ---------- */
 .ac-casting{max-width:1000px;margin:0 auto}
 .ac-casting__wrap{
@@ -280,6 +273,30 @@
 .ac-final__eyebrow{font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:18px}
 .ac-final__title{font-family:var(--font-display);font-weight:400;font-size:clamp(34px,6vw,72px);color:var(--paper);margin:0 0 36px;letter-spacing:-.01em}
 .ac-final__ctas{display:flex;flex-wrap:wrap;gap:16px 30px;align-items:center;justify-content:center}
+
+/* ---------- 9. Cast Mal — representation modal ---------- */
+.ac-modal{
+  position:fixed;inset:0;z-index:500;background:rgba(12,10,9,.86);
+  display:flex;align-items:center;justify-content:center;padding:6vh 5vw;
+  opacity:0;pointer-events:none;transition:opacity .3s ease;
+}
+.ac-modal.is-open{opacity:1;pointer-events:auto}
+.ac-modal__card{
+  position:relative;width:100%;max-width:440px;background:#1c1815;border-radius:10px;
+  border:1px solid rgba(239,230,216,.12);padding:clamp(28px,4vw,40px);
+  box-shadow:0 40px 100px rgba(0,0,0,.6);
+}
+.ac-modal__close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--paper-dim);font-size:24px;line-height:1;cursor:pointer;padding:6px}
+.ac-modal__close:hover{color:var(--paper)}
+.ac-modal__eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:14px}
+.ac-modal__title{font-family:var(--font-display);font-weight:400;font-size:clamp(24px,3vw,30px);color:var(--paper);margin:0 0 14px}
+.ac-modal__body{font-size:13.5px;line-height:1.7;color:var(--paper-dim);margin:0 0 22px}
+.ac-modal__facts{list-style:none;margin:0 0 24px;padding:0;display:flex;flex-direction:column;gap:12px}
+.ac-modal__facts li{display:flex;justify-content:space-between;gap:12px;font-size:13px;border-bottom:1px solid rgba(239,230,216,.08);padding-bottom:10px}
+.ac-modal__facts span:first-child{color:var(--paper-faint);text-transform:uppercase;letter-spacing:.06em;font-size:10.5px;padding-top:2px}
+.ac-modal__facts span:last-child{color:var(--paper);text-align:right}
+.ac-modal__facts a{color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(224,178,106,.35)}
+.ac-modal__ctas{display:flex;flex-wrap:wrap;gap:12px}
 </style>
 </head>
 <body>
@@ -288,8 +305,12 @@
 
 <!-- ================= 1. HERO — THE ACTOR ================= -->
 <section class="ac-hero">
-  <div class="ac-hero__media">
-    <img id="ac-hero-poster" src="img/1722241513433.jpg" alt="Mal Griot, actor">
+  <div class="ac-hero__media" id="ac-hero-carousel">
+    <img class="is-active" src="img/1722241513433.jpg" alt="Mal Griot, actor" style="object-position:50% 8%">
+    <img src="img/2025_05_06_939 V3 FINAL 2 new.jpg" alt="Mal Griot, editorial portrait in a green suit" style="object-position:50% 4%">
+    <img src="img/acting-home.jpg" alt="Mal Griot, outdoor editorial portrait" style="object-position:50% 10%">
+    <img src="img/DSC01018.jpg" alt="Mal Griot, modeling portrait in a beanie and printed coat" style="object-position:50% 6%">
+    <img src="img/1722241513419.jpg" alt="Mal Griot, modeling portrait in a green jacket" style="object-position:50% 8%">
   </div>
   <div class="ac-hero__copy">
     <span class="ac-hero__name reveal">Mal Griot</span>
@@ -297,20 +318,19 @@
     <p class="ac-hero__edge reveal">Presence first. Character follows.</p>
     <div class="ac-hero__ctas reveal">
       <a href="#reel" class="ac-cta ac-cta--solid" id="ac-watch-reel-hero">
-        Watch reel
+        Watch
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
-      <a href="contact.html" class="ac-cta ac-cta--ghost">Cast Mal</a>
+      <button type="button" class="ac-cta ac-cta--ghost" data-cast-mal>Cast Mal</button>
     </div>
   </div>
-  <div class="ac-hero__scroll" aria-hidden="true"><span class="ac-hero__scroll-line"></span>Scroll</div>
 </section>
 
 <!-- ================= 2. REEL — LET THE WORK SPEAK ================= -->
 <section class="ac-section ac-reel" id="reel">
   <div class="ac-reel__head reveal">
     <span class="ac-eyebrow">Showreel</span>
-    <h2 class="ac-reel__title">Watch the reel</h2>
+    <h2 class="ac-reel__title">Latest Roles</h2>
     <p class="ac-reel__desc">A selection of screen and character work.</p>
   </div>
 
@@ -351,96 +371,105 @@
   </div>
 </section>
 
-<!-- ================= 3. RANGE — WHO CAN HE PLAY? ================= -->
-<section class="ac-section ac-range" id="range">
-  <div class="ac-range__head reveal">
-    <span class="ac-eyebrow">Range</span>
-    <h2 class="ac-range__title">Who he can play</h2>
-    <p class="ac-range__desc">Five character energies drawn from the real work — select one to see it.</p>
+<!-- ================= 3. INTRO TAPE ================= -->
+<section class="ac-section ac-tape" id="intro">
+  <div class="ac-tape__head reveal">
+    <span class="ac-eyebrow">Introduction</span>
+    <h2 class="ac-tape__title">Meet Mal</h2>
+    <p class="ac-tape__desc">A quick self-tape introduction — who he is, on camera.</p>
   </div>
-
-  <div class="ac-range__stage reveal">
-    <ul class="ac-range__list" id="ac-range-list">
-      <li class="ac-range__item is-active" data-img="img/PP_09402.JPG" data-cap="The Authority">
-        <button type="button" class="ac-range__btn">
-          <span class="ac-range__num">01</span>
-          <span class="ac-range__label">
-            <span class="ac-range__name">The Authority</span>
-            <span class="ac-range__tag">Controlled. Commanding. Dangerous when necessary.</span>
-          </span>
-        </button>
-      </li>
-      <li class="ac-range__item" data-img="img/performance/perf-joy.jpg" data-cap="The Lover">
-        <button type="button" class="ac-range__btn">
-          <span class="ac-range__num">02</span>
-          <span class="ac-range__label">
-            <span class="ac-range__name">The Lover</span>
-            <span class="ac-range__tag">Warm. Vulnerable. Magnetic.</span>
-          </span>
-        </button>
-      </li>
-      <li class="ac-range__item" data-img="img/1722241513419.jpg" data-cap="The Outsider">
-        <button type="button" class="ac-range__btn">
-          <span class="ac-range__num">03</span>
-          <span class="ac-range__label">
-            <span class="ac-range__name">The Outsider</span>
-            <span class="ac-range__tag">Observant. Strange. Unpredictable.</span>
-          </span>
-        </button>
-      </li>
-      <li class="ac-range__item" data-img="img/about-3.jpg" data-cap="The Everyman">
-        <button type="button" class="ac-range__btn">
-          <span class="ac-range__num">04</span>
-          <span class="ac-range__label">
-            <span class="ac-range__name">The Everyman</span>
-            <span class="ac-range__tag">Natural. Funny. Human.</span>
-          </span>
-        </button>
-      </li>
-      <li class="ac-range__item" data-img="img/DSC00868.jpg" data-cap="The Antagonist">
-        <button type="button" class="ac-range__btn">
-          <span class="ac-range__num">05</span>
-          <span class="ac-range__label">
-            <span class="ac-range__name">The Antagonist</span>
-            <span class="ac-range__tag">Quiet menace. Intelligence. Edge.</span>
-          </span>
-        </button>
-      </li>
-    </ul>
-
-    <div class="ac-range__view" id="ac-range-view">
-      <img src="img/PP_09402.JPG" class="is-shown" alt="Mal Griot — The Authority" data-key="1">
-      <img src="img/performance/perf-joy.jpg" alt="Mal Griot — The Lover" data-key="2">
-      <img src="img/1722241513419.jpg" alt="Mal Griot — The Outsider" data-key="3">
-      <img src="img/about-3.jpg" alt="Mal Griot — The Everyman" data-key="4">
-      <img src="img/DSC00868.jpg" alt="Mal Griot — The Antagonist" data-key="5">
-      <span class="ac-range__view-cap" id="ac-range-cap">The Authority</span>
+  <div class="reveal">
+    <div class="ac-tape__frame">
+      <video src="video/mal-griot-intro.mp4" controls playsinline preload="metadata" poster="img/1722241513433.jpg"></video>
     </div>
   </div>
 </section>
 
-<!-- ================= 4. CREDITS ================= -->
-<section class="ac-section ac-credits" id="credits">
-  <div class="ac-credits__head reveal">
-    <span class="ac-eyebrow">Credits</span>
-    <h2 class="ac-credits__title">The work</h2>
-    <p class="ac-credits__desc">On-camera credits to date.</p>
+<!-- ================= 4. MEASUREMENTS ================= -->
+<section class="ac-section ac-measure" id="measurements">
+  <div class="ac-measure__head reveal">
+    <span class="ac-eyebrow">Measurements</span>
+    <h2 class="ac-measure__title">The vitals</h2>
+    <p class="ac-measure__desc">Hover a point on the figure or a line in the list — metric and imperial, for wardrobe and casting.</p>
   </div>
 
-  <div class="reveal">
-    <span class="ac-credits__cat">Commercial / Brand</span>
-    <ul class="ac-credits__list">
-      <li class="ac-credits__row">
-        <span class="ac-credits__project">Run Your Work Chats On Zoho</span>
-        <span class="ac-credits__role">On-camera lead</span>
-        <span class="ac-credits__prod">Zoho Cliq — commercial spot</span>
-      </li>
-      <li class="ac-credits__row">
-        <span class="ac-credits__project">Run Your Sales On Zoho</span>
-        <span class="ac-credits__role">On-camera lead</span>
-        <span class="ac-credits__prod">Zoho CRM — commercial spot</span>
-      </li>
-    </ul>
+  <div class="ac-measure__stage reveal">
+    <div class="ac-measure__figure">
+      <svg viewBox="0 0 240 520" id="ac-measure-svg" aria-hidden="true">
+        <g class="ac-measure__silhouette" id="ac-measure-body">
+          <ellipse cx="120" cy="44" rx="26" ry="30"/>
+          <rect x="110" y="70" width="20" height="16" rx="6"/>
+          <path d="M75,92 Q120,78 165,92 L152,188 Q160,215 158,236 Q120,252 82,236 Q80,215 88,188 Z"/>
+          <path d="M75,100 L62,190 L57,270" stroke="rgba(239,230,216,.16)" stroke-width="18" fill="none" stroke-linecap="round"/>
+          <path d="M165,100 L178,190 L183,270" stroke="rgba(239,230,216,.16)" stroke-width="18" fill="none" stroke-linecap="round"/>
+          <path d="M100,238 L95,352 L92,468" stroke="rgba(239,230,216,.16)" stroke-width="26" fill="none" stroke-linecap="round"/>
+          <path d="M140,238 L145,352 L148,468" stroke="rgba(239,230,216,.16)" stroke-width="26" fill="none" stroke-linecap="round"/>
+        </g>
+
+        <g class="ac-measure__points" id="ac-measure-points">
+          <g data-key="head"><circle class="ac-measure__glow" cx="120" cy="40" r="14"/><circle class="ac-measure__dot" cx="120" cy="40" r="5"/></g>
+          <g data-key="neck"><circle class="ac-measure__glow" cx="120" cy="76" r="14"/><circle class="ac-measure__dot" cx="120" cy="76" r="5"/></g>
+          <g data-key="shoulder"><circle class="ac-measure__glow" cx="78" cy="96" r="14"/><circle class="ac-measure__dot" cx="78" cy="96" r="5"/></g>
+          <g data-key="armhole"><circle class="ac-measure__glow" cx="166" cy="102" r="14"/><circle class="ac-measure__dot" cx="166" cy="102" r="5"/></g>
+          <g data-key="chest"><circle class="ac-measure__glow" cx="120" cy="130" r="14"/><circle class="ac-measure__dot" cx="120" cy="130" r="5"/></g>
+          <g data-key="waist"><circle class="ac-measure__glow" cx="120" cy="192" r="14"/><circle class="ac-measure__dot" cx="120" cy="192" r="5"/></g>
+          <g data-key="hip"><circle class="ac-measure__glow" cx="120" cy="236" r="14"/><circle class="ac-measure__dot" cx="120" cy="236" r="5"/></g>
+          <g data-key="bicep"><circle class="ac-measure__glow" cx="60" cy="158" r="14"/><circle class="ac-measure__dot" cx="60" cy="158" r="5"/></g>
+          <g data-key="elbow"><circle class="ac-measure__glow" cx="58" cy="192" r="14"/><circle class="ac-measure__dot" cx="58" cy="192" r="5"/></g>
+          <g data-key="wrist"><circle class="ac-measure__glow" cx="55" cy="268" r="14"/><circle class="ac-measure__dot" cx="55" cy="268" r="5"/></g>
+          <g data-key="crotch"><circle class="ac-measure__glow" cx="120" cy="248" r="14"/><circle class="ac-measure__dot" cx="120" cy="248" r="5"/></g>
+          <g data-key="thigh"><circle class="ac-measure__glow" cx="98" cy="320" r="14"/><circle class="ac-measure__dot" cx="98" cy="320" r="5"/></g>
+          <g data-key="knee"><circle class="ac-measure__glow" cx="95" cy="388" r="14"/><circle class="ac-measure__dot" cx="95" cy="388" r="5"/></g>
+          <g data-key="calf"><circle class="ac-measure__glow" cx="93" cy="430" r="14"/><circle class="ac-measure__dot" cx="93" cy="430" r="5"/></g>
+          <g data-key="ankle"><circle class="ac-measure__glow" cx="92" cy="468" r="14"/><circle class="ac-measure__dot" cx="92" cy="468" r="5"/></g>
+        </g>
+      </svg>
+    </div>
+
+    <div>
+      <ul class="ac-measure__list" id="ac-measure-list">
+        <li class="ac-measure__row" data-key="build"><span class="ac-measure__label">Height</span><span class="ac-measure__value">6'3&Prime; <small>190.5 cm</small></span></li>
+        <li class="ac-measure__row" data-key="build"><span class="ac-measure__label">Weight</span><span class="ac-measure__value">158.7 lb <small>72 kg</small></span></li>
+        <li class="ac-measure__row" data-key="head"><span class="ac-measure__label">Head, round</span><span class="ac-measure__value">23&Prime; <small>58.4 cm</small></span></li>
+        <li class="ac-measure__row" data-key="neck"><span class="ac-measure__label">Neck, round</span><span class="ac-measure__value">16&Prime; <small>40.6 cm</small></span></li>
+        <li class="ac-measure__row" data-key="shoulder"><span class="ac-measure__label">Shoulder</span><span class="ac-measure__value">20&Prime; <small>50.8 cm</small></span></li>
+        <li class="ac-measure__row" data-key="chest"><span class="ac-measure__label">Chest, round</span><span class="ac-measure__value">34.5&Prime; <small>87.6 cm</small></span></li>
+        <li class="ac-measure__row" data-key="waist"><span class="ac-measure__label">High waist (navel), round</span><span class="ac-measure__value">30&Prime; <small>76.2 cm</small></span></li>
+        <li class="ac-measure__row" data-key="hip"><span class="ac-measure__label">Hip, round</span><span class="ac-measure__value">33&Prime; <small>83.8 cm</small></span></li>
+        <li class="ac-measure__row" data-key="chest"><span class="ac-measure__label">Shoulder to navel point</span><span class="ac-measure__value">18&Prime; <small>45.7 cm</small></span></li>
+        <li class="ac-measure__row" data-key="ankle"><span class="ac-measure__label">Navel point to floor</span><span class="ac-measure__value">45&Prime; <small>114.3 cm</small></span></li>
+        <li class="ac-measure__row" data-key="hip"><span class="ac-measure__label">Shirt length</span><span class="ac-measure__value">31&Prime; <small>78.7 cm</small></span></li>
+        <li class="ac-measure__row" data-key="armhole"><span class="ac-measure__label">Armhole, round</span><span class="ac-measure__value">19&Prime; <small>48.3 cm</small></span></li>
+        <li class="ac-measure__row" data-key="bicep"><span class="ac-measure__label">Biceps, round</span><span class="ac-measure__value">12&Prime; <small>30.5 cm</small></span></li>
+        <li class="ac-measure__row" data-key="elbow"><span class="ac-measure__label">Elbow, round</span><span class="ac-measure__value">11.5&Prime; <small>29.2 cm</small></span></li>
+        <li class="ac-measure__row" data-key="wrist"><span class="ac-measure__label">Wrist, round</span><span class="ac-measure__value">7&Prime; <small>17.8 cm</small></span></li>
+        <li class="ac-measure__row" data-key="bicep"><span class="ac-measure__label">Half sleeve length</span><span class="ac-measure__value">10.5&Prime; <small>26.7 cm</small></span></li>
+        <li class="ac-measure__row" data-key="wrist"><span class="ac-measure__label">Full sleeve length</span><span class="ac-measure__value">26&Prime; <small>66.0 cm</small></span></li>
+        <li class="ac-measure__row" data-key="waist"><span class="ac-measure__label">Shoulder to waist</span><span class="ac-measure__value">18&Prime; <small>45.7 cm</small></span></li>
+        <li class="ac-measure__row" data-key="hip"><span class="ac-measure__label">Shoulder to hip</span><span class="ac-measure__value">20&Prime; <small>50.8 cm</small></span></li>
+        <li class="ac-measure__row" data-key="crotch"><span class="ac-measure__label">Shoulder to crotch</span><span class="ac-measure__value">29&Prime; <small>73.7 cm</small></span></li>
+        <li class="ac-measure__row" data-key="thigh"><span class="ac-measure__label">Shoulder to thigh</span><span class="ac-measure__value">35&Prime; <small>88.9 cm</small></span></li>
+        <li class="ac-measure__row" data-key="knee"><span class="ac-measure__label">Shoulder to knee</span><span class="ac-measure__value">44&Prime; <small>111.8 cm</small></span></li>
+        <li class="ac-measure__row" data-key="calf"><span class="ac-measure__label">Shoulder to calf</span><span class="ac-measure__value">53&Prime; <small>134.6 cm</small></span></li>
+        <li class="ac-measure__row" data-key="crotch"><span class="ac-measure__label">Crotch from navel point</span><span class="ac-measure__value">14&Prime; <small>35.6 cm</small></span></li>
+        <li class="ac-measure__row" data-key="thigh"><span class="ac-measure__label">Thigh, round</span><span class="ac-measure__value">22&Prime; <small>55.9 cm</small></span></li>
+        <li class="ac-measure__row" data-key="knee"><span class="ac-measure__label">Knee, round</span><span class="ac-measure__value">15&Prime; <small>38.1 cm</small></span></li>
+        <li class="ac-measure__row" data-key="calf"><span class="ac-measure__label">Calf, round</span><span class="ac-measure__value">12&Prime; <small>30.5 cm</small></span></li>
+        <li class="ac-measure__row" data-key="ankle"><span class="ac-measure__label">Ankle, round</span><span class="ac-measure__value">10&Prime; <small>25.4 cm</small></span></li>
+        <li class="ac-measure__row" data-key="ankle"><span class="ac-measure__label">Pant length (from high waist)</span><span class="ac-measure__value">45&Prime; <small>114.3 cm</small></span></li>
+      </ul>
+
+      <div class="ac-measure__wear">
+        <span class="ac-measure__wear-title">Ready to wear</span>
+        <div class="ac-measure__wear-grid">
+          <div class="ac-measure__wear-item"><span class="ac-measure__wear-k">Shirt</span><span class="ac-measure__wear-v">L / XL</span></div>
+          <div class="ac-measure__wear-item"><span class="ac-measure__wear-k">T-Shirt</span><span class="ac-measure__wear-v">L</span></div>
+          <div class="ac-measure__wear-item"><span class="ac-measure__wear-k">Jeans</span><span class="ac-measure__wear-v">31</span></div>
+          <div class="ac-measure__wear-item"><span class="ac-measure__wear-k">Trouser</span><span class="ac-measure__wear-v">31</span></div>
+          <div class="ac-measure__wear-item"><span class="ac-measure__wear-k">Shoe</span><span class="ac-measure__wear-v">EU-45</span></div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -452,13 +481,17 @@
       <h2 class="ac-archive__title">Selected frames</h2>
     </div>
     <a href="#reel" class="ac-cta ac-cta--line">
-      Watch the reel
+      Latest Roles
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </a>
   </div>
 
   <div class="ac-grid reveal" id="ac-archive-grid">
-    <button type="button" class="ac-tile ac-tile--tall" data-full="img/ads/crm-airport-wide.jpg">
+    <button type="button" class="ac-tile ac-tile--tall" data-full="img/1722241513433.jpg">
+      <img src="img/1722241513433.jpg" alt="Mal Griot, black and white headshot, direct gaze" loading="lazy">
+      <span class="ac-tile__tag">Headshot</span>
+    </button>
+    <button type="button" class="ac-tile" data-full="img/ads/crm-airport-wide.jpg">
       <img src="img/ads/crm-airport-wide.jpg" alt="Mal Griot on set for the Zoho CRM commercial, airport gate scene" loading="lazy">
       <span class="ac-tile__tag">On Set — Zoho CRM</span>
     </button>
@@ -482,8 +515,20 @@
       <img src="img/about-2.jpg" alt="Mal Griot, profile portrait for modeling" loading="lazy">
       <span class="ac-tile__tag">Modeling</span>
     </button>
+    <button type="button" class="ac-tile" data-full="img/1722241513419.jpg">
+      <img src="img/1722241513419.jpg" alt="Mal Griot, profile portrait in a green jacket" loading="lazy">
+      <span class="ac-tile__tag">Modeling</span>
+    </button>
     <button type="button" class="ac-tile" data-full="img/DSC01018.jpg">
       <img src="img/DSC01018.jpg" alt="Mal Griot in a beanie and printed coat, modeling portrait" loading="lazy">
+      <span class="ac-tile__tag">Modeling</span>
+    </button>
+    <button type="button" class="ac-tile" data-full="img/about-3.jpg">
+      <img src="img/about-3.jpg" alt="Mal Griot in a beanie and fur coat, modeling portrait" loading="lazy">
+      <span class="ac-tile__tag">Modeling</span>
+    </button>
+    <button type="button" class="ac-tile" data-full="img/DSC00868.jpg">
+      <img src="img/DSC00868.jpg" alt="Mal Griot, profile portrait in a green jacket and sunglasses" loading="lazy">
       <span class="ac-tile__tag">Modeling</span>
     </button>
     <button type="button" class="ac-tile" data-full="img/WhatsApp Image 2024-04-13 at 4.10.06 PM.jpeg">
@@ -505,11 +550,39 @@
   </div>
 </section>
 
-<!-- ================= 6. ABOUT THE ACTOR ================= -->
-<section class="ac-section ac-about">
-  <span class="ac-eyebrow reveal">Why Mal</span>
-  <h2 class="ac-about__title reveal">Character built from rhythm, not just lines.</h2>
-  <p class="ac-about__body reveal">Before a camera, Mal is already a musician, a poet and a host — someone who reads a room and moves it in real time. That practice carries straight into character work: <strong>musicality</strong> in the way a line lands, <strong>physical presence</strong> built from years on stage, <strong>improvisation</strong> when the take needs to bend, and a storyteller's instinct for what an audience is actually feeling. Presence isn't performed — it's rehearsed, every night, in a different room.</p>
+<!-- ================= 5b. AUDITION TAPE ================= -->
+<section class="ac-section ac-tape" id="audition">
+  <div class="ac-tape__head reveal">
+    <span class="ac-eyebrow">Audition</span>
+    <h2 class="ac-tape__title">An audition tape</h2>
+    <p class="ac-tape__desc">Unfiltered process, not just the finished reel — this one didn't land the role, and it's here anyway.</p>
+  </div>
+  <div class="reveal">
+    <div class="ac-tape__frame">
+      <video src="video/mal-griot-audition.mp4" controls playsinline preload="metadata"></video>
+    </div>
+    <p class="ac-tape__note">Casting is a numbers game — showing the work in progress, wins included, is part of being honest about the craft.</p>
+  </div>
+</section>
+
+<!-- ================= 5c. REPRESENTATION — DYT ================= -->
+<section class="ac-section ac-rep" id="representation">
+  <div class="ac-rep__wrap">
+    <div class="reveal">
+      <span class="ac-eyebrow">Representation</span>
+      <h2 class="ac-rep__title">DYT — Display Your Talent</h2>
+      <p class="ac-rep__body">Mal is represented by <strong>DYT (Display Your Talent)</strong>, a Mumbai-based casting and talent management agency — one of the largest managers and agents of foreign and international-origin actors working in India. DYT connects talent directly with casting directors, production houses, and brands across film, TV, and commercial work.</p>
+      <p class="ac-rep__body">All casting inquiries should go through the agency first.</p>
+    </div>
+    <div class="reveal">
+      <ul class="ac-rep-facts">
+        <li><span class="ac-rep-facts__label">Agency</span><span class="ac-rep-facts__value">DYT — Display Your Talent</span></li>
+        <li><span class="ac-rep-facts__label">Based in</span><span class="ac-rep-facts__value">Khar West, Mumbai</span></li>
+        <li><span class="ac-rep-facts__label">Website</span><span class="ac-rep-facts__value"><a href="https://dyt.co.in" target="_blank" rel="noopener">dyt.co.in</a></span></li>
+        <li><span class="ac-rep-facts__label">Phone</span><span class="ac-rep-facts__value"><a href="tel:+918369198850">+91 83691 98850</a></span></li>
+      </ul>
+    </div>
+  </div>
 </section>
 
 <!-- ================= 7. CASTING INFORMATION ================= -->
@@ -521,7 +594,7 @@
         <li><span class="ac-facts__label">Based in</span><span class="ac-facts__value">India</span></li>
         <li><span class="ac-facts__label">Available for</span><span class="ac-facts__value">Film · TV · Theatre · Commercial · Music Video · Voice + Screen</span></li>
         <li><span class="ac-facts__label">Languages</span><span class="ac-facts__value">English</span></li>
-        <li><span class="ac-facts__label">Representation</span><span class="ac-facts__value">Direct — no agency, inquiries go straight to Mal</span></li>
+        <li><span class="ac-facts__label">Representation</span><span class="ac-facts__value">DYT (Display Your Talent) — Mumbai</span></li>
         <li><span class="ac-facts__label">Travel</span><span class="ac-facts__value">Available, domestic &amp; international</span></li>
       </ul>
     </div>
@@ -529,12 +602,12 @@
       <h2 class="ac-casting__title">Assets</h2>
       <p style="color:var(--paper-dim);font-size:13.5px;line-height:1.7;margin:0 0 6px">For casting directors and productions — direct downloads, no forms.</p>
       <div class="ac-downloads">
-        <a class="ac-download" href="img/DSC00868.jpg" download>
+        <a class="ac-download" href="img/1722241513433.jpg" download>
           Download headshot
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
         </a>
-        <a class="ac-download" href="epk/Mal-Griot-EPK.pdf" download>
-          Download EPK
+        <a class="ac-download" href="cv/Mal-Griot-CV.pdf" download>
+          Download CV
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
         </a>
       </div>
@@ -549,17 +622,38 @@
     <span class="ac-final__eyebrow reveal">Have a role in mind?</span>
     <h2 class="ac-final__title reveal">Cast Mal.</h2>
     <div class="ac-final__ctas reveal">
-      <a href="contact.html" class="ac-cta ac-cta--solid">
+      <button type="button" class="ac-cta ac-cta--solid" data-cast-mal>
         Cast Mal
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-      <a href="#reel" class="ac-cta ac-cta--ghost">Watch the reel</a>
+      </button>
+      <a href="#reel" class="ac-cta ac-cta--ghost">Latest Roles</a>
     </div>
   </div>
 </section>
 
 <div id="chrome-footer"></div>
 <div id="chrome-chat"></div>
+
+<div class="ac-modal" id="ac-modal">
+  <div class="ac-modal__card">
+    <button type="button" class="ac-modal__close" id="ac-modal-close" aria-label="Close">&times;</button>
+    <span class="ac-modal__eyebrow">Casting inquiry</span>
+    <h3 class="ac-modal__title">Cast Mal through DYT</h3>
+    <p class="ac-modal__body">Mal is represented by DYT (Display Your Talent) in Mumbai. Casting inquiries go through the agency first.</p>
+    <ul class="ac-modal__facts">
+      <li><span>Agency</span><span>DYT — Display Your Talent</span></li>
+      <li><span>Website</span><span><a href="https://dyt.co.in" target="_blank" rel="noopener">dyt.co.in</a></span></li>
+      <li><span>Phone</span><span><a href="tel:+918369198850">+91 83691 98850</a></span></li>
+    </ul>
+    <div class="ac-modal__ctas">
+      <a href="https://dyt.co.in" target="_blank" rel="noopener" class="ac-cta ac-cta--solid">
+        Visit DYT
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="tel:+918369198850" class="ac-cta ac-cta--ghost">Call DYT</a>
+    </div>
+  </div>
+</div>
 
 <div class="ac-lightbox" id="ac-lightbox">
   <div class="ac-lightbox__frame" id="ac-lightbox-frame">
@@ -637,23 +731,70 @@
 })();
 </script>
 <script>
-// Range taxonomy — click an archetype, crossfade the stage image.
+// Hero carousel — crossfade through the portfolio photos.
 (function () {
-  var list = document.getElementById('ac-range-list');
-  var view = document.getElementById('ac-range-view');
-  var cap = document.getElementById('ac-range-cap');
-  if (!list || !view) return;
-  var items = Array.prototype.slice.call(list.querySelectorAll('.ac-range__item'));
-  var imgs = Array.prototype.slice.call(view.querySelectorAll('img'));
+  var carousel = document.getElementById('ac-hero-carousel');
+  if (!carousel) return;
+  var imgs = Array.prototype.slice.call(carousel.querySelectorAll('img'));
+  if (imgs.length < 2) return;
+  var i = 0;
+  setInterval(function () {
+    imgs[i].classList.remove('is-active');
+    i = (i + 1) % imgs.length;
+    imgs[i].classList.add('is-active');
+  }, 5000);
+})();
+</script>
+<script>
+// Measurements diagram — hover a body point or a list row, light up the pair.
+(function () {
+  var svg = document.getElementById('ac-measure-svg');
+  var body = document.getElementById('ac-measure-body');
+  var list = document.getElementById('ac-measure-list');
+  if (!svg || !list) return;
+  var points = Array.prototype.slice.call(svg.querySelectorAll('#ac-measure-points > g'));
+  var rows = Array.prototype.slice.call(list.querySelectorAll('.ac-measure__row'));
 
-  items.forEach(function (item, i) {
-    item.querySelector('.ac-range__btn').addEventListener('click', function () {
-      items.forEach(function (el) { el.classList.remove('is-active'); });
-      item.classList.add('is-active');
-      imgs.forEach(function (img) { img.classList.toggle('is-shown', img.dataset.key === String(i + 1)); });
-      cap.textContent = item.dataset.cap;
+  function setLit(key, on) {
+    if (key === 'build') {
+      body.classList.toggle('is-lit', on);
+    } else {
+      points.forEach(function (p) {
+        if (p.dataset.key === key) {
+          p.querySelector('.ac-measure__dot').classList.toggle('is-lit', on);
+          p.querySelector('.ac-measure__glow').classList.toggle('is-lit', on);
+        }
+      });
+    }
+    rows.forEach(function (r) {
+      if (r.dataset.key === key) r.classList.toggle('is-lit', on);
     });
+  }
+
+  points.forEach(function (p) {
+    p.addEventListener('mouseenter', function () { setLit(p.dataset.key, true); });
+    p.addEventListener('mouseleave', function () { setLit(p.dataset.key, false); });
   });
+  rows.forEach(function (r) {
+    r.addEventListener('mouseenter', function () { setLit(r.dataset.key, true); });
+    r.addEventListener('mouseleave', function () { setLit(r.dataset.key, false); });
+  });
+})();
+</script>
+<script>
+// Cast Mal — every trigger opens the DYT representation modal instead of navigating away.
+(function () {
+  var modal = document.getElementById('ac-modal');
+  var closeBtn = document.getElementById('ac-modal-close');
+  if (!modal) return;
+  function openModal() { modal.classList.add('is-open'); }
+  function closeModal() { modal.classList.remove('is-open'); }
+  document.querySelectorAll('[data-cast-mal]').forEach(function (btn) {
+    btn.addEventListener('click', openModal);
+  });
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
 })();
 </script>
 <script>
