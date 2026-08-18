@@ -2,7 +2,7 @@
 // stay in sync without a server-side include. Call renderChrome('music'|'wellness'|'contact').
 function renderChrome(active) {
   const links = [
-    ['music.html', 'Music', 'discography'],
+    ['releases.html', 'Releases', 'discography'],
     ['soundscapes.html', 'Soundscapes', 'wellness'],
     ['contact.html', 'Contact', 'contact'],
   ];
@@ -13,8 +13,8 @@ function renderChrome(active) {
   // Full site map for the staggered-menu nav panel — every page, in accordion order.
   const menuItems = [
     ['index.html', 'Home', 'home'],
-    ['music.html', 'Music', 'discography'],
-    ['performance.html', 'Performance', 'performance'],
+    ['releases.html', 'Releases', 'discography'],
+    ['live-sets.html', 'Live Sets', 'performance'],
     ['hosting.html', 'Hosting', 'hosting'],
     ['poetry.html', 'Poetry', 'poetry'],
     ['acting.html', 'Acting', 'acting'],
@@ -471,7 +471,7 @@ function initMiniPlayer() {
   initMiniPlayerDrag(miniPlayer);
 
   // Public hook for non-SoundCloud sources (currently: Spotify release
-  // panels, see music.html) to take over the mini-player's display and
+  // panels, see releases.html) to take over the mini-player's display and
   // transport controls. The SC widget itself is paused separately via the
   // existing griot:pause-mini-player event before this is called.
   window.griotMiniPlayer = {

@@ -48,7 +48,7 @@ function initScrollFloat() {
     const wordEls = el.querySelectorAll('.word');
 
     // Elements choreographed by a page's own hand-built GSAP timeline (e.g.
-    // music.html's pinned hero sequence) opt out here via data-manual-float
+    // releases.html's pinned hero sequence) opt out here via data-manual-float
     // — they still get split into .word spans above, just not this generic
     // scroll-triggered reveal, so the two don't fight over the same props.
     if (reduceMotion || el.dataset.manualFloat === 'true') return;

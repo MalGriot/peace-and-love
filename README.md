@@ -8,7 +8,7 @@ Static personal site for Mal Griot (vocalist / spoken-word artist / MC-host / vo
 |---|---|
 | `index.html` | Home — builds its own hero/nav inline, does **not** use `renderChrome` |
 | `voice.html` | Voice page — hero photo carousel, listening stage, discography, about/EPK/socials, Instagram grid |
-| `music.html` | Discography page — hero with morph-slider background, full releases list (`.d-releases`) pulling live cover art the same way `voice.html` does, closing booking CTA |
+| `releases.html` | Discography page — hero with morph-slider background, full releases list (`.d-releases`) pulling live cover art the same way `voice.html` does, closing booking CTA |
 | `video.html` | Video page (Griot Cuts) |
 | `soundscapes.html` | Soundscapes page |
 | `contact.html` | Contact page |
@@ -28,13 +28,13 @@ Every page except `index.html` has three empty slot elements in its markup:
 <div id="chrome-footer"></div>
 <div id="chrome-chat"></div>
 ```
-and calls `renderChrome('<page-key>')` on load. `shared.js` replaces each slot's `outerHTML` with the nav/footer/chat markup, marking the link matching `active` with `.is-active`. Page keys used in the nav link list: `music`, `discography`, `cuts`, `wellness`, `contact` (mapped to `voice.html`, `music.html`, `video.html`, `soundscapes.html`, `contact.html`).
+and calls `renderChrome('<page-key>')` on load. `shared.js` replaces each slot's `outerHTML` with the nav/footer/chat markup, marking the link matching `active` with `.is-active`. Page keys used in the nav link list: `music`, `discography`, `cuts`, `wellness`, `contact` (mapped to `voice.html`, `releases.html`, `video.html`, `soundscapes.html`, `contact.html`).
 
 A fourth optional slot, `<div id="chrome-player"></div>`, holds the persistent mini-player (SoundCloud playback controls). It's always injected on `music` (that's the discovery page); on the other three satellite pages it's only injected once the visitor has pressed play at least once, tracked via `localStorage.griotPlayerActivated`. `index.html` has no slot and never calls `renderChrome`, so the mini-player never appears there. `initMiniPlayer()` (in `shared.js`, called from the `DOMContentLoaded` listener) wires up the SoundCloud Widget API — it guards every element specific to `voice.html`'s listening stage (`#listenStage`, `#listenVinyl`, `#sleeveArt`, `#listenTracks`) so the same function works everywhere without erroring on pages that don't have them.
 
 **Mini-player details:** shows the current track's album art (`#miniArt`), and a marquee title reading "Track Title — breathe love d e e p" (`#miniTitleTrack`, two duplicate `<span>`s for a seamless CSS-animation loop). The marquee only scrolls (`.is-scrolling` class) if the text actually overflows its box — short titles just sit still. A pulsing brass ring + "Press play to listen" / "Tap to listen" hint bubble (breakpoint-matched at 560px) shows on first load and dismisses after 6s or on first interaction.
 
-**To add a new page**: copy the `<head>` + `shared.css`/`effects.css` links + slot divs + `shared.js`/`effects.js` script includes + `renderChrome('key')` call from `contact.html` (or `music.html`) — the mobile nav's CSS/JS live in `effects.css`/`effects.js`, not `shared.css`/`shared.js`, so skipping them ships a page with a broken mobile nav. Then add `['your-page.html', 'Label', 'key']` to the `links` array in `shared.js` (top of file) so it appears in nav on every page.
+**To add a new page**: copy the `<head>` + `shared.css`/`effects.css` links + slot divs + `shared.js`/`effects.js` script includes + `renderChrome('key')` call from `contact.html` (or `releases.html`) — the mobile nav's CSS/JS live in `effects.css`/`effects.js`, not `shared.css`/`shared.js`, so skipping them ships a page with a broken mobile nav. Then add `['your-page.html', 'Label', 'key']` to the `links` array in `shared.js` (top of file) so it appears in nav on every page.
 
 ## Design tokens (`shared.css` `:root`)
 
