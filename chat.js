@@ -337,12 +337,31 @@ function chatDisableInput() {
 // the "text" field itself (e.g. a reply literally ending in "offerContact:
 // true.") instead of only setting the real JSON field. Strip anything
 // shaped like that back out before it ever reaches the chat bubble.
+// Mal has no phone number in his facts, but the model occasionally invents
+// one anyway (hallucinated digits, sometimes dressed up as a WhatsApp
+// number). Strip anything shaped like a phone number out of bot replies —
+// the real WhatsApp button already renders itself via offerContact, so a
+// visitor never needs the bot to type digits.
+function chatStripPhoneNumbers(text) {
+  return text.replace(/\+?\d[\d\-.\s()]{5,}\d/g, (match) => {
+    return (match.match(/\d/g) || []).length >= 7 ? '' : match;
+  });
+}
+
 function chatStripLeakedFields(text) {
-  return text
+  let cleaned = chatStripPhoneNumbers(text)
     .replace(/\(?\b(offerContact|replyToId|reaction)\s*[:=]\s*("[^"]*"|'[^']*'|true|false|[^\s).,]+)\)?[.,]?/gi, '')
+    .replace(/:\s*(?=[,.!?]|$)/g, '')
     .replace(/\s+/g, ' ')
     .replace(/\s+([.,!?])/g, '$1')
     .trim();
+  // A phone number stripped out from inside parentheses, e.g. "(987) 654-3210",
+  // can leave one side of the pair behind — drop all parens once unbalanced
+  // rather than try to guess which one is now orphaned.
+  const opens = (cleaned.match(/\(/g) || []).length;
+  const closes = (cleaned.match(/\)/g) || []).length;
+  if (opens !== closes) cleaned = cleaned.replace(/[()]/g, '');
+  return cleaned.replace(/\s+/g, ' ').trim();
 }
 
 function chatAppendBotMessage(data) {
