@@ -32,7 +32,7 @@ test('toWorkersAiMessages prepends quoted context when replyToId is set', () => 
 });
 
 test('MODEL is a Workers AI model id', () => {
-  assert.equal(MODEL, '@cf/meta/llama-3.3-70b-instruct-fp8-fast');
+  assert.equal(MODEL, '@cf/meta/llama-3.1-8b-instruct-fast');
 });
 
 test('getBotResponse calls env.AI.run with the model and JSON schema response format', async () => {

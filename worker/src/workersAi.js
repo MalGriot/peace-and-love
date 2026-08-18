@@ -2,9 +2,13 @@
 // separate API key — auth rides on the Worker's own `env.AI` binding
 // declared in wrangler.toml). Traded off against Anthropic: no forced
 // tool-choice API, so we lean on JSON Mode (response_format: json_schema)
-// instead, and a 70B open model is a weaker instruction-follower than
-// Claude, so the persona's hard rules carry a little less certainty.
-export const MODEL = '@cf/meta/llama-3.3-70b-instruct-fp8-fast';
+// instead, and an open model is a weaker instruction-follower than Claude,
+// so the persona's hard rules carry a little less certainty. Using the 8B
+// model rather than 70B: JSON-schema-constrained decoding on the 70B model
+// was pushing replies to 10-20s+, which read as "broken" in a chat widget;
+// 8B is a few times faster and the persona's rules are simple enough that
+// quality held up in testing.
+export const MODEL = '@cf/meta/llama-3.1-8b-instruct-fast';
 
 // Must match CHAT_REACTION_EMOJI in chat.js — the fixed hand-emoji set the
 // model is allowed to react with. Anything else the model returns is dropped.

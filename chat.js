@@ -5,6 +5,8 @@
 // DOMContentLoaded listener.
 
 const CHAT_WORKER_URL = 'https://mal-griot-chat.malgriot.workers.dev/chat';
+const CHAT_FETCH_TIMEOUT_MS = 15000;
+const CHAT_STORAGE_KEY = 'malGriotChatState';
 
 const CHAT_MAX_INPUT_LENGTH = 500;
 const CHAT_MAX_SENT_HISTORY = 20;
@@ -24,9 +26,38 @@ let chatNextId = 1;
 let chatReplyTargetId = null;
 let chatVisitorMessageCount = 0;
 let chatTypingVisible = false;
+let chatDisabled = false;
+let chatIsOpen = false;
 
 function chatGenerateId() {
   return 'm' + (chatNextId++) + '-' + Date.now().toString(36);
+}
+
+// Persisted per-tab (not per-domain) so the conversation survives navigating
+// between pages of this multi-page site, without leaking between visitors
+// on a shared machine the way localStorage would.
+function chatSaveState() {
+  try {
+    sessionStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify({
+      messages: chatMessages,
+      nextId: chatNextId,
+      visitorMessageCount: chatVisitorMessageCount,
+      disabled: chatDisabled,
+      isOpen: chatIsOpen,
+    }));
+  } catch {
+    // Storage unavailable (private browsing, quota) — chat just won't persist.
+  }
+}
+
+function chatLoadState() {
+  try {
+    const raw = sessionStorage.getItem(CHAT_STORAGE_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
 }
 
 function chatEscapeHtml(str) {
@@ -120,6 +151,8 @@ function chatOpen() {
   const chat = document.querySelector('.chat-widget');
   if (!chat) return;
   chat.classList.add('is-open');
+  chatIsOpen = true;
+  chatSaveState();
 }
 
 function initChat() {
@@ -129,6 +162,16 @@ function initChat() {
   const form = document.getElementById('chatForm');
   const input = document.getElementById('chatInput');
   if (!chat || !chatBtn || !messagesEl || !form || !input) return;
+
+  const saved = chatLoadState();
+  if (saved) {
+    chatMessages = Array.isArray(saved.messages) ? saved.messages : [];
+    chatNextId = typeof saved.nextId === 'number' ? saved.nextId : chatNextId;
+    chatVisitorMessageCount = typeof saved.visitorMessageCount === 'number' ? saved.visitorMessageCount : 0;
+    if (saved.disabled) chatDisableInput();
+    if (saved.isOpen) chatOpen();
+    chatRender();
+  }
 
   const replyCancel = document.getElementById('chatReplyCancel');
   if (replyCancel) replyCancel.addEventListener('click', () => chatCancelReply());
@@ -158,6 +201,8 @@ function initChat() {
       chatOpen();
     } else {
       chat.classList.remove('is-open');
+      chatIsOpen = false;
+      chatSaveState();
     }
   });
 
@@ -204,11 +249,15 @@ function chatSendUserMessage(text) {
   };
 
   const startedAt = Date.now();
+  const timeoutController = new AbortController();
+  const timeoutId = setTimeout(() => timeoutController.abort(), CHAT_FETCH_TIMEOUT_MS);
   fetch(CHAT_WORKER_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
+    signal: timeoutController.signal,
   })
+    .finally(() => clearTimeout(timeoutId))
     .then((res) => {
       if (!res.ok) throw new Error('Worker responded with ' + res.status);
       return res.json();
@@ -233,6 +282,7 @@ function chatSendUserMessage(text) {
 }
 
 function chatDisableInput() {
+  chatDisabled = true;
   const input = document.getElementById('chatInput');
   const form = document.getElementById('chatForm');
   if (input) {
@@ -240,6 +290,7 @@ function chatDisableInput() {
     input.placeholder = 'Continue on WhatsApp';
   }
   if (form) form.classList.add('is-disabled');
+  chatSaveState();
 }
 
 function chatAppendBotMessage(data) {
@@ -312,6 +363,7 @@ function chatRender() {
   messagesEl.innerHTML = chatMessages.map(chatRenderRow).join('');
   if (chatTypingVisible) messagesEl.appendChild(chatBuildTypingRow());
   messagesEl.scrollTop = messagesEl.scrollHeight;
+  chatSaveState();
 }
 
 function chatRenderRow(message) {
