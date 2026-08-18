@@ -256,7 +256,7 @@ a{color:inherit}
 .msg{font-size:13px;line-height:1.5;overflow-wrap:anywhere;word-break:break-word}
 .msg--bot{background:rgba(239,230,216,.06);border:1px solid rgba(239,230,216,.1);color:var(--paper);padding:9px 12px;border-radius:12px 12px 12px 3px}
 .msg--user{background:var(--brass);color:#12100f;padding:9px 12px;border-radius:12px 12px 3px 12px;font-weight:500}
-.msg a{color:inherit;text-decoration:underline;text-underline-offset:2px;overflow-wrap:anywhere;word-break:break-all}
+.msg a{color:var(--gold);text-decoration:underline;text-underline-offset:2px;overflow-wrap:anywhere;word-break:break-all}
 .msg--user a{color:#12100f}
 
 .msg--typing{display:flex;gap:4px;padding:10px 12px;background:rgba(239,230,216,.06);border:1px solid rgba(239,230,216,.1);border-radius:12px 12px 12px 3px}
