@@ -462,7 +462,7 @@
   <div class="d-releases__head reveal"><h2>Music Video</h2></div>
   <div class="d-releases__featured reveal">
     <div class="d-releases__featured-frame">
-      <iframe src="https://www.youtube-nocookie.com/embed/-p1xP7LNGuQ" title="Mal Griot — Sun Burna (Visualizer Lyric Video)" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <iframe id="sunBurnaVideo" src="https://www.youtube-nocookie.com/embed/-p1xP7LNGuQ?enablejsapi=1" title="Mal Griot — Sun Burna (Visualizer Lyric Video)" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
     <p class="d-releases__featured-caption"><strong>Sun Burna</strong> — Visualizer Lyric Video</p>
   </div>
@@ -909,6 +909,16 @@
   var releaseReadyHandler = null;  // bound only while a SoundCloud panel is open
   var loadTimeoutId = null;        // "couldn't load" fallback timer for the open SoundCloud panel
 
+  // The Sun Burna featured video (see the youtube player script further
+  // below) pauses whatever's playing via this same event SoundCloud already
+  // listens to in shared.js — extend it to also pause an open Spotify panel,
+  // which otherwise only pauses via closeActivePanel().
+  window.addEventListener('griot:pause-mini-player', function(){
+    if(activePlatform === 'spotify' && activePanel && activePanel._spotifyController){
+      activePanel._spotifyController.pause();
+    }
+  });
+
   // Play button doubles as the panel's close control: a triangle while
   // closed, an X the moment its dropdown is open — same as clicking the
   // album art, since both live inside the same clickable row.
@@ -1060,6 +1070,7 @@
         panel._spotifyController = controller;
         controller.addListener('playback_update', function(e){
           if(window.griotMiniPlayer) window.griotMiniPlayer.updateExternalPlaying(!e.data.isPaused);
+          if(!e.data.isPaused) window.dispatchEvent(new CustomEvent('griot:mini-player-playing'));
         });
         controller.addListener('ready', function(){
           if(window.griotMiniPlayer){
@@ -1114,6 +1125,57 @@
       if(!wasOpen) openPanel(anchor, panel, info);
     });
   });
+})();
+</script>
+<script>
+(function(){
+  // Featured Sun Burna video: playing it should pause whatever's playing
+  // elsewhere on the page (mini-player / Spotify), and vice versa — playing
+  // music elsewhere should pause the video. Reuses the same griot:* event
+  // bus the release panels already coordinate through (see above).
+  var iframe = document.getElementById('sunBurnaVideo');
+  if(!iframe) return;
+  var ytPlayer = null;
+  var suppressPauseBroadcast = false; // true while we're pausing the video ourselves, to avoid an echo
+
+  function wireYouTube(){
+    if(typeof YT === 'undefined' || !YT.Player){
+      setTimeout(wireYouTube, 300);
+      return;
+    }
+    ytPlayer = new YT.Player('sunBurnaVideo', {
+      events: {
+        onStateChange: function(e){
+          if(e.data === YT.PlayerState.PLAYING && !suppressPauseBroadcast){
+            window.dispatchEvent(new CustomEvent('griot:pause-mini-player'));
+          }
+        }
+      }
+    });
+  }
+
+  window.addEventListener('griot:mini-player-playing', function(){
+    if(!ytPlayer || !ytPlayer.pauseVideo) return;
+    suppressPauseBroadcast = true;
+    ytPlayer.pauseVideo();
+    setTimeout(function(){ suppressPauseBroadcast = false; }, 300);
+  });
+
+  if(window.YT && window.YT.Player){
+    wireYouTube();
+  } else {
+    var existing = document.querySelector('script[src="https://www.youtube.com/iframe_api"]');
+    var prevReady = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = function(){
+      if(prevReady) prevReady();
+      wireYouTube();
+    };
+    if(!existing){
+      var script = document.createElement('script');
+      script.src = 'https://www.youtube.com/iframe_api';
+      document.head.appendChild(script);
+    }
+  }
 })();
 </script>
 <script>
