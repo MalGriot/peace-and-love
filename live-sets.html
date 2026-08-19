@@ -204,23 +204,102 @@
   .perf-watch__side{aspect-ratio:16/10}
 }
 
-/* ---------- 4. The Sets ---------- */
-.perf-sets{max-width:1180px;margin:0 auto}
-.perf-sets__title{font-family:var(--font-display);font-weight:400;font-size:clamp(30px,4vw,46px);margin:0 0 12px;color:var(--paper)}
-.perf-sets__sub{color:var(--paper-dim);font-size:14px;margin:0 0 44px;max-width:52ch}
-.perf-sets__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px;background:rgba(239,230,216,.1)}
-.perf-set-card{background:var(--ink);display:flex;flex-direction:column}
-.perf-set-card__media{position:relative;aspect-ratio:4/5;overflow:hidden;background:#1c1815}
-.perf-set-card__media img{width:100%;height:100%;object-fit:cover;filter:saturate(.82) brightness(.86);transition:transform 1s cubic-bezier(.16,1,.3,1)}
-.perf-set-card:hover .perf-set-card__media img{transform:scale(1.05)}
-.perf-set-card__media::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(18,16,15,.75) 0%,transparent 50%)}
-.perf-set-card__body{padding:22px 20px 28px}
-.perf-set-card__name{font-family:var(--font-display);font-weight:400;font-size:clamp(19px,2vw,23px);color:var(--paper);display:block}
-.perf-set-card__format{
-  display:block;font-family:var(--font-body);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--brass);margin:7px 0 12px;
+.watch-group{margin:0 0 48px}
+.watch-group:last-child{margin-bottom:0}
+.watch-group__title{
+  font-family:var(--font-display);font-weight:400;font-size:clamp(17px,1.7vw,21px);
+  color:var(--gold);margin:0 0 16px;letter-spacing:.005em;
 }
-.perf-set-card__desc{color:var(--paper-dim);font-size:13.5px;line-height:1.62}
+.watch-group__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.watch-card{
+  position:relative;display:block;width:100%;padding:0;margin:0;border:none;background:none;
+  cursor:pointer;text-align:left;appearance:none;
+}
+.watch-card__thumb{position:relative;aspect-ratio:16/9;overflow:hidden;border-radius:4px;background:#1c1815}
+.watch-card__thumb img{
+  width:100%;height:100%;object-fit:cover;
+  filter:saturate(.82) brightness(.82);
+  transition:transform 1s cubic-bezier(.16,1,.3,1),filter .4s ease;
+}
+.watch-card:hover .watch-card__thumb img{transform:scale(1.05);filter:saturate(1) brightness(.92)}
+.watch-card__thumb::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(0deg,rgba(18,16,15,.8) 0%,transparent 45%);pointer-events:none;
+}
+.watch-card__play{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;
+  width:44px;height:44px;border-radius:999px;border:1px solid rgba(239,230,216,.5);
+  background:rgba(18,16,15,.45);display:flex;align-items:center;justify-content:center;
+  color:var(--paper);transition:background-color .25s ease,border-color .25s ease,color .25s ease;
+}
+.watch-card:hover .watch-card__play{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+.watch-card__caption{
+  position:absolute;left:12px;bottom:10px;z-index:2;
+  font-size:12.5px;letter-spacing:.01em;color:var(--paper);
+  text-shadow:0 1px 6px rgba(0,0,0,.6);
+}
+
+/* ---------- 4. Three Offerings ---------- */
+.perf-offerings{max-width:1180px;margin:0 auto}
+.perf-offerings__head{max-width:640px;margin:0 auto 20px}
+.perf-offerings__sub{color:var(--paper-dim);font-size:14px;margin:14px 0 0;max-width:52ch}
+
+.perf-offer{
+  display:grid;grid-template-columns:0.85fr 1.15fr;gap:clamp(28px,4vw,64px);
+  align-items:center;
+  padding:clamp(40px,6vw,72px) 0;
+  border-top:1px solid rgba(239,230,216,.12);
+}
+.perf-offer:first-of-type{border-top:none;padding-top:clamp(24px,4vw,48px)}
+
+.perf-offer__media{position:relative;overflow:hidden;border-radius:2px;background:#1c1815;aspect-ratio:4/5}
+.perf-offer__media img{width:100%;height:100%;object-fit:cover;filter:saturate(.85) brightness(.88);transition:transform 1.2s cubic-bezier(.16,1,.3,1)}
+.perf-offer:hover .perf-offer__media img{transform:scale(1.03)}
+.perf-offer__media::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(18,16,15,.6) 0%,transparent 55%);pointer-events:none}
+
+.perf-offer__eyebrow{display:block;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);margin-bottom:14px}
+.perf-offer__title{font-family:var(--font-display);font-weight:400;font-size:clamp(30px,3.6vw,46px);color:var(--paper);margin:0 0 16px;letter-spacing:-.01em}
+.perf-offer__desc{color:var(--paper-dim);font-size:14.5px;line-height:1.7;max-width:52ch;margin:0 0 20px}
+.perf-offer__desc--placeholder{font-style:italic;color:var(--paper-faint);font-size:13px}
+
+.perf-offer__durations{display:flex;flex-wrap:wrap;align-items:center;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--paper-dim);margin:0 0 22px}
+.perf-offer__durations span{padding:0 14px 0 0;position:relative}
+.perf-offer__durations span:not(:last-child)::after{content:"\00b7";position:absolute;right:5px;color:var(--brass)}
+.perf-offer__durations span:first-child{padding-left:0}
+.perf-offer__durations--single span{color:var(--gold);font-family:var(--font-display);font-size:16px;letter-spacing:.04em;text-transform:none;padding:0}
+
+.perf-offer__note{font-size:12.5px;color:var(--paper-faint);line-height:1.6;max-width:50ch;margin:-8px 0 22px}
+.perf-offer__row{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center}
+
+/* Breathe Love Deep — Live gets a featured, press-kit treatment: bigger
+   media, wider copy column, a wine-glow field and gold hairlines, so it
+   reads as a designed work rather than a third identical card. */
+.perf-offer--bld{
+  grid-template-columns:1fr 1fr;
+  padding:clamp(56px,7vw,96px) clamp(24px,4vw,48px);
+  margin:8px 0;
+  background:linear-gradient(180deg, rgba(74,31,34,.16), transparent 65%);
+  border-top:1px solid rgba(224,178,106,.28);
+  border-bottom:1px solid rgba(224,178,106,.28);
+}
+.perf-offer--bld .perf-offer__media{aspect-ratio:1/1;box-shadow:0 30px 90px rgba(0,0,0,.45)}
+.perf-offer--bld .perf-offer__title{font-size:clamp(34px,4.2vw,58px)}
+.perf-offer--bld .perf-offer__desc{max-width:58ch;font-size:15.5px}
+
+.perf-offer--band .perf-offer__media{order:2}
+.perf-offer--band .perf-offer__body{order:1}
+
+@media (max-width:820px){
+  .perf-offer{grid-template-columns:1fr}
+  .perf-offer--bld{grid-template-columns:1fr;padding:48px 20px}
+  .perf-offer--band .perf-offer__media,.perf-offer--band .perf-offer__body{order:0}
+}
+
+/* ---------- 4b. Format recap ---------- */
+.perf-ways{display:flex;flex-wrap:wrap;gap:32px 56px;justify-content:center;margin-top:44px}
+.perf-ways__item{display:flex;flex-direction:column;gap:8px;align-items:center;min-width:170px}
+.perf-ways__label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--brass)}
+.perf-ways__value{font-family:var(--font-display);font-size:17px;color:var(--paper)}
 
 /* ---------- 5. Where It Fits ---------- */
 .perf-fits{max-width:1100px;margin:0 auto}
@@ -432,11 +511,11 @@ body.bmd-open { overflow: hidden; }
 
 <section class="perf-hero">
   <div class="perf-hero__copy">
-    <span class="perf-hero__eyebrow reveal">Performance</span>
-    <h1 class="perf-hero__title reveal">Mal <em>Griot</em></h1>
-    <p class="perf-hero__desc perf-hero__desc--desktop reveal">A live musical performance built from voice, rhythm, looping, poetry and improvisation.</p>
-    <p class="perf-hero__philosophy reveal">Queens-raised, India-based, trails blazed. Original songs, covers, and spoken word all run through the same practice: voice, loop pedal, and a lifetime moving through different Western genres, arranged live and shaped to the room rather than played the same way twice. Presence over polish. The room finishes the song.</p>
-    <p class="perf-hero__desc perf-hero__desc--mobile reveal">Voice, rhythm, looping and poetry — built live, for the room, every time.</p>
+    <span class="perf-hero__eyebrow reveal">Mal Griot</span>
+    <h1 class="perf-hero__title reveal">Live <em>Experiences</em></h1>
+    <p class="perf-hero__desc perf-hero__desc--desktop reveal">A song can be performed. A room can be performed with.</p>
+    <p class="perf-hero__philosophy reveal">Mal doesn't deliver a fixed set — voice, loop pedal, rhythm and a lifetime moving through Western genres respond to the room in real time, built new every time rather than played the same way twice. Three ways into that practice: an adaptable flagship show, a complete performance work, and the full band.</p>
+    <p class="perf-hero__desc perf-hero__desc--mobile reveal">A song can be performed. A room can be performed with — voice, rhythm, looping and improvisation, live.</p>
     <div class="perf-hero__ctas reveal" style="display:flex;flex-wrap:wrap;gap:14px">
       <button type="button" class="perf-cta perf-cta--solid book-performance-trigger">
         Book the performance
@@ -455,67 +534,100 @@ body.bmd-open { overflow: hidden; }
   <div class="sv-row sv-row--fill" data-base-speed="30" data-text="JAZZ ✦ R&amp;B ✦ SPOKEN WORD ✦ AMBIENT ✦ CINEMATIC ✦&nbsp;"></div>
 </section>
 
-<section class="perf-section perf-sets">
-  <h2 class="perf-sets__title reveal">The sets</h2>
-  <p class="perf-sets__sub reveal">Four formats built from the same practice — chosen by room size and brief, not sold off a fixed menu.</p>
+<section class="perf-section perf-offerings" id="offerings">
+  <div class="perf-offerings__head reveal">
+    <span class="perf-fragments__eyebrow">Live</span>
+    <h2 class="perf-fragments__title">Three ways to book Mal Griot</h2>
+    <p class="perf-offerings__sub">One artist, three distinct offerings — chosen by what the room is for, not sold off a fixed menu.</p>
+  </div>
 
-  <div class="perf-sets__grid reveal">
-    <div class="perf-set-card">
-      <div class="perf-set-card__media">
-        <img src="img/performance/perf-solo-blue.jpg" alt="Mal Griot performing a solo live set" loading="lazy">
+  <div class="perf-offer perf-offer--flagship">
+    <div class="perf-offer__media reveal">
+      <img src="img/performance/perf-solo-blue.jpg" alt="Mal Griot performing the flagship live show" loading="lazy">
+    </div>
+    <div class="perf-offer__body reveal">
+      <span class="perf-offer__eyebrow">01 — Flexible flagship show</span>
+      <h3 class="perf-offer__title">Mal Griot — Live</h3>
+      <p class="perf-offer__desc">Originals, covers, live looping, voice, rhythm and improvisation, shaped to the room and drawn out with the audience — with djembe where the setting calls for it. The adaptable core of the practice: the same identity, scaled to fit.</p>
+      <div class="perf-offer__durations">
+        <span>30 MIN</span><span>60 MIN</span><span>90 MIN</span><span>EXTENDED</span>
       </div>
-      <div class="perf-set-card__body">
-        <span class="perf-set-card__name">Solo live set</span>
-        <span class="perf-set-card__format">Solo — voice, loop pedal, keys</span>
-        <p class="perf-set-card__desc">Original music built in real time: vocals, a loop pedal and keys stacking into full arrangements with nothing pre-recorded. The core format for club nights, curated series and festival slots.</p>
+      <p class="perf-offer__note">Extended bookings accommodate longer event engagements and multiple sets across an evening, up to roughly four hours — a night's residency, not one continuous concert.</p>
+      <button type="button" class="perf-cta perf-cta--ghost book-performance-trigger" data-experience="Mal Griot — Live">
+        Explore the show
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="perf-offer perf-offer--bld" id="bld">
+    <div class="perf-offer__media reveal">
+      <img src="epk/art/breathe.jpg" alt="breathe love d e e p album art">
+    </div>
+    <div class="perf-offer__body reveal">
+      <span class="perf-offer__eyebrow">02 — A complete performance work</span>
+      <h3 class="perf-offer__title">Breathe Love Deep — Live</h3>
+      <p class="perf-offer__desc">The live expression of <em class="nb">breathe love d e e p</em> — ten pieces about stillness, breath, and the space between one thought and the next; about love, loss, longing, and learning to let go. Built on groove and restraint, not range. This isn't a flexible set — it's treated as an experience rather than a concert, where transitions, lighting, atmosphere and silence carry as much weight as the notes.</p>
+      <p class="perf-offer__desc perf-offer__desc--placeholder">Full sequence, repertoire and staging concept available on request via the EPK.</p>
+      <div class="perf-offer__durations perf-offer__durations--single">
+        <span>One complete performance</span>
+      </div>
+      <div class="perf-offer__row">
+        <button type="button" class="perf-cta perf-cta--solid book-performance-trigger" data-experience="Breathe Love Deep — Live">
+          Explore the experience
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <a href="releases.html" class="perf-cta perf-cta--ghost">Hear the album</a>
       </div>
     </div>
-    <div class="perf-set-card">
-      <div class="perf-set-card__media">
-        <img src="img/performance/perf-archive-sofar.jpg" alt="Mal Griot performing an intimate voice-led set" loading="lazy">
-      </div>
-      <div class="perf-set-card__body">
-        <span class="perf-set-card__name">Acoustic / intimate</span>
-        <span class="perf-set-card__format">Solo or duo — voice-led</span>
-        <p class="perf-set-card__desc">Stripped back for smaller rooms and seated audiences — voice up front, minimal rig, built for listening rather than volume. Right for listening rooms, private events and gallery bills.</p>
-      </div>
+  </div>
+
+  <div class="perf-offer perf-offer--band">
+    <div class="perf-offer__media reveal">
+      <img src="img/performance/perf-ensemble.jpg" alt="Mal Griot performing with a full band and percussion" loading="lazy">
     </div>
-    <div class="perf-set-card">
-      <div class="perf-set-card__media">
-        <img src="img/performance/perf-ensemble.jpg" alt="Mal Griot performing a full band set with percussion" loading="lazy">
+    <div class="perf-offer__body reveal">
+      <span class="perf-offer__eyebrow">03 — The full concert</span>
+      <h3 class="perf-offer__title">Mal Griot + Band</h3>
+      <p class="perf-offer__desc">The full-band expression of the music — percussion and additional players alongside Mal, built for festivals, concert venues, cultural programmes and larger stages. A larger sonic scale for headline and support slots.</p>
+      <div class="perf-offer__durations">
+        <span>45 MIN</span><span>60 MIN</span><span>75 MIN</span><span>90 MIN</span>
       </div>
-      <div class="perf-set-card__body">
-        <span class="perf-set-card__name">Full performance</span>
-        <span class="perf-set-card__format">Full band — voice, percussion, additional players</span>
-        <p class="perf-set-card__desc">The developed version: percussion and additional musicians alongside Mal, movement, and a set arc built for a longer, headline-length slot on a proper stage.</p>
-      </div>
-    </div>
-    <div class="perf-set-card">
-      <div class="perf-set-card__media">
-        <img src="img/performance/perf-crowd.jpg" alt="Mal Griot performing a custom set built for the room" loading="lazy">
-      </div>
-      <div class="perf-set-card__body">
-        <span class="perf-set-card__name">Custom set</span>
-        <span class="perf-set-card__format">Scaled to the brief</span>
-        <p class="perf-set-card__desc">Built around a specific theme, programme or space — from a themed festival commission to a private booking with its own requirements. Lineup and length are set case by case.</p>
-      </div>
+      <button type="button" class="perf-cta perf-cta--ghost book-performance-trigger" data-experience="Mal Griot + Band">
+        Explore the band
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </div>
   </div>
 </section>
 
-<section class="perf-section perf-practice">
+<section class="perf-section perf-practice" id="format">
   <h2 class="perf-practice__head">
-    <span class="reveal">A song can be performed.</span>
-    <span class="reveal">A room can be performed with.</span>
+    <span class="reveal">One artist.</span>
+    <span class="reveal">Three ways into the music.</span>
   </h2>
-  <p class="perf-practice__body reveal">Mal builds performances in real time — layering voice, rhythm, poetry and instinct into something that only exists for the people in the room.</p>
+  <p class="perf-practice__body reveal">The experience comes first. The room determines the scale.</p>
+  <div class="perf-ways reveal">
+    <div class="perf-ways__item">
+      <span class="perf-ways__label">Mal Griot — Live</span>
+      <span class="perf-ways__value">30 · 60 · 90 MIN · EXTENDED</span>
+    </div>
+    <div class="perf-ways__item">
+      <span class="perf-ways__label">Breathe Love Deep — Live</span>
+      <span class="perf-ways__value">One complete performance</span>
+    </div>
+    <div class="perf-ways__item">
+      <span class="perf-ways__label">Mal Griot + Band</span>
+      <span class="perf-ways__value">45 · 60 · 75 · 90 MIN</span>
+    </div>
+  </div>
 </section>
 
 <section class="perf-section perf-fragments" id="fragments">
   <div class="perf-fragments__head reveal">
     <div>
-      <span class="perf-fragments__eyebrow">Fragments</span>
-      <h2 class="perf-fragments__title">From the archive</h2>
+      <span class="perf-fragments__eyebrow">Proof, not a pitch</span>
+      <h2 class="perf-fragments__title">The practice, in the room</h2>
     </div>
     <a href="#watch" class="perf-cta">
       Watch the live set
@@ -582,16 +694,92 @@ body.bmd-open { overflow: hidden; }
 <section class="perf-section perf-watch" id="watch">
   <div class="perf-watch__head reveal">
     <span class="perf-fragments__eyebrow">Watch</span>
-    <h2 class="perf-fragments__title">A set, in full</h2>
+    <h2 class="perf-fragments__title">Sets, in full</h2>
   </div>
-  <div class="perf-watch__grid reveal">
-    <div class="perf-watch__main">
-      <video src="video/hosting-reel/sofar-6.mp4" poster="video/hosting-reel/sofar-6-poster.jpg" controls playsinline preload="none"></video>
-      <span class="perf-watch__label"><b>Sofar Sounds</b><span>Bombay</span></span>
+
+  <div class="watch-group reveal">
+    <h3 class="watch-group__title">Sofar Sounds — Bombay</h3>
+    <div class="watch-group__grid">
+      <button type="button" class="watch-card" data-yt="I3TeA9X7nKg" data-start="0">
+        <span class="watch-card__thumb"><img src="https://i.ytimg.com/vi/I3TeA9X7nKg/hqdefault.jpg" alt="Sofar 5, Bombay" loading="lazy"></span>
+        <span class="watch-card__play"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+        <span class="watch-card__caption">Sofar 5</span>
+      </button>
+      <button type="button" class="watch-card" data-yt="xpyZW0msRtk" data-start="149">
+        <span class="watch-card__thumb"><img src="https://i.ytimg.com/vi/xpyZW0msRtk/hqdefault.jpg" alt="Live at Sofar Sounds Bombay" loading="lazy"></span>
+        <span class="watch-card__play"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+        <span class="watch-card__caption">Live at Sofar Bombay</span>
+      </button>
     </div>
-    <div class="perf-watch__side">
-      <video src="video/hosting-reel/deep-dawn.mp4" poster="video/hosting-reel/deep-dawn-poster.jpg" controls playsinline preload="none"></video>
-      <span class="perf-watch__label"><b>Full band</b><span>Live</span></span>
+  </div>
+
+  <div class="watch-group reveal">
+    <h3 class="watch-group__title">Kalabhumi Goes Live — Auroville · Deep Dawn</h3>
+    <div class="watch-group__grid">
+      <button type="button" class="watch-card" data-yt="80xPgu35hdU" data-start="0">
+        <span class="watch-card__thumb"><img src="https://i.ytimg.com/vi/80xPgu35hdU/hqdefault.jpg" alt="Helicopter Man — Kalabhumi Goes Live, Auroville" loading="lazy"></span>
+        <span class="watch-card__play"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+        <span class="watch-card__caption">Helicopter Man</span>
+      </button>
+      <button type="button" class="watch-card" data-yt="OW7HXJt7kEU" data-start="0">
+        <span class="watch-card__thumb"><img src="https://i.ytimg.com/vi/OW7HXJt7kEU/hqdefault.jpg" alt="How It Goes — Deep Dawn" loading="lazy"></span>
+        <span class="watch-card__play"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+        <span class="watch-card__caption">How It Goes</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="watch-group reveal">
+    <h3 class="watch-group__title">MOMENTS — Improv Jazz, Cripa · Auroville</h3>
+    <div class="watch-group__grid">
+      <button type="button" class="watch-card" data-yt="AquxdMRMNx8" data-start="0">
+        <span class="watch-card__thumb"><img src="https://i.ytimg.com/vi/AquxdMRMNx8/hqdefault.jpg" alt="Sober — MOMENTS improv jazz concert, Cripa Auroville" loading="lazy"></span>
+        <span class="watch-card__play"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+        <span class="watch-card__caption">Sober</span>
+      </button>
+      <button type="button" class="watch-card" data-yt="P9NWy271OAs" data-start="0">
+        <span class="watch-card__thumb"><img src="https://i.ytimg.com/vi/P9NWy271OAs/hqdefault.jpg" alt="Wrapped Around You — MOMENTS improv jazz concert, Cripa Auroville" loading="lazy"></span>
+        <span class="watch-card__play"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+        <span class="watch-card__caption">Wrapped Around You</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="watch-group reveal">
+    <h3 class="watch-group__title">MOMENTS II — Soho House, Mumbai</h3>
+    <div class="watch-group__grid">
+      <button type="button" class="watch-card" data-yt="uvffNO-YCDc" data-start="0">
+        <span class="watch-card__thumb"><img src="https://i.ytimg.com/vi/uvffNO-YCDc/hqdefault.jpg" alt="MOMENTS II — Soho House, Mumbai" loading="lazy"></span>
+        <span class="watch-card__play"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+        <span class="watch-card__caption">MOMENTS II</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="watch-group reveal">
+    <h3 class="watch-group__title">Looping — solo, voice &amp; loop pedal</h3>
+    <div class="watch-group__grid">
+      <button type="button" class="watch-card" data-yt="EI2ar1uUyk8" data-start="0">
+        <span class="watch-card__thumb"><img src="https://i.ytimg.com/vi/EI2ar1uUyk8/hqdefault.jpg" alt="Getta Damn Ups — looping performance" loading="lazy"></span>
+        <span class="watch-card__play"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+        <span class="watch-card__caption">Getta Damn Ups</span>
+      </button>
+      <button type="button" class="watch-card" data-yt="wBonF3kFFPU" data-start="0">
+        <span class="watch-card__thumb"><img src="https://i.ytimg.com/vi/wBonF3kFFPU/hqdefault.jpg" alt="Darkly — looping performance" loading="lazy"></span>
+        <span class="watch-card__play"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+        <span class="watch-card__caption">Darkly</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="watch-group reveal">
+    <h3 class="watch-group__title">Covers</h3>
+    <div class="watch-group__grid">
+      <button type="button" class="watch-card" data-yt="w2fCGLE2Lk0" data-start="0">
+        <span class="watch-card__thumb"><img src="https://i.ytimg.com/vi/w2fCGLE2Lk0/hqdefault.jpg" alt="Ascension — Maxwell cover" loading="lazy"></span>
+        <span class="watch-card__play"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+        <span class="watch-card__caption">Ascension (Maxwell Cover)</span>
+      </button>
     </div>
   </div>
 </section>
@@ -749,17 +937,17 @@ body.bmd-open { overflow: hidden; }
 
         <div class="bmd-section">
           <span class="bmd-eyebrow">§02</span>
-          <h3 class="bmd-heading">Which set are they picturing?</h3>
+          <h3 class="bmd-heading">Which experience are they interested in?</h3>
           <div class="bmd-field">
-            <label>Set format</label>
+            <label>Experience</label>
             <div class="bmd-pills" data-pill-group="set_format" data-select="single">
-              <button type="button" class="bmd-pill">Solo live set</button>
-              <button type="button" class="bmd-pill">Acoustic / intimate</button>
-              <button type="button" class="bmd-pill">Full performance</button>
-              <button type="button" class="bmd-pill">Custom set</button>
+              <button type="button" class="bmd-pill">Mal Griot — Live</button>
+              <button type="button" class="bmd-pill">Breathe Love Deep — Live</button>
+              <button type="button" class="bmd-pill">Mal Griot + Band</button>
               <button type="button" class="bmd-pill">Not sure yet</button>
             </div>
             <input type="hidden" name="set_format">
+            <p class="bmd-inline-hint" id="bpd-experience-hint">No problem — tell Mal about the room and the mood below, and this brief will help point to the right format.</p>
           </div>
           <div class="bmd-field">
             <label>How much energy should the set carry?</label>
@@ -971,10 +1159,30 @@ body.bmd-open { overflow: hidden; }
   function closeLightbox() {
     lightbox.classList.remove('is-open');
     frame.querySelectorAll('video').forEach(function (v) { v.pause(); });
+    frame.querySelectorAll('iframe').forEach(function (f) { f.remove(); });
   }
   closeBtn.addEventListener('click', closeLightbox);
   lightbox.addEventListener('click', function (e) { if (e.target === lightbox) closeLightbox(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeLightbox(); });
+
+  // "Watch a set" cards — open the matching YouTube video in the same lightbox.
+  document.querySelectorAll('.watch-card[data-yt]').forEach(function (card) {
+    card.addEventListener('click', function () {
+      var id = card.dataset.yt;
+      var start = card.dataset.start || '0';
+      frame.querySelectorAll('img, video, iframe').forEach(function (el) { el.remove(); });
+      var el = document.createElement('iframe');
+      el.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&start=' + start + '&rel=0';
+      el.style.width = 'min(920px, 88vw)';
+      el.style.aspectRatio = '16 / 9';
+      el.style.height = 'auto';
+      el.style.border = 'none';
+      el.allow = 'autoplay; encrypted-media; picture-in-picture';
+      el.allowFullscreen = true;
+      frame.appendChild(el);
+      lightbox.classList.add('is-open');
+    });
+  });
 })();
 </script>
 <script>
@@ -1014,7 +1222,21 @@ body.bmd-open { overflow: hidden; }
     document.body.classList.remove('bmd-open');
   }
 
-  triggers.forEach(function (t) { t.addEventListener('click', openDrawer); });
+  // Offering-card "Explore the X" buttons carry a data-experience value —
+  // opening the drawer also pre-selects the matching Experience pill.
+  triggers.forEach(function (t) {
+    t.addEventListener('click', function () {
+      openDrawer();
+      var exp = t.dataset.experience;
+      if (!exp) return;
+      var group = form.querySelector('[data-pill-group="set_format"]');
+      if (!group) return;
+      var match = Array.prototype.filter.call(group.querySelectorAll('.bmd-pill'), function (p) {
+        return p.textContent.trim() === exp;
+      })[0];
+      if (match) match.click();
+    });
+  });
   closeBtn.addEventListener('click', closeDrawer);
   scrim.addEventListener('click', closeDrawer);
   document.addEventListener('keydown', function (e) {
@@ -1077,6 +1299,17 @@ body.bmd-open { overflow: hidden; }
     eventType.addEventListener('change', function () {
       eventTypeHint.classList.toggle('is-visible', eventType.value === 'Other');
       clearError(eventType);
+    });
+  }
+
+  // s02: "Not sure yet" surfaces a hint that the brief below will help
+  // point to the right format.
+  var experienceGroup = form.querySelector('[data-pill-group="set_format"]');
+  var experienceHint = document.getElementById('bpd-experience-hint');
+  if (experienceGroup && experienceHint) {
+    experienceGroup.addEventListener('click', function (e) {
+      if (!e.target.classList.contains('bmd-pill')) return;
+      experienceHint.classList.toggle('is-visible', e.target.textContent.trim() === 'Not sure yet');
     });
   }
 
