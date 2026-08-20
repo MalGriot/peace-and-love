@@ -15,7 +15,7 @@
 <style>
 /* ---------- Performance page — editorial, intimate, candlelit-velvet.
    Distinct from Hosting's full-screen video-reel treatment: one still
-   image in the hero, quiet typography, a contact-sheet fragments grid. ---------- */
+   image in the hero, quiet typography, a three-card video proof section. ---------- */
 
 .perf-section{padding:clamp(64px,10vw,140px) clamp(20px,6vw,64px)}
 
@@ -106,51 +106,9 @@
   .perf-hero__desc--mobile{display:block;max-width:32ch}
 }
 
-/* ---------- 3. Performance Fragments ---------- */
-.perf-fragments__head{
-  display:flex;align-items:flex-end;justify-content:space-between;gap:24px;
-  max-width:1180px;margin:0 auto 34px;flex-wrap:wrap;
-}
+/* ---------- 3. Section eyebrow/title — shared by Offerings and Watch ---------- */
 .perf-fragments__eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);margin-bottom:12px;display:block}
 .perf-fragments__title{font-family:var(--font-display);font-weight:400;font-size:clamp(30px,4vw,46px);margin:0;color:var(--paper)}
-
-.perf-grid{
-  max-width:1180px;margin:0 auto;
-  display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:120px;grid-auto-flow:dense;gap:10px;
-}
-.perf-tile{
-  position:relative;overflow:hidden;border-radius:4px;cursor:pointer;
-  border:1px solid rgba(239,230,216,.08);background:#1c1815;
-  appearance:none;padding:0;display:block;width:100%;height:100%;
-}
-.perf-tile img, .perf-tile video{
-  width:100%;height:100%;object-fit:cover;
-  filter:saturate(.82) brightness(.92);
-  transition:transform 1.1s cubic-bezier(.16,1,.3,1),filter .6s ease;
-}
-.perf-tile:hover img, .perf-tile:hover video{transform:scale(1.055);filter:saturate(1) brightness(1)}
-.perf-tile__tag{
-  position:absolute;left:12px;bottom:10px;z-index:2;
-  font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--paper-dim);
-  opacity:0;transform:translateY(6px);transition:opacity .35s ease,transform .35s ease;
-}
-.perf-tile:hover .perf-tile__tag{opacity:1;transform:translateY(0)}
-.perf-tile::after{
-  content:"";position:absolute;inset:0;
-  background:linear-gradient(0deg,rgba(18,16,15,.55),transparent 55%);
-  pointer-events:none;
-}
-.perf-tile--play::before{
-  content:"";position:absolute;z-index:2;left:14px;top:14px;width:26px;height:26px;border-radius:999px;
-  border:1px solid rgba(239,230,216,.5);background:rgba(18,16,15,.4);
-}
-.perf-tile--wide{grid-column:span 2;grid-row:span 2}
-.perf-tile--tall{grid-row:span 2}
-
-@media (max-width:760px){
-  .perf-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:44vw}
-  .perf-tile--wide{grid-column:span 2;grid-row:span 1}
-}
 
 /* lightbox */
 .perf-lightbox{
@@ -170,53 +128,69 @@
 }
 .perf-lightbox__close:hover{color:var(--paper)}
 
-/* ---------- 3b. A set, in full — one deliberate piece of evidence,
-   not a video library. Reuses the watch-card thumb/play/caption
-   pattern, scaled up and given a two-line caption. ---------- */
+/* ---------- 3b. Watch Mal Live — three video pieces, one per offering
+   above. Three-column grid on desktop, single column on mobile; no
+   carousel, so all three read at once. Thumbnail → click → lightbox. ---------- */
 .perf-watch{max-width:1180px;margin:0 auto}
-.perf-watch__head{max-width:640px;margin:0 0 34px}
+.perf-watch__head{max-width:640px;margin:0 0 44px}
+.perf-watch__sub{color:var(--paper-dim);font-size:14px;margin:14px 0 0;max-width:52ch}
+
+.perf-watch__grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(28px,3vw,40px);
+}
+@media (max-width:900px){
+  .perf-watch__grid{grid-template-columns:1fr;gap:44px}
+}
+
+.watch-card-wrap{display:flex;flex-direction:column}
+.watch-card__title{
+  font-family:var(--font-display);font-weight:400;font-size:clamp(20px,2vw,24px);
+  color:var(--paper);margin:20px 0 6px;letter-spacing:-.01em;
+}
+.watch-card__desc{font-size:13px;color:var(--paper-dim);margin:0}
+.watch-card__link{
+  display:inline-block;margin-top:12px;font-size:12px;letter-spacing:.06em;
+  color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(224,178,106,.4);
+  padding-bottom:2px;transition:border-color .25s ease;
+}
+.watch-card__link:hover{border-color:var(--gold)}
 
 .watch-card{
   position:relative;display:block;width:100%;padding:0;margin:0;border:none;background:none;
   cursor:pointer;text-align:left;appearance:none;
 }
-.watch-card__thumb{position:relative;aspect-ratio:16/9;overflow:hidden;border-radius:4px;background:#1c1815}
-.watch-card__thumb img{
+.watch-card__thumb{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:2px;background:#1c1815}
+.watch-card__thumb img, .watch-card__thumb video{
   width:100%;height:100%;object-fit:cover;
   filter:saturate(.82) brightness(.82);
-  transition:transform 1s cubic-bezier(.16,1,.3,1),filter .4s ease;
+  transition:transform 1.2s cubic-bezier(.16,1,.3,1),filter .4s ease;
 }
-.watch-card:hover .watch-card__thumb img{transform:scale(1.05);filter:saturate(1) brightness(.92)}
+.watch-card:hover .watch-card__thumb img, .watch-card:hover .watch-card__thumb video{transform:scale(1.05);filter:saturate(1) brightness(.92)}
 .watch-card__thumb::after{
   content:"";position:absolute;inset:0;
   background:linear-gradient(0deg,rgba(18,16,15,.8) 0%,transparent 45%);pointer-events:none;
 }
 .watch-card__play{
   position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;
-  width:44px;height:44px;border-radius:999px;border:1px solid rgba(239,230,216,.5);
+  width:56px;height:56px;border-radius:999px;border:1px solid rgba(239,230,216,.5);
   background:rgba(18,16,15,.45);display:flex;align-items:center;justify-content:center;
   color:var(--paper);transition:background-color .25s ease,border-color .25s ease,color .25s ease;
 }
 .watch-card:hover .watch-card__play{background:var(--gold);border-color:var(--gold);color:var(--ink)}
 .watch-card__caption{
-  position:absolute;left:12px;bottom:10px;z-index:2;
-  font-size:12.5px;letter-spacing:.01em;color:var(--paper);
+  position:absolute;left:16px;bottom:14px;z-index:2;
+  font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);
   text-shadow:0 1px 6px rgba(0,0,0,.6);
 }
 
-.watch-card--proof .watch-card__thumb{aspect-ratio:21/9;border-radius:2px}
-.watch-card--proof .watch-card__play{
-  width:64px;height:64px;
-}
-.watch-card--proof .watch-card__play svg{width:22px;height:22px}
-.watch-card--proof .watch-card__caption{
-  left:22px;bottom:20px;text-shadow:none;
-}
-.watch-card--proof .watch-card__caption span{
-  font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);
-}
-@media (max-width:760px){
-  .watch-card--proof .watch-card__thumb{aspect-ratio:4/5}
+/* Placeholder — clearly marked, not clickable; no fabricated footage. */
+.watch-card--placeholder{cursor:default}
+.watch-card--placeholder .watch-card__thumb img{filter:saturate(.5) brightness(.5)}
+.watch-card--placeholder .watch-card__badge{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--paper);
+  border:1px solid rgba(239,230,216,.4);padding:9px 18px;border-radius:999px;
+  background:rgba(18,16,15,.55);white-space:nowrap;
 }
 
 /* ---------- 4. Three Offerings ---------- */
@@ -561,62 +535,46 @@ body.bmd-open { overflow: hidden; }
 <section class="perf-section perf-watch" id="watch">
   <div class="perf-watch__head reveal">
     <span class="perf-fragments__eyebrow">Live proof</span>
-    <h2 class="perf-fragments__title">A set, in full</h2>
+    <h2 class="perf-fragments__title">Watch Mal Live</h2>
+    <p class="perf-watch__sub">Three rooms, three shapes of the same practice — hover for a taste, click to step inside the full performance.</p>
   </div>
 
-  <button type="button" class="watch-card watch-card--proof reveal" data-yt="xpyZW0msRtk" data-start="149" aria-label="Play: A set, in full — Sofar Sounds Bombay, Full Band">
-    <span class="watch-card__thumb"><img src="https://i.ytimg.com/vi/xpyZW0msRtk/maxresdefault.jpg" alt="Mal Griot performing full band, Sofar Sounds Bombay" loading="lazy"></span>
-    <span class="watch-card__play"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
-    <span class="watch-card__caption"><span>Sofar Sounds Bombay · Full Band</span></span>
-  </button>
-</section>
-
-<section class="perf-section perf-fragments" id="fragments">
-  <div class="perf-fragments__head reveal">
-    <div>
-      <span class="perf-fragments__eyebrow">Proof, not a pitch</span>
-      <h2 class="perf-fragments__title">From the archive</h2>
-      <p class="perf-offerings__sub">A visual record of the work.</p>
+  <div class="perf-watch__grid">
+    <div class="watch-card-wrap reveal">
+      <button type="button" class="watch-card" data-video="video/live-darkly.mp4" aria-label="Play: Darkly, live looping at Leaping Windows, Mumbai">
+        <span class="watch-card__thumb">
+          <video src="video/live-darkly-hover.mp4" muted loop playsinline preload="metadata" poster="img/performance/perf-live-darkly.jpg"></video>
+        </span>
+        <span class="watch-card__play"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+        <span class="watch-card__caption">Leaping Windows · Mumbai</span>
+      </button>
+      <h3 class="watch-card__title">Darkly</h3>
+      <p class="watch-card__desc">Solo · Live looping · Original, built in the room</p>
     </div>
-  </div>
 
-  <div class="perf-grid reveal" id="perf-fragment-grid">
-    <button type="button" class="perf-tile perf-tile--wide" data-full="img/performance/perf-movement.jpg">
-      <img src="img/performance/perf-movement.jpg" alt="Movement, rhythm and percussion on stage" loading="lazy">
-      <span class="perf-tile__tag">Movement</span>
-    </button>
-    <button type="button" class="perf-tile perf-tile--tall" data-full="img/performance/perf-voice.jpg">
-      <img src="img/performance/perf-voice.jpg" alt="Mal Griot mid-verse, close on the microphone" loading="lazy">
-      <span class="perf-tile__tag">Voice</span>
-    </button>
-    <button type="button" class="perf-tile" data-full="img/performance/perf-rhythm.jpg">
-      <img src="img/performance/perf-rhythm.jpg" alt="Hand drums and percussion under stage light" loading="lazy">
-      <span class="perf-tile__tag">Rhythm</span>
-    </button>
-    <button type="button" class="perf-tile perf-tile--play" data-full="video/performance-hover.mp4" data-type="video">
-      <video src="video/performance-hover.mp4" muted loop playsinline preload="metadata"></video>
-      <span class="perf-tile__tag">Live clip</span>
-    </button>
-    <button type="button" class="perf-tile" data-full="img/performance/perf-portrait.jpg">
-      <img src="img/performance/perf-portrait.jpg" alt="Portrait of Mal Griot backstage" loading="lazy">
-      <span class="perf-tile__tag">Portrait</span>
-    </button>
-    <button type="button" class="perf-tile perf-tile--wide" data-full="img/performance/perf-room.jpg">
-      <img src="img/performance/perf-room.jpg" alt="Mal Griot performing for a seated room at a Sofar Sounds Bombay show" loading="lazy">
-      <span class="perf-tile__tag">The room</span>
-    </button>
-    <button type="button" class="perf-tile perf-tile--wide" data-full="img/performance/perf-archive-kgl.jpg">
-      <img src="img/performance/perf-archive-kgl.jpg" alt="Mal Griot performing at Kalabhumi Goes Live, Auroville" loading="lazy">
-      <span class="perf-tile__tag">Auroville</span>
-    </button>
-    <button type="button" class="perf-tile perf-tile--tall" data-full="img/performance/perf-grit.jpg">
-      <img src="img/performance/perf-grit.jpg" alt="Mal Griot singing under red stage light" loading="lazy">
-      <span class="perf-tile__tag">Grit</span>
-    </button>
-    <button type="button" class="perf-tile" data-full="img/performance/perf-joy.jpg">
-      <img src="img/performance/perf-joy.jpg" alt="Mal Griot mid-performance, arm raised" loading="lazy">
-      <span class="perf-tile__tag">Joy</span>
-    </button>
+    <div class="watch-card-wrap reveal">
+      <button type="button" class="watch-card" data-video="video/live-remember-the-time.mp4" data-start="125" aria-label="Play: Remember the Time, live at Bharat Nivas Theatre">
+        <span class="watch-card__thumb">
+          <video src="video/live-remember-the-time-hover.mp4" muted loop playsinline preload="metadata" poster="img/performance/perf-live-remember.jpg"></video>
+        </span>
+        <span class="watch-card__play"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+        <span class="watch-card__caption">Bharat Nivas Theatre</span>
+      </button>
+      <h3 class="watch-card__title">Remember the Time</h3>
+      <p class="watch-card__desc">Solo · A cover, made his own on stage</p>
+    </div>
+
+    <div class="watch-card-wrap reveal">
+      <button type="button" class="watch-card" data-video="video/live-interlube.mp4" aria-label="Play: Interlube, with Deep Dawn at Kalabhumi Studio, Auroville">
+        <span class="watch-card__thumb">
+          <video src="video/live-interlube-hover.mp4" muted loop playsinline preload="metadata" poster="img/performance/perf-live-interlube.jpg"></video>
+        </span>
+        <span class="watch-card__play"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+        <span class="watch-card__caption">Kalabhumi Studio · Auroville</span>
+      </button>
+      <h3 class="watch-card__title">Interlube</h3>
+      <p class="watch-card__desc">With Deep Dawn · Full band · Original music</p>
+    </div>
   </div>
 </section>
 
@@ -901,37 +859,22 @@ body.bmd-open { overflow: hidden; }
 <script src="drift-wall.js"></script>
 <script>renderChrome('performance');</script>
 <script>
-// Fragments lightbox — click any tile to expand image/video full-size.
-// Video tiles autoplay muted on hover; the lightbox unmutes so the clip
-// actually plays with sound once activated on purpose.
+// Watch Mal Live — click a video card to open it full-size in a lightbox.
+// Local clips (data-video) hover-preview muted from a short loop file,
+// then expand unmuted in the lightbox (data-start seeks to a timestamp,
+// e.g. the cover kicking in). data-yt is legacy support for a YouTube
+// embed card. Placeholder cards carry neither attribute and are inert.
 (function () {
   var lightbox = document.getElementById('perf-lightbox');
   var frame = document.getElementById('perf-lightbox-frame');
   var closeBtn = document.getElementById('perf-lightbox-close');
-  var grid = document.getElementById('perf-fragment-grid');
-  if (!lightbox || !grid) return;
+  if (!lightbox) return;
 
-  grid.querySelectorAll('.perf-tile[data-full]').forEach(function (tile) {
-    var vid = tile.querySelector('video');
-    if (vid) {
-      tile.addEventListener('mouseenter', function () { vid.play().catch(function () {}); });
-      tile.addEventListener('mouseleave', function () { vid.pause(); vid.currentTime = 0; });
-    }
-    tile.addEventListener('click', function () {
-      var src = tile.dataset.full;
-      var isVideo = tile.dataset.type === 'video';
-      frame.querySelectorAll('img, video').forEach(function (el) { el.remove(); });
-      var el = document.createElement(isVideo ? 'video' : 'img');
-      if (isVideo) {
-        el.src = src; el.controls = true; el.autoplay = true; el.playsInline = true;
-      } else {
-        el.src = src; el.alt = '';
-      }
-      frame.appendChild(el);
-      lightbox.classList.add('is-open');
-    });
-  });
-
+  function openLightboxWith(el) {
+    frame.querySelectorAll('img, video, iframe').forEach(function (n) { n.remove(); });
+    frame.appendChild(el);
+    lightbox.classList.add('is-open');
+  }
   function closeLightbox() {
     lightbox.classList.remove('is-open');
     frame.querySelectorAll('video').forEach(function (v) { v.pause(); });
@@ -941,12 +884,27 @@ body.bmd-open { overflow: hidden; }
   lightbox.addEventListener('click', function (e) { if (e.target === lightbox) closeLightbox(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeLightbox(); });
 
-  // "Watch a set" cards — open the matching YouTube video in the same lightbox.
+  document.querySelectorAll('.watch-card[data-video]').forEach(function (card) {
+    var previewVid = card.querySelector('video');
+    if (previewVid) {
+      card.addEventListener('mouseenter', function () { previewVid.play().catch(function () {}); });
+      card.addEventListener('mouseleave', function () { previewVid.pause(); previewVid.currentTime = 0; });
+    }
+    card.addEventListener('click', function () {
+      var el = document.createElement('video');
+      el.src = card.dataset.video; el.controls = true; el.autoplay = true; el.playsInline = true; el.muted = false;
+      var start = card.dataset.start ? Number(card.dataset.start) : 0;
+      if (start) {
+        el.addEventListener('loadedmetadata', function () { el.currentTime = start; });
+      }
+      openLightboxWith(el);
+    });
+  });
+
   document.querySelectorAll('.watch-card[data-yt]').forEach(function (card) {
     card.addEventListener('click', function () {
       var id = card.dataset.yt;
       var start = card.dataset.start || '0';
-      frame.querySelectorAll('img, video, iframe').forEach(function (el) { el.remove(); });
       var el = document.createElement('iframe');
       el.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&start=' + start + '&rel=0';
       el.style.width = 'min(920px, 88vw)';
@@ -955,8 +913,7 @@ body.bmd-open { overflow: hidden; }
       el.style.border = 'none';
       el.allow = 'autoplay; encrypted-media; picture-in-picture';
       el.allowFullscreen = true;
-      frame.appendChild(el);
-      lightbox.classList.add('is-open');
+      openLightboxWith(el);
     });
   });
 })();

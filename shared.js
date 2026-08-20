@@ -3,7 +3,7 @@
 function renderChrome(active) {
   const links = [
     ['releases.html', 'Releases', 'discography'],
-    ['soundscapes.html', 'Soundscapes', 'wellness'],
+    ['wellness.html', 'Wellness', 'wellness'],
     ['contact.html', 'Contact', 'contact'],
   ];
   const linkHtml = links
@@ -19,9 +19,7 @@ function renderChrome(active) {
     ['poetry.html', 'Poetry', 'poetry'],
     ['acting.html', 'Acting', 'acting'],
     ['voiceover.html', 'Voice Over', 'voiceover'],
-    ['soundbaths.html', 'Sound Baths', 'soundbaths'],
-    ['meditation.html', 'Meditation', 'meditation'],
-    ['soundscapes.html', 'Soundscapes', 'wellness'],
+    ['wellness.html', 'Wellness', 'wellness'],
     ['about.html', 'About', 'about'],
     ['press.html', 'Press', 'press'],
     ['contact.html', 'Contact', 'contact'],
