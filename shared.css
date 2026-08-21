@@ -351,7 +351,14 @@ a{color:inherit}
 .mini-player__title-track.is-scrolling{animation:mini-marquee 11s linear infinite}
 .mini-player__title-track.is-scrolling span:last-child{display:inline-block}
 @keyframes mini-marquee{to{transform:translateX(-50%)}}
-.mini-player__artist{font-size:11px;color:var(--paper-faint);letter-spacing:.04em;margin-top:1px}
+.mini-player__artist-stack{position:relative;margin-top:1px}
+.mini-player__artist-plain{font-size:11px;color:var(--paper-faint);letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:none}
+.mini-player__artist-mask{max-width:160px;overflow:hidden}
+.mini-player__artist-track{display:inline-flex;white-space:nowrap}
+.mini-player__artist-track span{font-size:11px;color:var(--paper-faint);letter-spacing:.04em;padding-right:36px;display:inline-block}
+.mini-player__artist-track span:last-child{display:none}
+.mini-player__artist-track.is-scrolling{animation:mini-marquee 11s linear infinite}
+.mini-player__artist-track.is-scrolling span:last-child{display:inline-block}
 .mini-player__skip{
   width:28px;height:28px;border-radius:999px;background:none;border:none;color:var(--paper-dim);
   display:flex;align-items:center;justify-content:center;cursor:pointer;transition:color .2s ease;
@@ -409,6 +416,20 @@ a{color:inherit}
   .mini-player:hover .mini-player__title-mask,.mini-player.is-dragging .mini-player__title-mask,
   .mini-player:focus-within .mini-player__title-mask{opacity:1}
   .mini-player__title-track{white-space:nowrap}
+
+  /* Same crossfade trick for the artist line, one row down. */
+  .mini-player__artist-stack{width:100px;height:14px}
+  .mini-player__artist-plain,.mini-player__artist-mask{
+    position:absolute;left:0;top:0;width:100%;
+    transition:opacity .35s ease;
+  }
+  .mini-player__artist-mask{width:100px;max-width:100px;display:block;opacity:0}
+  .mini-player__artist-plain{display:block;max-width:none;opacity:1}
+  .mini-player:hover .mini-player__artist-plain,.mini-player.is-dragging .mini-player__artist-plain,
+  .mini-player:focus-within .mini-player__artist-plain{opacity:0}
+  .mini-player:hover .mini-player__artist-mask,.mini-player.is-dragging .mini-player__artist-mask,
+  .mini-player:focus-within .mini-player__artist-mask{opacity:1}
+  .mini-player__artist-track{white-space:nowrap}
 }
 
 .msg-quote{font-size:11px;color:var(--paper-dim);border-left:2px solid var(--brass);padding:3px 8px;margin-bottom:6px;background:rgba(0,0,0,.15);border-radius:4px}

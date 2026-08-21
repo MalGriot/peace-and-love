@@ -68,6 +68,62 @@
   .ab-footer{padding:10px clamp(20px,5vw,64px) 120px;max-width:1000px;margin:0 auto}
   .ab-footer__row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
   .ab-footer__note{font-size:12px;color:var(--paper-faint);margin:10px 0 0}
+
+  /* ---- weekly playlist widget: presented as a playlist Mal curated
+     himself, though under the hood the tracks are sourced from his own
+     Discover Weekly. Rather than embedding Spotify's playlist iframe (whose
+     cover art and header literally read "Discover Weekly"), each track is
+     rendered as its own .release row with a click-to-expand accordion
+     (see the release-panel script below, which already branches on
+     open.spotify.com/track/ links), so a click still opens an inline
+     single-track embed that only ever shows that track's own name/art,
+     never the playlist's — no "Discover Weekly" branding leaks through.
+     The track data itself (title/artist/art/id) is static markup, refreshed
+     by a weekly routine rather than fetched live client-side. ---- */
+  .ab-discover{padding:0 clamp(20px,5vw,64px) 90px;max-width:900px;margin:0 auto;--discover-accent:#93a89e}
+  .ab-discover__inner{background:transparent;border:1px solid rgba(239,230,216,.08);border-radius:16px;padding:clamp(22px,4vw,34px)}
+  .ab-discover__head{max-width:560px;margin:0 auto;text-align:center}
+  .ab-discover__eyebrow{display:inline-block;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--discover-accent);margin-bottom:10px;font-family:var(--font-body);font-weight:600}
+  .ab-discover h2{font-family:var(--font-display);font-weight:400;font-size:clamp(20px,2.4vw,26px);margin:0 0 10px}
+  .ab-discover p{color:var(--paper-dim);margin:0;line-height:1.6;font-size:13.5px}
+  .ab-discover__list{margin-top:20px;border-top:1px solid rgba(239,230,216,.07);max-height:282px;overflow-y:auto;overscroll-behavior:contain;scrollbar-color:var(--discover-accent) transparent;scrollbar-width:thin}
+  .ab-discover__list::-webkit-scrollbar{width:6px}
+  .ab-discover__list::-webkit-scrollbar-track{background:transparent}
+  .ab-discover__list::-webkit-scrollbar-thumb{background:var(--discover-accent);border-radius:999px}
+
+  /* ---- .release: a compact track row (art/title/credits/play), reused
+     from releases.html's discography rows but scaled down and de-accented
+     (sage instead of brass) so it reads as a small parting gift rather than
+     a second discography competing with the real one. ---- */
+  .release{display:grid;grid-template-columns:28px 1fr auto;gap:12px;align-items:center;padding:11px 4px;border-bottom:1px solid rgba(239,230,216,.08);transition:background .3s ease;position:relative;--release-accent:var(--discover-accent)}
+  .release:last-child{border-bottom:none}
+  .release:hover{background:rgba(239,230,216,.03)}
+  .release__year{font-family:var(--font-display);font-size:11px;color:var(--paper-dim);letter-spacing:.05em}
+  .release__art-stage{position:relative;width:38px;height:38px;flex:none}
+  .release__art{width:38px;height:38px;object-fit:cover;border-radius:4px;box-shadow:0 6px 14px rgba(0,0,0,.4);transition:transform .35s ease;background:rgba(239,230,216,.06);display:block}
+  .release:hover .release__art{transform:scale(1.04)}
+  .release__main{display:flex;gap:12px;align-items:center;min-width:0}
+  .release__title{font-family:var(--font-display);font-weight:400;font-size:14px;margin:0 0 2px;transition:color .25s ease}
+  .release:hover .release__title{color:var(--release-accent)}
+  .release__credits{display:block;font-size:11px;letter-spacing:.02em;color:var(--release-accent);max-height:0;opacity:0;visibility:hidden;overflow:hidden;margin-top:0;transition:max-height .35s ease,opacity .3s ease,margin-top .35s ease,visibility 0s linear .35s}
+  .release:hover .release__credits{max-height:40px;opacity:1;visibility:visible;margin-top:2px;transition-delay:0s}
+  .release__play{width:28px;height:28px;border-radius:999px;border:1px solid rgba(239,230,216,.25);display:flex;align-items:center;justify-content:center;color:var(--paper);flex:none;transition:background .2s,border-color .2s}
+  .release__play svg{width:12px;height:12px}
+  .release:hover .release__play{background:var(--release-accent);border-color:var(--release-accent);color:#12100f}
+
+  /* ---- release track popups (accordion, one open at a time) ---- */
+  .release__panel{max-height:0;opacity:0;overflow:hidden;margin-top:0;transition:max-height .4s ease,opacity .3s ease,margin-top .4s ease}
+  .release__panel.is-open{max-height:600px;opacity:1;margin-top:20px}
+  .release__panel-inner{border-top:2px solid var(--release-accent);background:rgba(74,31,34,.18);border-radius:8px;padding:22px clamp(16px,3vw,28px)}
+  .release__tracks{list-style:none;margin:0;padding:0}
+  .release__track-row{display:flex;align-items:center;gap:14px;padding:10px 4px;width:100%;border:none;border-bottom:1px solid rgba(239,230,216,.08);background:none;text-align:left;cursor:pointer;color:var(--paper);font-family:var(--font-body);transition:color .2s ease}
+  .release__track-row:last-child{border-bottom:none}
+  .release__track-row:hover,.release__track-row.is-active{color:var(--release-accent)}
+  .release__track-row .num{font-size:11px;color:var(--paper-dim);width:22px;flex:none}
+  .release__track-row .title{flex:1;font-size:14px;min-width:0}
+  .release__track-row .play-ico{flex:none;width:20px;height:20px;display:flex;align-items:center;justify-content:center}
+  .release__panel-loading{font-size:13px;color:var(--paper-dim);padding:8px 4px}
+  .release__panel-embed{width:100%;border:none;border-radius:6px;display:block}
 </style>
 </head>
 <body>
@@ -112,9 +168,442 @@
 
     <div class="ab-clip">
       <div class="ab-clip__stage">
-        <iframe src="https://www.youtube-nocookie.com/embed/97xce3ehyHM?start=2100&end=2148" title="Mal Griot on Jungli Podcast — life philosophy" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe id="jungliClipVideo" src="https://www.youtube-nocookie.com/embed/97xce3ehyHM?start=2100&end=2148&enablejsapi=1" title="Mal Griot on Jungli Podcast — life philosophy" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
       <p class="ab-clip__caption">On life, unfiltered — from the <a href="https://www.youtube.com/watch?v=97xce3ehyHM" target="_blank" rel="noopener">Jungli Podcast: &ldquo;Rock Bottom Has A Basement&rdquo;</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="ab-discover reveal">
+  <div class="ab-discover__inner">
+    <div class="ab-discover__head">
+      <span class="ab-discover__eyebrow">Currently On Repeat</span>
+      <h2>What's Shaping The Sound</h2>
+      <p>The catalog above didn't arrive from nowhere — this is the rotation feeding it: Afro-house, funk, soul, jazz, neo-soul, whatever won't leave his ears this week. Refreshed every Monday with what's actually playing while he writes. If you want to hear the room the songs come from, this is it.</p>
+    </div>
+
+    <div class="ab-discover__list">
+      <a class="release reveal" href="https://open.spotify.com/track/7B90I1KP4WqNqMA03A0K0f" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">01</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://i.scdn.co/image/ab67616d00004851bc362c5a17d7550d3870b4cb" alt="Sade Riddim — Juls album art"></div>
+          <div>
+            <h3 class="release__title">Sade Riddim</h3>
+            <span class="release__credits">Juls</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/6D3XgKK1nqJykoZ5UDcPVp" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">02</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://i.scdn.co/image/ab67616d000048515174664b26330c4ad08b8460" alt="Pleasure Boy — ELIZA album art"></div>
+          <div>
+            <h3 class="release__title">Pleasure Boy</h3>
+            <span class="release__credits">ELIZA</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/7jCrTCuvdmAHYd4cTBpLny" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">03</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://i.scdn.co/image/ab67616d0000485114fb4f4e542c1e634962e716" alt="Casual Encounters — James Tillman album art"></div>
+          <div>
+            <h3 class="release__title">Casual Encounters</h3>
+            <span class="release__credits">James Tillman</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/562pdTsqaP4glM3nAut3DA" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">04</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://i.scdn.co/image/ab67616d0000485114d71d6ad8c8215e3b38c351" alt="Avenue B — Venna album art"></div>
+          <div>
+            <h3 class="release__title">Avenue B</h3>
+            <span class="release__credits">Venna</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/633PfmSDPfYA2wOjZK6EZm" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">05</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://i.scdn.co/image/ab67616d00004851a48a83dbca69315055069a0c" alt="Rust — Yussef Dayes, Tom Misch album art"></div>
+          <div>
+            <h3 class="release__title">Rust <span class="nb">(feat. Tom Misch)</span></h3>
+            <span class="release__credits">Yussef Dayes, Tom Misch</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/2JM7RAQLTWLMk4JbkduSvW" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">06</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://i.scdn.co/image/ab67616d000048516e091571249e30d0ddf5b0cd" alt="Daze — Olympia Vitalis album art"></div>
+          <div>
+            <h3 class="release__title">Daze</h3>
+            <span class="release__credits">Olympia Vitalis</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/5mExqKuari8zl4kLH6QD7q" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">07</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://i.scdn.co/image/ab67616d000048512dc0a8bbe97a144bec37fe37" alt="who are you to me — threetwenty album art"></div>
+          <div>
+            <h3 class="release__title">who are you to me</h3>
+            <span class="release__credits">threetwenty</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/1He6UQuHm8q2skPrOFKnja" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">08</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://i.scdn.co/image/ab67616d00004851b0bb45395b5e1ee3438af75a" alt="Lagoon — Laura Misch album art"></div>
+          <div>
+            <h3 class="release__title">Lagoon</h3>
+            <span class="release__credits">Laura Misch</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/3FllktA1ECJaaR5M0mpJA9" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">09</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02e2c5aebac63c87d700068080" alt="Verrans Corner — Serebii, Leith Sye Towers album art"></div>
+          <div>
+            <h3 class="release__title">Verrans Corner</h3>
+            <span class="release__credits">Serebii, Leith Sye Towers</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/1ux778Ljln0QEitz2fB4PH" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">10</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e025557786a9c1b65b81c018551" alt="First Responders — Terrace Martin, Robert Glasper, 9th Wonder, Kamasi Washington, Dinner Party album art"></div>
+          <div>
+            <h3 class="release__title">First Responders</h3>
+            <span class="release__credits">Terrace Martin, Robert Glasper, 9th Wonder, Kamasi Washington, Dinner Party</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/08LHDUV5KO2vP5m9wrDTYh" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">11</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02bcadaedef4eb82c2a0347bc3" alt="HOLD ON IT (PUZZLE) — 9DAYS album art"></div>
+          <div>
+            <h3 class="release__title">HOLD ON IT (PUZZLE)</h3>
+            <span class="release__credits">9DAYS</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/6YeDDC5ndGZcbuUWCx3hty" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">12</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e026819af187b4218acab8695aa" alt="The Circle — SAULT album art"></div>
+          <div>
+            <h3 class="release__title">The Circle</h3>
+            <span class="release__credits">SAULT</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/7tOLgvowU2OcA1gx44mpxz" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">13</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e0221a177804ceab36472a23ada" alt="one pillow — Theo Croker, Estelle, Kassa Overall album art"></div>
+          <div>
+            <h3 class="release__title">one pillow</h3>
+            <span class="release__credits">Theo Croker, Estelle, Kassa Overall</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/3t4S3Pc9KR9nSvnFHCQP1A" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">14</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e027bed3334e2d9751981e018f2" alt="delicate — Jonah Yano album art"></div>
+          <div>
+            <h3 class="release__title">delicate</h3>
+            <span class="release__credits">Jonah Yano</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/1uMujqG0hOvXAdr79aAw0w" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">15</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e021e69ac511162b8c4548039d8" alt="Cuffed — Nick Hakim album art"></div>
+          <div>
+            <h3 class="release__title">Cuffed</h3>
+            <span class="release__credits">Nick Hakim</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/6uA7PvBIjfp4FM08Doi7TH" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">16</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e020a38fa644aa68507b48ca537" alt="Time — Lady Wray album art"></div>
+          <div>
+            <h3 class="release__title">Time</h3>
+            <span class="release__credits">Lady Wray</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/2bj4TAWnz45nsiSoQeJKrp" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">17</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02151d5796ff34bb1b3ebc7991" alt="Dive In — A.G. Sully album art"></div>
+          <div>
+            <h3 class="release__title">Dive In</h3>
+            <span class="release__credits">A.G. Sully</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/7rshSdE9IsDzUn3WyGFazz" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">18</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e0240d869ff08da83cae198bc0e" alt="Be There For You — CARRTOONS album art"></div>
+          <div>
+            <h3 class="release__title">Be There For You</h3>
+            <span class="release__credits">CARRTOONS</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/3qgi6f6NzlTBznA7oHHazn" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">19</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e027096302e941475f3e2649fc2" alt="Me 4 — Jill Scott album art"></div>
+          <div>
+            <h3 class="release__title">Me 4</h3>
+            <span class="release__credits">Jill Scott</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/3D049Sbjbtn5PjKFSlcv2R" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">20</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02f3cb30ea968afd598d080da2" alt="High — Little Dragon album art"></div>
+          <div>
+            <h3 class="release__title">High</h3>
+            <span class="release__credits">Little Dragon</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/65DlOICP14caJXRCIP1BHF" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">21</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e020e47a2cfa5b3463a1aa2a5d6" alt="SHOULD'VE BEEN YOU — Bnnyhunna, Tallulah Rose album art"></div>
+          <div>
+            <h3 class="release__title">SHOULD'VE BEEN YOU</h3>
+            <span class="release__credits">Bnnyhunna, Tallulah Rose</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/0ucuF7IUcDcy6DduK2ceos" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">22</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02f1ccca6df24c763d09bf56d2" alt="Whatever, Nevermind — solace album art"></div>
+          <div>
+            <h3 class="release__title">Whatever, Nevermind</h3>
+            <span class="release__credits">solace</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/4ydFTtZk4oW6C9YDs5JDFG" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">23</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02284a35a473253463ee576e75" alt="Sweet — Mansur Brown album art"></div>
+          <div>
+            <h3 class="release__title">Sweet</h3>
+            <span class="release__credits">Mansur Brown</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/2vU95jI1hFEHcKgonUcrlF" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">24</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02b699b666d1dcaee57e69aaff" alt="To Be Found — DHANYA, Azekel, anaiis album art"></div>
+          <div>
+            <h3 class="release__title">To Be Found</h3>
+            <span class="release__credits">DHANYA, Azekel, anaiis</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/7uhxG159WuKuzoIDxPpVKC" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">25</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02324bea71a32e892c312eaa84" alt="Message — Jamie Woon album art"></div>
+          <div>
+            <h3 class="release__title">Message</h3>
+            <span class="release__credits">Jamie Woon</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/3XGdHT92GyDWN5XiCO9PdJ" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">26</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02940ad8d7580e7baf57851098" alt="On My Mind — Baby Rose, BADBADNOTGOOD album art"></div>
+          <div>
+            <h3 class="release__title">On My Mind</h3>
+            <span class="release__credits">Baby Rose, BADBADNOTGOOD</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/5Kkl5bbluwn12Q0QK3TrVn" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">27</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e0225077327a3840ab9cd5fc9c2" alt="Stay Away (From Me) — Madison McFerrin album art"></div>
+          <div>
+            <h3 class="release__title">Stay Away <span class="nb">(From Me)</span></h3>
+            <span class="release__credits">Madison McFerrin</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/0IWea5YZSqjGu3YyRu8lyV" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">28</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02a73471abb12ad455f79c82ab" alt="Motel — Arjuna Oakes album art"></div>
+          <div>
+            <h3 class="release__title">Motel</h3>
+            <span class="release__credits">Arjuna Oakes</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/1Z4atrf3HJ1O4jmSHZQZ4W" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">29</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02c3900efb3f3bd8fda8487812" alt="Words — Melodiesinfonie, Junes album art"></div>
+          <div>
+            <h3 class="release__title">Words</h3>
+            <span class="release__credits">Melodiesinfonie, Junes</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
+      <a class="release reveal" href="https://open.spotify.com/track/1EZSldxZEuWVL2S9L9cNoH" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <span class="release__year">30</span>
+        <div class="release__main">
+          <div class="release__art-stage"><img class="release__art" src="https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e028df106599ade118640d125a0" alt="Beloved — Babeheaven album art"></div>
+          <div>
+            <h3 class="release__title">Beloved</h3>
+            <span class="release__credits">Babeheaven</span>
+          </div>
+        </div>
+        <span class="release__play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </a>
+
     </div>
   </div>
 </section>
@@ -130,6 +619,7 @@
 
 <div id="chrome-footer"></div>
 <div id="chrome-chat"></div>
+<div id="chrome-player"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
@@ -137,5 +627,342 @@
 <script src="chat.js"></script>
 <script src="effects.js"></script>
 <script>renderChrome('about');</script>
+<script>
+(function(){
+  // Jungli Podcast clip: playing it should pause whatever's playing in the
+  // mini-player, and vice versa — same griot:* event bus the Sun Burna video
+  // on releases.html coordinates through.
+  var iframe = document.getElementById('jungliClipVideo');
+  if(!iframe) return;
+  var ytPlayer = null;
+  var suppressPauseBroadcast = false;
+
+  function wireYouTube(){
+    if(typeof YT === 'undefined' || !YT.Player){
+      setTimeout(wireYouTube, 300);
+      return;
+    }
+    ytPlayer = new YT.Player('jungliClipVideo', {
+      events: {
+        onStateChange: function(e){
+          if(e.data === YT.PlayerState.PLAYING && !suppressPauseBroadcast){
+            window.dispatchEvent(new CustomEvent('griot:pause-mini-player'));
+          }
+        }
+      }
+    });
+  }
+
+  window.addEventListener('griot:mini-player-playing', function(){
+    if(!ytPlayer || !ytPlayer.pauseVideo) return;
+    suppressPauseBroadcast = true;
+    ytPlayer.pauseVideo();
+    setTimeout(function(){ suppressPauseBroadcast = false; }, 300);
+  });
+
+  if(window.YT && window.YT.Player){
+    wireYouTube();
+  } else {
+    var existing = document.querySelector('script[src="https://www.youtube.com/iframe_api"]');
+    var prevReady = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = function(){
+      if(prevReady) prevReady();
+      wireYouTube();
+    };
+    if(!existing){
+      var script = document.createElement('script');
+      script.src = 'https://www.youtube.com/iframe_api';
+      document.head.appendChild(script);
+    }
+  }
+})();
+</script>
+<script>
+(function(){
+  // Release track popups: click a release row to expand an inline panel
+  // beneath it with a tracklist/player, instead of leaving the site.
+  // SoundCloud releases play through the shared mini-player widget (see
+  // shared.js). Spotify releases embed Spotify's own player via its iFrame
+  // Controller API — its play/pause state is mirrored into that same
+  // mini-player (window.griotMiniPlayer.setExternal/updateExternalPlaying/
+  // clearExternal in shared.js), so whichever source is actually playing
+  // stays reflected and controllable from the one mini-player.
+
+  var activePanel = null;          // currently open .release__panel, or null
+  var activeAnchor = null;         // its trigger <a class="release">
+  var activePlatform = null;       // 'soundcloud' | 'spotify' — platform of the open panel
+  var releaseReadyHandler = null;  // bound only while a SoundCloud panel is open
+  var loadTimeoutId = null;        // "couldn't load" fallback timer for the open SoundCloud panel
+  var autoAdvanceTimer = null;     // pending "move to next playlist track" timer, once one finishes playing
+
+  // The Jungli clip video (see the script above) pauses whatever's playing
+  // via this same event SoundCloud already listens to in shared.js —
+  // extend it to also pause an open Spotify panel, which otherwise only
+  // pauses via closeActivePanel().
+  window.addEventListener('griot:pause-mini-player', function(){
+    if(activePlatform === 'spotify' && activePanel && activePanel._spotifyController){
+      activePanel._spotifyController.pause();
+    }
+  });
+
+  // Play button doubles as the panel's close control: a triangle while
+  // closed, an X the moment its dropdown is open — same as clicking the
+  // album art, since both live inside the same clickable row.
+  var PLAY_ICON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+  var STOP_ICON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+  function setRowIcon(anchor, isOpen){
+    var btn = anchor && anchor.querySelector('.release__play');
+    if(btn) btn.innerHTML = isOpen ? STOP_ICON : PLAY_ICON;
+  }
+
+  // Spotify's official iFrame Controller API — loaded once, lazily, the first
+  // time a Spotify release panel opens. The loader itself lives in shared.js
+  // (window.griotLoadSpotifyIframeApi) so this page and shared.js's own
+  // cross-page-resume controller share one loader instead of both racing to
+  // set window.onSpotifyIframeApiReady.
+  var withSpotifyIframeApi = window.griotLoadSpotifyIframeApi;
+
+  function parseRelease(href){
+    if(href.indexOf('soundcloud.com') !== -1){
+      return { platform: 'soundcloud', url: href };
+    }
+    var sp = href.match(/open\.spotify\.com\/(track|album)\/([a-zA-Z0-9]+)/);
+    if(sp){
+      return { platform: 'spotify', kind: sp[1], id: sp[2], url: href };
+    }
+    return null;
+  }
+
+  function closeActivePanel(){
+    if(!activePanel) return;
+    var panel = activePanel;
+    panel.classList.remove('is-open');
+    activeAnchor.setAttribute('aria-expanded', 'false');
+    setRowIcon(activeAnchor, false);
+    if(releaseReadyHandler){
+      window.removeEventListener('griot:release-ready', releaseReadyHandler);
+      releaseReadyHandler = null;
+    }
+    if(loadTimeoutId){
+      clearTimeout(loadTimeoutId);
+      loadTimeoutId = null;
+    }
+    if(autoAdvanceTimer){
+      clearTimeout(autoAdvanceTimer);
+      autoAdvanceTimer = null;
+    }
+    // Stop whatever's actually playing, not just visually close the panel.
+    if(activePlatform === 'spotify'){
+      if(panel._spotifyController) panel._spotifyController.pause();
+      if(window.griotMiniPlayer) window.griotMiniPlayer.clearExternal();
+    } else {
+      window.dispatchEvent(new CustomEvent('griot:pause-mini-player'));
+    }
+    activePlatform = null;
+    // Clear the panel's content once the collapse transition finishes (removes
+    // the iframe/track-row buttons from the DOM and tab order) — but only if
+    // nothing reopened this same panel in the meantime.
+    setTimeout(function(){
+      if(panel !== activePanel) panel.innerHTML = '';
+    }, 400);
+    activePanel = null;
+    activeAnchor = null;
+  }
+
+  function buildSoundCloudPanel(panel, releaseUrl, releaseTitle){
+    panel.innerHTML =
+      '<div class="release__panel-inner">' +
+        '<div class="release__panel-loading">Loading tracklist…</div>' +
+        '<ul class="release__tracks" hidden></ul>' +
+      '</div>';
+
+    window.dispatchEvent(new CustomEvent('griot:pause-mini-player'));
+    window.dispatchEvent(new CustomEvent('griot:load-release', { detail: { url: releaseUrl, title: releaseTitle } }));
+
+    var loading = panel.querySelector('.release__panel-loading');
+    var list = panel.querySelector('.release__tracks');
+    var autoplayed = false; // only kick off playback the first time this panel's tracklist hydrates
+
+    // If the SoundCloud Widget API script never loads (blocked/slow/offline),
+    // griot:release-ready never fires. Give up after 8s and show a terminal
+    // error state instead of leaving "Loading tracklist…" up forever.
+    loadTimeoutId = setTimeout(function(){
+      loadTimeoutId = null;
+      loading.textContent = "Couldn't load the tracklist — try again in a moment.";
+    }, 8000);
+
+    releaseReadyHandler = function(e){
+      var sounds = (e.detail && e.detail.sounds) || [];
+      if(!sounds.length) return;
+      if(loadTimeoutId){
+        clearTimeout(loadTimeoutId);
+        loadTimeoutId = null;
+      }
+      loading.hidden = true;
+      list.hidden = false;
+      list.innerHTML = '';
+      sounds.forEach(function(s, i){
+        var li = document.createElement('li');
+        var row = document.createElement('button');
+        row.type = 'button';
+        row.className = 'release__track-row';
+        row.innerHTML =
+          '<span class="num">' + String(i + 1).padStart(2, '0') + '</span>' +
+          '<span class="title">' + (s.title || 'Track ' + (i + 1)) + '</span>' +
+          '<span class="play-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>';
+        row.addEventListener('click', function(){
+          window.dispatchEvent(new CustomEvent('griot:play-track-index', { detail: { index: i } }));
+        });
+        li.appendChild(row);
+        list.appendChild(li);
+      });
+      if(!autoplayed){
+        autoplayed = true;
+        window.dispatchEvent(new CustomEvent('griot:play-track-index', { detail: { index: 0 } }));
+      }
+    };
+    window.addEventListener('griot:release-ready', releaseReadyHandler);
+  }
+
+  function buildSpotifyPanel(panel, info, anchor){
+    var height = info.kind === 'track' ? 152 : 400;
+    var embedId = 'spotify-embed-' + info.kind + '-' + info.id;
+    // Playlist rows get skip controls in the shared mini-player (onNext/onPrev
+    // below) — other Spotify releases don't belong to an ordered list, so the
+    // mini-player hides its skip buttons for those (see setExternal in shared.js).
+    var inPlaylist = playlist.some(function(d){ return d.anchor === anchor; });
+    panel.innerHTML =
+      '<div class="release__panel-inner">' +
+        '<div id="' + embedId + '" class="release__panel-embed" style="height:' + height + 'px"></div>' +
+      '</div>';
+
+    var titleEl = anchor.querySelector('.release__title');
+    var artImg = anchor.querySelector('.release__art');
+    var creditsEl = anchor.querySelector('.release__credits');
+    var title = titleEl ? titleEl.textContent.trim() : 'Spotify';
+    var art = artImg ? artImg.src : '';
+    // Rows format credits as "Artist(s) — Label" — the mini-player only
+    // wants the artist name(s), not the label after the em dash.
+    var artist = creditsEl ? creditsEl.textContent.split('—')[0].trim() : '';
+
+    withSpotifyIframeApi(function(IFrameAPI){
+      var el = panel.querySelector('#' + embedId);
+      // The panel may have been closed (and its content wiped) before the
+      // API finished loading — don't mount a controller into a dead panel.
+      if(!el || !document.body.contains(el)) return;
+      var uri = 'spotify:' + info.kind + ':' + info.id;
+      IFrameAPI.createController(el, { uri: uri, width: '100%', height: height }, function(controller){
+        panel._spotifyController = controller;
+        // Playlist-only autoplay: the iFrame API has no explicit "ended" event, so
+        // completion is inferred — note whenever playback is within 1.5s of the
+        // track's end, then treat the next pause as a natural finish (rather than
+        // a manual one) and, after a 5s pause, advance to the next playlist track.
+        var nearEnd = false;
+        var endHandled = false;
+        controller.addListener('playback_update', function(e){
+          if(window.griotMiniPlayer) window.griotMiniPlayer.updateExternalPlaying(!e.data.isPaused);
+          if(window.griotMiniPlayer) window.griotMiniPlayer.updateExternalProgress(e.data.position);
+          if(!e.data.isPaused) window.dispatchEvent(new CustomEvent('griot:mini-player-playing'));
+
+          if(inPlaylist && e.data.duration){
+            var remaining = e.data.duration - e.data.position;
+            if(!e.data.isPaused){
+              nearEnd = remaining <= 1500;
+              if(remaining > 1500) endHandled = false;
+            } else if(nearEnd && !endHandled){
+              endHandled = true;
+              nearEnd = false;
+              autoAdvanceTimer = setTimeout(function(){
+                autoAdvanceTimer = null;
+                if(activePanel === panel) skipPlaylistTrack(1);
+              }, 5000);
+            }
+          }
+        });
+        controller.addListener('ready', function(){
+          if(window.griotMiniPlayer){
+            window.griotMiniPlayer.setExternal({
+              title: title,
+              artist: artist,
+              art: art,
+              uri: uri,
+              isPlaying: true,
+              onToggle: function(){ controller.togglePlay(); },
+              onNext: inPlaylist ? function(){ skipPlaylistTrack(1); } : null,
+              onPrev: inPlaylist ? function(){ skipPlaylistTrack(-1); } : null
+            });
+          }
+          controller.play();
+        });
+      });
+    });
+  }
+
+  function openPanel(anchor, panel, info){
+    var accent = getComputedStyle(anchor).getPropertyValue('--release-accent').trim();
+    if(accent) panel.style.setProperty('--release-accent', accent);
+
+    activePlatform = info.platform;
+    if(info.platform === 'soundcloud'){
+      var titleEl = anchor.querySelector('.release__title');
+      buildSoundCloudPanel(panel, info.url, titleEl ? titleEl.textContent.trim() : '');
+    } else if(info.platform === 'spotify'){
+      window.dispatchEvent(new CustomEvent('griot:pause-mini-player'));
+      buildSpotifyPanel(panel, info, anchor);
+    }
+
+    panel.classList.add('is-open');
+    anchor.setAttribute('aria-expanded', 'true');
+    setRowIcon(anchor, true);
+    activePanel = panel;
+    activeAnchor = anchor;
+  }
+
+  // Ordered list of {anchor, panel, info} for every recognized release row
+  // on this page — used below to build the playlist that next/previous
+  // skips step through.
+  var releaseData = [];
+
+  document.querySelectorAll('.release').forEach(function(anchor, idx){
+    var info = parseRelease(anchor.getAttribute('href'));
+    if(!info) return; // not a recognized platform yet — leave it as a normal link
+
+    var panel = document.createElement('div');
+    panel.className = 'release__panel';
+    panel.id = 'ab-release-panel-' + idx;
+    anchor.insertAdjacentElement('afterend', panel);
+    anchor.setAttribute('aria-expanded', 'false');
+    anchor.setAttribute('aria-controls', panel.id);
+
+    releaseData.push({ anchor: anchor, panel: panel, info: info });
+
+    anchor.addEventListener('click', function(e){
+      e.preventDefault();
+      var wasOpen = activePanel === panel;
+      closeActivePanel();
+      if(!wasOpen) openPanel(anchor, panel, info);
+    });
+  });
+
+  // Rows that live in the weekly playlist widget — the only ones
+  // next/previous is allowed to skip between.
+  var playlist = releaseData.filter(function(d){
+    return !!d.anchor.closest('.ab-discover__list');
+  });
+
+  // Advances (delta -1/+1) to the next playlist row relative to whichever one
+  // is currently open, wrapping around at either end, and reopens its panel —
+  // same one-thing-plays-at-a-time behavior as a normal row click.
+  function skipPlaylistTrack(delta){
+    if(!activeAnchor) return;
+    var idx = playlist.findIndex(function(d){ return d.anchor === activeAnchor; });
+    if(idx === -1) return;
+    var next = playlist[(idx + delta + playlist.length) % playlist.length];
+    closeActivePanel();
+    openPanel(next.anchor, next.panel, next.info);
+    next.anchor.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+})();
+</script>
 </body>
 </html>

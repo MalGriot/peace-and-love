@@ -634,6 +634,7 @@
 
 <div id="chrome-footer"></div>
 <div id="chrome-chat"></div>
+<div id="chrome-player"></div>
 
 <script src="shared.js"></script>
 <script src="chat.js"></script>
@@ -779,6 +780,7 @@
         onStateChange: function (e) {
           if (e.data === YT.PlayerState.PLAYING) {
             isPlaying = true;
+            window.dispatchEvent(new CustomEvent('griot:pause-mini-player'));
             duration = ytPlayer.getDuration() || duration;
             voTimeTotal.textContent = fmtTime(duration);
             startPoll();
@@ -910,6 +912,10 @@
     lightboxPanel.innerHTML = '<iframe style="width:100%;aspect-ratio:16/9;border:none;border-radius:12px" src="https://www.youtube.com/embed/' + encodeURIComponent(voPlayer.dataset.videoId) + '?autoplay=1" title="' + voPlayerTitle.textContent + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
     lightbox.classList.add('is-open');
     if (ytReady && isPlaying) ytPlayer.pauseVideo();
+    // The lightbox iframe autoplays immediately and isn't wired to the YT
+    // iframe API, so its own play state can't be observed — pause the
+    // mini-player up front instead of waiting for a state-change event.
+    window.dispatchEvent(new CustomEvent('griot:pause-mini-player'));
   });
   function closeLightbox() { lightbox.classList.remove('is-open'); lightboxPanel.innerHTML = ''; }
   document.getElementById('voLightboxClose').addEventListener('click', closeLightbox);

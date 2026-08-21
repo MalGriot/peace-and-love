@@ -908,6 +908,7 @@
   var activePlatform = null;       // 'soundcloud' | 'spotify' — platform of the open panel
   var releaseReadyHandler = null;  // bound only while a SoundCloud panel is open
   var loadTimeoutId = null;        // "couldn't load" fallback timer for the open SoundCloud panel
+  var autoAdvanceTimer = null;     // pending "move to next playlist track" timer, once one finishes playing
 
   // The Sun Burna featured video (see the youtube player script further
   // below) pauses whatever's playing via this same event SoundCloud already
@@ -933,22 +934,11 @@
   // time a Spotify release panel opens. Lets the panel's embedded player be
   // driven (and its play/pause state read) from outside the iframe, which is
   // what makes it possible to mirror a playing Spotify track into the shared
-  // mini-player the same way SoundCloud tracks already are.
-  function withSpotifyIframeApi(cb){
-    if(window.__spotifyIframeApi){ cb(window.__spotifyIframeApi); return; }
-    if(window.__spotifyIframeApiQueue){ window.__spotifyIframeApiQueue.push(cb); return; }
-    window.__spotifyIframeApiQueue = [cb];
-    window.onSpotifyIframeApiReady = function(IFrameAPI){
-      window.__spotifyIframeApi = IFrameAPI;
-      var queue = window.__spotifyIframeApiQueue;
-      window.__spotifyIframeApiQueue = null;
-      queue.forEach(function(fn){ fn(IFrameAPI); });
-    };
-    var script = document.createElement('script');
-    script.src = 'https://open.spotify.com/embed/iframe-api/v1';
-    script.async = true;
-    document.head.appendChild(script);
-  }
+  // mini-player the same way SoundCloud tracks already are. The loader itself
+  // lives in shared.js (window.griotLoadSpotifyIframeApi) so this page and
+  // shared.js's own cross-page-resume controller share one loader instead of
+  // both racing to set window.onSpotifyIframeApiReady.
+  var withSpotifyIframeApi = window.griotLoadSpotifyIframeApi;
 
   function parseRelease(href){
     if(href.indexOf('soundcloud.com') !== -1){
@@ -974,6 +964,10 @@
     if(loadTimeoutId){
       clearTimeout(loadTimeoutId);
       loadTimeoutId = null;
+    }
+    if(autoAdvanceTimer){
+      clearTimeout(autoAdvanceTimer);
+      autoAdvanceTimer = null;
     }
     // Stop whatever's actually playing, not just visually close the panel.
     if(activePlatform === 'spotify'){
@@ -1051,6 +1045,10 @@
   function buildSpotifyPanel(panel, info, anchor){
     var height = info.kind === 'track' ? 152 : 400;
     var embedId = 'spotify-embed-' + info.kind + '-' + info.id;
+    // Playlist rows get skip controls in the shared mini-player (onNext/onPrev
+    // below) — other Spotify releases don't belong to an ordered list, so the
+    // mini-player hides its skip buttons for those (see setExternal in shared.js).
+    var inPlaylist = playlist.some(function(d){ return d.anchor === anchor; });
     panel.innerHTML =
       '<div class="release__panel-inner">' +
         '<div id="' + embedId + '" class="release__panel-embed" style="height:' + height + 'px"></div>' +
@@ -1058,27 +1056,58 @@
 
     var titleEl = anchor.querySelector('.release__title');
     var artImg = anchor.querySelector('.release__art');
+    var creditsEl = anchor.querySelector('.release__credits');
     var title = titleEl ? titleEl.textContent.trim() : 'Spotify';
     var art = artImg ? artImg.src : '';
+    // Discography rows format credits as "Artist(s) — Label" — the mini-player
+    // only wants the artist name(s), not the label after the em dash.
+    var artist = creditsEl ? creditsEl.textContent.split('—')[0].trim() : '';
 
     withSpotifyIframeApi(function(IFrameAPI){
       var el = panel.querySelector('#' + embedId);
       // The panel may have been closed (and its content wiped) before the
       // API finished loading — don't mount a controller into a dead panel.
       if(!el || !document.body.contains(el)) return;
-      IFrameAPI.createController(el, { uri: 'spotify:' + info.kind + ':' + info.id, width: '100%', height: height }, function(controller){
+      var uri = 'spotify:' + info.kind + ':' + info.id;
+      IFrameAPI.createController(el, { uri: uri, width: '100%', height: height }, function(controller){
         panel._spotifyController = controller;
+        // Playlist-only autoplay: the iFrame API has no explicit "ended" event, so
+        // completion is inferred — note whenever playback is within 1.5s of the
+        // track's end, then treat the next pause as a natural finish (rather than
+        // a manual one) and, after a 5s pause, advance to the next playlist track.
+        var nearEnd = false;
+        var endHandled = false;
         controller.addListener('playback_update', function(e){
           if(window.griotMiniPlayer) window.griotMiniPlayer.updateExternalPlaying(!e.data.isPaused);
+          if(window.griotMiniPlayer) window.griotMiniPlayer.updateExternalProgress(e.data.position);
           if(!e.data.isPaused) window.dispatchEvent(new CustomEvent('griot:mini-player-playing'));
+
+          if(inPlaylist && e.data.duration){
+            var remaining = e.data.duration - e.data.position;
+            if(!e.data.isPaused){
+              nearEnd = remaining <= 1500;
+              if(remaining > 1500) endHandled = false;
+            } else if(nearEnd && !endHandled){
+              endHandled = true;
+              nearEnd = false;
+              autoAdvanceTimer = setTimeout(function(){
+                autoAdvanceTimer = null;
+                if(activePanel === panel) skipPlaylistTrack(1);
+              }, 5000);
+            }
+          }
         });
         controller.addListener('ready', function(){
           if(window.griotMiniPlayer){
             window.griotMiniPlayer.setExternal({
               title: title,
+              artist: artist,
               art: art,
+              uri: uri,
               isPlaying: true,
-              onToggle: function(){ controller.togglePlay(); }
+              onToggle: function(){ controller.togglePlay(); },
+              onNext: inPlaylist ? function(){ skipPlaylistTrack(1); } : null,
+              onPrev: inPlaylist ? function(){ skipPlaylistTrack(-1); } : null
             });
           }
           controller.play();
@@ -1107,6 +1136,11 @@
     activeAnchor = anchor;
   }
 
+  // Ordered list of {anchor, panel, info} for every recognized release row —
+  // used below to build the playlist subset that next/previous skips step
+  // through (the weekly playlist widget itself now lives on about.html).
+  var releaseData = [];
+
   document.querySelectorAll('.release').forEach(function(anchor, idx){
     var info = parseRelease(anchor.getAttribute('href'));
     if(!info) return; // not a recognized platform yet — leave it as a normal link
@@ -1118,6 +1152,8 @@
     anchor.setAttribute('aria-expanded', 'false');
     anchor.setAttribute('aria-controls', panel.id);
 
+    releaseData.push({ anchor: anchor, panel: panel, info: info });
+
     anchor.addEventListener('click', function(e){
       e.preventDefault();
       var wasOpen = activePanel === panel;
@@ -1125,6 +1161,24 @@
       if(!wasOpen) openPanel(anchor, panel, info);
     });
   });
+
+  // Playlist skip is exclusive to the weekly playlist widget on about.html,
+  // which has its own copy of this script — nothing on this page belongs to
+  // an ordered playlist, so next/previous never has anywhere to skip to.
+  var playlist = [];
+
+  // Advances (delta -1/+1) to the next playlist row relative to whichever one
+  // is currently open, wrapping around at either end, and reopens its panel —
+  // same one-thing-plays-at-a-time behavior as a normal row click.
+  function skipPlaylistTrack(delta){
+    if(!activeAnchor) return;
+    var idx = playlist.findIndex(function(d){ return d.anchor === activeAnchor; });
+    if(idx === -1) return;
+    var next = playlist[(idx + delta + playlist.length) % playlist.length];
+    closeActivePanel();
+    openPanel(next.anchor, next.panel, next.info);
+    next.anchor.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
 })();
 </script>
 <script>

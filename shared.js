@@ -167,7 +167,15 @@ const playerHtml = `
           </div>
         </div>
       </div>
-      <div class="mini-player__artist">Mal Griot</div>
+      <div class="mini-player__artist-stack">
+        <div class="mini-player__artist-plain" id="miniArtistPlain">Mal Griot</div>
+        <div class="mini-player__artist-mask">
+          <div class="mini-player__artist-track" id="miniArtistTrack">
+            <span id="miniArtist">Mal Griot</span>
+            <span aria-hidden="true" id="miniArtistDup">Mal Griot</span>
+          </div>
+        </div>
+      </div>
     </div>
     <button type="button" class="mini-player__skip" id="miniNext" aria-label="Next track">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM4 6l10 6-10 6z"/></svg>
@@ -175,7 +183,30 @@ const playerHtml = `
   </div>
   <iframe id="scFrame" class="sc-widget" scrolling="no" frameborder="no" allow="autoplay"
     src="https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Fmal-griot%2Fsets%2Fbreathelovedeep&auto_play=false&show_artwork=true">
-  </iframe>`;
+  </iframe>
+  <div id="spotifyPersist" class="sc-widget"></div>`;
+
+// Loads Spotify's iFrame Controller API once (lazily, on first need) and hands
+// it to every caller — both this file's own cross-page resume controller and
+// releases.html's inline release-panel players share this single loader so
+// they don't race to set window.onSpotifyIframeApiReady out from under each
+// other.
+function loadSpotifyIframeApi(cb) {
+  if (window.__spotifyIframeApi) { cb(window.__spotifyIframeApi); return; }
+  if (window.__spotifyIframeApiQueue) { window.__spotifyIframeApiQueue.push(cb); return; }
+  window.__spotifyIframeApiQueue = [cb];
+  window.onSpotifyIframeApiReady = (IFrameAPI) => {
+    window.__spotifyIframeApi = IFrameAPI;
+    const queue = window.__spotifyIframeApiQueue;
+    window.__spotifyIframeApiQueue = null;
+    queue.forEach((fn) => fn(IFrameAPI));
+  };
+  const script = document.createElement('script');
+  script.src = 'https://open.spotify.com/embed/iframe-api/v1';
+  script.async = true;
+  document.head.appendChild(script);
+}
+window.griotLoadSpotifyIframeApi = loadSpotifyIframeApi;
 
 // Wires the mini-player up once its markup exists in the DOM (on every page).
 // Guards every element that's specific to the voice.html listening stage
@@ -195,6 +226,11 @@ function initMiniPlayer() {
   const miniIconPlay = document.getElementById('miniIconPlay');
   const miniIconPause = document.getElementById('miniIconPause');
   const miniHint = document.getElementById('miniHint');
+  const miniArtist = document.getElementById('miniArtist');
+  const miniArtistDup = document.getElementById('miniArtistDup');
+  const miniArtistTrack = document.getElementById('miniArtistTrack');
+  const miniArtistPlain = document.getElementById('miniArtistPlain');
+  const defaultArtist = miniArtist ? miniArtist.textContent : 'Mal Griot';
   const vinyl = document.getElementById('listenVinyl');
   const vinylLabel = document.getElementById('listenVinylLabel');
   const sleeveArt = document.getElementById('sleeveArt');
@@ -220,8 +256,71 @@ function initMiniPlayer() {
   // mini-player (title/art/transport) follows whatever's actually playing.
   const BLD_URL = 'https://soundcloud.com/mal-griot/sets/breathelovedeep';
   let isBLDActive = true;
+  let currentReleaseUrl = BLD_URL;
   const sampleCanvas = document.createElement('canvas');
   const sampleCtx = sampleCanvas.getContext('2d');
+
+  // --- Cross-page playback resume -----------------------------------------
+  // Full page navigations on this static site tear down the audio/iframes
+  // entirely — there's no way to keep sound playing gaplessly through a real
+  // reload short of an SPA-style page-swap. What we *can* do is snapshot
+  // source/track/position/playing-state into sessionStorage as it changes and
+  // on unload, then on the next page reconstruct the same source and resume
+  // close to that position (subject to the browser's autoplay policy, which
+  // may require a user gesture before audio can actually resume automatically).
+  const RESUME_KEY = 'griotPlayerResume';
+  let scPositionMs = 0;
+  let spotifyPositionSec = 0;
+  let spotifyController = null;
+  let spotifyResumeState = null; // {uri, title, art, playing} of whatever's live via externalSource
+
+  function readResumeState() {
+    try {
+      const raw = sessionStorage.getItem(RESUME_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+  }
+  function saveResumeState(state) {
+    try { sessionStorage.setItem(RESUME_KEY, JSON.stringify(Object.assign({ ts: Date.now() }, state))); } catch (e) {}
+  }
+
+  let lastScSaveTs = 0;
+  function persistSoundCloudState(force) {
+    if (externalSource) return;
+    const now = Date.now();
+    if (!force && now - lastScSaveTs < 3000) return;
+    lastScSaveTs = now;
+    saveResumeState({
+      source: 'soundcloud',
+      url: currentReleaseUrl,
+      title: currentReleaseName,
+      index: currentIndex,
+      position: Math.floor((scPositionMs || 0) / 1000),
+      playing: currentlyPlaying,
+    });
+  }
+
+  let lastSpotifySaveTs = 0;
+  function persistSpotifyState(force) {
+    if (!spotifyResumeState) return;
+    const now = Date.now();
+    if (!force && now - lastSpotifySaveTs < 3000) return;
+    lastSpotifySaveTs = now;
+    saveResumeState({
+      source: 'spotify',
+      uri: spotifyResumeState.uri,
+      title: spotifyResumeState.title,
+      artist: spotifyResumeState.artist,
+      art: spotifyResumeState.art,
+      position: Math.floor(spotifyPositionSec || 0),
+      playing: spotifyResumeState.playing,
+    });
+  }
+
+  window.addEventListener('pagehide', () => {
+    if (externalSource) persistSpotifyState(true);
+    else persistSoundCloudState(true);
+  });
 
   function tintDiscFromArt(el, img) {
     try {
@@ -398,11 +497,14 @@ function initMiniPlayer() {
       setPlaying(true);
       try { localStorage.setItem('griotPlayerActivated', '1'); } catch (e) {}
       window.dispatchEvent(new CustomEvent('griot:mini-player-playing'));
+      persistSoundCloudState(true);
     });
-    widget.bind(SC.Widget.Events.PAUSE, () => setPlaying(false));
-    widget.bind(SC.Widget.Events.FINISH, () => setPlaying(false));
-    widget.bind(SC.Widget.Events.PLAY_PROGRESS, () => {
+    widget.bind(SC.Widget.Events.PAUSE, () => { setPlaying(false); persistSoundCloudState(true); });
+    widget.bind(SC.Widget.Events.FINISH, () => { setPlaying(false); persistSoundCloudState(true); });
+    widget.bind(SC.Widget.Events.PLAY_PROGRESS, (e) => {
       widget.getCurrentSoundIndex((i) => { if (i !== currentIndex) activate(i); });
+      scPositionMs = (e && e.currentPosition) || scPositionMs;
+      persistSoundCloudState(false);
     });
 
     // Hooks for external code (the Discography section's release panels) to
@@ -413,7 +515,9 @@ function initMiniPlayer() {
     window.addEventListener('griot:load-release', (e) => {
       if (!e.detail || !e.detail.url) return;
       currentReleaseName = e.detail.title || currentReleaseName;
+      currentReleaseUrl = e.detail.url;
       currentIndex = 0;
+      scPositionMs = 0;
       isBLDActive = e.detail.url === BLD_URL;
       widget.load(e.detail.url, { show_artwork: true, callback: refreshTracks });
     });
@@ -445,6 +549,41 @@ function initMiniPlayer() {
           togglePlay();
         }
       });
+    }
+
+    // Resume a SoundCloud track left playing (or paused) on a previous page.
+    // Only acts on state saved within the last hour, and only when this page
+    // didn't already land here mid-Spotify-playback (that's handled by
+    // resumeSpotifyIfNeeded below instead).
+    const resumeState = readResumeState();
+    if (resumeState && resumeState.source === 'soundcloud' && Date.now() - resumeState.ts < 60 * 60 * 1000) {
+      const finishResume = () => {
+        const seekMs = Math.max(0, (resumeState.position || 0) * 1000);
+        if (resumeState.index > 0) {
+          widget.skip(resumeState.index);
+          setTimeout(() => {
+            if (seekMs > 0) widget.seekTo(seekMs);
+            if (!resumeState.playing) widget.pause();
+          }, 400);
+        } else {
+          if (seekMs > 0) setTimeout(() => widget.seekTo(seekMs), 200);
+          if (resumeState.playing) widget.play();
+        }
+      };
+      if (resumeState.url && resumeState.url !== BLD_URL) {
+        const onReady = () => {
+          window.removeEventListener('griot:release-ready', onReady);
+          finishResume();
+        };
+        window.addEventListener('griot:release-ready', onReady);
+        window.dispatchEvent(new CustomEvent('griot:load-release', { detail: { url: resumeState.url, title: resumeState.title } }));
+      } else {
+        const onReady = () => {
+          window.removeEventListener('griot:release-ready', onReady);
+          finishResume();
+        };
+        window.addEventListener('griot:release-ready', onReady);
+      }
     }
   }
 
@@ -487,21 +626,52 @@ function initMiniPlayer() {
         });
       }
       if (miniArt && source.art) miniArt.src = source.art;
+      const artistText = source.artist || defaultArtist;
+      if (miniArtist) miniArtist.textContent = artistText;
+      if (miniArtistDup) miniArtistDup.textContent = artistText;
+      if (miniArtistPlain) miniArtistPlain.textContent = artistText;
+      if (miniArtistTrack) {
+        miniArtistTrack.classList.remove('is-scrolling');
+        requestAnimationFrame(() => {
+          const mask = miniArtistTrack.parentElement;
+          const firstSpan = miniArtistTrack.firstElementChild;
+          miniArtistTrack.classList.toggle('is-scrolling', firstSpan.scrollWidth > mask.clientWidth);
+        });
+      }
       miniNextBtn.style.visibility = source.onNext ? '' : 'hidden';
       miniPrevBtn.style.visibility = source.onPrev ? '' : 'hidden';
       setPlaying(!!source.isPlaying);
       miniPlayer.classList.add('is-visible');
       dismissHint();
+      if (source.uri) {
+        try { localStorage.setItem('griotPlayerActivated', '1'); } catch (e) {}
+        spotifyResumeState = { uri: source.uri, title: source.title, artist: source.artist, art: source.art, playing: !!source.isPlaying };
+        persistSpotifyState(true);
+      }
     },
     updateExternalPlaying(isPlaying) {
       if (!externalSource) return;
       setPlaying(isPlaying);
+      if (spotifyResumeState) spotifyResumeState.playing = isPlaying;
+      persistSpotifyState(true);
+    },
+    // Called on every Spotify playback_update tick (see releases.html) so a
+    // seek/resume elsewhere always has a fresh playhead to snapshot.
+    updateExternalProgress(positionSec) {
+      if (!externalSource) return;
+      spotifyPositionSec = positionSec || 0;
+      persistSpotifyState(false);
     },
     clearExternal() {
       if (!externalSource) return;
       externalSource = null;
+      spotifyResumeState = null;
       miniNextBtn.style.visibility = '';
       miniPrevBtn.style.visibility = '';
+      if (miniArtist) miniArtist.textContent = defaultArtist;
+      if (miniArtistDup) miniArtistDup.textContent = defaultArtist;
+      if (miniArtistPlain) miniArtistPlain.textContent = defaultArtist;
+      if (miniArtistTrack) miniArtistTrack.classList.remove('is-scrolling');
       activate(currentIndex);
       setPlaying(false);
     },
@@ -509,6 +679,41 @@ function initMiniPlayer() {
       return !!externalSource;
     }
   };
+
+  resumeSpotifyIfNeeded();
+
+  // Reconstruct a Spotify track left playing (or paused) on a previous page,
+  // via a hidden controller mounted into #spotifyPersist — releases.html's own
+  // visible release-panel player takes over instead the moment its panel is
+  // opened (see buildSpotifyPanel there), same as any other Spotify playback.
+  function resumeSpotifyIfNeeded() {
+    const resumeState = readResumeState();
+    if (!resumeState || resumeState.source !== 'spotify' || !resumeState.uri) return;
+    if (Date.now() - resumeState.ts > 60 * 60 * 1000) return;
+    const container = document.getElementById('spotifyPersist');
+    if (!container) return;
+    loadSpotifyIframeApi((IFrameAPI) => {
+      IFrameAPI.createController(container, { uri: resumeState.uri, width: '1', height: '1' }, (controller) => {
+        spotifyController = controller;
+        controller.addListener('playback_update', (e) => {
+          window.griotMiniPlayer.updateExternalPlaying(!e.data.isPaused);
+          window.griotMiniPlayer.updateExternalProgress(e.data.position);
+        });
+        controller.addListener('ready', () => {
+          window.griotMiniPlayer.setExternal({
+            title: resumeState.title,
+            artist: resumeState.artist,
+            art: resumeState.art,
+            uri: resumeState.uri,
+            isPlaying: !!resumeState.playing,
+            onToggle: () => controller.togglePlay(),
+          });
+          if (resumeState.position > 0) controller.seek(resumeState.position);
+          if (resumeState.playing) controller.play();
+        });
+      });
+    });
+  }
 }
 
 // Makes the mini-player draggable and snaps it to the nearest of six docks
@@ -697,6 +902,27 @@ function initLineSidebarEffect() {
     startLoop();
   });
 }
+
+// Site-wide rule: any native <video> that starts playing with sound (or gets
+// unmuted while already playing) should pause whatever's in the mini-player —
+// generalizes the pattern releases.html originally wired up just for its
+// featured Sun Burna YouTube embed (see the griot:pause-mini-player listener
+// near the bottom of that file) to every <video> on every page, without each
+// page having to wire it up itself. Muted background/hover-loop videos (the
+// index.html nav previews, hero loops, etc.) never dispatch anything since
+// they never play unmuted — only real, audible video playback competes with
+// the mini-player. Capturing-phase listeners on document catch 'play' and
+// 'volumechange' from any <video> even though those events don't bubble.
+document.addEventListener('play', (e) => {
+  if (e.target.tagName === 'VIDEO' && !e.target.muted) {
+    window.dispatchEvent(new CustomEvent('griot:pause-mini-player'));
+  }
+}, true);
+document.addEventListener('volumechange', (e) => {
+  if (e.target.tagName === 'VIDEO' && !e.target.muted && !e.target.paused) {
+    window.dispatchEvent(new CustomEvent('griot:pause-mini-player'));
+  }
+}, true);
 
 // Shared chrome behavior: mobile menu, chat widget shell toggle.
 document.addEventListener('DOMContentLoaded', () => {
