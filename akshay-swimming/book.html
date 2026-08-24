@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Book a Session — Akshay Swimming Academy</title>
+<meta name="description" content="Select your program, choose a cohort or package, pick a date, and reserve your place online.">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .book-nav-hide{ display:none !important; }
+</style>
+</head>
+<body>
+
+<nav class="nav scrolled">
+  <div class="wrap">
+    <a href="index.html" class="nav-logo">AKSHAY<span>.</span> SWIM</a>
+    <div class="nav-links">
+      <a href="programs/foundation.html">Programs</a>
+      <a href="private-coaching.html">Private Coaching</a>
+      <a href="library/index.html">Swim Library</a>
+      <a href="about.html">About</a>
+      <a href="faq.html">FAQ</a>
+    </div>
+    <div class="nav-cta">
+      <span class="slate" style="font-size:12px;">Secure booking</span>
+    </div>
+  </div>
+</nav>
+
+<section class="book-shell">
+  <div class="wrap">
+
+    <div class="book-steps" id="stepTabs">
+      <div class="book-step" data-step="1">1 · Program</div>
+      <div class="book-step" data-step="2">2 · Cohort / Package</div>
+      <div class="book-step" data-step="3">3 · Date &amp; Time</div>
+      <div class="book-step" data-step="4">4 · Your Details</div>
+      <div class="book-step" data-step="5">5 · Pay &amp; Confirm</div>
+    </div>
+
+    <div class="book-grid" id="bookApp">
+
+      <!-- LEFT: step content -->
+      <div>
+
+        <!-- STEP 1 — PROGRAM -->
+        <div class="book-panel" data-panel="1">
+          <div class="eyebrow">Step 1</div>
+          <h2 style="font-size:28px;margin-top:12px;">Select your program</h2>
+          <p class="slate" style="margin-top:10px;">Not sure yet? <a href="index.html#how-it-works" style="text-decoration:underline;">Find your starting point</a> or book an Assessment.</p>
+          <div id="programOptions" style="margin-top:28px;"></div>
+        </div>
+
+        <!-- STEP 2 — COHORT / PACKAGE -->
+        <div class="book-panel" data-panel="2" style="display:none;">
+          <div class="eyebrow">Step 2</div>
+          <h2 id="step2Title" style="font-size:28px;margin-top:12px;">Choose a cohort</h2>
+          <p class="slate" id="step2Sub" style="margin-top:10px;"></p>
+          <div id="cohortOptions" style="margin-top:28px;"></div>
+          <button class="btn btn-ghost-light" onclick="goStep(1)" style="margin-top:10px;">← Back</button>
+        </div>
+
+        <!-- STEP 3 — DATE/SLOT -->
+        <div class="book-panel" data-panel="3" style="display:none;">
+          <div class="eyebrow">Step 3</div>
+          <h2 style="font-size:28px;margin-top:12px;" id="step3Title">Select a time</h2>
+          <p class="slate" style="margin-top:10px;" id="step3Sub"></p>
+          <div id="slotArea" style="margin-top:28px;"></div>
+          <button class="btn btn-ghost-light" onclick="goStep(2)" style="margin-top:24px;">← Back</button>
+        </div>
+
+        <!-- STEP 4 — STUDENT INFO -->
+        <div class="book-panel" data-panel="4" style="display:none;">
+          <div class="eyebrow">Step 4</div>
+          <h2 style="font-size:28px;margin-top:12px;">Your details</h2>
+          <form id="studentForm" style="margin-top:28px;max-width:480px;">
+            <div class="form-field">
+              <label>Student's full name</label>
+              <input type="text" id="fName" required>
+            </div>
+            <div class="form-field">
+              <label>Age</label>
+              <input type="number" id="fAge" min="6" max="99" required>
+            </div>
+            <div class="form-field">
+              <label>Parent / guardian name (if under 18)</label>
+              <input type="text" id="fParent">
+            </div>
+            <div class="form-field">
+              <label>Phone / WhatsApp number</label>
+              <input type="tel" id="fPhone" required>
+            </div>
+            <div class="form-field">
+              <label>Email</label>
+              <input type="email" id="fEmail" required>
+            </div>
+            <div class="form-field">
+              <label>Swimming experience level</label>
+              <select id="fExp">
+                <option>Complete beginner</option>
+                <option>Some experience, not confident</option>
+                <option>Can swim, want to improve</option>
+                <option>Intermediate / advanced</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label>Notes for Akshay (optional)</label>
+              <input type="text" id="fNotes" placeholder="Medical notes, goals, anything useful to know">
+            </div>
+          </form>
+          <div style="display:flex;gap:12px;margin-top:8px;">
+            <button class="btn btn-ghost-light" onclick="goStep(3)">← Back</button>
+            <button class="btn btn-primary" onclick="submitDetails()">Continue to Payment →</button>
+          </div>
+        </div>
+
+        <!-- STEP 5 — CHECKOUT -->
+        <div class="book-panel" data-panel="5" style="display:none;">
+          <div class="eyebrow">Step 5</div>
+          <h2 style="font-size:28px;margin-top:12px;">Review &amp; pay</h2>
+          <table class="spec-table" style="margin-top:24px;max-width:520px;">
+            <tr><td>Program</td><td id="chkProgram">—</td></tr>
+            <tr><td>Dates</td><td id="chkDates">—</td></tr>
+            <tr><td>Sessions</td><td id="chkSessions">—</td></tr>
+            <tr><td>Duration</td><td id="chkDuration">—</td></tr>
+            <tr><td>Location</td><td>[Auroville / Pondicherry pool — confirmed on booking]</td></tr>
+            <tr><td>Total</td><td id="chkTotal" style="font-family:var(--serif);font-size:20px;">—</td></tr>
+          </table>
+          <div class="policy-note">
+            <strong>48-Hour Cancellation Policy.</strong> Your session is reserved exclusively for you. Cancellations or rescheduling more than 48 hours before a session receive full credit. Less than 48 hours, the session counts as used. No-shows forfeit the session. One discretionary exception is allowed per package for emergencies or illness.
+          </div>
+          <div style="display:flex;gap:12px;margin-top:28px;max-width:520px;">
+            <button class="btn btn-ghost-light" onclick="goStep(4)">← Back</button>
+            <button class="btn btn-primary btn-block" id="payBtn" onclick="payNow()">Pay &amp; Reserve My Place</button>
+          </div>
+          <p class="slate" style="font-size:12px;margin-top:14px;">Payment processing is not yet connected — this is a preview checkout. No charge will be made.</p>
+        </div>
+
+        <!-- CONFIRMATION -->
+        <div class="book-panel" data-panel="confirm" style="display:none;">
+          <div class="confirm-box">
+            <div class="confirm-check">✓</div>
+            <div class="eyebrow" style="justify-content:center;">Reservation Confirmed</div>
+            <h2 style="font-size:32px;margin-top:16px;">You're in.</h2>
+            <p class="slate" style="margin-top:14px;">Booking reference <strong id="confId">—</strong>. A confirmation has been sent to your email — [confirmation-email integration pending].</p>
+            <a href="index.html" class="btn btn-ghost-light" style="margin-top:28px;">Back to Home</a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: live summary -->
+      <div class="summary-box" id="summaryBox">
+        <h4>Your Booking</h4>
+        <div id="summaryContent"><p class="summary-empty">Select a program to begin.</p></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-bottom" style="border-top:0;padding-top:0;">
+      <span>© 2026 Akshay Swimming Academy · Auroville / Pondicherry, Tamil Nadu · 605101</span>
+      <a href="index.html">Back to Home</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+/* ============================================================
+   BOOKING FLOW DATA
+   ============================================================ */
+var PROGRAMS = {
+  waterready: { name:'Water Ready', level:'Level 0', kind:'group', price:15500,
+    cohorts:[{ label:'Foundation · Sep 7 – Oct 2', dates:'Sep 7 – Oct 2', sessions:8, duration:'4 weeks · 45–60 min', spots:4, max:6, price:15500 }] },
+  foundation: { name:'Foundation Cohort', level:'Level 1', kind:'group', price:15500,
+    cohorts:[
+      { label:'Sep 7 – Oct 2 (Mornings)', dates:'Sep 7 – Oct 2', sessions:8, duration:'4 weeks · 45–60 min', spots:4, max:6, price:15500 },
+      { label:'Oct 5 – Nov 1 (Evenings)', dates:'Oct 5 – Nov 1', sessions:8, duration:'4 weeks · 45–60 min', spots:6, max:6, price:15500 }
+    ] },
+  confident: { name:'Confident Swimmer', level:'Level 2', kind:'group', price:22500,
+    cohorts:[{ label:'Sep 14 – Oct 26 (Mornings)', dates:'Sep 14 – Oct 26', sessions:12, duration:'6 weeks · 45–60 min', spots:3, max:6, price:22500 }] },
+  technique: { name:'Technique Lab', level:'Level 3', kind:'group', price:24500,
+    cohorts:[{ label:'Sep 21 – Nov 2 (Evenings)', dates:'Sep 21 – Nov 2', sessions:12, duration:'6 weeks · 60 min', spots:5, max:6, price:24500 }] },
+  performance: { name:'Performance', level:'Level 4', kind:'group', price:32000,
+    cohorts:[{ label:'Oct 1 – Nov 26 (Mornings)', dates:'Oct 1 – Nov 26', sessions:16, duration:'8 weeks · 60–75 min', spots:2, max:6, price:32000 }] },
+  private: { name:'Private Coaching', level:'Premium', kind:'private',
+    packages:[
+      { id:'single', label:'Single Session', sessions:1, price:2500, validity:'—' },
+      { id:'p4', label:'Private 4', sessions:4, price:9000, validity:'30 days' },
+      { id:'p8', label:'Private 8', sessions:8, price:16500, validity:'45 days' },
+      { id:'p12', label:'Private 12', sessions:12, price:23500, validity:'60 days' }
+    ] },
+  assessment: { name:'Intro / Assessment', level:'Assessment', kind:'private',
+    packages:[ { id:'assess', label:'Intro / Assessment Session', sessions:1, price:1000, validity:'—' } ] }
+};
+
+var state = { program:null, programKey:null, cohort:null, pkg:null, slot:null, student:{} };
+
+function fmt(n){ return '₹' + n.toLocaleString('en-IN'); }
+
+function renderProgramOptions(){
+  var el = document.getElementById('programOptions');
+  el.innerHTML = '';
+  Object.keys(PROGRAMS).forEach(function(key){
+    var p = PROGRAMS[key];
+    var priceLabel = p.kind === 'group' ? fmt(p.price) : 'From ' + fmt(p.packages[0].price);
+    var div = document.createElement('div');
+    div.className = 'option-card';
+    div.innerHTML = '<div><h4>'+p.name+'</h4><p>'+p.level+'</p></div><div class="price">'+priceLabel+'</div>';
+    div.addEventListener('click', function(){ selectProgram(key); });
+    el.appendChild(div);
+  });
+}
+
+function selectProgram(key){
+  state.programKey = key;
+  state.program = PROGRAMS[key];
+  state.cohort = null; state.pkg = null; state.slot = null;
+  markSelected('programOptions', PROGRAMS[key].name);
+  updateSummary();
+  goStep(2);
+  renderStep2();
+}
+
+function markSelected(containerId, matchText){
+  document.querySelectorAll('#'+containerId+' .option-card').forEach(function(c){
+    c.classList.toggle('selected', c.querySelector('h4').textContent === matchText);
+  });
+}
+
+function renderStep2(){
+  var p = state.program;
+  var title = document.getElementById('step2Title');
+  var sub = document.getElementById('step2Sub');
+  var el = document.getElementById('cohortOptions');
+  el.innerHTML = '';
+
+  if(p.kind === 'group'){
+    title.textContent = 'Choose your cohort';
+    sub.textContent = p.name + ' runs as a fixed cohort — pick the dates that work for you.';
+    p.cohorts.forEach(function(c){
+      var div = document.createElement('div');
+      div.className = 'option-card';
+      div.innerHTML = '<div><h4>'+c.label+'</h4><p>'+c.sessions+' sessions · '+c.duration+' · '+c.spots+' of '+c.max+' places remaining</p></div><div class="price">'+fmt(c.price)+'</div>';
+      div.addEventListener('click', function(){
+        state.cohort = c;
+        markSelected('cohortOptions', c.label);
+        updateSummary();
+        goStep(3);
+        renderStep3();
+      });
+      el.appendChild(div);
+    });
+  } else {
+    title.textContent = 'Choose a package';
+    sub.textContent = p.name + ' is billed per package — the more sessions, the lower your per-session rate.';
+    p.packages.forEach(function(pkg){
+      var per = Math.round(pkg.price / pkg.sessions);
+      var div = document.createElement('div');
+      div.className = 'option-card';
+      div.innerHTML = '<div><h4>'+pkg.label+'</h4><p>'+pkg.sessions+' session'+(pkg.sessions>1?'s':'')+' · ₹'+per.toLocaleString('en-IN')+' / session</p></div><div class="price">'+fmt(pkg.price)+'</div>';
+      div.addEventListener('click', function(){
+        state.pkg = pkg;
+        markSelected('cohortOptions', pkg.label);
+        updateSummary();
+        goStep(3);
+        renderStep3();
+      });
+      el.appendChild(div);
+    });
+  }
+}
+
+var SLOT_TIMES = ['Mon 8:00 AM','Mon 5:00 PM','Wed 8:00 AM','Wed 5:00 PM','Fri 8:00 AM','Fri 5:00 PM','Sat 9:00 AM','Sat 11:00 AM','Sat 3:00 PM'];
+var TAKEN = [2,6];
+
+function renderStep3(){
+  var p = state.program;
+  var title = document.getElementById('step3Title');
+  var sub = document.getElementById('step3Sub');
+  var el = document.getElementById('slotArea');
+  el.innerHTML = '';
+
+  if(p.kind === 'group'){
+    title.textContent = 'Cohort schedule confirmed';
+    sub.textContent = 'Your sessions run on the fixed cohort schedule — no individual time selection needed.';
+    var box = document.createElement('div');
+    box.className = 'policy-note';
+    box.innerHTML = '<strong>'+state.cohort.label+'</strong><br>'+state.cohort.sessions+' sessions · '+state.cohort.duration;
+    el.appendChild(box);
+    var btn = document.createElement('button');
+    btn.className = 'btn btn-primary'; btn.style.marginTop='20px';
+    btn.textContent = 'Continue →';
+    btn.onclick = function(){ goStep(4); };
+    el.appendChild(btn);
+  } else {
+    title.textContent = 'Select your first session time';
+    sub.textContent = 'Remaining sessions in your package are scheduled directly with Akshay after your first visit.';
+    var grid = document.createElement('div');
+    grid.className = 'slot-grid';
+    SLOT_TIMES.forEach(function(t, i){
+      var s = document.createElement('div');
+      s.className = 'slot' + (TAKEN.indexOf(i) > -1 ? ' taken' : '');
+      s.textContent = t;
+      if(TAKEN.indexOf(i) === -1){
+        s.addEventListener('click', function(){
+          document.querySelectorAll('.slot').forEach(function(x){ x.classList.remove('selected'); });
+          s.classList.add('selected');
+          state.slot = t;
+          updateSummary();
+        });
+      }
+      grid.appendChild(s);
+    });
+    el.appendChild(grid);
+    var btn2 = document.createElement('button');
+    btn2.className = 'btn btn-primary'; btn2.style.marginTop = '24px';
+    btn2.textContent = 'Continue →';
+    btn2.onclick = function(){
+      if(!state.slot){ alert('Please select a time slot.'); return; }
+      goStep(4);
+    };
+    el.appendChild(btn2);
+  }
+}
+
+function submitDetails(){
+  var name = document.getElementById('fName').value.trim();
+  var phone = document.getElementById('fPhone').value.trim();
+  var email = document.getElementById('fEmail').value.trim();
+  if(!name || !phone || !email){ alert('Please complete the required fields.'); return; }
+  state.student = {
+    name:name, age:document.getElementById('fAge').value, parent:document.getElementById('fParent').value,
+    phone:phone, email:email, exp:document.getElementById('fExp').value, notes:document.getElementById('fNotes').value
+  };
+  renderCheckout();
+  goStep(5);
+}
+
+function renderCheckout(){
+  var p = state.program;
+  document.getElementById('chkProgram').textContent = p.name;
+  if(p.kind === 'group'){
+    document.getElementById('chkDates').textContent = state.cohort.dates;
+    document.getElementById('chkSessions').textContent = state.cohort.sessions;
+    document.getElementById('chkDuration').textContent = state.cohort.duration;
+    document.getElementById('chkTotal').textContent = fmt(state.cohort.price);
+  } else {
+    document.getElementById('chkDates').textContent = state.slot || '—';
+    document.getElementById('chkSessions').textContent = state.pkg.sessions;
+    document.getElementById('chkDuration').textContent = state.pkg.validity + ' validity';
+    document.getElementById('chkTotal').textContent = fmt(state.pkg.price);
+  }
+}
+
+function payNow(){
+  var btn = document.getElementById('payBtn');
+  btn.disabled = true; btn.textContent = 'Processing…';
+  var total = state.program.kind === 'group' ? state.cohort.price : state.pkg.price;
+  window.BookingAPI.createReservation({ program:state.programKey, state:state })
+    .then(function(res){ return window.BookingAPI.charge(res.bookingId, total).then(function(){ return res; }); })
+    .then(function(res){
+      document.getElementById('confId').textContent = res.bookingId;
+      goStep('confirm');
+      window.BookingStore.clear();
+    });
+}
+
+function updateSummary(){
+  var el = document.getElementById('summaryContent');
+  if(!state.program){ el.innerHTML = '<p class="summary-empty">Select a program to begin.</p>'; return; }
+  var rows = '<div class="summary-row"><span>Program</span><span>'+state.program.name+'</span></div>';
+  if(state.cohort) rows += '<div class="summary-row"><span>Cohort</span><span>'+state.cohort.dates+'</span></div>';
+  if(state.pkg) rows += '<div class="summary-row"><span>Package</span><span>'+state.pkg.label+'</span></div>';
+  if(state.slot) rows += '<div class="summary-row"><span>First Session</span><span>'+state.slot+'</span></div>';
+  var total = state.cohort ? state.cohort.price : (state.pkg ? state.pkg.price : 0);
+  if(total) rows += '<div class="summary-row total"><span>Total</span><span>'+fmt(total)+'</span></div>';
+  el.innerHTML = rows;
+}
+
+function goStep(n){
+  document.querySelectorAll('.book-panel').forEach(function(p){ p.style.display = 'none'; });
+  document.querySelector('[data-panel="'+n+'"]').style.display = 'block';
+  document.querySelectorAll('.book-step').forEach(function(s){
+    var sn = parseInt(s.getAttribute('data-step'), 10);
+    s.classList.remove('active','done');
+    if(n === 'confirm'){ s.classList.add('done'); return; }
+    if(sn === n) s.classList.add('active');
+    else if(sn < n) s.classList.add('done');
+  });
+  document.getElementById('stepTabs').classList.toggle('book-nav-hide', n === 'confirm');
+  window.scrollTo({ top: document.getElementById('bookApp').offsetTop - 120, behavior:'smooth' });
+}
+
+// init
+renderProgramOptions();
+goStep(1);
+
+// preselect from ?program=
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var pre = params.get('program');
+  if(pre && PROGRAMS[pre]){ selectProgram(pre); }
+})();
+</script>
+</body>
+</html>
