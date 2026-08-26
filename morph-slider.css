@@ -1,7 +1,7 @@
-/* MAL GRIOT — MorphSlider (react-bits) styling, ported for a fullscreen
+/* MAL GRIOT - MorphSlider (react-bits) styling, ported for a fullscreen
    self-hosted video slider. The WebGL canvas morphs between poster stills;
    once a transition settles, that slide's real <video> fades in on top and
-   plays — see morph-slider.js for why (file:// pages can't feed video
+   plays - see morph-slider.js for why (file:// pages can't feed video
    straight into WebGL). */
 
 html, body { height: 100%; background: #0c0c0e; overflow: hidden; }
@@ -169,7 +169,7 @@ html, body { height: 100%; background: #0c0c0e; overflow: hidden; }
   .morph-slider-unmute { font-size: 11px; padding: 8px 12px; }
 }
 
-/* Booking CTA — sits directly over the reel (no page scroll, no floating
+/* Booking CTA - sits directly over the reel (no page scroll, no floating
    card), styled with the same typography/hierarchy as the .m-cta block
    that closes voice.html: Philosopher headline, paper-dim description,
    .btn.btn-light button. A scrim behind it (darkening toward the bottom)
@@ -208,12 +208,12 @@ html, body { height: 100%; background: #0c0c0e; overflow: hidden; }
 
 /* Candlelit-Velvet "capsule" treatment: a near-black pill lit from inside
    by a soft gold/brass glow (the brand kit's "warm radial glow suggesting
-   candlelight" motif — see MAL GRIOT BRAND KIT design doc), with a thin
+   candlelight" motif - see MAL GRIOT BRAND KIT design doc), with a thin
    gold rim that pulses rather than a flat border. The real logo mark sits
-   at the left (the artist's own "river mark" — no invented starburst icon,
+   at the left (the artist's own "river mark" - no invented starburst icon,
    which the brand kit explicitly rules out), and a capped circular arrow
    at the right end gives it the "juicy" button-within-a-button read.
-   Keeps "Book Mal to Host Your [word]" on one line at any viewport width —
+   Keeps "Book Mal to Host Your [word]" on one line at any viewport width -
    without this, the flex button wraps the text and, worse, shrinks the
    word span under its pinned width despite the explicit width set in
    hosting.html's pinWordWidth(). */
@@ -253,9 +253,9 @@ html, body { height: 100%; background: #0c0c0e; overflow: hidden; }
   .morph-slider-cta .btn { animation: none; }
 }
 
-/* Logo mark — the artist's real approved mark (img/brand/nav-mark-gold.png),
+/* Logo mark - the artist's real approved mark (img/brand/nav-mark-gold.png),
    not a decorative icon. A quiet breathing glow behind it (candlelight, per
-   the brand kit's motif rule), not a spin — the mark itself isn't animated. */
+   the brand kit's motif rule), not a spin - the mark itself isn't animated. */
 .morph-slider-cta__mark {
   width: 24px;
   height: 24px;
@@ -264,7 +264,7 @@ html, body { height: 100%; background: #0c0c0e; overflow: hidden; }
   transition: filter 0.25s ease;
 }
 
-/* The mark is brushed gold on transparent — invisible once the pill itself
+/* The mark is brushed gold on transparent - invisible once the pill itself
    turns gold on hover, so it swaps to solid ink (brightness(0)) rather than
    fading against its own color. */
 .morph-slider-cta .btn:hover .morph-slider-cta__mark,
@@ -287,7 +287,7 @@ html, body { height: 100%; background: #0c0c0e; overflow: hidden; }
 
 /* Takes up whatever room is left between the fixed label text and the arrow
    cap, and centers the (fixed-width, per pinWordWidth()) cycling word
-   inside it — so the word reads as its own beat, not crammed against
+   inside it - so the word reads as its own beat, not crammed against
    "Your". */
 .morph-slider-cta__word-slot {
   display: flex;
@@ -297,7 +297,7 @@ html, body { height: 100%; background: #0c0c0e; overflow: hidden; }
   min-width: 0;
 }
 
-/* Circular arrow cap at the pill's trailing edge — sized to the pill's own
+/* Circular arrow cap at the pill's trailing edge - sized to the pill's own
    height so it reads as a button fused onto the button, echoing the
    reference's "juicy" round arrow. Nudges right on hover/focus. */
 .morph-slider-cta__arrow {
@@ -404,7 +404,7 @@ html, body { height: 100%; background: #0c0c0e; overflow: hidden; }
 }
 
 /* Per-character fold-in, ported from React Bits' <FoldText/> (splitBy="char",
-   hinge="top") to plain CSS + the GSAP already on this page — see
+   hinge="top") to plain CSS + the GSAP already on this page - see
    hosting.html's foldIn(). Each letter is a 3D hinge panel that rotates
    down from a folded, shaded crease into place. */
 .fold-seg {

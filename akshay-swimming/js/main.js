@@ -1,5 +1,5 @@
 /* ============================================================
-   AKSHAY SWIMMING ACADEMY — shared interactions
+   AKSHAY SWIMMING ACADEMY - shared interactions
    ============================================================ */
 
 // ---- nav scroll state ----
@@ -46,7 +46,7 @@
   });
 })();
 
-// ---- hero water ripple canvas (subtle, calm — not decorative overkill) ----
+// ---- hero water ripple canvas (subtle, calm - not decorative overkill) ----
 (function(){
   var canvas = document.querySelector('.hero-canvas');
   if(!canvas) return;
@@ -102,13 +102,13 @@
 })();
 
 // ============================================================
-// BOOKING ENGINE — shared state across book.html steps
+// BOOKING ENGINE - shared state across book.html steps
 // This is a client-side mock. All payment/booking calls are
 // isolated behind BookingAPI so a real provider (Razorpay etc.)
 // and a real backend can be dropped in later.
 // ============================================================
 window.BookingAPI = {
-  // MOCK — replace with real backend calls.
+  // MOCK - replace with real backend calls.
   createReservation: function(payload){
     return new Promise(function(resolve){
       setTimeout(function(){
@@ -121,7 +121,7 @@ window.BookingAPI = {
     });
   },
   charge: function(bookingId, amount){
-    // MOCK payment — no real payment provider connected yet.
+    // MOCK payment - no real payment provider connected yet.
     return new Promise(function(resolve){
       setTimeout(function(){ resolve({ ok:true, bookingId:bookingId, amount:amount }); }, 900);
     });

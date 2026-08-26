@@ -1,4 +1,4 @@
-/* TEMPORARY dev tool — manual face-alignment UI for the home accordion.
+/* TEMPORARY dev tool - manual face-alignment UI for the home accordion.
    Activate with ?align=1 in the URL. Does nothing otherwise. Safe to delete when done. */
 (function () {
   const params = new URLSearchParams(location.search);
@@ -43,7 +43,7 @@
 
   const panel = document.createElement('div');
   panel.className = 'align-panel';
-  panel.innerHTML = `<h3 id="align-drag-handle">⠿ Align photos — off:hover</h3><div class="align-list"></div>
+  panel.innerHTML = `<h3 id="align-drag-handle">⠿ Align photos - off:hover</h3><div class="align-list"></div>
     <div class="align-hint">Drag a photo to slide it. Click a row, then use arrow keys to nudge (Shift = fine). Drag this title bar to move the panel out of the way.</div>
     <button id="align-copy">Copy CSS</button><button id="align-reset" class="secondary">Reset all</button>
     <textarea id="align-out" readonly placeholder="Copy output appears here…"></textarea>`;
@@ -103,7 +103,7 @@
     activeKey = key;
     list.querySelector(`.align-row[data-key="${key}"]`).classList.add('active');
     if (scrollClear) {
-      // the fixed panel covers the right ~280px of the screen — scroll the
+      // the fixed panel covers the right ~280px of the screen - scroll the
       // item into the clear left portion so it can actually be dragged
       const accordion = document.getElementById('accordion');
       const item = state[key].item;
@@ -227,7 +227,7 @@
   });
 })();
 
-/* ---- on:hover mode — activate with ?align=2 ----
+/* ---- on:hover mode - activate with ?align=2 ----
    Edits transform-origin (the zoom anchor) while the photo is genuinely
    :hover-ed and zoomed in, so you see exactly what a visitor sees. */
 (function () {
@@ -268,7 +268,7 @@
   `;
   document.head.appendChild(style);
 
-  // per-item override rules — some hover states hardcode transform-origin
+  // per-item override rules - some hover states hardcode transform-origin
   // with !important in the base stylesheet, so a plain inline style can't
   // win. This tag is appended after everything else and always wins.
   const overrideStyle = document.createElement('style');
@@ -276,7 +276,7 @@
 
   const panel = document.createElement('div');
   panel.className = 'align-panel';
-  panel.innerHTML = `<h3 id="align2-drag-handle">⠿ Align photos — on:hover</h3><div class="align-list"></div>
+  panel.innerHTML = `<h3 id="align2-drag-handle">⠿ Align photos - on:hover</h3><div class="align-list"></div>
     <div class="align-hint">Hover a photo, then drag on it to move the zoom's focal point. Click a row, then use arrow keys to nudge (Shift = fine). Keep the cursor over the photo while dragging. Drag this title bar to move the panel.</div>
     <button id="align-copy">Copy CSS</button><button id="align-reset" class="secondary">Reset all</button>
     <textarea id="align-out" readonly placeholder="Copy output appears here…"></textarea>`;

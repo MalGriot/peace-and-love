@@ -53,7 +53,7 @@ function chatSaveState() {
       lastMessageAt: chatLastMessageAt,
     }));
   } catch {
-    // Storage unavailable (private browsing, quota) — chat just won't persist.
+    // Storage unavailable (private browsing, quota), so chat just won't persist.
   }
 }
 
@@ -352,8 +352,8 @@ function chatDisableInput() {
 // shaped like that back out before it ever reaches the chat bubble.
 // Mal has no phone number in his facts, but the model occasionally invents
 // one anyway (hallucinated digits, sometimes dressed up as a WhatsApp
-// number). Strip anything shaped like a phone number out of bot replies —
-// the real WhatsApp button already renders itself via offerContact, so a
+// number). Strip anything shaped like a phone number out of bot replies,
+// since the real WhatsApp button already renders itself via offerContact, so a
 // visitor never needs the bot to type digits.
 function chatStripPhoneNumbers(text) {
   return text.replace(/\+?\d[\d\-.\s()]{5,}\d/g, (match) => {
@@ -369,7 +369,7 @@ function chatStripLeakedFields(text) {
     .replace(/\s+([.,!?])/g, '$1')
     .trim();
   // A phone number stripped out from inside parentheses, e.g. "(987) 654-3210",
-  // can leave one side of the pair behind — drop all parens once unbalanced
+  // can leave one side of the pair behind - drop all parens once unbalanced
   // rather than try to guess which one is now orphaned.
   const opens = (cleaned.match(/\(/g) || []).length;
   const closes = (cleaned.match(/\)/g) || []).length;
@@ -389,7 +389,7 @@ function chatAppendBotMessage(data) {
   }
 
   // The bot's very first message in a session always opens with "Peace and
-  // love!" — guaranteed here rather than left purely to the model, since
+  // love!" - guaranteed here rather than left purely to the model, since
   // there's no more canned client-side greeting to fall back on. Every
   // message after that has any "peace and love" the model slips in
   // stripped back out, since the phrase is meant to open the conversation
@@ -486,7 +486,7 @@ function chatRenderRow(message) {
       </div>`;
   // Controls hug the inner side of each bubble: right of bot messages
   // (bot is left-aligned), left of the visitor's own messages (which are
-  // right-aligned) — so DOM order is swapped per role, not just CSS.
+  // right-aligned) - so DOM order is swapped per role, not just CSS.
   return `
     <div class="msg-row msg-row--${isBot ? 'bot' : 'user'}" data-message-id="${message.id}">
       ${isBot ? '<img class="msg-row__avatar" src="img/about.jpg" alt="">' : ''}

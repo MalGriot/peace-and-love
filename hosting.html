@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hosting — Mal Griot</title>
+<title>Hosting | Mal Griot</title>
 <meta name="description" content="MC and hosting work for events, brand activations and shows by Mal Griot.">
 <link rel="canonical" href="https://malgriot.github.io/peace-and-love/hosting.html">
 <link rel="icon" href="img/brand/favicon.ico">
@@ -55,14 +55,14 @@ body.ui-in .morph-slider-unmute {
   opacity: 1;
 }
 
-/* Slide 4 (the image-only "end card" — no video src, so the slider just
+/* Slide 4 (the image-only "end card": no video src, so the slider just
    rests there once reached, see morph-slider.js) gets a 3-state text
    overlay above the existing CTA: what Mal does, why it matters, how to
    start. The CTA block itself is untouched.
 
    Mal himself sits roughly center-frame in this photo (object-position
    51% 40%). States 1 and 2 land in the dark columns clear of him on either
-   side (left / right — verified against the actual photo); state 3 sits
+   side (left / right, verified against the actual photo); state 3 sits
    centered, which does land over him, so it gets a solid card (.s4-box)
    instead of relying on position to dodge him. On mobile the side margins
    are too narrow for full sentences, so mobile shows a condensed one-line
@@ -121,7 +121,7 @@ body.ui-in .morph-slider-unmute {
 .s4-state.s4-pos-right { align-items: flex-end; text-align: right; }
 .s4-state.s4-pos-center { align-items: center; text-align: center; }
 
-/* Left/right states get a soft directional vignette instead of a box —
+/* Left/right states get a soft directional vignette instead of a box -
    the photo is already dark and empty on both sides, this just adds a
    little extra contrast for the text. */
 .s4-pos-left::before,
@@ -172,8 +172,8 @@ body.ui-in .morph-slider-unmute {
   max-width: 14ch;
 }
 
-/* State 3 (centered) sits over Mal, so — per direction — it earns a real
-   card rather than trying to dodge him: same dark-card language as the
+/* State 3 (centered) sits over Mal, so it earns a real card (per
+   direction) rather than trying to dodge him: same dark-card language as the
    site's other panels (.c-form / .chat-widget__panel), not a new pattern. */
 .s4-box {
   background: rgba(23, 20, 18, 0.82);
@@ -342,7 +342,7 @@ body.ui-in .morph-slider-unmute {
 .bmd-slider-value { margin-top: 10px; font-family: var(--font-display); font-size: 15px; color: var(--gold); }
 .bmd-slider-help { margin: 6px 0 0; font-size: 12px; color: var(--paper-faint); }
 
-/* Energy slider — continuous drag with elastic overshoot at the rail
+/* Energy slider: continuous drag with elastic overshoot at the rail
    edges and a spring/back-ease snap to the nearest of 5 notches on
    release, echoing react-bits' Elastic Slider. */
 .bmd-elastic-track {
@@ -395,7 +395,7 @@ body.bmd-open { overflow: hidden; }
 
 <div id="chrome-nav"></div>
 
-<h1 class="sr-only">Hosting &amp; MC Work — Mal Griot</h1>
+<h1 class="sr-only">Hosting &amp; MC Work | Mal Griot</h1>
 
 <div id="static-intro" aria-hidden="true">
   <video id="static-intro-video" src="video/static-intro.mp4" autoplay muted playsinline></video>
@@ -446,7 +446,7 @@ body.bmd-open { overflow: hidden; }
     </div>
     <div class="s4-state s4-pos-right">
       <span class="s4-eyebrow">The Stakes</span>
-      <p class="scroll-float s4-full">A room full of people who showed up deserves more than an announcer. They need someone they trust at the mic — present, in on the moment, keeping the night connected from the first word to the last.</p>
+      <p class="scroll-float s4-full">A room full of people who showed up deserves more than an announcer. They need someone they trust at the mic, present, in on the moment, keeping the night connected from the first word to the last.</p>
       <p class="s4-short">Guests need a guide they can trust and feel.</p>
     </div>
     <div class="s4-state s4-pos-center">
@@ -492,7 +492,7 @@ body.bmd-open { overflow: hidden; }
     </div>
     <div class="bmd-rail" id="bmd-rail">
       <div class="bmd-rail-step is-active" data-step="1">
-        <span class="bmd-rail-num">01–02 Event</span>
+        <span class="bmd-rail-num">01 | 02 Event</span>
         <div class="bmd-rail-track"></div>
       </div>
       <div class="bmd-rail-step" data-step="2">
@@ -500,11 +500,11 @@ body.bmd-open { overflow: hidden; }
         <div class="bmd-rail-track"></div>
       </div>
       <div class="bmd-rail-step" data-step="3">
-        <span class="bmd-rail-num">04–05 Vision</span>
+        <span class="bmd-rail-num">04 | 05 Vision</span>
         <div class="bmd-rail-track"></div>
       </div>
       <div class="bmd-rail-step" data-step="4">
-        <span class="bmd-rail-num">06–08 Booking</span>
+        <span class="bmd-rail-num">06-08 Booking</span>
         <div class="bmd-rail-track"></div>
       </div>
     </div>
@@ -513,7 +513,7 @@ body.bmd-open { overflow: hidden; }
   <form id="bmd-form" novalidate>
     <input type="hidden" name="access_key" value="44f58f9f-ee75-4735-a37b-8b1caca96106">
     <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
-    <input type="hidden" name="subject" value="New booking request — Book Mal">
+    <input type="hidden" name="subject" value="New booking request - Book Mal">
 
     <div class="bmd-body">
       <div class="bmd-step is-active" data-step="1">
@@ -821,7 +821,7 @@ body.bmd-open { overflow: hidden; }
   // (--ink) pill: gold and parchment read clean against near-black, brass
   // is the mid warm tone between them. (The old amber/terracotta set was
   // picked for a light paper pill and would wash out now that the pill
-  // itself is dark — see morph-slider.css.)
+  // itself is dark - see morph-slider.css.)
   var COLORS = ['#e0b26a', '#efe6d8', '#c98a45'];
 
   // Pin the word slot to the widest word's rendered width (same brand font
@@ -892,7 +892,7 @@ body.bmd-open { overflow: hidden; }
 })();
 </script>
 <script>
-// Slide 4 is the image-only "end card" (no video src — see morph-slider.js),
+// Slide 4 is the image-only "end card" (no video src - see morph-slider.js),
 // so the slider just rests there once reached. While it's active, cycle its
 // overlay text through 3 states every 5s: what Mal does, why it matters,
 // how to start. Leaving slide 4 (via arrows/dots) stops the cycle and
@@ -920,7 +920,7 @@ body.bmd-open { overflow: hidden; }
   }
 
   // Slow Ken-Burns-style breathing on the end-card image itself: zoom in
-  // over 15s, hold 5s, zoom back out over 15s, hold 5s, loop — driven via
+  // over 15s, hold 5s, zoom back out over 15s, hold 5s, loop - driven via
   // the uZoom uniform morph-slider.js exposes as root.setIdleZoom().
   var zoomTween = null;
   var ZOOM_IN = 1.12;
@@ -974,7 +974,7 @@ body.bmd-open { overflow: hidden; }
 })();
 </script>
 <script>
-// Book Mal drawer — step wizard, pills, sliders, segmented control, submit.
+// Book Mal drawer - step wizard, pills, sliders, segmented control, submit.
 (function () {
   var trigger = document.getElementById('book-mal-trigger');
   var scrim = document.getElementById('book-mal-scrim');
@@ -995,7 +995,7 @@ body.bmd-open { overflow: hidden; }
   var EMAILJS_TEMPLATE_ID = 'template_mtilkov';
   if (window.emailjs) emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
 
-  // Duck the reel's video volume to 25% while the drawer's open — the
+  // Duck the reel's video volume to 25% while the drawer's open - the
   // videos stay muted unless the visitor hits Unmute, but the volume
   // level underneath should already be low so it doesn't jump on unmute.
   function reelVideos() {
@@ -1052,7 +1052,7 @@ body.bmd-open { overflow: hidden; }
     el.addEventListener('change', function () { clearError(el); });
   });
 
-  // ---------- pills — single- or multi-select per group ----------
+  // ---------- pills - single- or multi-select per group ----------
   form.querySelectorAll('[data-pill-group]').forEach(function (group) {
     var name = group.dataset.pillGroup;
     var multi = group.dataset.select === 'multi';
@@ -1085,7 +1085,7 @@ body.bmd-open { overflow: hidden; }
   }
 
   // s05: "Referral" or "Other" reveals a short "Who?" field beneath the
-  // pills; anything else retracts it. Optional — never validated.
+  // pills; anything else retracts it. Optional - never validated.
   var referralGroup = form.querySelector('[data-pill-group="referral"]');
   var referralWhoWrap = document.getElementById('bmd-referral-who-wrap');
   var referralWhoInput = document.getElementById('bmd-referral-who');
@@ -1144,7 +1144,7 @@ body.bmd-open { overflow: hidden; }
     label: function (v) { return ['$1K', '$5K', '$10K', '$15K', '$20K', '$25K+'][v]; }
   });
 
-  // ---------- energy slider — custom elastic drag (react-bits Elastic
+  // ---------- energy slider - custom elastic drag (react-bits Elastic
   // Slider style): the thumb tracks the pointer 1:1 in real time, stretches
   // past the rail ends with a bit of resistance, and springs back to the
   // nearest of 5 notches on release via a back-ease transition. ----------
@@ -1297,7 +1297,7 @@ body.bmd-open { overflow: hidden; }
     goToStep(step + 1);
   });
 
-  // ---------- submit — notifies Mal by email (Web3Forms) and confirms to
+  // ---------- submit - notifies Mal by email (Web3Forms) and confirms to
   // the requester. WhatsApp alerting needs a service + credentials Mal
   // hasn't provided yet; see the chat for the follow-up question. ----------
   form.addEventListener('submit', async function (e) {
@@ -1319,11 +1319,11 @@ body.bmd-open { overflow: hidden; }
       });
       var data = await res.json();
       if (data.success) {
-        status.textContent = "Sent — they'll hear back soon.";
+        status.textContent = "Sent - they'll hear back soon.";
         status.classList.add('is-success');
 
         // Confirmation email to the requester, separate from the Web3Forms
-        // notification above — best-effort, doesn't block the success state
+        // notification above - best-effort, doesn't block the success state
         // if it fails (Mal's already been notified either way).
         if (window.emailjs) {
           var fields = Object.fromEntries(new FormData(form));
@@ -1331,7 +1331,7 @@ body.bmd-open { overflow: hidden; }
             to_name: fields.name,
             to_email: fields.email,
             event_name: fields.event_name || fields.event_type || 'the event',
-            message: "Thanks for reaching out about " + (fields.event_name || 'your event') + " — Mal will get back to you with next steps."
+            message: "Thanks for reaching out about " + (fields.event_name || 'your event') + " - Mal will get back to you with next steps."
           }).catch(function (err) { console.warn('Confirmation email failed to send:', err); });
         }
 
@@ -1341,7 +1341,7 @@ body.bmd-open { overflow: hidden; }
         throw new Error(data.message || 'Send failed');
       }
     } catch (err) {
-      status.textContent = "Couldn't send — try again, or email yep.that.malcolm@gmail.com directly.";
+      status.textContent = "Couldn't send - try again, or email yep.that.malcolm@gmail.com directly.";
       status.classList.add('is-error');
     } finally {
       submitBtn.disabled = false;

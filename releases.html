@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <script>document.documentElement.className+=' js';</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Releases — Mal Griot</title>
-<meta name="description" content="Mal Griot's music — albums and EPs, streaming right here.">
-<meta property="og:title" content="Releases — Mal Griot">
-<meta property="og:description" content="Mal Griot's music — albums and EPs, streaming right here.">
+<title>Releases | Mal Griot</title>
+<meta name="description" content="Mal Griot's music: albums and EPs, streaming right here.">
+<meta property="og:title" content="Releases | Mal Griot">
+<meta property="og:description" content="Mal Griot's music: albums and EPs, streaming right here.">
 <meta property="og:image" content="https://malgriot.github.io/peace-and-love/img/og/share-contact.png">
 <meta property="og:url" content="https://malgriot.github.io/peace-and-love/releases.html">
 <meta property="og:type" content="website">
@@ -54,7 +54,7 @@
   .d-releases__featured-caption{margin:16px 0 0;font-size:14px;color:var(--paper-dim)}
   .d-releases__featured-caption strong{color:var(--paper);font-weight:400}
 
-  /* ---- editorial release rows — same treatment as voice.html's discography
+  /* ---- editorial release rows, matching the treatment on voice.html's discography
      (hover disc slide-out, accent-matched color, click-to-expand tracklist),
      sized down to this page's existing compact row height / 64px art ---- */
   .release{
@@ -198,18 +198,18 @@
   .release__panel-embed{width:100%;border:none;border-radius:6px;display:block}
   .release__panel-fallback{margin-top:16px}
 
-  /* ---- Jungli feature: crediting the win — "The Call of the Jungle"
+  /* ---- Jungli feature: crediting the win for "The Call of the Jungle"
      adopted as Jungli the Nomad Village's official sonic identity. This is
      Mal's achievement, so the album art and copy carry the section; Jungli's
      mark rides in the corner of the album art itself (a small credit
      badge, not a headline logo), and their hero video is demoted to a
-     small proof-of-placement thumbnail — muted, no autoplay, not the
-     backdrop — so it reads as a credit line, not a Jungli ad.
+     small proof-of-placement thumbnail, muted, no autoplay, and not the
+     backdrop, so it reads as a credit line, not a Jungli ad.
      Sits noticeably further from the album hero above than from "All
      Releases" below, so it reads as that section's lead-in rather than a
      stray card wedged under the hero. An aurora wash (react-bits Aurora)
      drifts behind the content and a slow rotating conic-gradient ring
-     (react-bits BorderGlow) traces the card's edge — both looping,
+     (react-bits BorderGlow) traces the card's edge, both looping,
      GPU-cheap CSS, no canvas/WebGL needed for a card this size. ---- */
   @property --jungli-angle{
     syntax:'<angle>';
@@ -314,6 +314,25 @@
   .d-cta p{color:var(--paper-dim);margin:0 0 28px}
   .d-cta__row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
 
+  /* ---- footer playlist strip: "this is mal griot" - the single Spotify
+     playlist that rounds up every release in one place. Kept below the
+     CTA as a closing note, not a competing call-to-action, so it's a plain
+     bordered strip rather than another big card. ---- */
+  .d-playlist{padding:0 clamp(20px,5vw,64px) 100px;max-width:1200px;margin:0 auto}
+  .d-playlist__inner{
+    display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+    border:1px solid rgba(239,230,216,.1);border-radius:16px;
+    padding:26px clamp(20px,3.5vw,32px);
+  }
+  .d-playlist__icon{
+    flex:none;width:48px;height:48px;border-radius:999px;
+    background:#1c1815;display:flex;align-items:center;justify-content:center;color:#1ED760;
+  }
+  .d-playlist__text{flex:1;min-width:220px}
+  .d-playlist__text h3{font-family:var(--font-display);font-weight:400;font-size:18px;margin:0 0 4px;color:var(--paper)}
+  .d-playlist__text p{margin:0;font-size:14px;color:var(--paper-dim)}
+  .d-playlist__link{flex:none}
+
   /* ---- hero collapse: pinned scroll sequence, .listen--hero only (releases.html) ----
      Scrolling drives a GSAP timeline: the copy locks in just under the title,
      then the title shrinks up under "New Album" while the album art rises
@@ -323,7 +342,7 @@
   .listen--hero .scroll-float{will-change:transform,clip-path,opacity;clip-path:inset(0 0 0% 0)}
   .listen--hero .listen__stage{will-change:transform}
   /* .listen's shared border-bottom sits at the section's own (unshrunk) box
-     edge — but this section is GSAP-pinned and its visible content is only
+     edge, but this section is GSAP-pinned and its visible content is only
      ever moved via transform, never actually resized, so that border ends up
      rendering far past the shrunk hero, over whatever content the pin has
      scrolled to (e.g. a stray line across the release rows below). Drop it
@@ -334,7 +353,7 @@
   /* .warp-text's shared min-height:220px (shared.css) is much taller than
      the glyphs it vertically centers, and the hero-collapse script's
      gsap.set(...,{clearProps:'all'}) strips the inline clamp() height on
-     load, so that 220px min-height is what actually governs the box —
+     load, so that 220px min-height is what actually governs the box -
      leaving a big empty gap below the visible title that the JS then
      used to lock "fall into the sky…" far from it. Tighten the box on
      mobile so its bottom edge sits close to the visible text. */
@@ -369,7 +388,7 @@
   /* ---- copy fade-in guard: without this, the paragraph's un-animated text
      briefly flashes at full opacity (its default state) while gsap/ScrollTrigger
      are still downloading/initializing, then vanishes once initHeroCollapse's
-     first gsap.set() runs — an ugly flash-then-hide. Start it hidden via CSS
+     first gsap.set() runs, an ugly flash-then-hide. Start it hidden via CSS
      (scoped to the very-early '.js' class set at the top of <head>, so this
      never fires for no-JS visitors) and let the hero-collapse timeline's own
      gsap.set(copy,{opacity:1,...}) reveal it once it's actually ready to
@@ -406,7 +425,7 @@
     data-letter-spacing="-0.06em"
     data-line-height="0.9"
   ></h1>
-  <p class="scroll-float variable-proximity" data-manual-float="true" data-base-opacity="0" data-base-rotation="5" data-blur-strength="10" data-radius="90" data-from-font-variation-settings="'wght' 100" data-to-font-variation-settings="'wght' 900">Ten songs about love, loss, longing, and learning to let go — built on groove and restraint, meant to be heard in one sitting, start to finish.</p>
+  <p class="scroll-float variable-proximity" data-manual-float="true" data-base-opacity="0" data-base-rotation="5" data-blur-strength="10" data-radius="90" data-from-font-variation-settings="'wght' 100" data-to-font-variation-settings="'wght' 900">Ten songs about love, loss, longing, and learning to let go, built on groove and restraint, meant to be heard in one sitting, start to finish.</p>
 
   <div class="listen__stage" id="listenStage" role="button" tabindex="0" aria-label="Play breathe love d e e p">
     <div class="listen__vinyl" id="listenVinyl">
@@ -436,14 +455,14 @@
   <div class="jungli-feature__card">
     <div class="jungli-feature__aurora" aria-hidden="true"></div>
     <a class="jungli-feature__art-wrap" href="https://open.spotify.com/album/2IHKGSoXq9EUbaomNYdG88" target="_blank" rel="noopener" aria-label="Hear The Call of the Jungle (Overmind) on Spotify">
-      <img class="jungli-feature__art" src="epk/art/overmind.jpg" alt="The Call of the Jungle (Overmind) — Mal Griot album art">
-      <img class="jungli-feature__art-logo" src="https://junglithenomad.com/logo/full-logo-white.png" alt="Jungli — The Nomad Village">
+      <img class="jungli-feature__art" src="epk/art/overmind.jpg" alt="The Call of the Jungle (Overmind) | Mal Griot album art">
+      <img class="jungli-feature__art-logo" src="https://junglithenomad.com/logo/full-logo-white.png" alt="Jungli | The Nomad Village">
       <span class="jungli-feature__art-play" aria-hidden="true"><span>Hear the Track ↗</span></span>
     </a>
     <div class="jungli-feature__content">
       <span class="jungli-feature__eyebrow">Brand Work</span>
       <h2 class="jungli-feature__title">"The Call of the Jungle" <span>is the official sonic identity of Jungli, the Nomad Village</span></h2>
-      <p class="jungli-feature__copy"><em>"The Call of the Jungle"</em> (aka "Overmind") by Mal Griot × Diveakssh Schae has been officially adopted as the resident sound of <strong>Jungli, the Nomad Village</strong> — where wifi meets wildlife. Jungli is a coliving village in Karnataka, India. This track signifies a fruitful partnership, and an expansion of both brands deeper into their respective industries.</p>
+      <p class="jungli-feature__copy"><em>"The Call of the Jungle"</em> (aka "Overmind") by Mal Griot × Diveakssh Schae has been officially adopted as the resident sound of <strong>Jungli, the Nomad Village</strong>, where wifi meets wildlife. Jungli is a coliving village in Karnataka, India. This track signifies a fruitful partnership, and an expansion of both brands deeper into their respective industries.</p>
       <div class="jungli-feature__row">
         <a class="jungli-feature__proof" href="https://junglithenomad.com/" target="_blank" rel="noopener" aria-label="See it playing on Jungli's own homepage">
           <video muted loop playsinline preload="metadata" poster="https://junglithenomad.com/video/hero-loop-poster.jpg">
@@ -462,9 +481,9 @@
   <div class="d-releases__head reveal"><h2>Music Video</h2></div>
   <div class="d-releases__featured reveal">
     <div class="d-releases__featured-frame">
-      <iframe id="sunBurnaVideo" src="https://www.youtube-nocookie.com/embed/-p1xP7LNGuQ?enablejsapi=1" title="Mal Griot — Sun Burna (Visualizer Lyric Video)" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <iframe id="sunBurnaVideo" src="https://www.youtube-nocookie.com/embed/-p1xP7LNGuQ?enablejsapi=1" title="Mal Griot | Sun Burna (Visualizer Lyric Video)" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
-    <p class="d-releases__featured-caption"><strong>Sun Burna</strong> — Visualizer Lyric Video</p>
+    <p class="d-releases__featured-caption"><strong>Sun Burna</strong> | Visualizer Lyric Video</p>
   </div>
 
   <div class="d-releases__head reveal"><h2>All Releases</h2></div>
@@ -479,7 +498,7 @@
             <span class="release__disc__hole"></span>
           </div>
         </div>
-        <img class="release__art" src="https://images.pexels.com/photos/9257184/pexels-photo-9257184.jpeg?cs=tinysrgb&dpr=2&w=300" alt="breathe love d e e p — Mal Griot album art">
+        <img class="release__art" src="https://images.pexels.com/photos/9257184/pexels-photo-9257184.jpeg?cs=tinysrgb&dpr=2&w=300" alt="breathe love d e e p | Mal Griot album art">
       </div>
       <div>
         <h3 class="release__title"><span class="nb">breathe love d e e p</span></h3>
@@ -500,11 +519,11 @@
             <span class="release__disc__hole"></span>
           </div>
         </div>
-        <img class="release__art" src="https://images.pexels.com/photos/13532875/pexels-photo-13532875.jpeg?cs=tinysrgb&dpr=2&w=300" alt="I Tried It — Mal Griot album art">
+        <img class="release__art" src="https://images.pexels.com/photos/13532875/pexels-photo-13532875.jpeg?cs=tinysrgb&dpr=2&w=300" alt="I Tried It | Mal Griot album art">
       </div>
       <div>
         <h3 class="release__title">I Tried It</h3>
-        <span class="release__credits">Mal Griot &amp; Unnayanaa — Wind Horse Records</span>
+        <span class="release__credits">Mal Griot &amp; Unnayanaa | Wind Horse Records</span>
       </div>
     </div>
     <div class="release__actions">
@@ -527,11 +546,11 @@
             <span class="release__disc__hole"></span>
           </div>
         </div>
-        <img class="release__art" src="https://images.pexels.com/photos/13532875/pexels-photo-13532875.jpeg?cs=tinysrgb&dpr=2&w=300" alt="The Call of the Jungle (Overmind) — Mal Griot album art">
+        <img class="release__art" src="https://images.pexels.com/photos/13532875/pexels-photo-13532875.jpeg?cs=tinysrgb&dpr=2&w=300" alt="The Call of the Jungle (Overmind) | Mal Griot album art">
       </div>
       <div>
         <h3 class="release__title">The Call of the Jungle (Overmind)</h3>
-        <span class="release__credits">Mal Griot &amp; Diveakssh Schae — Diveakssh Schae Records</span>
+        <span class="release__credits">Mal Griot &amp; Diveakssh Schae | Diveakssh Schae Records</span>
       </div>
     </div>
     <div class="release__actions">
@@ -554,11 +573,11 @@
             <span class="release__disc__hole"></span>
           </div>
         </div>
-        <img class="release__art" src="https://images.pexels.com/photos/9258252/pexels-photo-9258252.jpeg?cs=tinysrgb&dpr=2&w=300" alt="Free Fall — Mal Griot album art">
+        <img class="release__art" src="https://images.pexels.com/photos/9258252/pexels-photo-9258252.jpeg?cs=tinysrgb&dpr=2&w=300" alt="Free Fall | Mal Griot album art">
       </div>
       <div>
         <h3 class="release__title">Free Fall</h3>
-        <span class="release__credits">Mal Griot &amp; Stalvart John — Dynamite Disco Club</span>
+        <span class="release__credits">Mal Griot &amp; Stalvart John | Dynamite Disco Club</span>
       </div>
     </div>
     <div class="release__actions">
@@ -581,11 +600,11 @@
             <span class="release__disc__hole"></span>
           </div>
         </div>
-        <img class="release__art" src="https://images.pexels.com/photos/9257184/pexels-photo-9257184.jpeg?cs=tinysrgb&dpr=2&w=300" alt="Helicopter Man — Mal Griot album art">
+        <img class="release__art" src="https://images.pexels.com/photos/9257184/pexels-photo-9257184.jpeg?cs=tinysrgb&dpr=2&w=300" alt="Helicopter Man | Mal Griot album art">
       </div>
       <div>
         <h3 class="release__title">Helicopter Man</h3>
-        <span class="release__credits">Mal Griot &amp; Deep Dawn — Hangar 18 Studio</span>
+        <span class="release__credits">Mal Griot &amp; Deep Dawn | Hangar 18 Studio</span>
       </div>
     </div>
     <div class="release__actions">
@@ -608,11 +627,11 @@
             <span class="release__disc__hole"></span>
           </div>
         </div>
-        <img class="release__art" src="https://images.pexels.com/photos/16944874/pexels-photo-16944874/free-photo-of-vinyl-records-collection.jpeg?cs=tinysrgb&dpr=2&w=300" alt="Toxic Baby — Mal Griot album art">
+        <img class="release__art" src="https://images.pexels.com/photos/16944874/pexels-photo-16944874/free-photo-of-vinyl-records-collection.jpeg?cs=tinysrgb&dpr=2&w=300" alt="Toxic Baby | Mal Griot album art">
       </div>
       <div>
         <h3 class="release__title">Toxic Baby</h3>
-        <span class="release__credits">Mal Griot &amp; Deep Dawn — Hangar 18 Studio</span>
+        <span class="release__credits">Mal Griot &amp; Deep Dawn | Hangar 18 Studio</span>
       </div>
     </div>
     <div class="release__actions">
@@ -635,7 +654,7 @@
             <span class="release__disc__hole"></span>
           </div>
         </div>
-        <img class="release__art" src="https://images.pexels.com/photos/18430331/pexels-photo-18430331/free-photo-of-close-up-of-a-gramophone-playing-music.jpeg?cs=tinysrgb&dpr=2&w=300" alt="Truly Higher — Mal Griot album art">
+        <img class="release__art" src="https://images.pexels.com/photos/18430331/pexels-photo-18430331/free-photo-of-close-up-of-a-gramophone-playing-music.jpeg?cs=tinysrgb&dpr=2&w=300" alt="Truly Higher | Mal Griot album art">
       </div>
       <div>
         <h3 class="release__title">Truly Higher</h3>
@@ -656,7 +675,7 @@
             <span class="release__disc__hole"></span>
           </div>
         </div>
-        <img class="release__art" src="https://images.pexels.com/photos/9258252/pexels-photo-9258252.jpeg?cs=tinysrgb&dpr=2&w=300" alt="Sun Burna — Mal Griot album art">
+        <img class="release__art" src="https://images.pexels.com/photos/9258252/pexels-photo-9258252.jpeg?cs=tinysrgb&dpr=2&w=300" alt="Sun Burna | Mal Griot album art">
       </div>
       <div>
         <h3 class="release__title">Sun Burna</h3>
@@ -677,7 +696,7 @@
             <span class="release__disc__hole"></span>
           </div>
         </div>
-        <img class="release__art" src="https://images.pexels.com/photos/9009605/pexels-photo-9009605.jpeg?cs=tinysrgb&dpr=2&w=300" alt="sumthn — Mal Griot album art">
+        <img class="release__art" src="https://images.pexels.com/photos/9009605/pexels-photo-9009605.jpeg?cs=tinysrgb&dpr=2&w=300" alt="sumthn | Mal Griot album art">
       </div>
       <div>
         <h3 class="release__title">sumthn</h3>
@@ -698,7 +717,7 @@
             <span class="release__disc__hole"></span>
           </div>
         </div>
-        <img class="release__art" src="https://images.pexels.com/photos/30042523/pexels-photo-30042523/free-photo-of-vintage-record-player-with-spinning-vinyl.jpeg?cs=tinysrgb&dpr=2&w=300" alt="PeRiOdYsSiUs — Mal Griot album art">
+        <img class="release__art" src="https://images.pexels.com/photos/30042523/pexels-photo-30042523/free-photo-of-vintage-record-player-with-spinning-vinyl.jpeg?cs=tinysrgb&dpr=2&w=300" alt="PeRiOdYsSiUs | Mal Griot album art">
       </div>
       <div>
         <h3 class="release__title">PeRiOdYsSiUs</h3>
@@ -722,6 +741,19 @@
     <div class="d-cta__row">
       <a href="contact.html" class="btn btn-outline">Get in Touch</a>
     </div>
+  </div>
+</section>
+
+<section class="d-playlist reveal">
+  <div class="d-playlist__inner">
+    <span class="d-playlist__icon" aria-hidden="true">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.59 14.4c-.18.3-.57.39-.87.21-2.4-1.47-5.43-1.8-9-1a.628.628 0 0 1-.28-1.23c3.9-.9 7.26-.51 9.93 1.14.31.19.4.58.22.88zm1.22-2.73c-.23.37-.72.49-1.09.26-2.75-1.7-6.93-2.19-10.18-1.2a.75.75 0 1 1-.44-1.44c3.7-1.12 8.31-.58 11.45 1.35.36.22.48.72.26 1.03zm.11-2.84C14.71 8.86 9.35 8.67 6.24 9.64a.9.9 0 1 1-.53-1.72c3.57-1.11 9.5-.9 13.24 1.36a.9.9 0 1 1-.93 1.55z"/></svg>
+    </span>
+    <div class="d-playlist__text">
+      <h3>This Is Mal Griot</h3>
+      <p>Every release, one playlist. Stream it on Spotify.</p>
+    </div>
+    <a class="d-playlist__link btn btn-outline" href="https://open.spotify.com/playlist/2AcQTlTA3xgd9HAZJcHYmz?si=jKbeRArAR9Ch_9wcsmmNGA" target="_blank" rel="noopener">Listen on Spotify ↗</a>
   </div>
 </section>
 
@@ -757,11 +789,11 @@
   // Pull real album art for each SoundCloud/Spotify release the same way
   // voice.html's discography does, via their public oEmbed endpoints (no API
   // key needed for either). Falls back to the existing stock image on any
-  // failure (offline, CORS, private track, or — for Spotify — no thumbnail
+  // failure (offline, CORS, private track, or, for Spotify, no thumbnail
   // on an artist-only link).
   //
   // Every release also gets: the same art mirrored into its disc's center
-  // "label" (release__disc__label), and — for vinyl (album) releases — the
+  // "label" (release__disc__label), and, for vinyl (album) releases, the
   // disc's groove color sampled live from the art itself via a hidden
   // canvas, so each record's color matches its cover instead of a fixed tint.
 
@@ -780,14 +812,14 @@
       stage.style.setProperty('--disc-a', dark);
       stage.style.setProperty('--disc-b', light);
     }catch(e){
-      // Tainted canvas (CORS) or decode failure — leave the default teal tint.
+      // Tainted canvas (CORS) or decode failure: leave the default teal tint.
     }
   }
 
   // Hover accent per release: the brand kit's Candlelit Velvet palette has
   // only two colors safe as text on a near-black ground (Amber, Gold), so
   // gold/amber blends with Wine and Parchment fill out a small warm-red/rose
-  // option too — everything still built from the approved tokens. Each
+  // option too, everything still built from the approved tokens. Each
   // release is matched to whichever of the four sits closest, in hue/
   // lightness, to its own album art, so the hover state reads as
   // complementary rather than an arbitrary rotation of colors.
@@ -847,7 +879,7 @@
       for(var i=0;i<d.length;i+=4){ r+=d[i]; g+=d[i+1]; b+=d[i+2]; }
       link.style.setProperty('--release-accent', nearestAccent(r/n, g/n, b/n));
     }catch(e){
-      // Tainted canvas (CORS) — leave the default brass hover.
+      // Tainted canvas (CORS): leave the default brass hover.
     }
   }
 
@@ -898,21 +930,21 @@
   // SoundCloud releases play through the same shared mini-player widget
   // that drives the "breathe love d e e p" stage above (see shared.js).
   // Spotify releases embed Spotify's own player via its iFrame Controller
-  // API — its play/pause state is mirrored into that same mini-player
+  // API: its play/pause state is mirrored into that same mini-player
   // (window.griotMiniPlayer.setExternal/updateExternalPlaying/clearExternal
   // in shared.js), so whichever source is actually playing stays reflected
   // and controllable from the one mini-player, not just SoundCloud's.
 
   var activePanel = null;          // currently open .release__panel, or null
   var activeAnchor = null;         // its trigger <a class="release">
-  var activePlatform = null;       // 'soundcloud' | 'spotify' — platform of the open panel
+  var activePlatform = null;       // 'soundcloud' | 'spotify': platform of the open panel
   var releaseReadyHandler = null;  // bound only while a SoundCloud panel is open
   var loadTimeoutId = null;        // "couldn't load" fallback timer for the open SoundCloud panel
   var autoAdvanceTimer = null;     // pending "move to next playlist track" timer, once one finishes playing
 
   // The Sun Burna featured video (see the youtube player script further
   // below) pauses whatever's playing via this same event SoundCloud already
-  // listens to in shared.js — extend it to also pause an open Spotify panel,
+  // listens to in shared.js; extend it to also pause an open Spotify panel,
   // which otherwise only pauses via closeActivePanel().
   window.addEventListener('griot:pause-mini-player', function(){
     if(activePlatform === 'spotify' && activePanel && activePanel._spotifyController){
@@ -921,7 +953,7 @@
   });
 
   // Play button doubles as the panel's close control: a triangle while
-  // closed, an X the moment its dropdown is open — same as clicking the
+  // closed, an X the moment its dropdown is open, same as clicking the
   // album art, since both live inside the same clickable row.
   var PLAY_ICON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
   var STOP_ICON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
@@ -930,7 +962,7 @@
     if(btn) btn.innerHTML = isOpen ? STOP_ICON : PLAY_ICON;
   }
 
-  // Spotify's official iFrame Controller API — loaded once, lazily, the first
+  // Spotify's official iFrame Controller API, loaded once, lazily, the first
   // time a Spotify release panel opens. Lets the panel's embedded player be
   // driven (and its play/pause state read) from outside the iframe, which is
   // what makes it possible to mirror a playing Spotify track into the shared
@@ -978,7 +1010,7 @@
     }
     activePlatform = null;
     // Clear the panel's content once the collapse transition finishes (removes
-    // the iframe/track-row buttons from the DOM and tab order) — but only if
+    // the iframe/track-row buttons from the DOM and tab order), but only if
     // nothing reopened this same panel in the meantime.
     setTimeout(function(){
       if(panel !== activePanel) panel.innerHTML = '';
@@ -1006,7 +1038,7 @@
     // error state instead of leaving "Loading tracklist…" up forever.
     loadTimeoutId = setTimeout(function(){
       loadTimeoutId = null;
-      loading.textContent = "Couldn't load the tracklist — try again in a moment.";
+      loading.textContent = "Couldn't load the tracklist. Try again in a moment.";
     }, 8000);
 
     releaseReadyHandler = function(e){
@@ -1046,7 +1078,7 @@
     var height = info.kind === 'track' ? 152 : 400;
     var embedId = 'spotify-embed-' + info.kind + '-' + info.id;
     // Playlist rows get skip controls in the shared mini-player (onNext/onPrev
-    // below) — other Spotify releases don't belong to an ordered list, so the
+    // below); other Spotify releases don't belong to an ordered list, so the
     // mini-player hides its skip buttons for those (see setExternal in shared.js).
     var inPlaylist = playlist.some(function(d){ return d.anchor === anchor; });
     panel.innerHTML =
@@ -1059,20 +1091,20 @@
     var creditsEl = anchor.querySelector('.release__credits');
     var title = titleEl ? titleEl.textContent.trim() : 'Spotify';
     var art = artImg ? artImg.src : '';
-    // Discography rows format credits as "Artist(s) — Label" — the mini-player
-    // only wants the artist name(s), not the label after the em dash.
-    var artist = creditsEl ? creditsEl.textContent.split('—')[0].trim() : '';
+    // Discography rows format credits as "Artist(s) | Label"; the mini-player
+    // only wants the artist name(s), not the label after the divider.
+    var artist = creditsEl ? creditsEl.textContent.split('|')[0].trim() : '';
 
     withSpotifyIframeApi(function(IFrameAPI){
       var el = panel.querySelector('#' + embedId);
       // The panel may have been closed (and its content wiped) before the
-      // API finished loading — don't mount a controller into a dead panel.
+      // API finished loading, so don't mount a controller into a dead panel.
       if(!el || !document.body.contains(el)) return;
       var uri = 'spotify:' + info.kind + ':' + info.id;
       IFrameAPI.createController(el, { uri: uri, width: '100%', height: height }, function(controller){
         panel._spotifyController = controller;
         // Playlist-only autoplay: the iFrame API has no explicit "ended" event, so
-        // completion is inferred — note whenever playback is within 1.5s of the
+        // completion is inferred: note whenever playback is within 1.5s of the
         // track's end, then treat the next pause as a natural finish (rather than
         // a manual one) and, after a 5s pause, advance to the next playlist track.
         var nearEnd = false;
@@ -1136,14 +1168,14 @@
     activeAnchor = anchor;
   }
 
-  // Ordered list of {anchor, panel, info} for every recognized release row —
+  // Ordered list of {anchor, panel, info} for every recognized release row -
   // used below to build the playlist subset that next/previous skips step
   // through (the weekly playlist widget itself now lives on about.html).
   var releaseData = [];
 
   document.querySelectorAll('.release').forEach(function(anchor, idx){
     var info = parseRelease(anchor.getAttribute('href'));
-    if(!info) return; // not a recognized platform yet — leave it as a normal link
+    if(!info) return; // not a recognized platform yet, leave it as a normal link
 
     var panel = document.createElement('div');
     panel.className = 'release__panel';
@@ -1163,12 +1195,12 @@
   });
 
   // Playlist skip is exclusive to the weekly playlist widget on about.html,
-  // which has its own copy of this script — nothing on this page belongs to
+  // which has its own copy of this script; nothing on this page belongs to
   // an ordered playlist, so next/previous never has anywhere to skip to.
   var playlist = [];
 
   // Advances (delta -1/+1) to the next playlist row relative to whichever one
-  // is currently open, wrapping around at either end, and reopens its panel —
+  // is currently open, wrapping around at either end, and reopens its panel -
   // same one-thing-plays-at-a-time behavior as a normal row click.
   function skipPlaylistTrack(delta){
     if(!activeAnchor) return;
@@ -1184,7 +1216,7 @@
 <script>
 (function(){
   // Featured Sun Burna video: playing it should pause whatever's playing
-  // elsewhere on the page (mini-player / Spotify), and vice versa — playing
+  // elsewhere on the page (mini-player / Spotify), and vice versa: playing
   // music elsewhere should pause the video. Reuses the same griot:* event
   // bus the release panels already coordinate through (see above).
   var iframe = document.getElementById('sunBurnaVideo');
@@ -1236,7 +1268,7 @@
 (function(){
   // Buy modal: the cart button next to a buyable release's play button opens
   // its purchase embed (Beatport / Apple Music / Bandcamp) in a lightbox,
-  // instead of leaving the site. Separate from the play-dropdown above — the
+  // instead of leaving the site. Separate from the play-dropdown above; the
   // cart button stops its click from reaching the row's own anchor handler,
   // so opening the store never also triggers the sample player.
   var BUY_EMBEDS = {
@@ -1295,14 +1327,14 @@
   // Phase 1: copy is invisible at rest (only eyebrow + title show). It
   // fades in and floats up to lock in close beneath the title, like a
   // subtitle.
-  // Phase 1.5: a held pause once locked — extra scroll distance before
+  // Phase 1.5: a held pause once locked, extra scroll distance before
   // anything moves again.
   // Phase 2: title shrinks + slides up to rest under the eyebrow, while the
-  // copy wipes away bottom-up and fades out — the copy finishes disappearing
+  // copy wipes away bottom-up and fades out. The copy finishes disappearing
   // completely here, before the album ever moves.
   // Phase 3: only now does the album rise, to a resting spot well short of
   // the title (a roomy gap under the compact header).
-  // Phase 4: a couple more scrolls once the album has settled — the CTA
+  // Phase 4: a couple more scrolls once the album has settled, the CTA
   // button and the 10-track row rise together underneath it, so the album
   // ends up sitting just above the tracks.
   // Scrubbed + pinned, so scrolling up plays this in reverse automatically.
@@ -1352,7 +1384,7 @@
         const stageDeltaY = stageTargetTop - stageRect.top;
         const stageTargetBottom = stageTargetTop + stageRect.height;
 
-        // Make sure the album starts fully below the fold — push it down
+        // Make sure the album starts fully below the fold, push it down
         // further before the rise begins if its natural position would
         // otherwise peek into view at the bottom of the viewport.
         const stageStartDrop = Math.max(0, window.innerHeight + 40 - stageRect.top);
@@ -1362,7 +1394,7 @@
         const copyLockTop = titleRect.bottom + 16;
         const copyLockY = copyLockTop - copyRect.top;
 
-        // Copy itself sits at its locked position throughout phase 1 — the
+        // Copy itself sits at its locked position throughout phase 1; the
         // "floats up" motion happens per-word (below) rather than as one
         // block, so each word rises into place on its own beat.
         gsap.set(copy, { y: copyLockY, opacity: 1, clipPath: 'inset(0 0 0% 0)' });
@@ -1380,7 +1412,7 @@
 
         // Phase 3 (album rise) and phase 4 (CTA + tracks, which pulls in
         // "All Releases" behind them) each take half the scroll distance
-        // they used to — same local durations, halved — and the pin's
+        // they used to, same local durations, halved, and the pin's
         // total scroll length shrinks to match so there's no leftover
         // pinned scroll once they finish. Phases 1/1.5/2 (copy + title)
         // keep their original pace.
@@ -1403,14 +1435,14 @@
         // Phase 1: copy's words float up + fade in one at a time. Stagger
         // uses a fixed total "amount" (not a fixed per-word gap) so the
         // whole reveal still finishes inside the same budget regardless of
-        // word count — a fixed gap here made 39 words blow past phase 2's
+        // word count. A fixed gap here made 39 words blow past phase 2's
         // start and get wiped before the last ones ever appeared.
         tl.to(copyWords, { y: 0, opacity: 1, duration: 0.15, stagger: { amount: 0.25, from: 'start' }, ease: 'none' }, 0);
-        // Phase 1.5: held pause (nothing tweened) — more scroll before the
+        // Phase 1.5: held pause (nothing tweened), more scroll before the
         // title/copy move again. Next phase starts well after phase 1 ends.
         const phase2Start = 0.9;
         // Phase 2: title shrinks + slides under the eyebrow, copy wipes
-        // away bottom-up and fades out — fully finished before the album
+        // away bottom-up and fades out, fully finished before the album
         // moves at all.
         const phase2Dur = 0.45;
         tl.to(title, { y: titleDeltaY, scale: SHRINK_SCALE, transformOrigin: '50% 0%', duration: phase2Dur, ease: 'none' }, phase2Start)
@@ -1421,9 +1453,9 @@
         // Phase 4: CTA + tracks rise to follow the album. Their box in
         // normal document flow doesn't actually shrink just because we
         // transform them up, so pull the next section in with them via
-        // listen__gap-fix's negative margin — otherwise unpinning leaves a
+        // listen__gap-fix's negative margin, otherwise unpinning leaves a
         // phantom gap before "All Releases" equal to how far the tracks
-        // rose. (Can't animate the pinned section's own margin — GSAP's
+        // rose. (Can't animate the pinned section's own margin: GSAP's
         // pin logic actively resets that every frame; this sibling div,
         // outside the pin-spacer, isn't touched by it.)
         if (belowGroup.length) {

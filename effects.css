@@ -1,4 +1,4 @@
-/* MAL GRIOT — shared effects module: Scroll Reveal, and per-page signature
+/* MAL GRIOT - shared effects module: Scroll Reveal, and per-page signature
    effects (Morph Slider, Metallic Paint, ...). Loaded via <script src="effects.js">
    after shared.js on every page that uses any of these; each effect's init()
    no-ops if its markup isn't present. The staggered-menu nav itself lives in
@@ -16,7 +16,7 @@
 }
 
 /* ---------- Variable Proximity ---------- */
-/* Requires a variable font to have any visible effect — the site's display
+/* Requires a variable font to have any visible effect - the site's display
    face (Philosopher) only ships static 400/700 instances, so anything using
    this class needs the body face's full wght axis instead. */
 .variable-proximity{font-family:var(--font-body)}

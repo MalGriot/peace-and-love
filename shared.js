@@ -10,7 +10,7 @@ function renderChrome(active) {
     .map(([href, label, key]) => `<a href="${href}"${key === active ? ' class="is-active"' : ''}>${label}</a>`)
     .join('');
 
-  // Full site map for the staggered-menu nav panel — every page, in accordion order.
+  // Full site map for the staggered-menu nav panel, every page, in accordion order.
   const menuItems = [
     ['index.html', 'Home', 'home'],
     ['releases.html', 'Releases', 'discography'],
@@ -65,7 +65,7 @@ function renderChrome(active) {
       <div class="site-footer__top">
         <div>
           <div class="site-footer__mark">Mal Griot</div>
-          <p class="site-footer__tagline">Music, performance and voice work — Queens, New York-rooted.</p>
+          <p class="site-footer__tagline">Music, performance and voice work | Queens, New York-rooted.</p>
         </div>
         <ul class="site-footer__links">${linkHtml}</ul>
         <div class="site-footer__social">
@@ -93,8 +93,8 @@ function renderChrome(active) {
   // The mini-player only shows by default on pages with their own New Album
   // listening stage (Voice, and now the Music/discography page). On the
   // other satellite pages it stays out of the DOM entirely until the
-  // visitor has pressed play at least once (tracked in localStorage) —
-  // home (index.html) never gets it, since it doesn't call renderChrome at all.
+  // visitor has pressed play at least once (tracked in localStorage).
+  // Home (index.html) never gets it, since it doesn't call renderChrome at all.
   if (playerSlot) {
     let activated = false;
     try { activated = localStorage.getItem('griotPlayerActivated') === '1'; } catch (e) {}
@@ -106,7 +106,7 @@ function renderChrome(active) {
   }
 }
 
-// The "Mal" chat widget markup — used by renderChrome() on every satellite
+// The "Mal" chat widget markup, used by renderChrome() on every satellite
 // page and directly by index.html (which has no nav/footer, so it doesn't
 // call renderChrome() at all). All interactive behavior lives in chat.js's
 // initChat(), wired up from this file's DOMContentLoaded listener below.
@@ -142,7 +142,7 @@ function chatWidgetHtml() {
     </div>`;
 }
 
-// Persistent mini-player markup — injected into the #chrome-player slot on
+// Persistent mini-player markup, injected into the #chrome-player slot on
 // the music page always, and on the other satellite pages only once the
 // visitor has activated it (see renderChrome above). Never appears on
 // index.html, which has no slot and never calls renderChrome.
@@ -187,7 +187,7 @@ const playerHtml = `
   <div id="spotifyPersist" class="sc-widget"></div>`;
 
 // Loads Spotify's iFrame Controller API once (lazily, on first need) and hands
-// it to every caller — both this file's own cross-page resume controller and
+// it to every caller: both this file's own cross-page resume controller and
 // releases.html's inline release-panel players share this single loader so
 // they don't race to set window.onSpotifyIframeApiReady out from under each
 // other.
@@ -211,7 +211,7 @@ window.griotLoadSpotifyIframeApi = loadSpotifyIframeApi;
 // Wires the mini-player up once its markup exists in the DOM (on every page).
 // Guards every element that's specific to the voice.html listening stage
 // (#listenVinyl, #sleeveArt, #listenTracks, #listenStage) since they don't
-// exist on the other pages — the player still works there, just without
+// exist on the other pages, and the player still works there, just without
 // those extra visuals.
 function initMiniPlayer() {
   const miniPlayer = document.getElementById('miniPlayer');
@@ -243,7 +243,7 @@ function initMiniPlayer() {
   let currentlyPlaying = false;
   let albumArtFallback = null;
   // Set whenever a non-SoundCloud source (currently: a Spotify release panel)
-  // takes over the mini-player — see window.griotMiniPlayer below. While set,
+  // takes over the mini-player, see window.griotMiniPlayer below. While set,
   // the transport buttons drive that source instead of the SC widget.
   let externalSource = null;
   const miniNextBtn = document.getElementById('miniNext');
@@ -252,7 +252,7 @@ function initMiniPlayer() {
   let currentReleaseName = 'breathe love d e e p';
   // The "New Album" hero stage (sleeve art, vinyl, its own tile row) always
   // stays pinned to breathe love d e e p, even while a different release is
-  // loaded into this same shared widget from a Discography panel — only the
+  // loaded into this same shared widget from a Discography panel. Only the
   // mini-player (title/art/transport) follows whatever's actually playing.
   const BLD_URL = 'https://soundcloud.com/mal-griot/sets/breathelovedeep';
   let isBLDActive = true;
@@ -262,7 +262,7 @@ function initMiniPlayer() {
 
   // --- Cross-page playback resume -----------------------------------------
   // Full page navigations on this static site tear down the audio/iframes
-  // entirely — there's no way to keep sound playing gaplessly through a real
+  // entirely, and there's no way to keep sound playing gaplessly through a real
   // reload short of an SPA-style page-swap. What we *can* do is snapshot
   // source/track/position/playing-state into sessionStorage as it changes and
   // on unload, then on the next page reconstruct the same source and resume
@@ -334,7 +334,7 @@ function initMiniPlayer() {
       el.style.setProperty('--disc-a', dark);
       el.style.setProperty('--disc-b', light);
     } catch (e) {
-      // Tainted canvas (CORS) or decode failure — leave the default teal tint.
+      // Tainted canvas (CORS) or decode failure: leave the default teal tint.
     }
   }
 
@@ -348,7 +348,7 @@ function initMiniPlayer() {
     miniIconPlay.style.display = isPlaying ? 'none' : 'block';
     miniIconPause.style.display = isPlaying ? 'block' : 'none';
     // The hero vinyl and its 10 track discs only ever spin for breathe love
-    // d e e p itself — if a Discography release (SoundCloud, via isBLDActive,
+    // d e e p itself. If a Discography release (SoundCloud, via isBLDActive,
     // or Spotify, via externalSource) is what's actually playing, BLD's own
     // visuals stay in their base/paused state instead of following along.
     const bldPlaying = isPlaying && isBLDActive && !externalSource;
@@ -365,14 +365,14 @@ function initMiniPlayer() {
     const s = sounds[index];
     if (!s) return;
     const title = s.title || currentReleaseName;
-    // "breathe love d e e p" is always one phrase — never let "d e e p" split
+    // "breathe love d e e p" is always one phrase: never let "d e e p" split
     // across a wrap or marquee boundary, so it's wrapped in a no-wrap span.
-    const marqueeHtml = `${title}  —  <span class="nb">${currentReleaseName}</span>`;
+    const marqueeHtml = `${title}  |  <span class="nb">${currentReleaseName}</span>`;
     miniTitle.innerHTML = marqueeHtml;
     if (miniTitleDup) miniTitleDup.innerHTML = marqueeHtml;
     if (miniTitlePlain) miniTitlePlain.textContent = title;
     if (miniTitleTrack) {
-      // Only run the marquee if the text actually overflows its box — a
+      // Only run the marquee if the text actually overflows its box. A
       // short title just sits still instead of scrolling for no reason.
       miniTitleTrack.classList.remove('is-scrolling');
       const checkOverflow = () => {
@@ -411,7 +411,7 @@ function initMiniPlayer() {
 
   function buildTracks(widget) {
     // Only the BLD hero stage's own tile row rebuilds from the loaded
-    // sounds — while a Discography release is active it stays exactly as
+    // sounds. While a Discography release is active it stays exactly as
     // BLD last left it (its own click handlers still point at BLD's sounds).
     if (!tracksWrap || !isBLDActive) return;
     tracksWrap.innerHTML = '';
@@ -438,8 +438,8 @@ function initMiniPlayer() {
       }
       tile.addEventListener('click', (e) => {
         e.stopPropagation();
-        // A Discography release may have since taken over this shared widget
-        // — these indexes only make sense against BLD's own sounds, so make
+        // A Discography release may have since taken over this shared widget,
+        // and these indexes only make sense against BLD's own sounds, so make
         // sure BLD is actually reloaded (via the same public event Discography
         // panels use) before skipping into it, so the mini-player's title/art
         // and this tile row itself get fully re-synced too, not just the audio.
@@ -471,10 +471,10 @@ function initMiniPlayer() {
 
     // The widget can return artwork_url/avatar as null for tracks further
     // down the playlist on early getSounds() calls, before their metadata
-    // has fully hydrated — poll a few times, spaced out, until every sound
+    // has fully hydrated. Poll a few times, spaced out, until every sound
     // has art (or give up and keep the album-cover fallback). Hoisted out of
     // the READY binding so it can also run as the callback of widget.load()
-    // (READY only fires once, on the widget's first boot — it does not
+    // (READY only fires once, on the widget's first boot: it does not
     // re-fire when a different release is loaded into the same widget).
     function refreshTracks() {
       let attempts = 0;
@@ -683,7 +683,7 @@ function initMiniPlayer() {
   resumeSpotifyIfNeeded();
 
   // Reconstruct a Spotify track left playing (or paused) on a previous page,
-  // via a hidden controller mounted into #spotifyPersist — releases.html's own
+  // via a hidden controller mounted into #spotifyPersist. releases.html's own
   // visible release-panel player takes over instead the moment its panel is
   // opened (see buildSpotifyPanel there), same as any other Spotify playback.
   function resumeSpotifyIfNeeded() {
@@ -728,8 +728,8 @@ function initMiniPlayerDrag(miniPlayer) {
   const ANCHORS = ['bottom-center', 'top-center', 'top-left', 'top-right', 'bottom-left', 'bottom-right'];
 
   function place(anchor) {
-    // Explicitly "auto" (not "") every offset that this anchor doesn't use —
-    // clearing to "" falls back to the stylesheet's own left/bottom defaults,
+    // Explicitly "auto" (not "") every offset that this anchor doesn't use.
+    // Clearing to "" falls back to the stylesheet's own left/bottom defaults,
     // which left both an inline and a stylesheet offset active on the same
     // axis at once and stretched the pill across the gap between them.
     miniPlayer.style.left = miniPlayer.style.right = miniPlayer.style.top = miniPlayer.style.bottom = 'auto';
@@ -870,7 +870,7 @@ function initLineSidebarEffect() {
   }
 
   function startLoop() {
-    // Only kick off a fresh rAF chain if nothing is running — pointermove
+    // Only kick off a fresh rAF chain if nothing is running, since pointermove
     // fires far more often than paint, so cancel+restart here would keep
     // wiping out frame() before it ever executes, leaving --effect frozen
     // until the pointer stops moving. Once running, frame() reads the
@@ -885,7 +885,7 @@ function initLineSidebarEffect() {
     const pointerY = e.clientY - listRect.top;
     items.forEach((el, i) => {
       // getBoundingClientRect (not offsetTop) so the item's position is
-      // measured in the same coordinate space as pointerY above — offsetTop
+      // measured in the same coordinate space as pointerY above. offsetTop
       // is relative to the nearest positioned ancestor, which here is the
       // fixed-position .staggered-menu-panel, not this list, and double-counts
       // the panel's top padding.
@@ -904,13 +904,13 @@ function initLineSidebarEffect() {
 }
 
 // Site-wide rule: any native <video> that starts playing with sound (or gets
-// unmuted while already playing) should pause whatever's in the mini-player —
-// generalizes the pattern releases.html originally wired up just for its
+// unmuted while already playing) should pause whatever's in the mini-player,
+// generalizing the pattern releases.html originally wired up just for its
 // featured Sun Burna YouTube embed (see the griot:pause-mini-player listener
 // near the bottom of that file) to every <video> on every page, without each
 // page having to wire it up itself. Muted background/hover-loop videos (the
 // index.html nav previews, hero loops, etc.) never dispatch anything since
-// they never play unmuted — only real, audible video playback competes with
+// they never play unmuted. Only real, audible video playback competes with
 // the mini-player. Capturing-phase listeners on document catch 'play' and
 // 'volumechange' from any <video> even though those events don't bubble.
 document.addEventListener('play', (e) => {

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Book a Session — Akshay Swimming Academy</title>
+<title>Book a Session | Akshay Swimming Academy</title>
 <meta name="description" content="Select your program, choose a cohort or package, pick a date, and reserve your place online.">
 <link rel="stylesheet" href="css/style.css">
 <style>
@@ -44,7 +44,7 @@
       <!-- LEFT: step content -->
       <div>
 
-        <!-- STEP 1 — PROGRAM -->
+        <!-- STEP 1: PROGRAM -->
         <div class="book-panel" data-panel="1">
           <div class="eyebrow">Step 1</div>
           <h2 style="font-size:28px;margin-top:12px;">Select your program</h2>
@@ -52,7 +52,7 @@
           <div id="programOptions" style="margin-top:28px;"></div>
         </div>
 
-        <!-- STEP 2 — COHORT / PACKAGE -->
+        <!-- STEP 2: COHORT / PACKAGE -->
         <div class="book-panel" data-panel="2" style="display:none;">
           <div class="eyebrow">Step 2</div>
           <h2 id="step2Title" style="font-size:28px;margin-top:12px;">Choose a cohort</h2>
@@ -61,7 +61,7 @@
           <button class="btn btn-ghost-light" onclick="goStep(1)" style="margin-top:10px;">← Back</button>
         </div>
 
-        <!-- STEP 3 — DATE/SLOT -->
+        <!-- STEP 3: DATE/SLOT -->
         <div class="book-panel" data-panel="3" style="display:none;">
           <div class="eyebrow">Step 3</div>
           <h2 style="font-size:28px;margin-top:12px;" id="step3Title">Select a time</h2>
@@ -70,7 +70,7 @@
           <button class="btn btn-ghost-light" onclick="goStep(2)" style="margin-top:24px;">← Back</button>
         </div>
 
-        <!-- STEP 4 — STUDENT INFO -->
+        <!-- STEP 4: STUDENT INFO -->
         <div class="book-panel" data-panel="4" style="display:none;">
           <div class="eyebrow">Step 4</div>
           <h2 style="font-size:28px;margin-top:12px;">Your details</h2>
@@ -115,17 +115,17 @@
           </div>
         </div>
 
-        <!-- STEP 5 — CHECKOUT -->
+        <!-- STEP 5: CHECKOUT -->
         <div class="book-panel" data-panel="5" style="display:none;">
           <div class="eyebrow">Step 5</div>
           <h2 style="font-size:28px;margin-top:12px;">Review &amp; pay</h2>
           <table class="spec-table" style="margin-top:24px;max-width:520px;">
-            <tr><td>Program</td><td id="chkProgram">—</td></tr>
-            <tr><td>Dates</td><td id="chkDates">—</td></tr>
-            <tr><td>Sessions</td><td id="chkSessions">—</td></tr>
-            <tr><td>Duration</td><td id="chkDuration">—</td></tr>
-            <tr><td>Location</td><td>[Auroville / Pondicherry pool — confirmed on booking]</td></tr>
-            <tr><td>Total</td><td id="chkTotal" style="font-family:var(--serif);font-size:20px;">—</td></tr>
+            <tr><td>Program</td><td id="chkProgram">-</td></tr>
+            <tr><td>Dates</td><td id="chkDates">-</td></tr>
+            <tr><td>Sessions</td><td id="chkSessions">-</td></tr>
+            <tr><td>Duration</td><td id="chkDuration">-</td></tr>
+            <tr><td>Location</td><td>[Auroville / Pondicherry pool, confirmed on booking]</td></tr>
+            <tr><td>Total</td><td id="chkTotal" style="font-family:var(--serif);font-size:20px;">-</td></tr>
           </table>
           <div class="policy-note">
             <strong>48-Hour Cancellation Policy.</strong> Your session is reserved exclusively for you. Cancellations or rescheduling more than 48 hours before a session receive full credit. Less than 48 hours, the session counts as used. No-shows forfeit the session. One discretionary exception is allowed per package for emergencies or illness.
@@ -134,7 +134,7 @@
             <button class="btn btn-ghost-light" onclick="goStep(4)">← Back</button>
             <button class="btn btn-primary btn-block" id="payBtn" onclick="payNow()">Pay &amp; Reserve My Place</button>
           </div>
-          <p class="slate" style="font-size:12px;margin-top:14px;">Payment processing is not yet connected — this is a preview checkout. No charge will be made.</p>
+          <p class="slate" style="font-size:12px;margin-top:14px;">Payment processing is not yet connected. This is a preview checkout, so no charge will be made.</p>
         </div>
 
         <!-- CONFIRMATION -->
@@ -143,7 +143,7 @@
             <div class="confirm-check">✓</div>
             <div class="eyebrow" style="justify-content:center;">Reservation Confirmed</div>
             <h2 style="font-size:32px;margin-top:16px;">You're in.</h2>
-            <p class="slate" style="margin-top:14px;">Booking reference <strong id="confId">—</strong>. A confirmation has been sent to your email — [confirmation-email integration pending].</p>
+            <p class="slate" style="margin-top:14px;">Booking reference <strong id="confId">-</strong>. A confirmation has been sent to your email - [confirmation-email integration pending].</p>
             <a href="index.html" class="btn btn-ghost-light" style="margin-top:28px;">Back to Home</a>
           </div>
         </div>
@@ -176,27 +176,27 @@
    ============================================================ */
 var PROGRAMS = {
   waterready: { name:'Water Ready', level:'Level 0', kind:'group', price:15500,
-    cohorts:[{ label:'Foundation · Sep 7 – Oct 2', dates:'Sep 7 – Oct 2', sessions:8, duration:'4 weeks · 45–60 min', spots:4, max:6, price:15500 }] },
+    cohorts:[{ label:'Foundation · Sep 7 to Oct 2', dates:'Sep 7 to Oct 2', sessions:8, duration:'4 weeks · 45 to 60 min', spots:4, max:6, price:15500 }] },
   foundation: { name:'Foundation Cohort', level:'Level 1', kind:'group', price:15500,
     cohorts:[
-      { label:'Sep 7 – Oct 2 (Mornings)', dates:'Sep 7 – Oct 2', sessions:8, duration:'4 weeks · 45–60 min', spots:4, max:6, price:15500 },
-      { label:'Oct 5 – Nov 1 (Evenings)', dates:'Oct 5 – Nov 1', sessions:8, duration:'4 weeks · 45–60 min', spots:6, max:6, price:15500 }
+      { label:'Sep 7 to Oct 2 (Mornings)', dates:'Sep 7 to Oct 2', sessions:8, duration:'4 weeks · 45 to 60 min', spots:4, max:6, price:15500 },
+      { label:'Oct 5 to Nov 1 (Evenings)', dates:'Oct 5 to Nov 1', sessions:8, duration:'4 weeks · 45 to 60 min', spots:6, max:6, price:15500 }
     ] },
   confident: { name:'Confident Swimmer', level:'Level 2', kind:'group', price:22500,
-    cohorts:[{ label:'Sep 14 – Oct 26 (Mornings)', dates:'Sep 14 – Oct 26', sessions:12, duration:'6 weeks · 45–60 min', spots:3, max:6, price:22500 }] },
+    cohorts:[{ label:'Sep 14 to Oct 26 (Mornings)', dates:'Sep 14 to Oct 26', sessions:12, duration:'6 weeks · 45 to 60 min', spots:3, max:6, price:22500 }] },
   technique: { name:'Technique Lab', level:'Level 3', kind:'group', price:24500,
-    cohorts:[{ label:'Sep 21 – Nov 2 (Evenings)', dates:'Sep 21 – Nov 2', sessions:12, duration:'6 weeks · 60 min', spots:5, max:6, price:24500 }] },
+    cohorts:[{ label:'Sep 21 to Nov 2 (Evenings)', dates:'Sep 21 to Nov 2', sessions:12, duration:'6 weeks · 60 min', spots:5, max:6, price:24500 }] },
   performance: { name:'Performance', level:'Level 4', kind:'group', price:32000,
-    cohorts:[{ label:'Oct 1 – Nov 26 (Mornings)', dates:'Oct 1 – Nov 26', sessions:16, duration:'8 weeks · 60–75 min', spots:2, max:6, price:32000 }] },
+    cohorts:[{ label:'Oct 1 to Nov 26 (Mornings)', dates:'Oct 1 to Nov 26', sessions:16, duration:'8 weeks · 60 to 75 min', spots:2, max:6, price:32000 }] },
   private: { name:'Private Coaching', level:'Premium', kind:'private',
     packages:[
-      { id:'single', label:'Single Session', sessions:1, price:2500, validity:'—' },
+      { id:'single', label:'Single Session', sessions:1, price:2500, validity:'-' },
       { id:'p4', label:'Private 4', sessions:4, price:9000, validity:'30 days' },
       { id:'p8', label:'Private 8', sessions:8, price:16500, validity:'45 days' },
       { id:'p12', label:'Private 12', sessions:12, price:23500, validity:'60 days' }
     ] },
   assessment: { name:'Intro / Assessment', level:'Assessment', kind:'private',
-    packages:[ { id:'assess', label:'Intro / Assessment Session', sessions:1, price:1000, validity:'—' } ] }
+    packages:[ { id:'assess', label:'Intro / Assessment Session', sessions:1, price:1000, validity:'-' } ] }
 };
 
 var state = { program:null, programKey:null, cohort:null, pkg:null, slot:null, student:{} };
@@ -242,7 +242,7 @@ function renderStep2(){
 
   if(p.kind === 'group'){
     title.textContent = 'Choose your cohort';
-    sub.textContent = p.name + ' runs as a fixed cohort — pick the dates that work for you.';
+    sub.textContent = p.name + ' runs as a fixed cohort - pick the dates that work for you.';
     p.cohorts.forEach(function(c){
       var div = document.createElement('div');
       div.className = 'option-card';
@@ -258,7 +258,7 @@ function renderStep2(){
     });
   } else {
     title.textContent = 'Choose a package';
-    sub.textContent = p.name + ' is billed per package — the more sessions, the lower your per-session rate.';
+    sub.textContent = p.name + ' is billed per package - the more sessions, the lower your per-session rate.';
     p.packages.forEach(function(pkg){
       var per = Math.round(pkg.price / pkg.sessions);
       var div = document.createElement('div');
@@ -288,7 +288,7 @@ function renderStep3(){
 
   if(p.kind === 'group'){
     title.textContent = 'Cohort schedule confirmed';
-    sub.textContent = 'Your sessions run on the fixed cohort schedule — no individual time selection needed.';
+    sub.textContent = 'Your sessions run on the fixed cohort schedule - no individual time selection needed.';
     var box = document.createElement('div');
     box.className = 'policy-note';
     box.innerHTML = '<strong>'+state.cohort.label+'</strong><br>'+state.cohort.sessions+' sessions · '+state.cohort.duration;
@@ -351,7 +351,7 @@ function renderCheckout(){
     document.getElementById('chkDuration').textContent = state.cohort.duration;
     document.getElementById('chkTotal').textContent = fmt(state.cohort.price);
   } else {
-    document.getElementById('chkDates').textContent = state.slot || '—';
+    document.getElementById('chkDates').textContent = state.slot || '-';
     document.getElementById('chkSessions').textContent = state.pkg.sessions;
     document.getElementById('chkDuration').textContent = state.pkg.validity + ' validity';
     document.getElementById('chkTotal').textContent = fmt(state.pkg.price);

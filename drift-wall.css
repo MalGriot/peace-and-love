@@ -1,7 +1,7 @@
-/* MAL GRIOT — vanilla port of react-bits DriftWall. A grid of tiles idles
+/* MAL GRIOT - vanilla port of react-bits DriftWall. A grid of tiles idles
    with a slow, staggered float (each on its own phase/amplitude so the wall
    never reads as a single unit), and lifts on hover. Hovering also arms a
-   delayed video reveal — same "hold to watch" pattern as the homepage
+   delayed video reveal - same "hold to watch" pattern as the homepage
    accordion (see index.html's VIDEO_DELAY), ported here as drift-wall.js. */
 
 .dw-grid{

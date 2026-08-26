@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Wellness — Mal Griot</title>
-<meta name="description" content="Sound baths, guided meditation, and bespoke soundscapes with Mal Griot — four free pieces to listen to right now.">
-<meta property="og:title" content="Wellness — Mal Griot">
-<meta property="og:description" content="Sound baths, guided meditation, and bespoke soundscapes with Mal Griot — four free pieces to listen to right now.">
+<title>Wellness | Mal Griot</title>
+<meta name="description" content="Sound baths, guided meditation, and bespoke soundscapes with Mal Griot: four free pieces to listen to right now.">
+<meta property="og:title" content="Wellness | Mal Griot">
+<meta property="og:description" content="Sound baths, guided meditation, and bespoke soundscapes with Mal Griot: four free pieces to listen to right now.">
 <meta property="og:image" content="https://malgriot.github.io/peace-and-love/img/og/share-soundscapes.png">
 <meta property="og:url" content="https://malgriot.github.io/peace-and-love/wellness.html">
 <meta property="og:type" content="website">
@@ -35,10 +35,10 @@
   @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
   body.gate-lock{overflow:hidden;height:100vh}
 
-  /* ================= 01 — opening gate ================= */
+  /* ================= 01. opening gate ================= */
   /* "Entering a quiet space": near-black, a single diffuse indigo pool of
      light breathing (expand/hold/contract) once, then a second, larger
-     breath that doubles as the transition — the light expands and softens
+     breath that doubles as the transition: the light expands and softens
      until it dissolves into the hero's own violet glow as the image and
      copy emerge from it. Driven by a data-phase attribute on #gate, set by
      initGate()'s timers below; each phase is a pure CSS transition so the
@@ -103,7 +103,7 @@
   .wl-eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--brass);display:block;margin-bottom:18px}
   .wl-kicker{font-size:12px;letter-spacing:.1em;color:var(--paper-faint);text-transform:uppercase;margin:0 0 10px}
 
-  /* ================= 02 — hero ================= */
+  /* ================= 02. hero ================= */
   .wl-hero{
     min-height:100vh;position:relative;display:flex;align-items:flex-end;
     padding:140px clamp(20px,5vw,64px) 90px;overflow:hidden;
@@ -127,7 +127,7 @@
      the gate's second breath) fades it up so the image and copy feel like
      they're emerging from the same light rather than cutting in. Returning
      visitors who skip the gate entirely never get body.gate-active, so the
-     hero just renders at full opacity immediately — no flash, no wait. */
+     hero just renders at full opacity immediately, no flash, no wait. */
   body.gate-active .wl-hero__bg img{opacity:0}
   body.gate-active .wl-hero__content>*,
   body.gate-active .wl-hero__scroll{opacity:0;transform:translateY(14px)}
@@ -153,7 +153,7 @@
   @keyframes wl-scroll-pulse{0%,100%{opacity:.3}50%{opacity:.9}}
   @media (prefers-reduced-motion: reduce){ .wl-hero__scroll-line{animation:none} }
 
-  /* ================= 03 — free experience & players ================= */
+  /* ================= 03. free experience & players ================= */
   .wl-free{background:linear-gradient(180deg, var(--ink), var(--well-indigo) 40%, var(--ink))}
   .wl-free__head{max-width:640px;margin:0 0 56px}
   .wl-free__title{font-family:var(--font-display);font-weight:400;font-size:clamp(34px,5.5vw,58px);margin:0 0 16px}
@@ -197,7 +197,7 @@
   .wl-player--pending .wl-player__wave{cursor:default}
   .wl-player--pending .wl-player__time{color:var(--paper-faint)}
 
-  /* ================= 04 — three offerings ================= */
+  /* ================= 04. three offerings ================= */
   .wl-offer{
     display:grid;grid-template-columns:1fr 1fr;min-height:78vh;
   }
@@ -216,7 +216,7 @@
   .wl-offer__uses{font-size:12px;letter-spacing:.02em;color:var(--paper-faint);margin:0 0 30px}
   .wl-offer__cta{align-self:flex-start}
 
-  /* ================= 05 — sonic products ================= */
+  /* ================= 05. sonic products ================= */
   .wl-products{background:linear-gradient(180deg, var(--ink), var(--well-indigo))}
   .wl-products__head{max-width:640px;margin:0 0 56px}
   .wl-products__title{font-family:var(--font-display);font-weight:400;font-size:clamp(34px,5.5vw,58px);margin:0 0 16px}
@@ -238,7 +238,7 @@
   .wl-tile__price{font-size:13px;color:var(--paper);letter-spacing:.02em}
   .wl-tile__note{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--brass)}
 
-  /* ================= 06 — commissions ================= */
+  /* ================= 06. commissions ================= */
   .wl-commission{
     position:relative;overflow:hidden;
     background:radial-gradient(90% 100% at 80% 20%, var(--well-violet), var(--well-indigo) 55%, var(--ink) 100%);
@@ -253,7 +253,7 @@
   }
   .wl-commission__list li{border:1px solid rgba(239,230,216,.16);border-radius:999px;padding:7px 16px}
 
-  /* ================= 07 — take-home strip ================= */
+  /* ================= 07. take-home strip ================= */
   .wl-strip{padding-top:0}
   .wl-strip__row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(239,230,216,.1);border:1px solid rgba(239,230,216,.1);border-radius:6px;overflow:hidden}
   @media (max-width:760px){ .wl-strip__row{grid-template-columns:1fr} }
@@ -262,7 +262,7 @@
   .wl-strip__title{font-family:var(--font-display);font-weight:400;font-size:19px;margin:0 0 8px}
   .wl-strip__desc{font-size:13px;line-height:1.55;color:var(--paper-dim);margin:0}
 
-  /* ================= 08 — final cta ================= */
+  /* ================= 08. final cta ================= */
   .wl-final{text-align:center;background:linear-gradient(180deg, var(--ink), var(--well-indigo-2))}
   .wl-final__title{font-family:var(--font-display);font-weight:400;font-size:clamp(30px,5vw,52px);margin:0 0 56px}
   .wl-final__choices{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(239,230,216,.1);border:1px solid rgba(239,230,216,.1);border-radius:6px;overflow:hidden;max-width:1000px;margin:0 auto}
@@ -284,7 +284,7 @@
 
 <div id="chrome-nav"></div>
 
-<!-- 01 — opening gate: "entering a quiet space" — near-black, a single -->
+<!-- 01. opening gate: "entering a quiet space." Near-black, a single -->
 <!-- breathing pool of indigo light, three quiet lines, then the light's -->
 <!-- second breath dissolves into the hero image emerging beneath it. -->
 <noscript><style>#gate{display:none}</style></noscript>
@@ -298,7 +298,7 @@
   <button class="gate__skip" id="gate-skip" type="button">Skip →</button>
 </div>
 
-<!-- 02 — hero -->
+<!-- 02. hero -->
 <section class="wl-hero">
   <div class="wl-hero__bg">
     <img src="img/about.jpg" alt="" loading="eager">
@@ -306,7 +306,7 @@
   <div class="wl-hero__content">
     <span class="wl-eyebrow">Wellness</span>
     <h1 class="wl-hero__title">Take a moment.</h1>
-    <p class="wl-hero__desc">Sound, silence, and guided practice for changing states of mind — built by a musician, not a wellness brand.</p>
+    <p class="wl-hero__desc">Sound, silence, and guided practice for changing states of mind, built by a musician, not a wellness brand.</p>
     <div class="wl-hero__cues">
       <span class="wl-hero__cue">Free to listen</span>
       <span class="wl-hero__cue">Live in person</span>
@@ -316,12 +316,12 @@
   <div class="wl-hero__scroll"><span class="wl-hero__scroll-line"></span>Listen</div>
 </section>
 
-<!-- 03 — free experience -->
+<!-- 03. free experience -->
 <section class="wl-section wl-free" id="listen">
   <div class="wl-free__head">
     <span class="wl-eyebrow reveal">Free, right now</span>
     <h2 class="wl-free__title reveal">Need a moment?</h2>
-    <p class="wl-free__desc reveal">Four short pieces, built from the same sound work as the rest of this site. No email, no signup — press play and stay as long as you need.</p>
+    <p class="wl-free__desc reveal">Four short pieces, built from the same sound work as the rest of this site. No email, no signup. Press play and stay as long as you need.</p>
   </div>
 
   <div class="wl-players">
@@ -391,14 +391,14 @@
   </div>
 </section>
 
-<!-- 04 — three offerings -->
+<!-- 04. three offerings -->
 <section id="offerings">
   <div class="wl-offer reveal">
     <div class="wl-offer__media"><img src="img/soundbaths-home.jpg" alt="Mal Griot playing hand percussion" loading="lazy"></div>
     <div class="wl-offer__body">
       <span class="wl-eyebrow">Live, in person</span>
       <h2 class="wl-offer__title">Sound Baths</h2>
-      <p class="wl-offer__desc">Immersive live experiences built around resonance, vibration, voice, and deep listening — for a room full of people, not a pair of headphones.</p>
+      <p class="wl-offer__desc">Immersive live experiences built around resonance, vibration, voice, and deep listening, for a room full of people, not a pair of headphones.</p>
       <p class="wl-offer__uses">Private sessions · group experiences · retreats · wellness communities · workplace wellbeing · events</p>
       <a href="contact.html" class="btn btn-outline wl-offer__cta">Experience a Sound Bath →</a>
     </div>
@@ -409,7 +409,7 @@
     <div class="wl-offer__body">
       <span class="wl-eyebrow">Guided practice</span>
       <h2 class="wl-offer__title">Meditation</h2>
-      <p class="wl-offer__desc">Guided practices using voice, breath, sound, and silence to bring attention back inward — one voice leading the room, not a track on a loop.</p>
+      <p class="wl-offer__desc">Guided practices using voice, breath, sound, and silence to bring attention back inward: one voice leading the room, not a track on a loop.</p>
       <p class="wl-offer__uses">Private sessions · groups · retreats · wellness programs · bespoke guided practice</p>
       <a href="contact.html" class="btn btn-outline wl-offer__cta">Explore Meditation →</a>
     </div>
@@ -420,46 +420,46 @@
     <div class="wl-offer__body">
       <span class="wl-eyebrow">Designed for your space</span>
       <h2 class="wl-offer__title">Soundscapes</h2>
-      <p class="wl-offer__desc">Designed sonic environments for spaces, experiences, retreats, installations, and brands — where the wellness practice meets the production work.</p>
+      <p class="wl-offer__desc">Designed sonic environments for spaces, experiences, retreats, installations, and brands, where the wellness practice meets the production work.</p>
       <p class="wl-offer__uses">Remote by default · intake and available times sent on request</p>
       <a href="contact.html" class="btn btn-brass wl-offer__cta">Commission a Soundscape →</a>
     </div>
   </div>
 </section>
 
-<!-- 05 — sonic products -->
+<!-- 05. sonic products -->
 <section class="wl-section wl-products" id="library">
   <div class="wl-products__head">
     <span class="wl-eyebrow reveal">The sound library</span>
     <h2 class="wl-products__title reveal">Take something with you.</h2>
-    <p class="wl-products__sub reveal">Free to listen here. Own it, and it's yours whenever you need it — no browser tab required.</p>
+    <p class="wl-products__sub reveal">Free to listen here. Own it, and it's yours whenever you need it, no browser tab required.</p>
   </div>
 
   <div class="wl-tiles">
     <div class="wl-tile reveal">
       <div class="wl-tile__top"><h3 class="wl-tile__title">The Reset</h3><span class="wl-tile__len">10 MIN</span></div>
-      <p class="wl-tile__desc">The full-length download of the free reset above — yours to keep, no wifi needed.</p>
-      <div class="wl-tile__foot"><span class="wl-tile__price">₹149–₹299</span><span class="wl-tile__note">Coming soon</span></div>
+      <p class="wl-tile__desc">The full-length download of the free reset above, yours to keep, no wifi needed.</p>
+      <div class="wl-tile__foot"><span class="wl-tile__price">₹149 to ₹299</span><span class="wl-tile__note">Coming soon</span></div>
     </div>
     <div class="wl-tile reveal">
       <div class="wl-tile__top"><h3 class="wl-tile__title">Deep Rest</h3><span class="wl-tile__len">30 MIN</span></div>
-      <p class="wl-tile__desc">The extended version of Deep Rest — for the nights you can actually lie down.</p>
-      <div class="wl-tile__foot"><span class="wl-tile__price">₹199–₹399</span><span class="wl-tile__note">Coming soon</span></div>
+      <p class="wl-tile__desc">The extended version of Deep Rest, for the nights you can actually lie down.</p>
+      <div class="wl-tile__foot"><span class="wl-tile__price">₹199 to ₹399</span><span class="wl-tile__note">Coming soon</span></div>
     </div>
     <div class="wl-tile reveal">
-      <div class="wl-tile__top"><h3 class="wl-tile__title">Sleep</h3><span class="wl-tile__len">45–60 MIN</span></div>
+      <div class="wl-tile__top"><h3 class="wl-tile__title">Sleep</h3><span class="wl-tile__len">45 to 60 MIN</span></div>
       <p class="wl-tile__desc">A longer cut of Sleep, built to run the whole way through the night.</p>
-      <div class="wl-tile__foot"><span class="wl-tile__price">₹199–₹399</span><span class="wl-tile__note">Coming soon</span></div>
+      <div class="wl-tile__foot"><span class="wl-tile__price">₹199 to ₹399</span><span class="wl-tile__note">Coming soon</span></div>
     </div>
     <div class="wl-tile reveal">
       <div class="wl-tile__top"><h3 class="wl-tile__title">The Arrival</h3><span class="wl-tile__len">8 MIN</span></div>
       <p class="wl-tile__desc">The complete Arrival practice, for whenever you need to come back to the room.</p>
-      <div class="wl-tile__foot"><span class="wl-tile__price">₹149–₹299</span><span class="wl-tile__note">Coming soon</span></div>
+      <div class="wl-tile__foot"><span class="wl-tile__price">₹149 to ₹299</span><span class="wl-tile__note">Coming soon</span></div>
     </div>
   </div>
 </section>
 
-<!-- 06 — commissions -->
+<!-- 06. commissions -->
 <section class="wl-section wl-commission">
   <div class="wl-commission__inner">
     <span class="wl-eyebrow reveal">Bespoke</span>
@@ -476,7 +476,7 @@
   </div>
 </section>
 
-<!-- 07 — take-home / free resources -->
+<!-- 07. take-home / free resources -->
 <section class="wl-section wl-strip">
   <div class="wl-strip__row">
     <div class="wl-strip__item reveal">
@@ -487,7 +487,7 @@
     <div class="wl-strip__item reveal">
       <span class="wl-strip__eyebrow">Free</span>
       <h3 class="wl-strip__title">The Sleep Kit</h3>
-      <p class="wl-strip__desc">Meditation, soundscape, and a short nighttime ritual — a little routine, not a rulebook.</p>
+      <p class="wl-strip__desc">Meditation, soundscape, and a short nighttime ritual: a little routine, not a rulebook.</p>
     </div>
     <div class="wl-strip__item reveal">
       <span class="wl-strip__eyebrow">Free</span>
@@ -497,7 +497,7 @@
   </div>
 </section>
 
-<!-- 08 — final cta -->
+<!-- 08. final cta -->
 <section class="wl-section wl-final">
   <h2 class="wl-final__title reveal">What do you need right now?</h2>
   <div class="wl-final__choices reveal">
@@ -527,7 +527,7 @@
 renderChrome('wellness');
 
 // Wellness content wants a quiet room: the mini-player still shows here
-// (same as any other satellite page, once activated) but never plays —
+// (same as any other satellite page, once activated) but never plays -
 // pause it on arrival, and again on 'pageshow' to cover the back-forward
 // cache case where a browser can restore a page (and a still-playing
 // SoundCloud iframe) without re-running this script from scratch.
@@ -538,11 +538,11 @@ window.addEventListener('pageshow', function(){
   window.dispatchEvent(new CustomEvent('griot:pause-mini-player'));
 });
 
-// ---------- 01 — opening gate ----------
+// ---------- 01. opening gate ----------
 // "Entering a quiet space": a single breathing pool of indigo light (two
-// breath cycles — the second one doubles as the reveal), three short lines
+// breath cycles, the second one doubles as the reveal), three short lines
 // of text, then the hero emerges from the same light instead of cutting to
-// it. Pure setTimeout state machine driving CSS transitions — see the
+// it. Pure setTimeout state machine driving CSS transitions; see the
 // #gate rules above for what each phase/class actually animates.
 (function initGate() {
   var gate = document.getElementById('gate');
@@ -573,7 +573,7 @@ window.addEventListener('pageshow', function(){
   }
 
   // Returning visitors, and anyone who prefers reduced motion, skip the
-  // sequence entirely — no gate-active class means the hero just renders
+  // sequence entirely: no gate-active class means the hero just renders
   // at full opacity immediately, no flash, no wait.
   if (reduced || seen) {
     gate.style.display = 'none';
@@ -582,12 +582,12 @@ window.addEventListener('pageshow', function(){
 
   document.body.classList.add('gate-lock', 'gate-active');
 
-  at(150,   function () { gate.setAttribute('data-phase', 'in1'); setLine(1); });   // inhale — "Take a breath."
+  at(150,   function () { gate.setAttribute('data-phase', 'in1'); setLine(1); });   // inhale: "Take a breath."
   at(3200,  function () { gate.setAttribute('data-phase', 'hold1'); });             // hold
   at(3400,  function () { setLine(0); });                                          // line 1 fades
-  at(4300,  function () { gate.setAttribute('data-phase', 'out1'); setLine(2); });  // exhale — "Nothing to do."
+  at(4300,  function () { gate.setAttribute('data-phase', 'out1'); setLine(2); });  // exhale: "Nothing to do."
   at(7600,  function () { setLine(0); });                                          // line 2 fades
-  at(8000,  function () {                                                          // second inhale — the reveal
+  at(8000,  function () {                                                          // second inhale, the reveal
     gate.setAttribute('data-phase', 'in2');
     setLine(3);                                                                    // "You're here."
     document.body.classList.add('gate-revealing');
@@ -598,7 +598,7 @@ window.addEventListener('pageshow', function(){
   skip.addEventListener('click', dismiss);
 })();
 
-// ---------- 03 — custom audio players ----------
+// ---------- 03. custom audio players ----------
 (function initWellnessPlayers() {
   var players = document.querySelectorAll('[data-player]');
   if (!players.length) return;

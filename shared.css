@@ -1,4 +1,4 @@
-/* MAL GRIOT — shared shell: nav, footer, chat widget, buttons, base resets.
+/* MAL GRIOT - shared shell: nav, footer, chat widget, buttons, base resets.
    Each satellite page layers its own signature-texture styles on top of this.
    Palette/type: "Candlelit Velvet" brand kit (see MAL GRIOT BRAND KIT/). */
 
@@ -23,7 +23,7 @@
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;overflow-x:hidden;max-width:100%}
 /* Base body treatment: deep ink sky with a scatter of barely-there star-like
-   glints — no curtain texture, just the dark ground and faint points of light.
+   glints - no curtain texture, just the dark ground and faint points of light.
    Satellite pages with their own signature texture (asphalt, leather, linen)
    override this via their own body{background:...} rule. */
 body{
@@ -219,7 +219,7 @@ a{color:inherit}
 .btn-outline{background:transparent;color:var(--paper);border-color:rgba(239,230,216,.4)}
 .btn-outline:hover{border-color:var(--paper)}
 
-/* ---------- persistent chat widget (shell only — Phase 2 wires logic) ---------- */
+/* ---------- persistent chat widget (shell only - Phase 2 wires logic) ---------- */
 .chat-widget{position:fixed;right:clamp(16px,3vw,32px);bottom:clamp(16px,3vw,32px);z-index:200}
 .chat-widget__btn{
   width:56px;height:56px;border-radius:999px;border:none;cursor:pointer;
@@ -307,14 +307,14 @@ a{color:inherit}
 /* ---------- page transition mark (used on satellite hero entries) ---------- */
 .eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--paper-dim)}
 
-/* "breathe love d e e p" is a single title — never let it break mid-phrase
+/* "breathe love d e e p" is a single title - never let it break mid-phrase
    (in particular "d e e p" must never split across a wrap/marquee boundary). */
 .nb{white-space:nowrap}
 
-/* ---------- persistent mini-player (site-wide — plays the current album on any page) ----------
+/* ---------- persistent mini-player (site-wide - plays the current album on any page) ----------
    Draggable: the visitor can drag it anywhere and it snaps to the nearest of six docks
    (top/bottom × left/center/right). Docks are kept clear of the site nav (top) and the
-   chat widget (bottom-right) — see the clearance constants in initMiniPlayerDrag(). */
+   chat widget (bottom-right) - see the clearance constants in initMiniPlayerDrag(). */
 .mini-player{
   position:fixed;left:50%;bottom:22px;translate:-50% 0;z-index:150;
   display:flex;align-items:center;gap:14px;padding:10px 18px 10px 10px;border-radius:999px;
@@ -400,7 +400,7 @@ a{color:inherit}
     opacity:1;pointer-events:auto;
   }
   /* Both the plain title and the marquee are always laid out (never display:none),
-     stacked on top of each other, and crossfade via opacity — that's what lets the
+     stacked on top of each other, and crossfade via opacity - that's what lets the
      swap animate smoothly instead of popping, and lets the marquee keep a stable,
      genuinely fixed width so overflow (and therefore is-scrolling) can be measured
      correctly instead of the box just hugging its own content. */
@@ -461,7 +461,7 @@ a{color:inherit}
 .listen__stage:focus-visible{outline:2px solid var(--brass);outline-offset:6px}
 
 /* inactive: static cover, only scales on hover (no tilt/move).
-   click swaps it out for the spinning record — see .is-playing below. */
+   click swaps it out for the spinning record - see .is-playing below. */
 .listen__sleeve{
   position:absolute;inset:0;z-index:2;border-radius:6px;overflow:hidden;
   box-shadow:0 30px 70px rgba(0,0,0,.6),0 0 0 1px rgba(239,230,216,.08);
@@ -594,7 +594,7 @@ a{color:inherit}
 .listen__track:hover .listen__track-tip,
 .listen__track:focus-visible .listen__track-tip{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* ---------- warp-text (react-bits WarpText — WebGL2 glass-refraction text,
+/* ---------- warp-text (react-bits WarpText - WebGL2 glass-refraction text,
    ported in warp-text.js via the real ogl library loaded from esm.sh) ---------- */
 .warp-text{
   position:relative;display:block;width:100%;min-height:220px;
@@ -603,7 +603,7 @@ a{color:inherit}
 .warp-text canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 
 /* ---------- scroll-float (react-bits ScrollReveal) ----------
-   Base typography only — rotation, opacity and blur are all driven directly
+   Base typography only - rotation, opacity and blur are all driven directly
    off scroll position by gsap/ScrollTrigger in initScrollFloat() (effects.js),
    the same scrub-based animation as the original component. */
 .scroll-float{
@@ -613,7 +613,7 @@ a{color:inherit}
 }
 .scroll-float .word{display:inline-block}
 
-/* ---------- scroll cue (site-wide) — injected by initScrollCue() in shared.js
+/* ---------- scroll cue (site-wide) - injected by initScrollCue() in shared.js
    on any page tall enough to scroll. Fades in after 5s of inactivity, hides
    the moment the visitor moves, docked clear of the mini-player's slot. ---------- */
 .scroll-cue{

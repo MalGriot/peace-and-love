@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>document.documentElement.className+=' js';</script>
-<title>Acting — Mal Griot</title>
-<meta name="description" content="Mal Griot, actor — presence first, character follows. Watch his latest roles, view his measurements, and cast him through DYT.">
-<meta property="og:title" content="Acting — Mal Griot">
-<meta property="og:description" content="Mal Griot, actor — presence first, character follows. Watch his latest roles, view his measurements, and cast him through DYT.">
+<title>Acting | Mal Griot</title>
+<meta name="description" content="Mal Griot, actor - presence first, character follows. Watch his latest roles, view his measurements, and cast him through DYT.">
+<meta property="og:title" content="Acting | Mal Griot">
+<meta property="og:description" content="Mal Griot, actor - presence first, character follows. Watch his latest roles, view his measurements, and cast him through DYT.">
 <meta property="og:image" content="https://malgriot.github.io/peace-and-love/img/acting-home.jpg">
 <meta property="og:url" content="https://malgriot.github.io/peace-and-love/acting.html">
 <meta property="og:type" content="website">
@@ -20,11 +20,11 @@
 <link rel="stylesheet" href="effects.css">
 <style>
 /* ============================================================
-   MAL GRIOT — ACTING
+   MAL GRIOT - ACTING
    Cinema, not CV. Hero as opening frame → premiere-style reel →
    an interactive taxonomy of range → the work → the archive →
    why him → the practicalities → the closing shot.
-   Namespaced ac-* throughout; deliberately its own pacing —
+   Namespaced ac-* throughout; deliberately its own pacing -
    no reuse of Music/Hosting/Performance/Poetry section structure.
    ============================================================ */
 
@@ -46,7 +46,7 @@
 .ac-cta--line{border:none;padding:2px 0 6px;border-bottom:1px solid rgba(239,230,216,.32);border-radius:0}
 .ac-cta--line:hover{border-bottom-color:var(--gold);color:var(--gold);background:none}
 
-/* ---------- 1. Hero — the opening frame ---------- */
+/* ---------- 1. Hero - the opening frame ---------- */
 .ac-hero{
   position:relative;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;background:var(--ink);
 }
@@ -58,6 +58,12 @@
 .ac-hero__media img.is-active{opacity:1;animation:ac-hero-kenburns 9s cubic-bezier(.16,1,.3,1) both}
 @keyframes ac-hero-kenburns{from{transform:scale(1.12)}to{transform:scale(1.02)}}
 @media (prefers-reduced-motion: reduce){.ac-hero__media img.is-active{animation:none}}
+.ac-hero__media img.ac-hero__img--cliq{object-position:50% 30%}
+.ac-hero__media img.ac-hero__img--crm{object-position:50% 30%}
+@media (max-width:640px){
+  .ac-hero__media img.ac-hero__img--cliq{object-position:78% 32%}
+  .ac-hero__media img.ac-hero__img--crm{object-position:70% 26%}
+}
 .ac-hero::before{
   content:"";position:absolute;inset:0;z-index:0;
   background:linear-gradient(0deg,rgba(18,16,15,.96) 0%,rgba(18,16,15,.28) 46%,rgba(18,16,15,.5) 100%);
@@ -77,12 +83,20 @@
 }
 .ac-hero__edge{font-size:clamp(15px,1.4vw,18px);line-height:1.6;color:var(--paper-dim);max-width:44ch;margin:0 0 34px}
 .ac-hero__ctas{display:flex;flex-wrap:wrap;gap:14px}
+.ac-hero__nav{display:flex;flex-wrap:wrap;gap:14px 26px;margin-top:36px;padding-top:28px;border-top:1px solid rgba(239,230,216,.16)}
+.ac-hero__nav a{
+  font-family:var(--font-body);font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
+  color:var(--paper-dim);text-decoration:none;padding-bottom:5px;border-bottom:1px solid rgba(239,230,216,.22);
+  transition:color .25s ease,border-color .25s ease;
+}
+.ac-hero__nav a:hover{color:var(--gold);border-color:var(--gold)}
 .ac-hero__name.reveal{transition-delay:.05s}
 .ac-hero__role.reveal{transition-delay:.16s}
 .ac-hero__edge.reveal{transition-delay:.34s}
 .ac-hero__ctas.reveal{transition-delay:.48s}
+.ac-hero__nav.reveal{transition-delay:.58s}
 
-/* ---------- 2. Reel — the premiere ---------- */
+/* ---------- 2. Reel - the premiere ---------- */
 .ac-reel{max-width:1100px;margin:0 auto}
 .ac-reel__head{text-align:center;max-width:640px;margin:0 auto clamp(30px,4vw,48px)}
 .ac-reel__title{font-family:var(--font-display);font-weight:400;font-size:clamp(30px,4.4vw,52px);margin:14px 0 12px;color:var(--paper)}
@@ -135,7 +149,7 @@
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media (max-width:640px){.ac-filmstrip{flex-direction:column}}
 
-/* ---------- 3. Measurements — the vitals ---------- */
+/* ---------- 3. Measurements - the vitals ---------- */
 .ac-measure{max-width:1180px;margin:0 auto}
 .ac-measure__head{text-align:center;max-width:680px;margin:0 auto clamp(36px,5vw,56px)}
 .ac-measure__title{font-family:var(--font-display);font-weight:400;font-size:clamp(30px,4.4vw,52px);margin:14px 0 12px;color:var(--paper)}
@@ -176,25 +190,33 @@
 }
 @media (max-width:480px){.ac-measure__list{grid-template-columns:1fr}}
 
-/* ---------- 4. Intro / Audition tape ---------- */
+/* ---------- 4. On tape (intro + audition) ---------- */
 .ac-tape{max-width:820px;margin:0 auto}
 .ac-tape__head{text-align:center;max-width:620px;margin:0 auto clamp(28px,4vw,44px)}
 .ac-tape__title{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,3.8vw,44px);margin:14px 0 12px;color:var(--paper)}
 .ac-tape__desc{color:var(--paper-dim);font-size:14.5px;line-height:1.7;margin:0}
+.ac-tape__grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,48px);align-items:start}
+.ac-tape__clip{text-align:center}
+.ac-tape__clip-label{display:block;font-family:var(--font-display);font-weight:400;font-size:18px;color:var(--paper);margin:0 0 14px}
 .ac-tape__frame{position:relative;max-width:340px;margin:0 auto;border-radius:14px;overflow:hidden;
   background:#000;box-shadow:0 40px 100px rgba(0,0,0,.6),0 0 0 1px rgba(239,230,216,.08);aspect-ratio:9/16}
 .ac-tape__frame video{width:100%;height:100%;object-fit:cover;display:block}
-.ac-tape__note{text-align:center;font-size:12.5px;color:var(--paper-faint);margin-top:18px;max-width:52ch;margin-left:auto;margin-right:auto;line-height:1.7}
+.ac-tape__note{text-align:center;font-size:12.5px;color:var(--paper-faint);margin-top:14px;max-width:52ch;margin-left:auto;margin-right:auto;line-height:1.7}
+@media (max-width:640px){.ac-tape__grid{grid-template-columns:1fr;gap:36px}}
 
-/* ---------- 5. Representation — DYT ---------- */
-.ac-rep{max-width:900px;margin:0 auto}
+/* ---------- 5. Representation & Casting - DYT ---------- */
+.ac-rep{max-width:1000px;margin:0 auto}
+.ac-rep__head{text-align:center;max-width:640px;margin:0 auto clamp(28px,4vw,44px)}
+.ac-rep__title{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,3.8vw,44px);margin:14px 0 12px;color:var(--paper)}
+.ac-rep__desc{color:var(--paper-dim);font-size:14.5px;line-height:1.7;margin:0}
 .ac-rep__wrap{
   display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,64px);
   border-top:1px solid rgba(239,230,216,.12);padding-top:clamp(32px,4vw,48px);align-items:start;
 }
-.ac-rep__title{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,3.8vw,42px);color:var(--paper);margin:14px 0 16px}
 .ac-rep__body{font-size:14px;line-height:1.75;color:var(--paper-dim);margin:0 0 18px}
 .ac-rep__body strong{color:var(--paper);font-weight:500}
+.ac-rep__subhead{display:block;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);margin:0 0 16px}
+.ac-rep__subhead--spaced{margin-top:32px}
 .ac-rep-facts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
 .ac-rep-facts li{display:flex;justify-content:space-between;gap:16px;font-size:13px;line-height:1.6;
   border-bottom:1px solid rgba(239,230,216,.08);padding-bottom:12px}
@@ -204,7 +226,7 @@
 .ac-rep-facts__value a:hover{border-color:var(--gold)}
 @media (max-width:640px){.ac-rep__wrap{grid-template-columns:1fr}}
 
-/* ---------- 5. Gallery — the archive ---------- */
+/* ---------- 5. Gallery - the archive ---------- */
 .ac-archive{max-width:1180px;margin:0 auto}
 .ac-archive__head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin:0 0 34px;flex-wrap:wrap}
 .ac-archive__title{font-family:var(--font-display);font-weight:400;font-size:clamp(30px,4vw,46px);margin:0;color:var(--paper)}
@@ -243,13 +265,7 @@
 .ac-lightbox__close{position:absolute;top:-42px;right:0;background:none;border:none;color:var(--paper-dim);font-size:26px;line-height:1;cursor:pointer;padding:6px}
 .ac-lightbox__close:hover{color:var(--paper)}
 
-/* ---------- 7. Casting information ---------- */
-.ac-casting{max-width:1000px;margin:0 auto}
-.ac-casting__wrap{
-  display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,64px);
-  border-top:1px solid rgba(239,230,216,.12);padding-top:clamp(32px,4vw,48px);
-}
-.ac-casting__title{font-family:var(--font-display);font-weight:400;font-size:clamp(24px,3vw,32px);color:var(--paper);margin:0 0 22px}
+/* ---------- 5b. Casting facts (nested inside Representation) ---------- */
 .ac-facts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:16px}
 .ac-facts li{display:flex;justify-content:space-between;gap:16px;font-size:13.5px;line-height:1.6;
   border-bottom:1px solid rgba(239,230,216,.08);padding-bottom:14px}
@@ -265,7 +281,7 @@
 .ac-download:hover{border-color:var(--gold);color:var(--gold);background:rgba(224,178,106,.06)}
 .ac-download svg{flex:none;opacity:.7}
 
-/* ---------- 8. Final CTA — the closing shot ---------- */
+/* ---------- 8. Final CTA - the closing shot ---------- */
 .ac-final{position:relative;min-height:78vh;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:0}
 .ac-final img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%;filter:grayscale(1) contrast(1.08)}
 .ac-final::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,16,15,.75) 0%,rgba(18,16,15,.4) 40%,rgba(18,16,15,.88) 100%)}
@@ -274,7 +290,7 @@
 .ac-final__title{font-family:var(--font-display);font-weight:400;font-size:clamp(34px,6vw,72px);color:var(--paper);margin:0 0 36px;letter-spacing:-.01em}
 .ac-final__ctas{display:flex;flex-wrap:wrap;gap:16px 30px;align-items:center;justify-content:center}
 
-/* ---------- 9. Cast Mal — representation modal ---------- */
+/* ---------- 9. Cast Mal - representation modal ---------- */
 .ac-modal{
   position:fixed;inset:0;z-index:500;background:rgba(12,10,9,.86);
   display:flex;align-items:center;justify-content:center;padding:6vh 5vw;
@@ -303,12 +319,12 @@
 
 <div id="chrome-nav"></div>
 
-<!-- ================= 1. HERO — THE ACTOR ================= -->
+<!-- ================= 1. HERO - THE ACTOR ================= -->
 <section class="ac-hero">
   <div class="ac-hero__media" id="ac-hero-carousel">
-    <img class="is-active" src="img/2025_05_06_939 V3 FINAL 2 new.jpg" alt="Mal Griot, editorial portrait in a green suit" style="object-position:50% 4%">
-    <img src="img/2025_05_06_999_44 F.jpg" alt="Mal Griot, standing editorial portrait in a green suit" style="object-position:50% 10%">
-    <img src="img/1722241513419.jpg" alt="Mal Griot, profile portrait in a green suit" style="object-position:50% 8%">
+    <img class="is-active ac-hero__img--cliq" src="img/ads/hero-cliq.jpg" alt="Mal Griot on a video call in the Zoho Cliq commercial">
+    <img class="ac-hero__img--crm" src="img/ads/hero-crm.jpg" alt="Mal Griot on set for the Zoho CRM commercial, airport gate scene">
+    <img src="img/hero-no-closure.jpg" alt="Mal Griot as a cloaked figure in the short film No Closure" style="object-position:50% 30%">
   </div>
   <div class="ac-hero__copy">
     <span class="ac-hero__name reveal">Mal Griot</span>
@@ -321,10 +337,17 @@
       </a>
       <button type="button" class="ac-cta ac-cta--ghost" data-cast-mal>Cast Mal</button>
     </div>
+    <nav class="ac-hero__nav reveal" aria-label="Section navigation">
+      <a href="#reel">Latest Roles</a>
+      <a href="#archive">Selected Frames</a>
+      <a href="#representation">Representation</a>
+      <a href="#measurements">The Vitals</a>
+      <a href="#on-tape">On Tape</a>
+    </nav>
   </div>
 </section>
 
-<!-- ================= 2. REEL — LET THE WORK SPEAK ================= -->
+<!-- ================= 2. REEL - LET THE WORK SPEAK ================= -->
 <section class="ac-section ac-reel" id="reel">
   <div class="ac-reel__head reveal">
     <span class="ac-eyebrow">Showreel</span>
@@ -369,26 +392,139 @@
   </div>
 </section>
 
-<!-- ================= 3. INTRO TAPE ================= -->
-<section class="ac-section ac-tape" id="intro">
-  <div class="ac-tape__head reveal">
-    <span class="ac-eyebrow">Introduction</span>
-    <h2 class="ac-tape__title">Meet Mal</h2>
-    <p class="ac-tape__desc">A quick self-tape introduction — who he is, on camera.</p>
+<!-- ================= 5. GALLERY - CHARACTER / PERFORMANCE ARCHIVE ================= -->
+<section class="ac-section ac-archive" id="archive">
+  <div class="ac-archive__head reveal">
+    <div>
+      <span class="ac-eyebrow">Archive</span>
+      <h2 class="ac-archive__title">Selected Frames</h2>
+    </div>
+    <a href="#reel" class="ac-cta ac-cta--line">
+      Latest Roles
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
   </div>
-  <div class="reveal">
-    <div class="ac-tape__frame">
-      <video src="video/mal-griot-intro.mp4" controls playsinline preload="metadata" poster="img/1722241513433.jpg"></video>
+
+  <div class="ac-grid reveal" id="ac-archive-grid">
+    <button type="button" class="ac-tile ac-tile--tall" data-full="img/1722241513433.jpg">
+      <img src="img/1722241513433.jpg" alt="Mal Griot, black and white headshot, direct gaze" loading="lazy">
+      <span class="ac-tile__tag">Headshot</span>
+    </button>
+    <button type="button" class="ac-tile" data-full="img/ads/crm-airport-wide.jpg">
+      <img src="img/ads/crm-airport-wide.jpg" alt="Mal Griot on set for the Zoho CRM commercial, airport gate scene" loading="lazy">
+      <span class="ac-tile__tag">On Set - Zoho CRM</span>
+    </button>
+    <button type="button" class="ac-tile" data-full="img/ads/cliq-video-call.jpg">
+      <img src="img/ads/cliq-video-call.jpg" alt="Mal Griot on a video call in the Zoho Cliq commercial" loading="lazy">
+      <span class="ac-tile__tag">Zoho Cliq</span>
+    </button>
+    <button type="button" class="ac-tile" data-full="img/ads/crm-airport-talk.jpg">
+      <img src="img/ads/crm-airport-talk.jpg" alt="Mal Griot mid-scene in the Zoho CRM commercial" loading="lazy">
+      <span class="ac-tile__tag">Zoho CRM</span>
+    </button>
+    <button type="button" class="ac-tile ac-tile--tall" data-full="img/2025_05_06_939 V3 FINAL 2 new.jpg">
+      <img src="img/2025_05_06_939 V3 FINAL 2 new.jpg" alt="Mal Griot in a green suit, seated editorial portrait" loading="lazy">
+      <span class="ac-tile__tag">Modeling - Editorial</span>
+    </button>
+    <button type="button" class="ac-tile" data-full="img/2025_05_06_999_44 F.jpg">
+      <img src="img/2025_05_06_999_44 F.jpg" alt="Mal Griot in a green suit, standing editorial portrait" loading="lazy">
+      <span class="ac-tile__tag">Modeling - Editorial</span>
+    </button>
+    <button type="button" class="ac-tile" data-full="img/about-2.jpg">
+      <img src="img/about-2.jpg" alt="Mal Griot, profile portrait for modeling" loading="lazy">
+      <span class="ac-tile__tag">Modeling</span>
+    </button>
+    <button type="button" class="ac-tile" data-full="img/1722241513419.jpg">
+      <img src="img/1722241513419.jpg" alt="Mal Griot, profile portrait in a green jacket" loading="lazy">
+      <span class="ac-tile__tag">Modeling</span>
+    </button>
+    <button type="button" class="ac-tile" data-full="img/DSC01018.jpg">
+      <img src="img/DSC01018.jpg" alt="Mal Griot in a beanie and printed coat, modeling portrait" loading="lazy">
+      <span class="ac-tile__tag">Modeling</span>
+    </button>
+    <button type="button" class="ac-tile" data-full="img/about-3.jpg">
+      <img src="img/about-3.jpg" alt="Mal Griot in a beanie and fur coat, modeling portrait" loading="lazy">
+      <span class="ac-tile__tag">Modeling</span>
+    </button>
+    <button type="button" class="ac-tile" data-full="img/DSC00868.jpg">
+      <img src="img/DSC00868.jpg" alt="Mal Griot, profile portrait in a green jacket and sunglasses" loading="lazy">
+      <span class="ac-tile__tag">Modeling</span>
+    </button>
+    <button type="button" class="ac-tile" data-full="img/WhatsApp Image 2024-04-13 at 4.10.06 PM.jpeg">
+      <img src="img/WhatsApp Image 2024-04-13 at 4.10.06 PM.jpeg" alt="Mal Griot in a printed shirt, modeling portrait" loading="lazy">
+      <span class="ac-tile__tag">Modeling</span>
+    </button>
+    <button type="button" class="ac-tile" data-full="img/1722241513480.jpg">
+      <img src="img/1722241513480.jpg" alt="Mal Griot, black and white studio portrait, seated" loading="lazy">
+      <span class="ac-tile__tag">Modeling - Studio</span>
+    </button>
+    <button type="button" class="ac-tile" data-full="img/1722241513450.jpg">
+      <img src="img/1722241513450.jpg" alt="Mal Griot, black and white studio portrait, close profile" loading="lazy">
+      <span class="ac-tile__tag">Modeling - Studio</span>
+    </button>
+    <button type="button" class="ac-tile ac-tile--wide" data-full="img/acting-home.jpg">
+      <img src="img/acting-home.jpg" alt="Mal Griot, shirtless outdoor editorial portrait" loading="lazy">
+      <span class="ac-tile__tag">Modeling - Editorial</span>
+    </button>
+    <button type="button" class="ac-tile ac-tile--wide" data-full="img/no-closure-figure.jpg">
+      <img src="img/no-closure-figure.jpg" alt="Mal Griot as a towering cloaked figure facing another performer on a dark stage, in the short film No Closure" loading="lazy">
+      <span class="ac-tile__tag">No Closure - Film</span>
+    </button>
+    <button type="button" class="ac-tile ac-tile--tall" data-full="img/no-closure-closeup.jpg">
+      <img src="img/no-closure-closeup.jpg" alt="Mal Griot in close-up character makeup with dreadlocks framing his face, in the short film No Closure" loading="lazy">
+      <span class="ac-tile__tag">No Closure - Film</span>
+    </button>
+  </div>
+</section>
+
+<!-- ================= 5b. REPRESENTATION & CASTING - DYT ================= -->
+<section class="ac-section ac-rep" id="representation">
+  <div class="ac-rep__head reveal">
+    <span class="ac-eyebrow">Representation</span>
+    <h2 class="ac-rep__title">Representation &amp; Casting</h2>
+    <p class="ac-rep__desc">Managed by DYT in Mumbai - casting details and direct-download assets for productions.</p>
+  </div>
+  <div class="ac-rep__wrap reveal">
+    <div>
+      <p class="ac-rep__body">Mal is represented by <strong>DYT (Display Your Talent)</strong>, a Mumbai-based casting and talent management agency - one of the largest managers and agents of foreign and international-origin actors working in India. DYT connects talent directly with casting directors, production houses, and brands across film, TV, and commercial work.</p>
+      <p class="ac-rep__body">All casting inquiries should go through the agency first.</p>
+      <span class="ac-rep__subhead ac-rep__subhead--spaced">Casting Information</span>
+      <ul class="ac-facts">
+        <li><span class="ac-facts__label">Based in</span><span class="ac-facts__value">India</span></li>
+        <li><span class="ac-facts__label">Available for</span><span class="ac-facts__value">Film · TV · Theatre · Commercial · Music Video · Voice + Screen</span></li>
+        <li><span class="ac-facts__label">Languages</span><span class="ac-facts__value">English</span></li>
+        <li><span class="ac-facts__label">Travel</span><span class="ac-facts__value">Available, domestic &amp; international</span></li>
+      </ul>
+    </div>
+    <div>
+      <ul class="ac-rep-facts">
+        <li><span class="ac-rep-facts__label">Agency</span><span class="ac-rep-facts__value">DYT - Display Your Talent</span></li>
+        <li><span class="ac-rep-facts__label">Based in</span><span class="ac-rep-facts__value">Khar West, Mumbai</span></li>
+        <li><span class="ac-rep-facts__label">Website</span><span class="ac-rep-facts__value"><a href="https://dyt.co.in" target="_blank" rel="noopener">dyt.co.in</a></span></li>
+        <li><span class="ac-rep-facts__label">Phone</span><span class="ac-rep-facts__value"><a href="tel:+918369198850">+91 83691 98850</a></span></li>
+      </ul>
+      <span class="ac-rep__subhead ac-rep__subhead--spaced">Assets</span>
+      <p style="color:var(--paper-dim);font-size:13.5px;line-height:1.7;margin:0 0 14px">For casting directors and productions - direct downloads, no forms.</p>
+      <div class="ac-downloads">
+        <a class="ac-download" href="img/1722241513433.jpg" download>
+          Download headshot
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+        </a>
+        <a class="ac-download" href="cv/Mal-Griot-CV.pdf" download>
+          Download CV
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+        </a>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ================= 4. MEASUREMENTS ================= -->
+<!-- ================= 5c. MEASUREMENTS ================= -->
 <section class="ac-section ac-measure" id="measurements">
   <div class="ac-measure__head reveal">
     <span class="ac-eyebrow">Measurements</span>
-    <h2 class="ac-measure__title">The vitals</h2>
-    <p class="ac-measure__desc">Hover a point on the figure or a line in the list — metric and imperial, for wardrobe and casting.</p>
+    <h2 class="ac-measure__title">The Vitals</h2>
+    <p class="ac-measure__desc">Hover a point on the figure or a line in the list - metric and imperial, for wardrobe and casting.</p>
   </div>
 
   <div class="ac-measure__stage reveal">
@@ -471,149 +607,31 @@
   </div>
 </section>
 
-<!-- ================= 5. GALLERY — CHARACTER / PERFORMANCE ARCHIVE ================= -->
-<section class="ac-section ac-archive" id="archive">
-  <div class="ac-archive__head reveal">
-    <div>
-      <span class="ac-eyebrow">Archive</span>
-      <h2 class="ac-archive__title">Selected frames</h2>
-    </div>
-    <a href="#reel" class="ac-cta ac-cta--line">
-      Latest Roles
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </a>
-  </div>
-
-  <div class="ac-grid reveal" id="ac-archive-grid">
-    <button type="button" class="ac-tile ac-tile--tall" data-full="img/1722241513433.jpg">
-      <img src="img/1722241513433.jpg" alt="Mal Griot, black and white headshot, direct gaze" loading="lazy">
-      <span class="ac-tile__tag">Headshot</span>
-    </button>
-    <button type="button" class="ac-tile" data-full="img/ads/crm-airport-wide.jpg">
-      <img src="img/ads/crm-airport-wide.jpg" alt="Mal Griot on set for the Zoho CRM commercial, airport gate scene" loading="lazy">
-      <span class="ac-tile__tag">On Set — Zoho CRM</span>
-    </button>
-    <button type="button" class="ac-tile" data-full="img/ads/cliq-video-call.jpg">
-      <img src="img/ads/cliq-video-call.jpg" alt="Mal Griot on a video call in the Zoho Cliq commercial" loading="lazy">
-      <span class="ac-tile__tag">Zoho Cliq</span>
-    </button>
-    <button type="button" class="ac-tile" data-full="img/ads/crm-airport-talk.jpg">
-      <img src="img/ads/crm-airport-talk.jpg" alt="Mal Griot mid-scene in the Zoho CRM commercial" loading="lazy">
-      <span class="ac-tile__tag">Zoho CRM</span>
-    </button>
-    <button type="button" class="ac-tile ac-tile--tall" data-full="img/2025_05_06_939 V3 FINAL 2 new.jpg">
-      <img src="img/2025_05_06_939 V3 FINAL 2 new.jpg" alt="Mal Griot in a green suit, seated editorial portrait" loading="lazy">
-      <span class="ac-tile__tag">Modeling — Editorial</span>
-    </button>
-    <button type="button" class="ac-tile" data-full="img/2025_05_06_999_44 F.jpg">
-      <img src="img/2025_05_06_999_44 F.jpg" alt="Mal Griot in a green suit, standing editorial portrait" loading="lazy">
-      <span class="ac-tile__tag">Modeling — Editorial</span>
-    </button>
-    <button type="button" class="ac-tile" data-full="img/about-2.jpg">
-      <img src="img/about-2.jpg" alt="Mal Griot, profile portrait for modeling" loading="lazy">
-      <span class="ac-tile__tag">Modeling</span>
-    </button>
-    <button type="button" class="ac-tile" data-full="img/1722241513419.jpg">
-      <img src="img/1722241513419.jpg" alt="Mal Griot, profile portrait in a green jacket" loading="lazy">
-      <span class="ac-tile__tag">Modeling</span>
-    </button>
-    <button type="button" class="ac-tile" data-full="img/DSC01018.jpg">
-      <img src="img/DSC01018.jpg" alt="Mal Griot in a beanie and printed coat, modeling portrait" loading="lazy">
-      <span class="ac-tile__tag">Modeling</span>
-    </button>
-    <button type="button" class="ac-tile" data-full="img/about-3.jpg">
-      <img src="img/about-3.jpg" alt="Mal Griot in a beanie and fur coat, modeling portrait" loading="lazy">
-      <span class="ac-tile__tag">Modeling</span>
-    </button>
-    <button type="button" class="ac-tile" data-full="img/DSC00868.jpg">
-      <img src="img/DSC00868.jpg" alt="Mal Griot, profile portrait in a green jacket and sunglasses" loading="lazy">
-      <span class="ac-tile__tag">Modeling</span>
-    </button>
-    <button type="button" class="ac-tile" data-full="img/WhatsApp Image 2024-04-13 at 4.10.06 PM.jpeg">
-      <img src="img/WhatsApp Image 2024-04-13 at 4.10.06 PM.jpeg" alt="Mal Griot in a printed shirt, modeling portrait" loading="lazy">
-      <span class="ac-tile__tag">Modeling</span>
-    </button>
-    <button type="button" class="ac-tile" data-full="img/1722241513480.jpg">
-      <img src="img/1722241513480.jpg" alt="Mal Griot, black and white studio portrait, seated" loading="lazy">
-      <span class="ac-tile__tag">Modeling — Studio</span>
-    </button>
-    <button type="button" class="ac-tile" data-full="img/1722241513450.jpg">
-      <img src="img/1722241513450.jpg" alt="Mal Griot, black and white studio portrait, close profile" loading="lazy">
-      <span class="ac-tile__tag">Modeling — Studio</span>
-    </button>
-    <button type="button" class="ac-tile ac-tile--wide" data-full="img/acting-home.jpg">
-      <img src="img/acting-home.jpg" alt="Mal Griot, shirtless outdoor editorial portrait" loading="lazy">
-      <span class="ac-tile__tag">Modeling — Editorial</span>
-    </button>
-  </div>
-</section>
-
-<!-- ================= 5b. AUDITION TAPE ================= -->
-<section class="ac-section ac-tape" id="audition">
+<!-- ================= 5d. ON TAPE - INTRO + AUDITION ================= -->
+<section class="ac-section ac-tape" id="on-tape">
   <div class="ac-tape__head reveal">
-    <span class="ac-eyebrow">Audition</span>
-    <h2 class="ac-tape__title">An audition tape</h2>
-    <p class="ac-tape__desc">Unfiltered process, not just the finished reel — this one didn't land the role, and it's here anyway.</p>
+    <span class="ac-eyebrow">On Tape</span>
+    <h2 class="ac-tape__title">Self-Tapes - Introduction &amp; Audition</h2>
+    <p class="ac-tape__desc">Two sides of the same process: a quick on-camera introduction, and an unfiltered audition submission - process, not just the finished reel.</p>
   </div>
-  <div class="reveal">
-    <div class="ac-tape__frame">
-      <video src="video/mal-griot-audition.mp4" controls playsinline preload="metadata"></video>
+  <div class="ac-tape__grid reveal">
+    <div class="ac-tape__clip">
+      <span class="ac-tape__clip-label">Meet Mal</span>
+      <div class="ac-tape__frame">
+        <video src="video/mal-griot-intro.mp4" controls playsinline preload="metadata" poster="img/1722241513433.jpg"></video>
+      </div>
     </div>
-    <p class="ac-tape__note">Casting is a numbers game — showing the work in progress, wins included, is part of being honest about the craft.</p>
-  </div>
-</section>
-
-<!-- ================= 5c. REPRESENTATION — DYT ================= -->
-<section class="ac-section ac-rep" id="representation">
-  <div class="ac-rep__wrap">
-    <div class="reveal">
-      <span class="ac-eyebrow">Representation</span>
-      <h2 class="ac-rep__title">DYT — Display Your Talent</h2>
-      <p class="ac-rep__body">Mal is represented by <strong>DYT (Display Your Talent)</strong>, a Mumbai-based casting and talent management agency — one of the largest managers and agents of foreign and international-origin actors working in India. DYT connects talent directly with casting directors, production houses, and brands across film, TV, and commercial work.</p>
-      <p class="ac-rep__body">All casting inquiries should go through the agency first.</p>
-    </div>
-    <div class="reveal">
-      <ul class="ac-rep-facts">
-        <li><span class="ac-rep-facts__label">Agency</span><span class="ac-rep-facts__value">DYT — Display Your Talent</span></li>
-        <li><span class="ac-rep-facts__label">Based in</span><span class="ac-rep-facts__value">Khar West, Mumbai</span></li>
-        <li><span class="ac-rep-facts__label">Website</span><span class="ac-rep-facts__value"><a href="https://dyt.co.in" target="_blank" rel="noopener">dyt.co.in</a></span></li>
-        <li><span class="ac-rep-facts__label">Phone</span><span class="ac-rep-facts__value"><a href="tel:+918369198850">+91 83691 98850</a></span></li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- ================= 7. CASTING INFORMATION ================= -->
-<section class="ac-section ac-casting" id="casting">
-  <div class="ac-casting__wrap">
-    <div class="reveal">
-      <h2 class="ac-casting__title">Casting information</h2>
-      <ul class="ac-facts">
-        <li><span class="ac-facts__label">Based in</span><span class="ac-facts__value">India</span></li>
-        <li><span class="ac-facts__label">Available for</span><span class="ac-facts__value">Film · TV · Theatre · Commercial · Music Video · Voice + Screen</span></li>
-        <li><span class="ac-facts__label">Languages</span><span class="ac-facts__value">English</span></li>
-        <li><span class="ac-facts__label">Representation</span><span class="ac-facts__value">DYT (Display Your Talent) — Mumbai</span></li>
-        <li><span class="ac-facts__label">Travel</span><span class="ac-facts__value">Available, domestic &amp; international</span></li>
-      </ul>
-    </div>
-    <div class="reveal">
-      <h2 class="ac-casting__title">Assets</h2>
-      <p style="color:var(--paper-dim);font-size:13.5px;line-height:1.7;margin:0 0 6px">For casting directors and productions — direct downloads, no forms.</p>
-      <div class="ac-downloads">
-        <a class="ac-download" href="img/1722241513433.jpg" download>
-          Download headshot
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
-        </a>
-        <a class="ac-download" href="cv/Mal-Griot-CV.pdf" download>
-          Download CV
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
-        </a>
+    <div class="ac-tape__clip">
+      <span class="ac-tape__clip-label">An audition tape</span>
+      <div class="ac-tape__frame">
+        <video src="video/mal-griot-audition.mp4" controls playsinline preload="metadata"></video>
       </div>
     </div>
   </div>
+  <p class="ac-tape__note">This audition didn't land the role, and it's here anyway - casting is a numbers game, and showing the work in progress, wins included, is part of being honest about the craft.</p>
 </section>
 
-<!-- ================= 8. FINAL CTA — THE CLOSING SHOT ================= -->
+<!-- ================= 8. FINAL CTA - THE CLOSING SHOT ================= -->
 <section class="ac-final">
   <img src="img/1722241513465.jpg" alt="">
   <div class="ac-final__copy">
@@ -640,7 +658,7 @@
     <h3 class="ac-modal__title">Cast Mal through DYT</h3>
     <p class="ac-modal__body">Mal is represented by DYT (Display Your Talent) in Mumbai. Casting inquiries go through the agency first.</p>
     <ul class="ac-modal__facts">
-      <li><span>Agency</span><span>DYT — Display Your Talent</span></li>
+      <li><span>Agency</span><span>DYT - Display Your Talent</span></li>
       <li><span>Website</span><span><a href="https://dyt.co.in" target="_blank" rel="noopener">dyt.co.in</a></span></li>
       <li><span>Phone</span><span><a href="tel:+918369198850">+91 83691 98850</a></span></li>
     </ul>
@@ -665,7 +683,7 @@
 <script src="effects.js"></script>
 <script>renderChrome('acting');</script>
 <script>
-// Cinema player — filmstrip picks the clip; first click on the play ring
+// Cinema player - filmstrip picks the clip; first click on the play ring
 // (or the hero's "Watch reel" CTA) lazy-loads the YouTube embed.
 (function () {
   var frame = document.getElementById('ac-cinema-frame');
@@ -730,7 +748,7 @@
 })();
 </script>
 <script>
-// Hero carousel — crossfade through the portfolio photos.
+// Hero carousel - crossfade through the portfolio photos.
 (function () {
   var carousel = document.getElementById('ac-hero-carousel');
   if (!carousel) return;
@@ -745,7 +763,7 @@
 })();
 </script>
 <script>
-// Measurements diagram — hover a body point or a list row, light up the pair.
+// Measurements diagram - hover a body point or a list row, light up the pair.
 (function () {
   var svg = document.getElementById('ac-measure-svg');
   var body = document.getElementById('ac-measure-body');
@@ -781,7 +799,7 @@
 })();
 </script>
 <script>
-// Cast Mal — every trigger opens the DYT representation modal instead of navigating away.
+// Cast Mal - every trigger opens the DYT representation modal instead of navigating away.
 (function () {
   var modal = document.getElementById('ac-modal');
   var closeBtn = document.getElementById('ac-modal-close');
@@ -797,7 +815,7 @@
 })();
 </script>
 <script>
-// Archive lightbox — click any frame to view it full-size.
+// Archive lightbox - click any frame to view it full-size.
 (function () {
   var lightbox = document.getElementById('ac-lightbox');
   var frame = document.getElementById('ac-lightbox-frame');

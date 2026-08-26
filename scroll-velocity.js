@@ -1,6 +1,6 @@
-// MAL GRIOT — vanilla port of react-bits ScrollVelocity.
+// MAL GRIOT - vanilla port of react-bits ScrollVelocity.
 // Usage: <div class="sv-wrap"><div class="sv-row" data-base-speed="-40"
-// data-text="AFRO-HOUSE">...</div></div> — one seed item is duplicated
+// data-text="AFRO-HOUSE">...</div></div> - one seed item is duplicated
 // until the row is at least 3x its own width (so the loop never shows a
 // gap), then translated on a plain rAF loop. Idle speed comes from
 // data-base-speed (px/sec, sign sets direction); scrolling adds a
@@ -28,7 +28,7 @@
       var rowBox = row.parentElement.getBoundingClientRect().width || window.innerWidth;
       // The row wraps by translating one seed-width at a time (see tick()),
       // which only looks seamless if there's always at least a full
-      // viewport of content still ahead after any wrap — i.e. total row
+      // viewport of content still ahead after any wrap - i.e. total row
       // width needs to clear rowBox + one seed-width. Two spare copies on
       // top of that is a cheap safety margin against measurement rounding.
       var needed = Math.max(3, Math.ceil(rowBox / oneWidth) + 2);
@@ -93,7 +93,7 @@
         // Rendered items only exist in the positive-local-x direction (item0
         // at [0,w), item1 at [w,2w), ...), so the visible window (which
         // spans local [-r.x, -r.x+rowBox]) only ever lands on real content
-        // when r.x stays within (-w, 0] — true for BOTH scroll directions.
+        // when r.x stays within (-w, 0] - true for BOTH scroll directions.
         // A rightward row (dir > 0, r.x climbing toward positive) would
         // otherwise walk the window into negative local space, where
         // nothing is rendered, and just go blank instead of looping.

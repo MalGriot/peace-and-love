@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Poetry — Mal Griot</title>
-<meta name="description" content="Spoken-word poetry by Mal Griot — clips, audio, and the book.">
-<meta property="og:title" content="Poetry — Mal Griot">
-<meta property="og:description" content="Spoken-word poetry by Mal Griot — clips, audio, and the book.">
+<title>Poetry | Mal Griot</title>
+<meta name="description" content="Spoken-word poetry by Mal Griot: clips, audio, and the book.">
+<meta property="og:title" content="Poetry | Mal Griot">
+<meta property="og:description" content="Spoken-word poetry by Mal Griot: clips, audio, and the book.">
 <meta property="og:image" content="https://malgriot.github.io/peace-and-love/img/og/share-contact.png">
 <meta property="og:url" content="https://malgriot.github.io/peace-and-love/poetry.html">
 <meta property="og:type" content="website">
@@ -19,12 +19,12 @@
 <link rel="stylesheet" href="effects.css">
 <link rel="stylesheet" href="flowing-menu.css">
 <style>
-/* ---------- Poetry page — editorial, page not stage. No booking CTA
+/* ---------- Poetry page: editorial, page not stage. No booking CTA
    anywhere on this page; the two asks are "watch/listen" and "buy the book". ---------- */
 
 .po-section{padding:clamp(64px,10vw,140px) clamp(20px,6vw,64px)}
 
-/* ---------- 1. Hero — self-hosted loop, same asset already used on the
+/* ---------- 1. Hero: self-hosted loop, same asset already used on the
    homepage accordion tile, now full-bleed. ---------- */
 .po-hero{position:relative;min-height:60vh;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;background:var(--ink)}
 
@@ -32,7 +32,7 @@
    muted; they hand off to one another in sequence (1 -> 2 -> 3 -> loop),
    and a click on any tile jumps playback to it and brings it forward.
    Tiles are sized by aspect-ratio (matching the portrait source clips)
-   rather than stretched to fill leftover flex space — the latter squashed
+   rather than stretched to fill leftover flex space; the latter squashed
    them into a near-landscape box on desktop, forcing object-fit:cover to
    zoom in hard and crop out most of the frame. ---------- */
 .po-hero__reel{position:relative;z-index:0;display:grid;grid-template-columns:repeat(3,1fr);gap:2px;flex:none;background:#000}
@@ -46,7 +46,7 @@
 }
 .po-hero__tile.is-active video{opacity:1;filter:grayscale(0)}
 
-/* Thumbnail card — swaps in over the video once a clip finishes, instead
+/* Thumbnail card: swaps in over the video once a clip finishes, instead
    of leaving it frozen on its last frame. Clicking it again replays. */
 .po-hero__tile-thumb{
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 22%;
@@ -55,7 +55,7 @@
 .po-hero__tile.is-ended .po-hero__tile-thumb{opacity:1}
 .po-hero__tile.is-ended video{opacity:0}
 
-/* Title — visible at rest (idle/paused/ended), fades out while its clip
+/* Title: visible at rest (idle/paused/ended), fades out while its clip
    is actively playing so it doesn't compete with the footage. */
 .po-hero__tile-title{
   position:absolute;left:16px;right:16px;bottom:80px;z-index:1;
@@ -70,12 +70,12 @@
   font-size:clamp(11px,1.1vw,13px);letter-spacing:.01em;color:var(--paper-dim,rgba(239,230,216,.72));
 }
 
-/* Subtitles — a custom overlay driven off the <track>'s cues (JS sets
+/* Subtitles: a custom overlay driven off the <track>'s cues (JS sets
    textContent on 'cuechange'; the native cue box itself is disabled via
    track.mode='hidden') rather than relying on browser-native ::cue
    rendering. Native cues paint *inside* the video element, and the
    .po-hero__tile::after gradient (below) sits in front of the whole tile
-   with no z-index — same tier problem the title/index text has, except
+   with no z-index, same tier problem the title/index text has, except
    native captions can't be given z-index individually since they aren't
    a separate box. This element can: it sits above the gradient like the
    title does. Set in the brand display face (--font-display, matching the
@@ -158,7 +158,7 @@
 .po-practice__head span{display:block}
 .po-practice__body{font-size:clamp(15px,1.4vw,18px);line-height:1.75;color:var(--paper-dim);max-width:54ch;margin:0 auto}
 
-/* ---------- 3. Clips & audio — react-bits Flowing Menu (flowing-menu.css/
+/* ---------- 3. Clips & audio: react-bits Flowing Menu (flowing-menu.css/
    .js), retitled for poems: hover a row and a gold band sweeps in from the
    edge the cursor entered on, with the title scrolling across it beside a
    thumbnail. Click opens the shared player panel below the list. ---------- */
@@ -223,7 +223,7 @@
   .poem__lyrics-close{display:flex}
 }
 
-/* ---------- 4. The Book — an actual flip-through, not a flat cover shot.
+/* ---------- 4. The Book: an actual flip-through, not a flat cover shot.
    vendor/page-flip.js (StPageFlip, self-hosted like vendor/ogl.js) renders
    a draggable/click-to-turn page-flip on a canvas it builds inside
    #po-book-flip; the "table" card below is just a resting surface for it
@@ -243,12 +243,12 @@
 }
 .po-book__flip{position:relative;width:100%;max-width:760px;filter:drop-shadow(0 26px 46px rgba(0,0,0,.5))}
 
-/* Periodic drag hint — a small triangular "peel" tugs at the top-right
+/* Periodic drag hint: a small triangular "peel" tugs at the top-right
    corner every 10s (see the page-flip init script) to suggest the page
    can be dragged open: two short pulls, the second reaching a little
-   deeper into the page, then a full retreat. Purely decorative — sits
+   deeper into the page, then a full retreat. Purely decorative, sits
    above the canvas but never intercepts pointer events. Named
-   po-book__corner-tease (not po-book__flip-hint) — that name's already
+   po-book__corner-tease (not po-book__flip-hint) since that name's already
    taken by the static "Drag a corner, or use the arrows" caption below
    the book. */
 .po-book__corner-tease{position:absolute;top:0;right:0;width:18%;max-width:110px;aspect-ratio:1;z-index:6;pointer-events:none;overflow:visible}
@@ -284,7 +284,7 @@
   .po-book__stage{gap:8px;padding:22px 8px}
 }
 
-/* ---------- 5. The Playlist — a Discover-Weekly-style playlist card so
+/* ---------- 5. The Playlist: a Discover-Weekly-style playlist card so
    readers can listen while they read. Structurally the same shape as a
    Spotify playlist page (big cover, header stats, a "play all" button,
    numbered track rows) but restyled in the site's own ink/gold palette
@@ -371,7 +371,7 @@
   border:1px solid rgba(239,230,216,.2);border-radius:999px;padding:4px 10px;white-space:nowrap;
 }
 
-/* Persistent now-playing bar — docks to the bottom of the viewport once a
+/* Persistent now-playing bar: docks to the bottom of the viewport once a
    track has been started, so the song keeps going while the reader
    scrolls back up into the book/clips sections above. Holds a small
    YouTube iframe (real video, muted visually-small rather than removed,
@@ -423,7 +423,7 @@
   .po-pl-row-tag{display:none}
 }
 
-/* ---------- Ko-fi checkout modal — clicking "Get the book" opens the
+/* ---------- Ko-fi checkout modal: clicking "Get the book" opens the
    shop item in an in-page overlay (iframe) instead of navigating away.
    ?embed=true is Ko-fi's supported param for iframe-embedding a shop/
    checkout page. ---------- */
@@ -448,12 +448,12 @@
 
 <section class="po-hero">
   <div class="po-hero__reel" id="po-hero-reel">
-    <div class="po-hero__tile is-active" data-tile="0" role="button" tabindex="0" aria-label="Play clip 1 — In My Bones, MOMENTS Improv Jazz Concert, CRIPA Auroville">
+    <div class="po-hero__tile is-active" data-tile="0" role="button" tabindex="0" aria-label="Play clip 1 | In My Bones, MOMENTS Improv Jazz Concert, CRIPA Auroville">
       <video src="video/poetry-hero-1.mp4" poster="img/poetry-hero-1-poster.jpg" autoplay muted playsinline preload="auto">
         <track kind="subtitles" srclang="en" label="English" src="captions/poetry-hero-1.vtt">
       </video>
       <img class="po-hero__tile-thumb" src="img/poetry-hero-1-poster.jpg" alt="" aria-hidden="true">
-      <span class="po-hero__tile-title">&ldquo;In My Bones&rdquo;<span class="po-hero__tile-subtitle">MOMENTS - An Improv Jazz Concert | CRIPA, Auroville</span></span>
+      <span class="po-hero__tile-title">&ldquo;In My Bones&rdquo;<span class="po-hero__tile-subtitle">MOMENTS: An Improv Jazz Concert | CRIPA, Auroville</span></span>
       <span class="po-hero__tile-caption" aria-hidden="true"></span>
       <span class="po-hero__tile-index"><span class="po-hero__tile-bar"><i></i></span> 01</span>
       <button type="button" class="po-hero__tile-mute" aria-label="Unmute clip 1" aria-pressed="true">
@@ -461,7 +461,7 @@
         <svg class="po-hero__tile-mute-icon po-hero__tile-mute-icon--muted" width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/><path d="M16 9l6 6M22 9l-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
       </button>
     </div>
-    <div class="po-hero__tile" data-tile="1" role="button" tabindex="0" aria-label="Play clip 2 — Unlock the Key, Light Into Space Art Exhibition, NMACC Mumbai">
+    <div class="po-hero__tile" data-tile="1" role="button" tabindex="0" aria-label="Play clip 2 | Unlock the Key, Light Into Space Art Exhibition, NMACC Mumbai">
       <video src="video/poetry-hero-2.mp4" poster="img/poetry-hero-2-poster.jpg" muted playsinline preload="auto">
         <track kind="subtitles" srclang="en" label="English" src="captions/poetry-hero-2.vtt">
       </video>
@@ -474,7 +474,7 @@
         <svg class="po-hero__tile-mute-icon po-hero__tile-mute-icon--muted" width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/><path d="M16 9l6 6M22 9l-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
       </button>
     </div>
-    <div class="po-hero__tile" data-tile="2" role="button" tabindex="0" aria-label="Play clip 3 — Precious Delights, MOMENTS II Rehearsal, R&amp;B Studio Bombay">
+    <div class="po-hero__tile" data-tile="2" role="button" tabindex="0" aria-label="Play clip 3 | Precious Delights, MOMENTS II Rehearsal, R&amp;B Studio Bombay">
       <video src="video/poetry-hero-3.mp4" poster="img/poetry-hero-3-poster.jpg" muted playsinline preload="auto">
         <track kind="subtitles" srclang="en" label="English" src="captions/poetry-hero-3.vtt">
       </video>
@@ -491,7 +491,7 @@
   <div class="po-hero__copy">
     <span class="po-hero__eyebrow">Spoken Word</span>
     <h1 class="po-hero__title">Words that<br>move first.</h1>
-    <p class="po-hero__desc">Before a song has a melody, before a set has a shape, there's the page — ninety-plus pieces Mal sorts by theme, not chronology, chasing the feeling before he's found the words for it. Some become lyrics. Some become the pause before a verse on stage. This is where the rest of the work starts.</p>
+    <p class="po-hero__desc">Before a song has a melody, before a set has a shape, there's the page. Ninety-plus pieces Mal sorts by theme, not chronology, chasing the feeling before he's found the words for it. Some become lyrics. Some become the pause before a verse on stage. This is where the rest of the work starts.</p>
     <div class="po-hero__ctas">
       <a href="#book" class="po-cta po-cta--solid">Get the book<svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       <a href="#listen" class="po-cta po-cta--ghost">Hear the pieces</a>
@@ -501,7 +501,7 @@
 
 <section class="po-section po-practice">
   <h2 class="po-practice__head"><span>Not a poet who also performs.</span><span>A performer built from poems.</span></h2>
-  <p class="po-practice__body">Every live set draws from this same well — the pause before a verse, a phrase turned mid-song, a room read and answered in real time. Booking Mal for a wedding, a listening room, a brand activation? This is the raw material underneath all of it. See it in <a href="live-sets.html" class="po-cta" style="font-size:inherit;text-transform:none;letter-spacing:normal;border-bottom-width:1px">Live Sets</a>.</p>
+  <p class="po-practice__body">Every live set draws from this same well: the pause before a verse, a phrase turned mid-song, a room read and answered in real time. Booking Mal for a wedding, a listening room, a brand activation? This is the raw material underneath all of it. See it in <a href="live-sets.html" class="po-cta" style="font-size:inherit;text-transform:none;letter-spacing:normal;border-bottom-width:1px">Live Sets</a>.</p>
 </section>
 
 <section class="po-section po-book" id="book">
@@ -533,14 +533,14 @@
 <section class="po-section po-listen" id="listen">
   <div class="po-listen__head reveal">
     <h2>Clips &amp; Audio</h2>
-    <p class="po-listen__sub">A running set — video and recorded audio, added as each piece is ready to share.</p>
+    <p class="po-listen__sub">A running set of video and recorded audio, added as each piece is ready to share.</p>
   </div>
 
   <div class="po-flow-wrap reveal">
     <!-- Each row: data-platform="youtube" data-id="<video id>" OR
          data-platform="soundcloud" data-url="<full soundcloud track url>".
          Swap the placeholder IDs/URLs for the real ones, and data-img for a
-         real thumbnail — layout, hover reveal, and expand/collapse all just
+         real thumbnail; layout, hover reveal, and expand/collapse all just
          work once they're real. Markup shape (item > link + marquee seed)
          is required by flowing-menu.js, which fills in the repeated
          marquee copies at runtime. -->
@@ -640,7 +640,7 @@
 
 <section class="po-section po-playlist" id="playlist">
   <div class="po-pl-card reveal">
-    <div class="po-pl-cover"><img src="img/book/cover.jpg" alt="falling under where — book cover"></div>
+    <div class="po-pl-cover"><img src="img/book/cover.jpg" alt="falling under where | book cover"></div>
     <div class="po-pl-meta">
       <span class="po-pl-kicker">From the back of the book</span>
       <h2 class="po-pl-title">For deep listeners</h2>
@@ -764,8 +764,8 @@
 <div class="po-pl-bar" id="po-pl-bar">
   <div class="po-pl-bar-video" id="po-pl-bar-video"></div>
   <div class="po-pl-bar-meta">
-    <div class="po-pl-bar-title" id="po-pl-bar-title">—</div>
-    <div class="po-pl-bar-artist" id="po-pl-bar-artist">—</div>
+    <div class="po-pl-bar-title" id="po-pl-bar-title">-</div>
+    <div class="po-pl-bar-artist" id="po-pl-bar-artist">-</div>
   </div>
   <div class="po-pl-bar-transport">
     <button type="button" class="po-pl-bar-btn" id="po-pl-bar-prev" aria-label="Previous track">
@@ -801,7 +801,7 @@
 <div id="chrome-chat"></div>
 <div id="chrome-player"></div>
 <script>
-// Ko-fi checkout modal — lazy-loads the iframe on first open (not on page
+// Ko-fi checkout modal: lazy-loads the iframe on first open (not on page
 // load) so the Ko-fi embed never fires an extra request for visitors who
 // never click "Get the book". Falls back to opening the shop link in a new
 // tab if the iframe fails to load (some ad-blockers block ko-fi.com frames).
@@ -838,8 +838,8 @@
 <script src="effects.js"></script>
 <script>renderChrome('poetry');</script>
 <script>
-// Hero reel — three portrait clips that hand off to one another in
-// sequence (1 -> 2 -> 3, stopping after the last one — no loop back to 1).
+// Hero reel: three portrait clips that hand off to one another in
+// sequence (1 -> 2 -> 3, stopping after the last one, no loop back to 1).
 // Only the active tile plays and shows in color; the others sit paused and
 // greyscale (see .po-hero__tile video filter in CSS). Each tile also
 // carries: a title that's visible at rest and fades out while that clip is
@@ -869,7 +869,7 @@
     btn.setAttribute('aria-label', (mutedState[i] ? 'Unmute' : 'Mute') + ' clip ' + (i + 1));
   }
 
-  // Drive captions ourselves instead of native ::cue rendering — see the
+  // Drive captions ourselves instead of native ::cue rendering; see the
   // .po-hero__tile-caption CSS comment for why (the gradient overlay sits
   // in front of native cues with no way to re-stack them individually).
   // Setting mode='hidden' isn't enough by itself: the browser's own
@@ -879,7 +879,7 @@
   // a short interval until it holds, rather than relying on one event
   // whose exact timing isn't reliable across browsers.
   // Shrinks the caption's font-size (from its CSS clamp() default) until it
-  // fits on one line within its tile — cues vary in length and the tile can
+  // fits on one line within its tile. Cues vary in length and the tile can
   // be much narrower than the desktop three-up layout's widest column, so a
   // single fixed size either wraps long cues or wastes space on short ones.
   function fitCaptionLine(el, tile) {
@@ -960,7 +960,7 @@
     v.addEventListener('ended', function () {
       if (i !== active) return;
       tiles[i].classList.add('is-ended');
-      if (i === tiles.length - 1) return; // last clip — stop, don't loop back to the first
+      if (i === tiles.length - 1) return; // last clip, stop, don't loop back to the first
       activate(i + 1, { restart: true, muted: true });
     });
     v.addEventListener('loadedmetadata', function () {
@@ -978,11 +978,11 @@
       return;
     }
     if (tiles[i].classList.contains('is-ended')) {
-      activate(i, { restart: true, muted: false }); // finished — click replays
+      activate(i, { restart: true, muted: false }); // finished, click replays
     } else if (!v.paused) {
-      v.pause(); // active and playing — click pauses in place
+      v.pause(); // active and playing, click pauses in place
     } else {
-      var p = v.play(); // active and paused mid-clip — click resumes
+      var p = v.play(); // active and paused mid-clip, click resumes
       if (p && p.catch) p.catch(function () {});
     }
   }
@@ -997,7 +997,7 @@
     });
   });
 
-  // Swipe navigation (mobile) — the CSS collapses the reel to one tile at
+  // Swipe navigation (mobile): the CSS collapses the reel to one tile at
   // a time under 720px, with no visible way to move between clips besides
   // waiting for autoplay handoff. A horizontal swipe on the reel jumps to
   // the next/previous tile, same as tapping it (restarts, unmuted). Small
@@ -1049,7 +1049,7 @@
 <script src="https://w.soundcloud.com/player/api.js"></script>
 <script>
 // Clip/audio rows (react-bits Flowing Menu, see flowing-menu.css/.js for the
-// hover reveal) — click a row to expand an inline YouTube or SoundCloud
+// hover reveal); click a row to expand an inline YouTube or SoundCloud
 // embed in the single shared panel below the list, one open at a time.
 // Mirrors the release-row pattern on releases.html but simplified (no
 // tracklist, no mini-player mirroring).
@@ -1058,36 +1058,36 @@
 // data-lyrics id on the row). When a panel opens with lyrics available, a
 // "Lyrics" button appears on the player. Toggling it opens a synced panel
 // (docked beside the player on desktop, full overlay with a close button
-// on mobile) that auto-scrolls to the active line as playback advances —
+// on mobile) that auto-scrolls to the active line as playback advances -
 // via the YouTube IFrame API for video, the SoundCloud Widget API for audio.
 (function () {
   var list = document.getElementById('poem-list');
   var panel = document.getElementById('poem-active-panel');
   if (!list || !panel) return;
 
-  // Placeholder lyric sets, one per data-lyrics id above — swap the text
+  // Placeholder lyric sets, one per data-lyrics id above; swap the text
   // and timestamps (seconds) for the real transcriptions once available.
   var LYRICS = {
     '1': [
-      { t: 0,  text: 'Untitled Piece I — lyrics placeholder.' },
+      { t: 0,  text: 'Untitled Piece I: lyrics placeholder.' },
       { t: 6,  text: 'Swap this block for the real, timed transcription.' },
       { t: 13, text: 'Each line carries a start time in seconds.' },
       { t: 20, text: 'The active line highlights and scrolls into view as the clip plays.' }
     ],
     '2': [
-      { t: 0,  text: 'Untitled Piece II — lyrics placeholder.' },
+      { t: 0,  text: 'Untitled Piece II: lyrics placeholder.' },
       { t: 6,  text: 'Swap this block for the real, timed transcription.' },
       { t: 13, text: 'Each line carries a start time in seconds.' },
       { t: 20, text: 'The active line highlights and scrolls into view as the clip plays.' }
     ],
     '3': [
-      { t: 0,  text: 'There Will Be a Moment — lyrics placeholder.' },
+      { t: 0,  text: 'There Will Be a Moment: lyrics placeholder.' },
       { t: 6,  text: 'Swap this block for the real, timed transcription.' },
       { t: 13, text: 'Each line carries a start time in seconds.' },
       { t: 20, text: 'The active line highlights and scrolls into view as the track plays.' }
     ],
     '4': [
-      { t: 0,  text: 'Untitled Piece IV — lyrics placeholder.' },
+      { t: 0,  text: 'Untitled Piece IV: lyrics placeholder.' },
       { t: 6,  text: 'Swap this block for the real, timed transcription.' },
       { t: 13, text: 'Each line carries a start time in seconds.' },
       { t: 20, text: 'The active line highlights and scrolls into view as the track plays.' }
@@ -1168,7 +1168,7 @@
 
   function wireYouTubeSync(mediaId) {
     if (typeof YT === 'undefined' || !YT.Player) {
-      // API script still loading — retry shortly.
+      // API script still loading, retry shortly.
       setTimeout(function () { if (activePanel) wireYouTubeSync(mediaId); }, 300);
       return;
     }
@@ -1256,7 +1256,7 @@
 </script>
 <script src="vendor/page-flip.js"></script>
 <script>
-// The Book — a real page-flip (StPageFlip, vendor/page-flip.js), not a
+// The Book: a real page-flip (StPageFlip, vendor/page-flip.js), not a
 // static cover shot. Pages are the actual "a moment" scans, book-ended by
 // the cover front and back (showCover:true treats the first/last images as
 // a stiffer cover page rather than a normal leaf). usePortrait lets it
@@ -1304,13 +1304,13 @@
   var prevBtn = document.querySelector('.po-book__flip-btn--prev');
   var nextBtn = document.querySelector('.po-book__flip-btn--next');
 
-  // The front cover is a lone "hard" page (showCover:true) — in landscape/
+  // The front cover is a lone "hard" page (showCover:true); in landscape/
   // spread mode StPageFlip renders it alone on the right and leaves the
   // paired left half blank. That blank half isn't transparent: the
   // library's own render loop clears the whole canvas to opaque white
   // every frame before drawing pages into it, so anything left undrawn
   // (the blank half at rest, and the exposed strip behind the page while
-  // it's mid-drag) shows through as flat white — a DOM overlay can only
+  // it's mid-drag) shows through as flat white. A DOM overlay can only
   // mask the "at rest" case, since during a drag the animated page has to
   // paint on top of that same canvas region, not under an overlay div.
   // Patching the clear color directly fixes both at the source.
@@ -1329,7 +1329,7 @@
     if (nextBtn) nextBtn.disabled = current >= count - 1;
   }
 
-  // Periodic "you can drag this" hint — every 10s, a small corner peels in
+  // Periodic "you can drag this" hint: every 10s, a small corner peels in
   // and back out at the top-right of whatever page is currently on top
   // (purely a CSS pulse on an overlay, not a real page-flip drag, so it
   // can't leave the book in a half-turned state). Skipped whenever the
@@ -1346,7 +1346,7 @@
   }, 10000);
 
   // turnToNextPage/turnToPrevPage (a direct jump) rather than
-  // flipNext/flipPrev (a simulated corner-drag gesture) — the latter
+  // flipNext/flipPrev (a simulated corner-drag gesture); the latter
   // computes its drag target from the current spread geometry and can
   // silently no-op from certain starting positions (e.g. right on the
   // cover), where a direct turn always works.
@@ -1357,7 +1357,7 @@
 })();
 </script>
 <script>
-// The Playlist — Discover-Weekly-style card wired to real YouTube audio.
+// The Playlist - Discover-Weekly-style card wired to real YouTube audio.
 // One shared YT.Player lives in the fixed bottom bar; clicking a row (or
 // the header "play all") loads that video into it, opens the bar, and
 // starts playback. The bar stays docked while the reader scrolls back up
@@ -1389,7 +1389,7 @@
 
   // Playing a playlist track should pause the shared mini-player (and any
   // Spotify/SoundCloud release panel driving it, see releases.html), and
-  // vice versa — the mini-player starting up should pause this playlist.
+  // vice versa - the mini-player starting up should pause this playlist.
   // Same griot:* event bus the rest of the site already coordinates through.
   window.addEventListener('griot:mini-player-playing', function () {
     if (!player || !player.pauseVideo) return;
@@ -1460,7 +1460,7 @@
 
     // Build the iframe directly (matching the Clips & Audio embed pattern
     // above) rather than letting `new YT.Player` construct one from an
-    // empty div — attaching the API to an existing embed iframe is the
+    // empty div - attaching the API to an existing embed iframe is the
     // path that reliably initializes here.
     var videoHost = document.getElementById('po-pl-bar-video');
     videoHost.innerHTML = '<iframe id="po-pl-bar-iframe" src="https://www.youtube.com/embed/' +

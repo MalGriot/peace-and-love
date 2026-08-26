@@ -1,7 +1,7 @@
-/* MAL GRIOT — vanilla port of react-bits FlowingMenu (Codrops-style hover
+/* MAL GRIOT - vanilla port of react-bits FlowingMenu (Codrops-style hover
    marquee reveal). Ported as a themeable BEM block (.po-flow*) rather than
    the library's generic .menu* names, sized for an inline content list
-   instead of a full-viewport nav — see flowing-menu.js for the interaction
+   instead of a full-viewport nav - see flowing-menu.js for the interaction
    logic (gsap-driven edge-aware reveal + auto-scrolling marquee). */
 
 .po-flow-wrap{position:relative;border-radius:12px;overflow:hidden;background:#1c1815;border:1px solid rgba(239,230,216,.1)}

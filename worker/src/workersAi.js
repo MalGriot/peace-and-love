@@ -1,5 +1,5 @@
 // Cloudflare Workers AI is free (10,000 neurons/day, no card required, no
-// separate API key — auth rides on the Worker's own `env.AI` binding
+// separate API key - auth rides on the Worker's own `env.AI` binding
 // declared in wrangler.toml). Traded off against Anthropic: no forced
 // tool-choice API, so we lean on JSON Mode (response_format: json_schema)
 // instead, and an open model is a weaker instruction-follower than Claude,
@@ -10,7 +10,7 @@
 // quality held up in testing.
 export const MODEL = '@cf/meta/llama-3.1-8b-instruct-fast';
 
-// Must match CHAT_REACTION_EMOJI in chat.js — the fixed hand-emoji set the
+// Must match CHAT_REACTION_EMOJI in chat.js - the fixed hand-emoji set the
 // model is allowed to react with. Anything else the model returns is dropped.
 export const REACTION_EMOJI_SET = new Set(['🙌🏾', '🫶🏾', '👌🏾', '🤘🏾', '🙏🏾', '💪🏾', '👍🏾', '🤝🏾', '👊🏾', '🤙🏾']);
 
@@ -47,7 +47,7 @@ export function toWorkersAiMessages(systemPrompt, messages) {
 }
 
 // Workers AI's JSON Mode response shape isn't fully pinned down in public
-// docs at the time of writing — some responses land the parsed object
+// docs at the time of writing - some responses land the parsed object
 // directly on `.response`, others return it as a JSON string. Handle both
 // rather than assuming one.
 function extractJson(result) {
@@ -82,7 +82,7 @@ export async function getBotResponse({ ai, systemPrompt, messages, runImpl }) {
   }
 
   // The model can only thread to a real visitor message from this
-  // conversation — never a hallucinated id, and never one of its own
+  // conversation - never a hallucinated id, and never one of its own
   // earlier replies (assistant ids are never exposed to it in the first
   // place, see toWorkersAiMessages).
   const validUserIds = new Set(messages.filter((m) => m.role === 'user').map((m) => m.id));

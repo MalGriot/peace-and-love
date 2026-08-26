@@ -17,8 +17,9 @@ test('SYSTEM_PROMPT includes real site facts, not placeholders', () => {
   }
 });
 
-test('SYSTEM_PROMPT states the no-en-dash rule using the literal character', () => {
-  assert.ok(SYSTEM_PROMPT.includes('–'));
+test('SYSTEM_PROMPT states the no-en-dash rule', () => {
+  assert.match(SYSTEM_PROMPT, /never use an en dash/i);
+  assert.ok(!SYSTEM_PROMPT.includes('\u2013'));
 });
 
 test('SYSTEM_PROMPT states the Peace and love framing', () => {

@@ -1,7 +1,7 @@
-// MAL GRIOT — vanilla port of react-bits WarpText (WebGL2 glass-refraction
+// MAL GRIOT - vanilla port of react-bits WarpText (WebGL2 glass-refraction
 // text over a canvas texture, pointer-reactive). Deliberately a classic
-// script, NOT type="module": Chrome refuses to load any ES module — even a
-// same-origin one — from a file:// page (the document's origin is opaque
+// script, NOT type="module": Chrome refuses to load any ES module - even a
+// same-origin one - from a file:// page (the document's origin is opaque
 // "null", and file: isn't on the CORS-allowed scheme list for module
 // fetches), and this site is tested by double-clicking the HTML locally, not
 // via a server. vendor/ogl.js is the ogl library pre-bundled from esm.sh
@@ -217,7 +217,7 @@ const syncUniforms = (program, props) => {
   uniforms.uRipple.value = props.ripple ? 1 : 0;
 };
 
-// Props are read once from data-* attributes at init — this static site has
+// Props are read once from data-* attributes at init - this static site has
 // no reactive re-render, unlike the React version's propsRef effect.
 function readProps(container) {
   const d = container.dataset;

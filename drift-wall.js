@@ -1,4 +1,4 @@
-// MAL GRIOT — vanilla port of react-bits DriftWall.
+// MAL GRIOT - vanilla port of react-bits DriftWall.
 // Markup: .dw-grid > .dw-tile[data-video] > .dw-tile__media > img + video,
 // plus a .dw-tile__label with a .dw-tile__timer ring (same SVG shape as the
 // homepage accordion's timer). On hover, the ring fills over VIDEO_DELAY;

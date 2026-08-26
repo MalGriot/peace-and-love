@@ -1,5 +1,5 @@
-// MAL GRIOT — vanilla port of react-bits FlowingMenu. Classic script (not
-// type="module"), matching morph-slider.js/warp-text.js — this site is
+// MAL GRIOT - vanilla port of react-bits FlowingMenu. Classic script (not
+// type="module"), matching morph-slider.js/warp-text.js - this site is
 // tested by opening the HTML directly, not always via a server. gsap is
 // loaded from CDN via <script src> ahead of this file; if it's missing on a
 // given page the marquee reveal just no-ops and the row still works as a

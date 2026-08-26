@@ -1,4 +1,4 @@
-// MAL GRIOT — shared effects module. Every init*() here follows the same
+// MAL GRIOT - shared effects module. Every init*() here follows the same
 // guard idiom as initMiniPlayer() in shared.js: find the target markup,
 // return early if it's not on this page, so effects.js can be safely
 // included on every page without erroring where an effect isn't used.
@@ -26,7 +26,7 @@ function initScrollReveal() {
 
 // ---------- Scroll Float ----------
 // react-bits ScrollReveal, ported to vanilla JS against the real gsap +
-// ScrollTrigger (loaded via CDN <script> tags on pages that use it — no
+// ScrollTrigger (loaded via CDN <script> tags on pages that use it - no
 // bundler needed). Splits each .scroll-float element's text into per-word
 // spans, then scrubs container rotation and per-word opacity/blur directly
 // off scroll position, matching the original component's animation 1:1.
@@ -49,7 +49,7 @@ function initScrollFloat() {
 
     // Elements choreographed by a page's own hand-built GSAP timeline (e.g.
     // releases.html's pinned hero sequence) opt out here via data-manual-float
-    // — they still get split into .word spans above, just not this generic
+    // - they still get split into .word spans above, just not this generic
     // scroll-triggered reveal, so the two don't fight over the same props.
     if (reduceMotion || el.dataset.manualFloat === 'true') return;
 
@@ -152,7 +152,7 @@ function initVariableProximity() {
 
     // Heavier weights render wider glyphs, so without this a character
     // swelling toward data-to-font-variation-settings pushes everything
-    // after it sideways — shifting words, and occasionally bumping one to
+    // after it sideways - shifting words, and occasionally bumping one to
     // the next line. Pin each char to a fixed, center-aligned box sized for
     // its widest instance (measured once fonts are actually loaded, so the
     // measurement isn't taken against a fallback font) so weight changes

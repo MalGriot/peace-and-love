@@ -1,7 +1,7 @@
-// MAL GRIOT — vanilla port of react-bits MorphSlider, adapted to slide
+// MAL GRIOT - vanilla port of react-bits MorphSlider, adapted to slide
 // between self-hosted video clips instead of static images. Deliberately a
 // classic script, NOT type="module" (see warp-text.js for why file:// pages
-// need this — and this site is tested by double-clicking the HTML locally,
+// need this - and this site is tested by double-clicking the HTML locally,
 // not via a server). vendor/ogl.js exposes window.OGL the same way; gsap is
 // loaded from CDN via <script src> ahead of this file.
 //
@@ -10,7 +10,7 @@
 // "SecurityError: cross-origin data" on file:// pages (Chrome treats every
 // file:// document as its own opaque origin, so even a video sitting next
 // to the HTML in the same folder is cross-origin as far as WebGL's texture
-// read-back security check is concerned — no CORS header can fix that on
+// read-back security check is concerned - no CORS header can fix that on
 // file://). So instead: once a transition settles on a slide, that slide's
 // real <video> fades in on top of the canvas and plays; during a transition
 // the videos are hidden/paused and the canvas alone morphs between poster
@@ -474,7 +474,7 @@ void main() {
 
   // "0:23% 42%,10:47% 42%,20:37% 42%" -> [{t:0,x:.23,y:.42}, ...] sorted by t.
   // Lets a slide's crop follow a moving subject instead of sitting on one
-  // static point — see the dsc-9634 slide, where Mal Griot walks across a
+  // static point - see the dsc-9634 slide, where Mal Griot walks across a
   // wide group shot and a single crop can't keep him in frame throughout.
   function parseKeyframeGroup(group) {
     return group
@@ -524,7 +524,7 @@ void main() {
     if (!root.dataset.videos) return;
     const isMobile = window.matchMedia('(max-width: 640px)').matches;
 
-    // NOT filter(Boolean) on these — a slide can have an empty video src
+    // NOT filter(Boolean) on these - a slide can have an empty video src
     // (an image-only "end card" slide), and positions must stay aligned to
     // slide index, so an empty entry has to survive the split as a hole,
     // not get dropped and shift every later slide's data left by one.
@@ -554,7 +554,7 @@ void main() {
       src,
       poster: posters[i] || '',
       position: positions[i] || '50% 50%',
-      // Desktop keyframes describe desktop-only footage — drop them when
+      // Desktop keyframes describe desktop-only footage - drop them when
       // this slide's video was swapped for a mobile-specific clip.
       keyframes: !videoIsMobile[i] && keyframeGroups[i] ? parseKeyframeGroup(keyframeGroups[i]) : null
     }));
@@ -584,7 +584,7 @@ void main() {
     let muted = true;
 
     // A slide with no video src (item.src === '') is an image-only "end
-    // card" — no <video> is created for it, so it has nothing to play/pause
+    // card" - no <video> is created for it, so it has nothing to play/pause
     // and no 'ended' listener to auto-advance away from it. The WebGL
     // canvas already renders its poster persistently once the slider
     // settles there, so it just stays put.

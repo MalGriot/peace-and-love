@@ -1,7 +1,7 @@
-/* MAL GRIOT — vanilla port of react-bits ScrollVelocity. Two full-bleed rows
+/* MAL GRIOT - vanilla port of react-bits ScrollVelocity. Two full-bleed rows
    of looping text drift in opposite directions at a lazy idle speed, and pick
    up extra speed (capped) in whichever direction matches recent scroll
-   velocity — the signature "scrubs with your scroll" feel of the original.
+   velocity - the signature "scrubs with your scroll" feel of the original.
    Classic script, no build step: matches flowing-menu.js/morph-slider.js. */
 
 .sv-wrap{
