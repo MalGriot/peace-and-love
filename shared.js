@@ -50,11 +50,17 @@ function renderChrome(active) {
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>
         </button>
         <ul class="sm-panel-list">${menuItemHtml}</ul>
-        <div class="sm-socials">
-          <h3 class="sm-socials-title">Socials</h3>
-          <div class="sm-socials-list">
-            <a href="https://instagram.com/yep.that.malcolm" target="_blank" rel="noopener">Instagram</a>
-          </div>
+        <div class="sm-theme">
+          <h3 class="sm-theme-title">Appearance</h3>
+          <button type="button" class="theme-toggle" aria-pressed="false" aria-label="Switch to light mode">
+            <span class="theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.4 4.4l1.7 1.7M17.9 17.9l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.4 19.6l1.7-1.7M17.9 6.1l1.7-1.7"/></svg>
+            </span>
+            <span class="theme-toggle__track"><span class="theme-toggle__thumb"></span></span>
+            <span class="theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M20.2 14.6A8.6 8.6 0 019.4 3.8a8.8 8.8 0 102.9 17.1 8.6 8.6 0 017.9-6.3z"/></svg>
+            </span>
+          </button>
         </div>
       </aside>
       <div class="sm-backdrop"></div>
@@ -832,6 +838,44 @@ function initStaggeredMenu() {
   });
 }
 
+// Manual light/dark toggle, nav panel. Defaults to following the visitor's
+// OS/browser scheme (no stored choice yet); once pressed, the pick is
+// persisted in localStorage and forced via data-theme on <html>, which wins
+// over prefers-color-scheme in shared.css. A tiny inline script in each
+// page's <head> applies any stored choice before first paint to avoid a
+// flash of the wrong theme.
+function initThemeToggle() {
+  const btn = document.querySelector('.theme-toggle');
+  if (!btn) return;
+  const root = document.documentElement;
+  const media = window.matchMedia('(prefers-color-scheme: light)');
+
+  function effectiveTheme() {
+    const stored = root.getAttribute('data-theme');
+    if (stored === 'light' || stored === 'dark') return stored;
+    return media.matches ? 'light' : 'dark';
+  }
+
+  function reflect(theme) {
+    const isLight = theme === 'light';
+    btn.setAttribute('aria-pressed', String(isLight));
+    btn.setAttribute('aria-label', isLight ? 'Switch to dark mode' : 'Switch to light mode');
+    btn.classList.toggle('is-light', isLight);
+  }
+
+  reflect(effectiveTheme());
+  media.addEventListener('change', () => {
+    if (!root.getAttribute('data-theme')) reflect(effectiveTheme());
+  });
+
+  btn.addEventListener('click', () => {
+    const next = effectiveTheme() === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('griotTheme', next); } catch (e) {}
+    reflect(next);
+  });
+}
+
 // react-bits LineSidebar, adapted: cursor-proximity effect for the nav panel
 // list. Each .sm-panel-item gets a --effect (0..1) custom property, eased
 // toward a target with frame-rate-independent exponential smoothing so
@@ -927,6 +971,7 @@ document.addEventListener('volumechange', (e) => {
 // Shared chrome behavior: mobile menu, chat widget shell toggle.
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof initStaggeredMenu === 'function') initStaggeredMenu();
+  if (typeof initThemeToggle === 'function') initThemeToggle();
   if (typeof initLineSidebarEffect === 'function') initLineSidebarEffect();
 
   initChat();

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<script>(function(){try{var t=localStorage.getItem('griotTheme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Voice Over | Mal Griot</title>
 <meta name="description" content="Mal Griot - voice over artist. Audiobook narration, character voice and book-trailer reads. Press play and hear the voice, then book a narration.">
@@ -31,7 +32,7 @@
 }
 .vo-cta svg{flex:none;transition:transform .3s ease}
 .vo-cta:hover svg{transform:translateX(3px)}
-.vo-cta--solid{background:var(--gold);color:var(--ink);border:1px solid var(--gold);padding:15px 26px;border-radius:2px;gap:10px}
+.vo-cta--solid{background:var(--gold);color:#12100f;border:1px solid var(--gold);padding:15px 26px;border-radius:2px;gap:10px}
 .vo-cta--solid:hover{background:var(--paper);border-color:var(--paper);color:var(--ink);gap:14px}
 .vo-cta--ghost{background:transparent;color:var(--paper);border:1px solid rgba(239,230,216,.32);padding:14px 25px;border-radius:2px}
 .vo-cta--ghost:hover{border-color:var(--gold);color:var(--gold);background:rgba(224,178,106,.06)}
@@ -40,35 +41,102 @@
   width:46px;height:46px;border-radius:999px;border:1px solid rgba(224,178,106,.55);
   display:flex;align-items:center;justify-content:center;transition:background .25s ease,transform .25s ease;flex:none;
 }
-.vo-cta--play:hover .vo-cta__ring{background:var(--gold);color:var(--ink);transform:scale(1.06)}
+.vo-cta--play:hover .vo-cta__ring{background:var(--gold);color:#12100f;transform:scale(1.06)}
 
-/* ============ 1. HERO ============ */
-.vo-hero{
-  position:relative;min-height:84vh;display:flex;align-items:flex-end;overflow:hidden;background:var(--ink);
+/* ============ 1. HERO — FORGET ME NOT ============ */
+.vo-hero{position:relative;min-height:92vh;display:flex;align-items:center;overflow:hidden;background:var(--ink);padding:clamp(90px,12vw,130px) 0 60px}
+.vo-hero__amb{position:absolute;inset:0;z-index:0;overflow:hidden}
+.vo-hero__amb img{width:100%;height:100%;object-fit:cover;object-position:50% 30%;filter:blur(28px) brightness(.32) saturate(1.05);transform:scale(1.15)}
+.vo-hero__amb::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,16,15,.75) 0%,rgba(18,16,15,.94) 60%,var(--ink) 100%)}
+@media (prefers-reduced-motion: reduce){.vo-hero__amb img{transform:none}}
+
+.vo-hero__stage{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 clamp(24px,6vw,64px);display:flex;align-items:center;gap:clamp(40px,6vw,90px);flex-wrap:wrap}
+
+/* -- the book, presented like a physical object -- */
+.vo-hero__book{position:relative;flex:none;width:min(340px,74vw);cursor:pointer;transform:perspective(1400px) rotateY(-14deg) rotateX(2deg);transform-style:preserve-3d;transition:transform .4s ease}
+.vo-hero__book:hover{transform:perspective(1400px) rotateY(-8deg) rotateX(1deg)}
+.vo-hero__book::before{
+  content:"";position:absolute;inset:-10%;z-index:-1;border-radius:50%;
+  background:radial-gradient(circle,rgba(224,178,106,.35) 0%,rgba(224,178,106,0) 68%);
+  animation:vo-book-glow 3.6s ease-in-out infinite;
 }
-.vo-hero__media{position:absolute;inset:0;overflow:hidden}
-.vo-hero__media img{
-  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 38%;
-  animation:vo-kenburns 16s cubic-bezier(.16,1,.3,1) both;
+@keyframes vo-book-glow{0%,100%{opacity:.55;transform:scale(.96)}50%{opacity:1;transform:scale(1.04)}}
+@media (prefers-reduced-motion: reduce){.vo-hero__book::before{animation:none}}
+.vo-hero__book-pages{
+  position:absolute;top:1.5%;bottom:1.5%;right:-8px;width:8px;
+  background:repeating-linear-gradient(180deg,#efe6d8 0 2px,#d9cdb1 2px 4px);
+  box-shadow:2px 0 10px rgba(0,0,0,.45);border-radius:0 3px 3px 0;transform:translateZ(-4px);
 }
-@keyframes vo-kenburns{from{transform:scale(1.1)}to{transform:scale(1)}}
-@media (prefers-reduced-motion: reduce){.vo-hero__media img{animation:none}}
-.vo-hero::before{
-  content:"";position:absolute;inset:0;z-index:0;
-  background:linear-gradient(0deg,rgba(18,16,15,.96) 0%,rgba(18,16,15,.4) 46%,rgba(18,16,15,.6) 100%);
+.vo-hero__book-cover{position:relative;display:block;aspect-ratio:1/1;border-radius:4px 9px 9px 4px;overflow:hidden;box-shadow:-10px 14px 34px rgba(0,0,0,.5),0 50px 110px rgba(0,0,0,.65)}
+.vo-hero__book-cover img{width:100%;height:100%;object-fit:cover;display:block}
+.vo-hero__book-spine{position:absolute;inset:0;box-shadow:inset 12px 0 24px -12px rgba(0,0,0,.8);pointer-events:none;z-index:2}
+.vo-hero__book-badge{
+  position:absolute;top:14px;left:14px;z-index:3;background:var(--gold);color:#12100f;
+  font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;
+  padding:7px 13px;border-radius:999px;box-shadow:0 10px 20px rgba(0,0,0,.4);
 }
-/* faint frequency line threaded across the hero - the page's one motif,
-   not a literal waveform-of-audio, just a signal that this is a listening
-   room rather than a portfolio page */
-.vo-hero__freq{position:absolute;left:0;right:0;bottom:0;height:120px;z-index:0;opacity:.5;pointer-events:none}
-.vo-hero__copy{position:relative;z-index:1;padding:clamp(32px,5vw,56px) clamp(24px,6vw,72px) clamp(44px,7vw,72px);max-width:860px}
-.vo-hero__kicker{font-family:var(--font-display);font-weight:400;font-size:clamp(40px,7vw,90px);line-height:.96;letter-spacing:-.02em;color:var(--paper);margin:0}
-.vo-hero__kicker em{display:block;font-style:normal;color:var(--gold)}
-.vo-hero__line{font-size:clamp(16px,1.6vw,20px);line-height:1.6;color:var(--paper-dim);max-width:44ch;margin:22px 0 34px}
-.vo-hero__ctas{display:flex;flex-wrap:wrap;align-items:center;gap:28px}
-.vo-hero__name.reveal{transition-delay:.05s}
-.vo-hero__line.reveal{transition-delay:.2s}
-.vo-hero__ctas.reveal{transition-delay:.36s}
+.vo-hero__book-play{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center}
+.vo-hero__book-play-ring{
+  width:68px;height:68px;border-radius:999px;border:1px solid rgba(239,230,216,.6);
+  background:rgba(18,16,15,.4);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;
+  color:var(--paper-fixed);transition:background .25s ease,transform .25s ease,border-color .25s ease;
+  animation:vo-ring-pulse 2.4s ease-in-out infinite;
+}
+@keyframes vo-ring-pulse{0%,100%{box-shadow:0 0 0 0 rgba(224,178,106,.35)}50%{box-shadow:0 0 0 14px rgba(224,178,106,0)}}
+@media (prefers-reduced-motion: reduce){.vo-hero__book-play-ring{animation:none}}
+.vo-hero__book:hover .vo-hero__book-play-ring{background:var(--gold);border-color:var(--gold);color:#12100f;transform:scale(1.1)}
+.vo-hero__book-play-ring .ic-pause{display:none}
+.vo-hero__book.is-playing .vo-hero__book-play-ring .ic-play{display:none}
+.vo-hero__book.is-playing .vo-hero__book-play-ring .ic-pause{display:block}
+
+/* -- the copy stage -- */
+.vo-hero__stage-copy{flex:1 1 380px;min-width:280px;max-width:560px}
+.vo-hero__stage-title{font-family:var(--font-display);font-weight:400;font-size:clamp(36px,5.4vw,64px);color:var(--paper);margin:14px 0 6px;line-height:1}
+.vo-hero__stage-by{font-size:14px;color:var(--paper-dim);margin:0 0 14px}
+.vo-hero__rating{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.vo-hero__stars{display:inline-flex;gap:2px;color:var(--gold)}
+.vo-hero__rating-text{font-size:12px;color:var(--paper-dim)}
+.vo-hero__stage-desc{font-size:15.5px;line-height:1.75;color:var(--paper);margin:0 0 16px;max-width:48ch}
+.vo-hero__stage-credits{font-size:13.5px;line-height:1.7;color:var(--paper-faint);margin:0 0 26px;max-width:48ch}
+.vo-hero__narrator{display:flex;align-items:center;gap:12px;margin-bottom:26px}
+.vo-hero__narrator-photo{flex:none;width:40px;height:40px;border-radius:999px;object-fit:cover;object-position:50% 20%;border:1px solid rgba(239,230,216,.3);box-shadow:0 6px 14px rgba(0,0,0,.4)}
+.vo-hero__narrator-label{font-size:12.5px;color:var(--paper-dim)}
+.vo-hero__narrator-label strong{color:var(--paper);font-weight:500}
+.vo-hero__stage-ctas{display:flex;flex-wrap:wrap;align-items:center;gap:18px 22px;margin-bottom:18px}
+#heroSampleBtn{display:inline-flex;align-items:center;gap:10px;font-size:13px;padding:16px 30px}
+#heroSampleBtn .ic-pause{display:none}
+#heroSampleBtn.is-playing .ic-play{display:none}
+#heroSampleBtn.is-playing .ic-pause{display:block}
+
+.vo-hero__buy-row{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+.vo-hero__store-btn{
+  display:inline-flex;align-items:center;gap:10px;background:#111;border:1px solid rgba(239,230,216,.18);
+  border-radius:8px;padding:11px 18px;text-decoration:none;color:var(--paper-fixed);font-size:12.5px;letter-spacing:.02em;
+  transition:border-color .2s ease,transform .2s ease,background .2s ease;
+}
+.vo-hero__store-btn:hover{border-color:var(--gold);transform:translateY(-2px);background:#161311}
+.vo-hero__store-logo{height:16px;width:auto;display:block}
+.vo-hero__store-btn--alt{background:transparent;border-color:rgba(239,230,216,.28)}
+.vo-hero__book-mal{display:inline-block;font-size:12px;color:var(--paper-faint);text-decoration:underline;text-underline-offset:3px;transition:color .2s}
+.vo-hero__book-mal:hover{color:var(--gold)}
+
+.vo-hero__stage-title.reveal{transition-delay:.08s}
+.vo-hero__stage-by.reveal{transition-delay:.14s}
+.vo-hero__rating.reveal{transition-delay:.18s}
+.vo-hero__stage-desc.reveal{transition-delay:.24s}
+.vo-hero__stage-credits.reveal{transition-delay:.3s}
+.vo-hero__narrator.reveal{transition-delay:.36s}
+.vo-hero__stage-ctas.reveal{transition-delay:.42s}
+.vo-hero__buy-row.reveal{transition-delay:.48s}
+.vo-hero__book-mal.reveal{transition-delay:.52s}
+
+@media (max-width:900px){
+  .vo-hero__stage{flex-direction:column;text-align:center}
+  .vo-hero__book{transform:none;margin:0 auto}
+  .vo-hero__book:hover{transform:none}
+  .vo-hero__stage-desc,.vo-hero__stage-credits{margin-left:auto;margin-right:auto}
+  .vo-hero__rating,.vo-hero__narrator,.vo-hero__stage-ctas,.vo-hero__buy-row{justify-content:center}
+}
 
 /* ============ 2. THE DEMO - big player ============ */
 .vo-player-wrap{max-width:920px;margin:0 auto}
@@ -78,16 +146,16 @@
 
 .vo-player{
   background:linear-gradient(165deg,#201a17,#161211);
-  border:1px solid rgba(239,230,216,.12);border-radius:20px;
+  border:1px solid rgba(239,230,216,.12);border-radius:20px;color:var(--paper-fixed);
   padding:clamp(22px,4vw,36px);box-shadow:0 30px 80px rgba(0,0,0,.5);
 }
 .vo-player__top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
 .vo-player__tag{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass)}
-.vo-player__title{font-family:var(--font-display);font-weight:400;font-size:clamp(22px,3vw,30px);color:var(--paper);margin:8px 0 4px;line-height:1.15}
-.vo-player__by{font-size:12.5px;color:var(--paper-dim);letter-spacing:.03em}
+.vo-player__title{font-family:var(--font-display);font-weight:400;font-size:clamp(22px,3vw,30px);color:var(--paper-fixed);margin:8px 0 4px;line-height:1.15}
+.vo-player__by{font-size:12.5px;color:var(--paper-fixed-dim);letter-spacing:.03em}
 .vo-player__expand{
   flex:none;width:38px;height:38px;border-radius:999px;border:1px solid rgba(239,230,216,.2);background:transparent;
-  color:var(--paper-dim);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s,color .2s;
+  color:var(--paper-fixed-dim);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s,color .2s;
 }
 .vo-player__expand:hover{border-color:var(--gold);color:var(--gold)}
 
@@ -95,28 +163,28 @@
 .vo-wave__bar{flex:1 1 0;min-width:2px;border-radius:2px 2px 0 0;background:rgba(239,230,216,.16);transform-origin:bottom;transition:background .25s ease,transform .5s ease}
 .vo-wave__bar.is-played{background:var(--brass);transform:scaleY(1.05)}
 .vo-player.is-playing .vo-wave__bar.is-played{background:var(--gold)}
-.vo-wave__cursor{position:absolute;top:0;bottom:0;width:2px;background:var(--paper);pointer-events:none;box-shadow:0 0 10px rgba(239,230,216,.6);transition:left .1s linear}
+.vo-wave__cursor{position:absolute;top:0;bottom:0;width:2px;background:var(--paper-fixed);pointer-events:none;box-shadow:0 0 10px rgba(239,230,216,.6);transition:left .1s linear}
 
 .vo-player__controls{display:flex;align-items:center;gap:18px;margin-top:20px}
 .vo-player__playbtn{
-  flex:none;width:60px;height:60px;border-radius:999px;border:none;background:var(--gold);color:var(--ink);
+  flex:none;width:60px;height:60px;border-radius:999px;border:none;background:var(--gold);color:#12100f;
   display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .2s ease,background .2s ease;
 }
 .vo-player__playbtn:hover{transform:scale(1.06)}
 .vo-player__playbtn .ic-pause{display:none}
 .vo-player.is-playing .vo-player__playbtn .ic-play{display:none}
 .vo-player.is-playing .vo-player__playbtn .ic-pause{display:block}
-.vo-player__time{font-size:11.5px;color:var(--paper-dim);letter-spacing:.03em;font-variant-numeric:tabular-nums;flex:none}
+.vo-player__time{font-size:11.5px;color:var(--paper-fixed-dim);letter-spacing:.03em;font-variant-numeric:tabular-nums;flex:none}
 .vo-player__scrub{flex:1 1 auto;position:relative;height:3px;background:rgba(239,230,216,.14);border-radius:999px;cursor:pointer}
 .vo-player__scrub-fill{position:absolute;left:0;top:0;bottom:0;width:0%;background:var(--gold);border-radius:999px}
-.vo-player__scrub-knob{position:absolute;top:50%;width:11px;height:11px;border-radius:999px;background:var(--paper);left:0%;transform:translate(-50%,-50%);box-shadow:0 0 0 3px rgba(224,178,106,.25)}
-.vo-player__hint{margin-top:16px;font-size:11.5px;color:var(--paper-faint);text-align:center}
+.vo-player__scrub-knob{position:absolute;top:50%;width:11px;height:11px;border-radius:999px;background:var(--paper-fixed);left:0%;transform:translate(-50%,-50%);box-shadow:0 0 0 3px rgba(224,178,106,.25)}
+.vo-player__hint{margin-top:16px;font-size:11.5px;color:var(--paper-fixed-faint);text-align:center}
 
 /* expanded / "fullscreen" listening mode */
 .vo-lightbox{position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(10,9,8,.88);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .3s ease}
 .vo-lightbox.is-open{opacity:1;pointer-events:auto}
 .vo-lightbox__panel{width:min(920px,100%);max-height:92vh;overflow:auto}
-.vo-lightbox__close{position:absolute;top:22px;right:24px;width:42px;height:42px;border-radius:999px;border:1px solid rgba(239,230,216,.25);background:rgba(18,16,15,.6);color:var(--paper);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.vo-lightbox__close{position:absolute;top:22px;right:24px;width:42px;height:42px;border-radius:999px;border:1px solid rgba(239,230,216,.25);background:rgba(18,16,15,.6);color:var(--paper-fixed);display:flex;align-items:center;justify-content:center;cursor:pointer}
 
 /* ============ 3. FIND YOUR VOICE - category browser ============ */
 .vo-browse{max-width:1080px;margin:0 auto}
@@ -148,38 +216,38 @@
 .vo-card{
   position:relative;background:#1c1815;border:1px solid rgba(239,230,216,.1);border-radius:12px;
   padding:16px 16px 16px 14px;display:flex;align-items:center;gap:14px;cursor:pointer;text-align:left;width:100%;
-  font-family:inherit;color:inherit;transition:border-color .2s ease,background .2s ease;
+  font-family:inherit;color:var(--paper-fixed);transition:border-color .2s ease,background .2s ease;
 }
 .vo-card:hover{border-color:rgba(224,178,106,.4);background:#221c19}
 .vo-card.is-playing{border-color:var(--gold);background:rgba(224,178,106,.08)}
 .vo-card__play{
   flex:none;width:40px;height:40px;border-radius:999px;border:1px solid rgba(239,230,216,.28);
-  display:flex;align-items:center;justify-content:center;color:var(--paper);transition:background .2s,border-color .2s,color .2s;
+  display:flex;align-items:center;justify-content:center;color:var(--paper-fixed);transition:background .2s,border-color .2s,color .2s;
 }
 .vo-card:hover .vo-card__play,.vo-card.is-playing .vo-card__play{background:var(--gold);border-color:var(--gold);color:#12100f}
 .vo-card.is-playing .vo-card__play .ic-play{display:none}
 .vo-card.is-playing .vo-card__play .ic-pause{display:block}
 .vo-card__play .ic-pause{display:none}
 .vo-card__body{min-width:0}
-.vo-card__title{font-size:14px;color:var(--paper);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.vo-card__by{font-size:11.5px;color:var(--paper-dim);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.vo-card__dur{position:absolute;top:14px;right:14px;font-size:10.5px;color:var(--paper-faint);font-variant-numeric:tabular-nums}
+.vo-card__title{font-size:14px;color:var(--paper-fixed);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vo-card__by{font-size:11.5px;color:var(--paper-fixed-dim);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vo-card__dur{position:absolute;top:14px;right:14px;font-size:10.5px;color:var(--paper-fixed-faint);font-variant-numeric:tabular-nums}
 
 .vo-book-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 @media (max-width:640px){.vo-book-grid{grid-template-columns:1fr}}
-.vo-book{background:#1c1815;border:1px solid rgba(239,230,216,.1);border-radius:14px;overflow:hidden;transition:border-color .2s ease}
+.vo-book{background:#1c1815;color:var(--paper-fixed);border:1px solid rgba(239,230,216,.1);border-radius:14px;overflow:hidden;transition:border-color .2s ease}
 .vo-book.is-playing{border-color:var(--gold)}
 .vo-book__art{position:relative;aspect-ratio:16/9;overflow:hidden;background:#000}
 .vo-book__art img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
 .vo-book:hover .vo-book__art img{transform:scale(1.04)}
 .vo-book__art::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(18,16,15,.85) 0%,rgba(18,16,15,.05) 60%)}
-.vo-book__chapters{position:absolute;left:16px;bottom:14px;z-index:1;color:var(--paper);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.vo-book__chapters{position:absolute;left:16px;bottom:14px;z-index:1;color:var(--paper-fixed);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
 .vo-book__body{padding:20px 22px 24px}
 .vo-book__eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass)}
-.vo-book__title{font-family:var(--font-display);font-weight:400;font-size:clamp(19px,2vw,23px);color:var(--paper);margin:8px 0 8px;line-height:1.15}
-.vo-book__desc{font-size:13.5px;line-height:1.65;color:var(--paper-dim);margin:0 0 16px}
+.vo-book__title{font-family:var(--font-display);font-weight:400;font-size:clamp(19px,2vw,23px);color:var(--paper-fixed);margin:8px 0 8px;line-height:1.15}
+.vo-book__desc{font-size:13.5px;line-height:1.65;color:var(--paper-fixed-dim);margin:0 0 16px}
 .vo-book__btn{
-  display:inline-flex;align-items:center;gap:10px;appearance:none;background:transparent;border:1px solid rgba(239,230,216,.32);color:var(--paper);
+  display:inline-flex;align-items:center;gap:10px;appearance:none;background:transparent;border:1px solid rgba(239,230,216,.32);color:var(--paper-fixed);
   font-family:var(--font-body);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
   padding:11px 18px;border-radius:2px;cursor:pointer;transition:border-color .2s,color .2s,background .2s;
 }
@@ -188,7 +256,7 @@
 .vo-book.is-playing .vo-book__btn .ic-play{display:none}
 .vo-book.is-playing .vo-book__btn .ic-pause{display:block}
 .vo-book__all{margin-top:14px;font-size:11.5px}
-.vo-book__all a{color:var(--paper-dim);text-decoration:underline;text-underline-offset:3px;transition:color .2s}
+.vo-book__all a{color:var(--paper-fixed-dim);text-decoration:underline;text-underline-offset:3px;transition:color .2s}
 .vo-book__all a:hover{color:var(--gold)}
 
 /* ============ 4. THE VOICE - instrument attributes ============ */
@@ -198,10 +266,10 @@
 .vo-instrument__head p{color:var(--paper-dim);font-size:14.5px;line-height:1.7;margin:0}
 .vo-attrs{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:rgba(239,230,216,.1);border:1px solid rgba(239,230,216,.1);border-radius:14px;overflow:hidden}
 @media (max-width:700px){.vo-attrs{grid-template-columns:1fr}}
-.vo-attr{background:#1c1815;padding:clamp(26px,3.6vw,38px);display:flex;flex-direction:column;gap:14px}
+.vo-attr{background:#1c1815;color:var(--paper-fixed);padding:clamp(26px,3.6vw,38px);display:flex;flex-direction:column;gap:14px}
 .vo-attr__num{font-size:11px;letter-spacing:.14em;color:var(--brass);text-transform:uppercase}
-.vo-attr__title{font-family:var(--font-display);font-weight:400;font-size:clamp(22px,2.6vw,28px);color:var(--paper);margin:0}
-.vo-attr__range{font-size:13px;color:var(--paper-dim);line-height:1.6;margin:0}
+.vo-attr__title{font-family:var(--font-display);font-weight:400;font-size:clamp(22px,2.6vw,28px);color:var(--paper-fixed);margin:0}
+.vo-attr__range{font-size:13px;color:var(--paper-fixed-dim);line-height:1.6;margin:0}
 .vo-attr__sample{
   display:inline-flex;align-items:center;gap:8px;align-self:flex-start;margin-top:4px;
   background:transparent;border:none;color:var(--gold);font-family:var(--font-body);font-size:11.5px;letter-spacing:.1em;
@@ -210,7 +278,7 @@
 .vo-attr__sample svg{transition:transform .25s ease}
 .vo-attr__sample:hover svg{transform:translateX(3px)}
 .vo-attr.is-playing{background:rgba(224,178,106,.06)}
-.vo-attr.is-playing .vo-attr__sample{color:var(--paper)}
+.vo-attr.is-playing .vo-attr__sample{color:var(--paper-fixed)}
 
 /* ============ 5. WHAT I CAN VOICE ============ */
 .vo-services{max-width:1080px;margin:0 auto}
@@ -219,9 +287,9 @@
 .vo-services__head p{color:var(--paper-dim);font-size:14.5px;line-height:1.7;margin:0}
 .vo-svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 @media (max-width:820px){.vo-svc-grid{grid-template-columns:1fr}}
-.vo-svc{background:#1c1815;border:1px solid rgba(239,230,216,.1);border-radius:14px;padding:26px 24px}
-.vo-svc__title{font-family:var(--font-display);font-weight:400;font-size:19px;color:var(--paper);margin:0 0 10px}
-.vo-svc__desc{font-size:13.5px;line-height:1.65;color:var(--paper-dim);margin:0}
+.vo-svc{background:#1c1815;color:var(--paper-fixed);border:1px solid rgba(239,230,216,.1);border-radius:14px;padding:26px 24px}
+.vo-svc__title{font-family:var(--font-display);font-weight:400;font-size:19px;color:var(--paper-fixed);margin:0 0 10px}
+.vo-svc__desc{font-size:13.5px;line-height:1.65;color:var(--paper-fixed-dim);margin:0}
 .vo-services__more{text-align:center;color:var(--paper-dim);font-size:13.5px;line-height:1.7;margin:clamp(26px,4vw,36px) auto 0;max-width:56ch}
 .vo-services__more a{color:var(--gold);text-decoration:underline;text-underline-offset:3px}
 
@@ -239,10 +307,10 @@
 .vo-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(239,230,216,.1);border:1px solid rgba(239,230,216,.1);border-radius:14px;overflow:hidden}
 @media (max-width:820px){.vo-steps{grid-template-columns:1fr 1fr}}
 @media (max-width:520px){.vo-steps{grid-template-columns:1fr}}
-.vo-step{background:#1c1815;padding:26px 22px}
+.vo-step{background:#1c1815;color:var(--paper-fixed);padding:26px 22px}
 .vo-step__num{font-family:var(--font-display);font-size:34px;color:rgba(224,178,106,.35);margin:0 0 12px}
-.vo-step__title{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper);margin:0 0 10px}
-.vo-step__desc{font-size:13px;line-height:1.6;color:var(--paper-dim);margin:0}
+.vo-step__title{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-fixed);margin:0 0 10px}
+.vo-step__desc{font-size:13px;line-height:1.6;color:var(--paper-fixed-dim);margin:0}
 
 /* ============ 8. WORK / SELECTED CLIENTS ============ */
 .vo-work{max-width:1080px;margin:0 auto}
@@ -278,22 +346,22 @@
 .vo-brief__head{text-align:center;max-width:600px;margin:0 auto clamp(30px,4vw,40px)}
 .vo-brief__head h2{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,3.8vw,44px);margin:14px 0 12px;color:var(--paper)}
 .vo-brief__head p{color:var(--paper-dim);font-size:14.5px;line-height:1.7;margin:0}
-.vo-brief-form{background:#1c1815;border:1px solid rgba(239,230,216,.1);border-radius:18px;padding:clamp(24px,4vw,40px)}
+.vo-brief-form{background:#1c1815;color:var(--paper-fixed);border:1px solid rgba(239,230,216,.1);border-radius:18px;padding:clamp(24px,4vw,40px)}
 .vo-brief-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px 24px}
 @media (max-width:680px){.vo-brief-grid{grid-template-columns:1fr}}
 .vo-field{display:flex;flex-direction:column;gap:8px}
 .vo-field--full{grid-column:1/-1}
-.vo-field label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--paper-dim)}
+.vo-field label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--paper-fixed-dim)}
 .vo-field input,.vo-field select,.vo-field textarea{
   background:rgba(239,230,216,.05);border:1px solid rgba(239,230,216,.16);border-radius:8px;
-  padding:12px 14px;color:var(--paper);font-family:var(--font-body);font-size:13.5px;outline:none;transition:border-color .2s;
+  padding:12px 14px;color:var(--paper-fixed);font-family:var(--font-body);font-size:13.5px;outline:none;transition:border-color .2s;
 }
 .vo-field input:focus,.vo-field select:focus,.vo-field textarea:focus{border-color:var(--brass)}
 .vo-field textarea{resize:vertical;min-height:90px}
 .vo-field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23efe6d8' stroke-width='1.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
 .vo-toggle{display:flex;align-items:center;gap:10px;cursor:pointer}
 .vo-toggle input{width:18px;height:18px;accent-color:var(--brass);margin:0}
-.vo-toggle span{font-size:13px;color:var(--paper)}
+.vo-toggle span{font-size:13px;color:var(--paper-fixed)}
 .vo-brief-form button[type="submit"]{width:100%;justify-content:center;margin-top:22px}
 .vo-brief-status{font-size:13px;line-height:1.6;margin:14px 0 0;min-height:1.6em;text-align:center}
 .vo-brief-status.is-success{color:#8fbf8f}
@@ -305,8 +373,10 @@
 .vo-final__media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 22%;filter:grayscale(.15)}
 .vo-final::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(18,16,15,.55) 0%,rgba(18,16,15,.92) 78%)}
 .vo-final__copy{position:relative;z-index:1;padding:40px 24px}
-.vo-final__title{font-family:var(--font-display);font-weight:400;font-size:clamp(34px,6vw,68px);color:var(--paper);margin:0 0 30px;line-height:1.05}
+.vo-final__title{font-family:var(--font-display);font-weight:400;font-size:clamp(34px,6vw,68px);color:var(--paper-fixed);margin:0 0 30px;line-height:1.05}
 .vo-final__ctas{display:flex;flex-wrap:wrap;gap:16px;justify-content:center}
+.vo-final .vo-cta--ghost{color:var(--paper-fixed)}
+.vo-final .vo-cta--ghost:hover{color:var(--gold)}
 
 /* visually-hidden host for the YouTube iframe player that actually plays
    the audio - kept in the DOM (never display:none) so playback stays
@@ -317,7 +387,7 @@
 .vo-mini{
   position:fixed;left:50%;bottom:18px;translate:-50% 0;z-index:180;max-width:calc(100vw - 28px);
   display:flex;align-items:center;gap:12px;padding:9px 16px 9px 9px;border-radius:999px;
-  background:rgba(17,16,19,.78);backdrop-filter:blur(16px) saturate(1.3);
+  background:rgba(17,16,19,.78);color:var(--paper-fixed);backdrop-filter:blur(16px) saturate(1.3);
   border:1px solid rgba(239,230,216,.14);box-shadow:0 20px 50px rgba(0,0,0,.5);
   opacity:0;transform:translateY(10px) scale(.96);pointer-events:none;transition:opacity .3s ease,transform .3s ease;
 }
@@ -327,10 +397,10 @@
 .vo-mini.is-playing .vo-mini__btn .ic-play{display:none}
 .vo-mini.is-playing .vo-mini__btn .ic-pause{display:block}
 .vo-mini__info{min-width:0;max-width:34vw}
-.vo-mini__title{font-size:12.5px;color:var(--paper);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.vo-mini__by{font-size:10.5px;color:var(--paper-faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.vo-mini__close{flex:none;width:26px;height:26px;border-radius:999px;border:none;background:transparent;color:var(--paper-dim);display:flex;align-items:center;justify-content:center;cursor:pointer}
-.vo-mini__close:hover{color:var(--paper)}
+.vo-mini__title{font-size:12.5px;color:var(--paper-fixed);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vo-mini__by{font-size:10.5px;color:var(--paper-fixed-faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vo-mini__close{flex:none;width:26px;height:26px;border-radius:999px;border:none;background:transparent;color:var(--paper-fixed-dim);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.vo-mini__close:hover{color:var(--paper-fixed)}
 @media (max-width:520px){.vo-mini__info{max-width:42vw}}
 </style>
 </head>
@@ -338,24 +408,65 @@
 
 <div id="chrome-nav"></div>
 
-<!-- ============ 1. HERO ============ -->
+<!-- ============ 1. HERO — FORGET ME NOT ============ -->
 <section class="vo-hero">
-  <div class="vo-hero__media"><img src="img/voiceover-home.jpg" alt="Mal Griot, voice over artist"></div>
-  <svg class="vo-hero__freq" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
-    <path d="M0 60 Q30 20 60 60 T120 60 T180 30 T240 60 T300 90 T360 60 T420 40 T480 60 T540 70 T600 60 T660 20 T720 60 T780 80 T840 60 T900 45 T960 60 T1020 75 T1080 60 T1140 35 T1200 60" fill="none" stroke="#e0b26a" stroke-width="1" opacity=".5"/>
-  </svg>
-  <div class="vo-hero__copy">
-    <span class="vo-eyebrow vo-hero__name reveal">Mal Griot</span>
-    <h1 class="vo-hero__kicker vo-hero__name reveal">Voice<br><em>Over.</em></h1>
-    <p class="vo-hero__line reveal">A voice with presence, texture and range. Warm when it needs to be. Dangerous when it isn't.</p>
-    <div class="vo-hero__ctas reveal">
-      <button type="button" class="vo-cta vo-cta--play" data-play-hero>
-        <span class="vo-cta__ring">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+  <div class="vo-hero__amb"><img src="img/voiceover-home.jpg" alt=""></div>
+  <div class="vo-hero__stage">
+    <div class="vo-hero__book reveal" id="heroBookPanel" role="button" tabindex="0" aria-label="Play a sample from Forget Me Not" data-video-id="O-wFjH72Tbs" data-title="Forget Me Not — Sample" data-by="J.T. Ezra — narrated by Mal Griot">
+      <span class="vo-hero__book-pages" aria-hidden="true"></span>
+      <span class="vo-hero__book-cover">
+        <img src="img/forget-me-not-cover.jpg" alt="Forget Me Not audiobook cover, by J.T. Ezra">
+        <span class="vo-hero__book-spine" aria-hidden="true"></span>
+      </span>
+      <span class="vo-hero__book-badge">Out Now</span>
+      <span class="vo-hero__book-play">
+        <span class="vo-hero__book-play-ring">
+          <svg class="ic-play" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="ic-pause" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
         </span>
-        Hear the Voice
-      </button>
-      <a href="#brief" class="vo-cta vo-cta--ghost">Book Mal</a>
+      </span>
+    </div>
+
+    <div class="vo-hero__stage-copy">
+      <span class="vo-eyebrow reveal">New Audiobook — Out Now</span>
+      <h1 class="vo-hero__stage-title reveal">Forget Me Not</h1>
+      <p class="vo-hero__stage-by reveal">by J.T. Ezra</p>
+
+      <div class="vo-hero__rating reveal" aria-label="4 out of 5 stars on Audible">
+        <span class="vo-hero__stars" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01z"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01z"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01z"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01z"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" opacity=".35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01z"/></svg>
+        </span>
+        <span class="vo-hero__rating-text">4.0 rating on Audible</span>
+      </div>
+
+      <p class="vo-hero__stage-desc reveal">Betrayal has a price. In the criminal underworld of an alternate New York, one split-second choice — and one crumbling empire — decide who survives.</p>
+      <p class="vo-hero__stage-credits reveal">Mal voiced, edited, produced, sound designed, and mixed &amp; mastered the full production — twenty-five distinct characters, one narrator, start to finish.</p>
+
+      <div class="vo-hero__narrator reveal">
+        <img class="vo-hero__narrator-photo" src="img/voiceover-home.jpg" alt="Mal Griot, voice over artist">
+        <span class="vo-hero__narrator-label">Narrated by <strong>Mal Griot</strong></span>
+      </div>
+
+      <div class="vo-hero__stage-ctas reveal">
+        <button type="button" class="vo-cta vo-cta--solid" id="heroSampleBtn" data-video-id="O-wFjH72Tbs" data-title="Forget Me Not — Sample" data-by="J.T. Ezra — narrated by Mal Griot">
+          <svg class="ic-play" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="ic-pause" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+          Listen Now
+        </button>
+      </div>
+
+      <div class="vo-hero__buy-row reveal">
+        <a class="vo-hero__store-btn" href="https://www.audible.com/pd/Forget-Me-Not-Audiobook/B0DJWP7MFJ" target="_blank" rel="noopener" aria-label="Get Forget Me Not on Audible">
+          <img src="img/brand/audible-logo-light.svg" alt="" class="vo-hero__store-logo">
+          <span>Get it on Audible</span>
+        </a>
+        <a class="vo-hero__store-btn vo-hero__store-btn--alt" href="https://www.amazon.com/Forget-Me-Not/dp/B0CJ93VR3N" target="_blank" rel="noopener">Buy on Amazon</a>
+      </div>
+      <a class="vo-hero__book-mal reveal" href="#brief">Book Mal for your own project →</a>
     </div>
   </div>
 </section>
@@ -894,16 +1005,25 @@
   voScrub.addEventListener('click', function (e) { scrubTo(e.clientX, voScrub); });
   voWaveEl.addEventListener('click', function (e) { scrubTo(e.clientX, voWaveEl); });
 
-  // ---------------- hero CTA ----------------
-  document.querySelector('[data-play-hero]').addEventListener('click', function () {
-    document.getElementById('demo').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    togglePlay(voPlayer.dataset.videoId, voPlayerTitle.textContent, voPlayerBy.textContent);
-  });
   document.getElementById('voListenAgain').addEventListener('click', function (e) {
     e.preventDefault();
     document.getElementById('demo').scrollIntoView({ behavior: 'smooth', block: 'start' });
     playTrack(voPlayer.dataset.videoId, voPlayerTitle.textContent, voPlayerBy.textContent, true);
   });
+
+  // ---------------- hero: Forget Me Not book + sample CTA ----------------
+  var heroBookPanel = document.getElementById('heroBookPanel');
+  var heroSampleBtn = document.getElementById('heroSampleBtn');
+  function playHeroBook() {
+    togglePlay(heroBookPanel.dataset.videoId, heroBookPanel.dataset.title, heroBookPanel.dataset.by);
+  }
+  heroBookPanel.addEventListener('click', playHeroBook);
+  heroBookPanel.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); playHeroBook(); }
+  });
+  heroSampleBtn.addEventListener('click', playHeroBook);
+  registerCardEl(heroBookPanel, heroBookPanel.dataset.videoId);
+  registerCardEl(heroSampleBtn, heroSampleBtn.dataset.videoId);
 
   // ---------------- expand / lightbox ----------------
   var lightbox = document.getElementById('voLightbox');

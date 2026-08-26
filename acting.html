@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<script>(function(){try{var t=localStorage.getItem('griotTheme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>document.documentElement.className+=' js';</script>
 <title>Acting | Mal Griot</title>
@@ -39,10 +40,12 @@
 }
 .ac-cta svg{flex:none;transition:transform .3s ease}
 .ac-cta:hover svg{transform:translateX(3px)}
-.ac-cta--solid{background:var(--gold);color:var(--ink);border:1px solid var(--gold);padding:16px 30px;border-radius:2px;gap:10px}
+.ac-cta--solid{background:var(--gold);color:#12100f;border:1px solid var(--gold);padding:16px 30px;border-radius:2px;gap:10px}
 .ac-cta--solid:hover{background:var(--paper);border-color:var(--paper);color:var(--ink);gap:14px}
 .ac-cta--ghost{background:transparent;color:var(--paper);border:1px solid rgba(239,230,216,.32);padding:15px 28px;border-radius:2px}
 .ac-cta--ghost:hover{border-color:var(--gold);color:var(--gold);background:rgba(224,178,106,.06)}
+.ac-modal__ctas .ac-cta--ghost{color:var(--paper-fixed)}
+.ac-modal__ctas .ac-cta--ghost:hover{color:var(--gold)}
 .ac-cta--line{border:none;padding:2px 0 6px;border-bottom:1px solid rgba(239,230,216,.32);border-radius:0}
 .ac-cta--line:hover{border-bottom-color:var(--gold);color:var(--gold);background:none}
 
@@ -242,7 +245,7 @@
 .ac-tile:hover img{transform:scale(1.055);filter:saturate(1) brightness(1)}
 .ac-tile__tag{
   position:absolute;left:12px;bottom:10px;z-index:2;
-  font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--paper-dim);
+  font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--paper-fixed-dim);
   opacity:0;transform:translateY(6px);transition:opacity .35s ease,transform .35s ease;
 }
 .ac-tile:hover .ac-tile__tag{opacity:1;transform:translateY(0)}
@@ -262,8 +265,8 @@
 .ac-lightbox.is-open{opacity:1;pointer-events:auto}
 .ac-lightbox__frame{position:relative;max-width:min(920px,92vw);max-height:88vh}
 .ac-lightbox__frame img{max-width:100%;max-height:88vh;display:block;border-radius:4px;box-shadow:0 30px 90px rgba(0,0,0,.5)}
-.ac-lightbox__close{position:absolute;top:-42px;right:0;background:none;border:none;color:var(--paper-dim);font-size:26px;line-height:1;cursor:pointer;padding:6px}
-.ac-lightbox__close:hover{color:var(--paper)}
+.ac-lightbox__close{position:absolute;top:-42px;right:0;background:none;border:none;color:var(--paper-fixed-dim);font-size:26px;line-height:1;cursor:pointer;padding:6px}
+.ac-lightbox__close:hover{color:var(--paper-fixed)}
 
 /* ---------- 5b. Casting facts (nested inside Representation) ---------- */
 .ac-facts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:16px}
@@ -302,15 +305,15 @@
   border:1px solid rgba(239,230,216,.12);padding:clamp(28px,4vw,40px);
   box-shadow:0 40px 100px rgba(0,0,0,.6);
 }
-.ac-modal__close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--paper-dim);font-size:24px;line-height:1;cursor:pointer;padding:6px}
-.ac-modal__close:hover{color:var(--paper)}
+.ac-modal__close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--paper-fixed-dim);font-size:24px;line-height:1;cursor:pointer;padding:6px}
+.ac-modal__close:hover{color:var(--paper-fixed)}
 .ac-modal__eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:14px}
-.ac-modal__title{font-family:var(--font-display);font-weight:400;font-size:clamp(24px,3vw,30px);color:var(--paper);margin:0 0 14px}
-.ac-modal__body{font-size:13.5px;line-height:1.7;color:var(--paper-dim);margin:0 0 22px}
+.ac-modal__title{font-family:var(--font-display);font-weight:400;font-size:clamp(24px,3vw,30px);color:var(--paper-fixed);margin:0 0 14px}
+.ac-modal__body{font-size:13.5px;line-height:1.7;color:var(--paper-fixed-dim);margin:0 0 22px}
 .ac-modal__facts{list-style:none;margin:0 0 24px;padding:0;display:flex;flex-direction:column;gap:12px}
 .ac-modal__facts li{display:flex;justify-content:space-between;gap:12px;font-size:13px;border-bottom:1px solid rgba(239,230,216,.08);padding-bottom:10px}
-.ac-modal__facts span:first-child{color:var(--paper-faint);text-transform:uppercase;letter-spacing:.06em;font-size:10.5px;padding-top:2px}
-.ac-modal__facts span:last-child{color:var(--paper);text-align:right}
+.ac-modal__facts span:first-child{color:var(--paper-fixed-faint);text-transform:uppercase;letter-spacing:.06em;font-size:10.5px;padding-top:2px}
+.ac-modal__facts span:last-child{color:var(--paper-fixed);text-align:right}
 .ac-modal__facts a{color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(224,178,106,.35)}
 .ac-modal__ctas{display:flex;flex-wrap:wrap;gap:12px}
 </style>

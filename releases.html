@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<script>(function(){try{var t=localStorage.getItem('griotTheme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <script>document.documentElement.className+=' js';</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Releases | Mal Griot</title>
@@ -150,10 +151,10 @@
   }
   .buy-modal.is-open .buy-modal__panel{transform:translateY(0)}
   .buy-modal__head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
-  .buy-modal__title{font-family:var(--font-display);font-weight:400;font-size:18px;margin:0;color:var(--paper)}
+  .buy-modal__title{font-family:var(--font-display);font-weight:400;font-size:18px;margin:0;color:var(--paper-fixed)}
   .buy-modal__close{
     width:32px;height:32px;border-radius:999px;border:1px solid rgba(239,230,216,.25);
-    background:none;color:var(--paper);display:flex;align-items:center;justify-content:center;
+    background:none;color:var(--paper-fixed);display:flex;align-items:center;justify-content:center;
     cursor:pointer;flex:none;transition:background .2s,border-color .2s,color .2s;
   }
   .buy-modal__close:hover{background:var(--brass);border-color:var(--brass);color:#12100f}
@@ -234,6 +235,7 @@
     position:relative;border-radius:20px;overflow:hidden;isolation:isolate;
     display:grid;grid-template-columns:auto 1fr;gap:clamp(24px,4vw,48px);align-items:center;
     background:linear-gradient(160deg,#1c1815 0%,#150f0d 60%,#0f1a0c 100%);
+    color:var(--paper-fixed);
     padding:clamp(28px,4.5vw,52px);
   }
   .jungli-feature__aurora{
@@ -285,19 +287,19 @@
   }
   .jungli-feature__title{
     font-family:var(--font-display);font-weight:400;line-height:1.12;
-    font-size:clamp(24px,3.2vw,38px);margin:0 0 16px;color:var(--paper);
+    font-size:clamp(24px,3.2vw,38px);margin:0 0 16px;color:var(--paper-fixed);
   }
-  .jungli-feature__title span{display:block;color:var(--paper-dim);font-size:.55em;letter-spacing:.02em;margin-top:6px}
-  .jungli-feature__copy{color:var(--paper-dim);font-size:15px;line-height:1.65;margin:0 0 24px;max-width:56ch}
+  .jungli-feature__title span{display:block;color:var(--paper-fixed-dim);font-size:.55em;letter-spacing:.02em;margin-top:6px}
+  .jungli-feature__copy{color:var(--paper-fixed-dim);font-size:15px;line-height:1.65;margin:0 0 24px;max-width:56ch}
   .jungli-feature__copy strong{color:#fbd010;font-weight:600}
   .jungli-feature__row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
   .jungli-feature__proof{
     display:inline-flex;align-items:center;gap:10px;text-decoration:none;
-    color:var(--paper-dim);font-family:var(--font-body);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--paper-fixed-dim);font-family:var(--font-body);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;
     border:1px solid rgba(239,230,216,.18);border-radius:999px;padding:6px 14px 6px 6px;
     transition:border-color .2s ease,color .2s ease;
   }
-  .jungli-feature__proof:hover{border-color:#fbd010;color:var(--paper)}
+  .jungli-feature__proof:hover{border-color:#fbd010;color:var(--paper-fixed)}
   .jungli-feature__proof video{
     width:40px;height:40px;border-radius:999px;object-fit:cover;flex:none;
   }
@@ -309,9 +311,9 @@
   }
 
   .d-cta{padding:0 clamp(20px,5vw,64px) 120px;max-width:1200px;margin:0 auto;text-align:center}
-  .d-cta__inner{background:#1c1815;border:1px solid rgba(239,230,216,.1);border-radius:20px;padding:56px 32px}
+  .d-cta__inner{background:#1c1815;color:var(--paper-fixed);border:1px solid rgba(239,230,216,.1);border-radius:20px;padding:56px 32px}
   .d-cta h2{font-family:var(--font-display);font-weight:400;font-size:clamp(26px,3.4vw,36px);margin:0 0 14px}
-  .d-cta p{color:var(--paper-dim);margin:0 0 28px}
+  .d-cta p{color:var(--paper-fixed-dim);margin:0 0 28px}
   .d-cta__row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
 
   /* ---- footer playlist strip: "this is mal griot" - the single Spotify
@@ -364,7 +366,7 @@
     position:fixed;left:50%;bottom:104px;translate:-50% 0;z-index:140;
     width:36px;height:36px;border-radius:999px;border:1px solid rgba(239,230,216,.25);
     background:rgba(17,16,19,.6);backdrop-filter:blur(10px);
-    display:flex;align-items:center;justify-content:center;color:var(--paper-dim);
+    display:flex;align-items:center;justify-content:center;color:var(--paper-fixed-dim);
     opacity:0;pointer-events:none;transition:opacity .5s ease;
   }
   .scroll-nudge.is-visible{opacity:1;animation:scroll-nudge-bounce 1.4s ease-in-out infinite}

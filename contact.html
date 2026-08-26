@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<script>(function(){try{var t=localStorage.getItem('griotTheme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <script>document.documentElement.className+=' js';</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Contact | Mal Griot</title>
@@ -109,13 +110,13 @@
   .c-list a:hover{color:var(--brass)}
   .c-list .k{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-faint);width:90px;flex:none}
 
-  .c-form{background:#1c1815;border:1px solid rgba(239,230,216,.1);border-radius:16px;padding:36px}
+  .c-form{background:#1c1815;border:1px solid rgba(239,230,216,.1);border-radius:16px;padding:36px;color:var(--paper-fixed)}
   .c-form h2{font-family:var(--font-display);font-weight:400;font-size:22px;margin:0 0 24px}
   .field{margin-bottom:18px}
-  .field label{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--paper-dim);margin-bottom:8px}
+  .field label{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--paper-fixed-dim);margin-bottom:8px}
   .field input,.field select,.field textarea{
     width:100%;background:rgba(239,230,216,.05);border:1px solid rgba(239,230,216,.15);border-radius:8px;
-    padding:12px 14px;color:var(--paper);font-family:var(--font-body);font-size:14px;
+    padding:12px 14px;color:var(--paper-fixed);font-family:var(--font-body);font-size:14px;
   }
   .field textarea{resize:vertical;min-height:100px}
   .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--brass)}
