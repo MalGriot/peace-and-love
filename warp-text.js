@@ -224,7 +224,7 @@ function readProps(container) {
   const num = (v, fallback) => (v === undefined ? fallback : parseFloat(v));
   return {
     text: d.warpText ?? container.getAttribute('aria-label') ?? 'Bend the moment',
-    color: d.color ?? '#f8f5ff',
+    color: d.color ?? getComputedStyle(container).color,
     warpStrength: num(d.warpStrength, 0.08),
     warpScale: num(d.warpScale, 1.7),
     speed: num(d.speed, 0.55),
@@ -408,6 +408,19 @@ function initWarpTextElement(container) {
     renderOnce();
     raf = requestAnimationFrame(loop);
   };
+
+  // The text color is baked into the canvas texture at rasterize time, so a
+  // theme toggle after init (data-theme flip on <html>) needs to explicitly
+  // re-read the (now-inverted) computed color and re-rasterize - it won't
+  // happen on its own since this is a canvas bitmap, not live CSS.
+  let themeObserver;
+  if (!container.dataset.color) {
+    themeObserver = new MutationObserver(() => {
+      props.color = getComputedStyle(container).color;
+      rasterize();
+    });
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  }
 
   resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(container);

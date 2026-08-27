@@ -19,7 +19,7 @@
   display:flex;align-items:center;flex:none;
   font-family:var(--font-display);font-weight:400;
   font-size:clamp(42px,9vw,108px);line-height:1;letter-spacing:-.01em;
-  color:transparent;-webkit-text-stroke:1px rgba(239,230,216,.55);
+  color:transparent;-webkit-text-stroke:1px var(--paper-dim);
   padding:0 clamp(20px,2.6vw,40px);
 }
 .sv-row--fill .sv-item{color:var(--gold);-webkit-text-stroke:0}

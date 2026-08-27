@@ -23,6 +23,11 @@
 /* ---------- Poetry page: editorial, page not stage. No booking CTA
    anywhere on this page; the two asks are "watch/listen" and "buy the book". ---------- */
 
+/* This page's nav header sits directly over the hero video tiles (always
+   dark footage), so the logo/menu text must stay fixed-light instead of
+   flipping with the theme. */
+.sm-logo{color:var(--paper-fixed)}
+
 .po-section{padding:clamp(64px,10vw,140px) clamp(20px,6vw,64px)}
 
 /* ---------- 1. Hero: self-hosted loop, same asset already used on the
@@ -61,14 +66,14 @@
 .po-hero__tile-title{
   position:absolute;left:16px;right:16px;bottom:80px;z-index:1;
   font-family:var(--font-display);font-weight:400;line-height:1.2;
-  font-size:clamp(15px,1.6vw,19px);color:var(--paper);
+  font-size:clamp(15px,1.6vw,19px);color:var(--paper-fixed);
   opacity:1;transition:opacity .4s ease;pointer-events:none;
 }
 .po-hero__tile.is-playing .po-hero__tile-title{opacity:0}
 .po-hero__tile-subtitle{
   display:block;margin-top:4px;
   font-family:var(--font-body,inherit);font-weight:400;line-height:1.3;
-  font-size:clamp(11px,1.1vw,13px);letter-spacing:.01em;color:var(--paper-dim,rgba(239,230,216,.72));
+  font-size:clamp(11px,1.1vw,13px);letter-spacing:.01em;color:var(--paper-fixed-dim,rgba(239,230,216,.72));
 }
 
 /* Subtitles: a custom overlay driven off the <track>'s cues (JS sets
@@ -112,7 +117,7 @@
   position:absolute;bottom:12px;right:12px;z-index:2;
   width:32px;height:32px;border-radius:999px;
   background:rgba(18,16,15,.55);border:1px solid rgba(239,230,216,.3);
-  display:flex;align-items:center;justify-content:center;color:var(--paper);
+  display:flex;align-items:center;justify-content:center;color:var(--paper-fixed);
   cursor:pointer;opacity:0;transition:opacity .3s ease,background .2s ease,border-color .2s ease,color .2s ease;
 }
 .po-hero__tile.is-active .po-hero__tile-mute,.po-hero__tile:hover .po-hero__tile-mute,.po-hero__tile:focus-within .po-hero__tile-mute{opacity:1}

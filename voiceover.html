@@ -44,10 +44,10 @@
 .vo-cta--play:hover .vo-cta__ring{background:var(--gold);color:#12100f;transform:scale(1.06)}
 
 /* ============ 1. HERO — FORGET ME NOT ============ */
-.vo-hero{position:relative;min-height:92vh;display:flex;align-items:center;overflow:hidden;background:var(--ink);padding:clamp(90px,12vw,130px) 0 60px}
+.vo-hero{position:relative;min-height:92vh;display:flex;align-items:center;overflow:hidden;background:var(--asphalt);padding:clamp(90px,12vw,130px) 0 60px}
 .vo-hero__amb{position:absolute;inset:0;z-index:0;overflow:hidden}
 .vo-hero__amb img{width:100%;height:100%;object-fit:cover;object-position:50% 30%;filter:blur(28px) brightness(.32) saturate(1.05);transform:scale(1.15)}
-.vo-hero__amb::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,16,15,.75) 0%,rgba(18,16,15,.94) 60%,var(--ink) 100%)}
+.vo-hero__amb::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,16,15,.75) 0%,rgba(18,16,15,.94) 60%,var(--asphalt) 100%)}
 @media (prefers-reduced-motion: reduce){.vo-hero__amb img{transform:none}}
 
 .vo-hero__stage{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 clamp(24px,6vw,64px);display:flex;align-items:center;gap:clamp(40px,6vw,90px);flex-wrap:wrap}
@@ -91,17 +91,17 @@
 
 /* -- the copy stage -- */
 .vo-hero__stage-copy{flex:1 1 380px;min-width:280px;max-width:560px}
-.vo-hero__stage-title{font-family:var(--font-display);font-weight:400;font-size:clamp(36px,5.4vw,64px);color:var(--paper);margin:14px 0 6px;line-height:1}
-.vo-hero__stage-by{font-size:14px;color:var(--paper-dim);margin:0 0 14px}
+.vo-hero__stage-title{font-family:var(--font-display);font-weight:400;font-size:clamp(36px,5.4vw,64px);color:var(--paper-fixed);margin:14px 0 6px;line-height:1}
+.vo-hero__stage-by{font-size:14px;color:var(--paper-fixed-dim);margin:0 0 14px}
 .vo-hero__rating{display:flex;align-items:center;gap:10px;margin-bottom:20px}
 .vo-hero__stars{display:inline-flex;gap:2px;color:var(--gold)}
-.vo-hero__rating-text{font-size:12px;color:var(--paper-dim)}
-.vo-hero__stage-desc{font-size:15.5px;line-height:1.75;color:var(--paper);margin:0 0 16px;max-width:48ch}
-.vo-hero__stage-credits{font-size:13.5px;line-height:1.7;color:var(--paper-faint);margin:0 0 26px;max-width:48ch}
+.vo-hero__rating-text{font-size:12px;color:var(--paper-fixed-dim)}
+.vo-hero__stage-desc{font-size:15.5px;line-height:1.75;color:var(--paper-fixed);margin:0 0 16px;max-width:48ch}
+.vo-hero__stage-credits{font-size:13.5px;line-height:1.7;color:var(--paper-fixed-faint);margin:0 0 26px;max-width:48ch}
 .vo-hero__narrator{display:flex;align-items:center;gap:12px;margin-bottom:26px}
 .vo-hero__narrator-photo{flex:none;width:40px;height:40px;border-radius:999px;object-fit:cover;object-position:50% 20%;border:1px solid rgba(239,230,216,.3);box-shadow:0 6px 14px rgba(0,0,0,.4)}
-.vo-hero__narrator-label{font-size:12.5px;color:var(--paper-dim)}
-.vo-hero__narrator-label strong{color:var(--paper);font-weight:500}
+.vo-hero__narrator-label{font-size:12.5px;color:var(--paper-fixed-dim)}
+.vo-hero__narrator-label strong{color:var(--paper-fixed);font-weight:500}
 .vo-hero__stage-ctas{display:flex;flex-wrap:wrap;align-items:center;gap:18px 22px;margin-bottom:18px}
 #heroSampleBtn{display:inline-flex;align-items:center;gap:10px;font-size:13px;padding:16px 30px}
 #heroSampleBtn .ic-pause{display:none}
@@ -117,7 +117,7 @@
 .vo-hero__store-btn:hover{border-color:var(--gold);transform:translateY(-2px);background:#161311}
 .vo-hero__store-logo{height:16px;width:auto;display:block}
 .vo-hero__store-btn--alt{background:transparent;border-color:rgba(239,230,216,.28)}
-.vo-hero__book-mal{display:inline-block;font-size:12px;color:var(--paper-faint);text-decoration:underline;text-underline-offset:3px;transition:color .2s}
+.vo-hero__book-mal{display:inline-block;font-size:12px;color:var(--paper-fixed-faint);text-decoration:underline;text-underline-offset:3px;transition:color .2s}
 .vo-hero__book-mal:hover{color:var(--gold)}
 
 .vo-hero__stage-title.reveal{transition-delay:.08s}
@@ -371,7 +371,7 @@
 .vo-final{position:relative;min-height:70vh;display:flex;align-items:center;justify-content:center;overflow:hidden;text-align:center}
 .vo-final__media{position:absolute;inset:0;overflow:hidden}
 .vo-final__media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 22%;filter:grayscale(.15)}
-.vo-final::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(18,16,15,.55) 0%,rgba(18,16,15,.92) 78%)}
+.vo-final::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(18,16,15,.72) 0%,rgba(18,16,15,.94) 78%)}
 .vo-final__copy{position:relative;z-index:1;padding:40px 24px}
 .vo-final__title{font-family:var(--font-display);font-weight:400;font-size:clamp(34px,6vw,68px);color:var(--paper-fixed);margin:0 0 30px;line-height:1.05}
 .vo-final__ctas{display:flex;flex-wrap:wrap;gap:16px;justify-content:center}
@@ -402,9 +402,34 @@
 .vo-mini__close{flex:none;width:26px;height:26px;border-radius:999px;border:none;background:transparent;color:var(--paper-fixed-dim);display:flex;align-items:center;justify-content:center;cursor:pointer}
 .vo-mini__close:hover{color:var(--paper-fixed)}
 @media (max-width:520px){.vo-mini__info{max-width:42vw}}
+
+/* ---------- Light-mode page wash: a low, warm wine glow (matches the
+   brand's --velvet-wine accent) instead of the flat default cream, since
+   this is the most intimate/sultry page on the site - candlelight, not
+   daylight, even when the theme is "light". Dark mode is untouched. */
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]) body.vo-page{
+    background-color: #f2e2e0;
+    background-image:
+      radial-gradient(ellipse 90% 55% at 50% -6%, rgba(58,15,20,.28), transparent 62%),
+      radial-gradient(ellipse 75% 50% at 100% 100%, rgba(58,15,20,.2), transparent 60%),
+      var(--stars-svg);
+    background-repeat: no-repeat, no-repeat, repeat;
+    background-attachment: fixed, fixed, fixed;
+  }
+}
+:root[data-theme="light"] body.vo-page{
+  background-color: #f2e2e0;
+  background-image:
+    radial-gradient(ellipse 90% 55% at 50% -6%, rgba(58,15,20,.28), transparent 62%),
+    radial-gradient(ellipse 75% 50% at 100% 100%, rgba(58,15,20,.2), transparent 60%),
+    var(--stars-svg);
+  background-repeat: no-repeat, no-repeat, repeat;
+  background-attachment: fixed, fixed, fixed;
+}
 </style>
 </head>
-<body>
+<body class="vo-page">
 
 <div id="chrome-nav"></div>
 
@@ -714,7 +739,8 @@
 
 <!-- ============ 10. FINAL CTA ============ -->
 <section class="vo-final">
-  <div class="vo-final__media"><img src="img/voiceover-home.jpg" alt=""></div>
+  <!-- Stock studio photo (CC BY 2.0, Dejan Krsmanovic, via Wikimedia Commons): https://commons.wikimedia.org/wiki/File:Small_Bedroom_Recording_Studio_(46873514981).jpg -->
+  <div class="vo-final__media"><img src="img/voiceover-studio.jpg" alt="A recording studio setup with a condenser microphone, mixing console and monitors"></div>
   <div class="vo-final__copy">
     <h2 class="vo-final__title reveal">Words need<br>a voice.</h2>
     <div class="vo-final__ctas reveal">
