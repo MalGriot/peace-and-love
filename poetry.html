@@ -551,50 +551,6 @@
          is required by flowing-menu.js, which fills in the repeated
          marquee copies at runtime. -->
     <nav class="po-flow" id="poem-list">
-      <div class="po-flow__item" data-platform="youtube" data-id="REPLACE_YOUTUBE_ID_1" data-lyrics="1">
-        <button type="button" class="po-flow__link">
-          <span class="po-flow__title">Untitled Piece I</span>
-          <span class="po-flow__meta">
-            <span class="po-flow__type">Video</span>
-            <span class="po-flow__play">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-            </span>
-          </span>
-        </button>
-        <div class="po-flow__marquee">
-          <div class="po-flow__marquee-inner-wrap">
-            <div class="po-flow__marquee-inner">
-              <div class="po-flow__marquee-part">
-                <span>Untitled Piece I</span>
-                <div class="po-flow__marquee-img" data-bg="img/poetry-hero-1-poster.jpg"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="po-flow__item" data-platform="youtube" data-id="REPLACE_YOUTUBE_ID_2" data-lyrics="2">
-        <button type="button" class="po-flow__link">
-          <span class="po-flow__title">Untitled Piece II</span>
-          <span class="po-flow__meta">
-            <span class="po-flow__type">Video</span>
-            <span class="po-flow__play">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-            </span>
-          </span>
-        </button>
-        <div class="po-flow__marquee">
-          <div class="po-flow__marquee-inner-wrap">
-            <div class="po-flow__marquee-inner">
-              <div class="po-flow__marquee-part">
-                <span>Untitled Piece II</span>
-                <div class="po-flow__marquee-img" data-bg="img/poetry-hero-2-poster.jpg"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div class="po-flow__item" data-platform="soundcloud" data-url="https://soundcloud.com/mal-griot/moment" data-lyrics="3">
         <button type="button" class="po-flow__link">
           <span class="po-flow__title">There Will Be a Moment</span>
@@ -617,27 +573,6 @@
         </div>
       </div>
 
-      <div class="po-flow__item" data-platform="soundcloud" data-url="https://soundcloud.com/mal-griot/REPLACE_SOUNDCLOUD_SLUG_2" data-lyrics="4">
-        <button type="button" class="po-flow__link">
-          <span class="po-flow__title">Untitled Piece IV</span>
-          <span class="po-flow__meta">
-            <span class="po-flow__type">Audio</span>
-            <span class="po-flow__play">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-            </span>
-          </span>
-        </button>
-        <div class="po-flow__marquee">
-          <div class="po-flow__marquee-inner-wrap">
-            <div class="po-flow__marquee-inner">
-              <div class="po-flow__marquee-part">
-                <span>Untitled Piece IV</span>
-                <div class="po-flow__marquee-img" data-bg="img/poetry-home.jpg"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </nav>
   </div>
 
@@ -1071,34 +1006,9 @@
   var panel = document.getElementById('poem-active-panel');
   if (!list || !panel) return;
 
-  // Placeholder lyric sets, one per data-lyrics id above; swap the text
-  // and timestamps (seconds) for the real transcriptions once available.
-  var LYRICS = {
-    '1': [
-      { t: 0,  text: 'Untitled Piece I: lyrics placeholder.' },
-      { t: 6,  text: 'Swap this block for the real, timed transcription.' },
-      { t: 13, text: 'Each line carries a start time in seconds.' },
-      { t: 20, text: 'The active line highlights and scrolls into view as the clip plays.' }
-    ],
-    '2': [
-      { t: 0,  text: 'Untitled Piece II: lyrics placeholder.' },
-      { t: 6,  text: 'Swap this block for the real, timed transcription.' },
-      { t: 13, text: 'Each line carries a start time in seconds.' },
-      { t: 20, text: 'The active line highlights and scrolls into view as the clip plays.' }
-    ],
-    '3': [
-      { t: 0,  text: 'There Will Be a Moment: lyrics placeholder.' },
-      { t: 6,  text: 'Swap this block for the real, timed transcription.' },
-      { t: 13, text: 'Each line carries a start time in seconds.' },
-      { t: 20, text: 'The active line highlights and scrolls into view as the track plays.' }
-    ],
-    '4': [
-      { t: 0,  text: 'Untitled Piece IV: lyrics placeholder.' },
-      { t: 6,  text: 'Swap this block for the real, timed transcription.' },
-      { t: 13, text: 'Each line carries a start time in seconds.' },
-      { t: 20, text: 'The active line highlights and scrolls into view as the track plays.' }
-    ]
-  };
+  // Timed lyric sets keyed by data-lyrics id above; add the real transcription
+  // (t = start time in seconds) once it exists for a given piece.
+  var LYRICS = {};
 
   var activeRow = null;
   var ytPlayer = null;
