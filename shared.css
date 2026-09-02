@@ -685,14 +685,19 @@ a{color:inherit}
 
 /* ---------- scroll cue (site-wide) - injected by initScrollCue() in shared.js
    on any page tall enough to scroll. Fades in after 5s of inactivity, hides
-   the moment the visitor moves, docked clear of the mini-player's slot. ---------- */
+   the moment the visitor moves. Its `bottom` offset is set inline by JS,
+   measured live off the mini-player's actual position, so it always clears
+   the pill instead of guessing with a fixed viewport-relative value.
+   Clickable/focusable: activating it scrolls to the section beneath. ---------- */
 .scroll-cue{
-  position:fixed;left:50%;bottom:clamp(70px,9vh,96px);translate:-50% 0;z-index:60;
+  position:fixed;left:50%;bottom:32px;translate:-50% 0;z-index:60;
   display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--paper-faint);
-  font-size:10px;letter-spacing:.2em;text-transform:uppercase;pointer-events:none;
-  opacity:0;transition:opacity .6s ease;
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;pointer-events:none;cursor:pointer;
+  opacity:0;transition:opacity .6s ease,bottom .3s ease;
 }
-.scroll-cue.is-visible{opacity:1}
+.scroll-cue.is-visible{opacity:1;pointer-events:auto}
+.scroll-cue:hover,.scroll-cue:focus-visible{color:var(--paper-dim)}
+.scroll-cue:focus-visible{outline:1px solid var(--gold);outline-offset:6px}
 .scroll-cue__line{width:1px;height:34px;background:linear-gradient(180deg,var(--gold),transparent);animation:scroll-cue-pulse 2.4s ease-in-out infinite}
 @keyframes scroll-cue-pulse{0%,100%{opacity:.35}50%{opacity:1}}
 @media (prefers-reduced-motion: reduce){.scroll-cue__line{animation:none}}

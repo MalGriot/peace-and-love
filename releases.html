@@ -363,25 +363,6 @@
      leaving a big empty gap below the visible title that the JS then
      used to lock "fall into the sky…" far from it. Tighten the box on
      mobile so its bottom edge sits close to the visible text. */
-  /* ---- scroll nudge: if the visitor stops scrolling for a few seconds
-     mid-page, a small bouncing down-arrow prompts them to keep going. Sits
-     just above the mini-player so the two never overlap. ---- */
-  .scroll-nudge{
-    position:fixed;left:50%;bottom:104px;translate:-50% 0;z-index:140;
-    width:36px;height:36px;border-radius:999px;border:1px solid rgba(239,230,216,.25);
-    background:rgba(17,16,19,.6);backdrop-filter:blur(10px);
-    display:flex;align-items:center;justify-content:center;color:var(--paper-fixed-dim);
-    opacity:0;pointer-events:none;transition:opacity .5s ease;
-  }
-  .scroll-nudge.is-visible{opacity:1;animation:scroll-nudge-bounce 1.4s ease-in-out infinite}
-  @keyframes scroll-nudge-bounce{
-    0%,100%{transform:translateY(0)}
-    50%{transform:translateY(6px)}
-  }
-  @media (prefers-reduced-motion: reduce){
-    .scroll-nudge{display:none}
-  }
-
   @media (max-width:640px){
     .listen--hero .warp-text{height:100px !important;min-height:100px !important}
     /* The locked copy block was tall enough on short mobile viewports (real
@@ -765,9 +746,6 @@
 <div id="chrome-footer"></div>
 <div id="chrome-chat"></div>
 <div id="chrome-player"></div>
-<button class="scroll-nudge" id="scrollNudge" aria-hidden="true" tabindex="-1">
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-</button>
 
 <div class="buy-modal" id="buyModal" aria-hidden="true">
   <div class="buy-modal__panel" role="dialog" aria-modal="true" aria-labelledby="buyModalTitle">
@@ -1344,6 +1322,7 @@
   // ends up sitting just above the tracks.
   // Scrubbed + pinned, so scrolling up plays this in reverse automatically.
   (function () {
+    let tl;
     function initHeroCollapse() {
       if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
       const section = document.querySelector('.listen--hero');
@@ -1361,7 +1340,6 @@
 
       const SHRINK_SCALE = 0.34;
       const belowGroup = [cta, tracks].filter(Boolean);
-      let tl;
 
       function build() {
         if (tl) {
@@ -1479,41 +1457,57 @@
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(build, 200);
       });
+
+      // The 10-track row (#listenTracks, populated by initMiniPlayer in
+      // shared.js) loads asynchronously off the SoundCloud widget and can
+      // still be empty when build() first runs, making the section's - and
+      // therefore this pin's "+=105%" - measured height far shorter than
+      // its real one once the tracks render in. Rebuild once they're ready
+      // so both the pin's scroll pacing and the phase checkpoints below
+      // are measured against the section's true height.
+      window.addEventListener('griot:release-ready', build);
     }
 
     if (document.readyState === 'complete') initHeroCollapse();
     else window.addEventListener('load', initHeroCollapse);
-  })();
-</script>
-<script>
-  // Scroll nudge: if the visitor stops scrolling for 3s anywhere short of
-  // the bottom of the page, bounce a down-arrow to prompt them onward.
-  // Any scroll movement hides it immediately and restarts the 3s idle timer.
-  (function () {
-    const nudge = document.getElementById('scrollNudge');
-    if (!nudge) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    const IDLE_MS = 3000;
-    const NEAR_BOTTOM_PX = 80;
-    let idleTimer = null;
-
-    function nearBottom() {
-      return window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - NEAR_BOTTOM_PX;
+    // ---- scroll cue phases: wires the site-wide "keep scrolling" button
+    // (initScrollCue, shared.js) to this page's actual narrative beats
+    // instead of a blind fixed-distance scroll:
+    //   1. the "breathe love d e e p" copy fully revealed (mid-pause,
+    //      before the collapse starts)
+    //   2. title shrunk, copy gone, album + track row pulled up (end of
+    //      the pinned collapse)
+    //   3. the Jungli brand-work credit
+    //   4. the Sun Burna music video
+    //   5. the All Releases grid
+    // The first two read live off the hero collapse's own ScrollTrigger
+    // (built above), so they track its pinned range exactly even across
+    // the resize-triggered rebuilds in initHeroCollapse.
+    function heroPhaseY(fraction) {
+      return function () {
+        let st = tl && tl.scrollTrigger;
+        // ScrollTrigger resolves a percentage-based `end` (here "+=105%")
+        // lazily - it can still be unset if the visitor's first interaction
+        // on the page is clicking the cue, before any real scroll/resize
+        // has forced GSAP to calculate it. Force that calculation rather
+        // than risk reading a stale/undefined end and skipping straight to
+        // the next phase.
+        if (st && typeof st.end !== 'number') {
+          ScrollTrigger.refresh();
+          st = tl && tl.scrollTrigger;
+        }
+        return st && typeof st.end === 'number' ? st.start + fraction * (st.end - st.start) : null;
+      };
     }
-
-    function show() {
-      if (!nearBottom()) nudge.classList.add('is-visible');
-    }
-
-    function scheduleIdle() {
-      clearTimeout(idleTimer);
-      nudge.classList.remove('is-visible');
-      idleTimer = setTimeout(show, IDLE_MS);
-    }
-
-    window.addEventListener('scroll', scheduleIdle, { passive: true });
-    scheduleIdle();
+    const releaseHeads = Array.from(document.querySelectorAll('.d-releases__head'));
+    window.griotScrollPhases = [
+      heroPhaseY(0.3),
+      heroPhaseY(0.995),
+      document.querySelector('.jungli-feature'),
+      releaseHeads.find((h) => /music video/i.test(h.textContent)),
+      releaseHeads.find((h) => /all releases/i.test(h.textContent))
+    ].filter(Boolean);
   })();
 </script>
 </body>

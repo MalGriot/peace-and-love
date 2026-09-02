@@ -23,7 +23,7 @@
 /* ---------- 1. Hero ---------- */
 .perf-hero{
   display:grid;grid-template-columns:1.05fr 0.95fr;align-items:stretch;
-  min-height:92vh;padding:0;
+  min-height:70vh;padding:0;
 }
 .perf-hero__copy{
   display:flex;flex-direction:column;justify-content:flex-start;gap:22px;
@@ -81,7 +81,7 @@
 
 .perf-hero__media{position:relative;overflow:hidden;background:var(--ink)}
 .perf-hero__media img{
-  width:100%;height:100%;object-fit:cover;object-position:50% 22%;
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 22%;
   filter:saturate(.86) contrast(1.05);
 }
 .perf-hero__media::after{
@@ -565,7 +565,7 @@ body.bmd-open { overflow: hidden; }
         <span class="watch-card__caption">Bharat Nivas Theatre</span>
       </button>
       <h3 class="watch-card__title">Remember the Time</h3>
-      <p class="watch-card__desc">Solo · A cover, made his own on stage</p>
+      <p class="watch-card__desc">Duet · A cover, made his own on stage</p>
     </div>
 
     <div class="watch-card-wrap reveal">
@@ -589,7 +589,7 @@ body.bmd-open { overflow: hidden; }
         <span class="watch-card__caption">Sofar Sounds</span>
       </button>
       <h3 class="watch-card__title">Overmind</h3>
-      <p class="watch-card__desc">Solo · Live looped · Original</p>
+      <p class="watch-card__desc">Duet · Live looped · Original</p>
     </div>
   </div>
 </section>

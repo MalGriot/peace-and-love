@@ -1086,16 +1086,23 @@ function initAnimatedFavicon() {
 // Site-wide "keep scrolling" cue: fades in after 5s of no scroll/pointer/
 // key activity, on any page tall enough to actually scroll. Hides again the
 // moment the visitor moves, and stops offering it once they're near the
-// bottom of the page. Docked above the mini-player's bottom-center slot so
-// the two never overlap.
+// bottom of the page. Clicking (or Enter/Space when focused) scrolls down
+// to the section beneath. Its vertical position is measured live off the
+// mini-player's actual on-screen position (rather than guessed with a
+// fixed viewport-relative offset), so it clears the pill consistently
+// regardless of page, viewport height, or wherever it's been dragged to.
 function initScrollCue() {
   const cue = document.createElement('div');
   cue.className = 'scroll-cue';
-  cue.setAttribute('aria-hidden', 'true');
+  cue.setAttribute('role', 'button');
+  cue.setAttribute('tabindex', '-1');
+  cue.setAttribute('aria-label', 'Scroll to next section');
   cue.innerHTML = '<span class="scroll-cue__line"></span>Scroll';
   document.body.appendChild(cue);
 
   const IDLE_DELAY = 5000;
+  const BASE_BOTTOM = 32; // clearance used when there's no mini-player to clear
+  const GAP_ABOVE_PLAYER = 18;
   let idleTimer;
 
   // Measured live (not once at init) so a page whose height only settles
@@ -1109,18 +1116,114 @@ function initScrollCue() {
     return window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 40;
   }
 
+  function updateCuePosition() {
+    const player = document.getElementById('miniPlayer');
+    let bottom = BASE_BOTTOM;
+    if (player && player.classList.contains('is-visible') && (player.dataset.anchor || 'bottom-center').indexOf('bottom') === 0) {
+      const rect = player.getBoundingClientRect();
+      const playerBottomOffset = window.innerHeight - rect.bottom;
+      bottom = Math.max(BASE_BOTTOM, playerBottomOffset + rect.height + GAP_ABOVE_PLAYER);
+    }
+    cue.style.bottom = bottom + 'px';
+  }
+
   function showCue() {
-    if (isScrollable() && !nearBottom()) cue.classList.add('is-visible');
+    if (isScrollable() && !nearBottom()) {
+      updateCuePosition();
+      cue.classList.add('is-visible');
+      cue.setAttribute('tabindex', '0');
+    }
   }
 
   function resetIdleTimer() {
     cue.classList.remove('is-visible');
+    cue.setAttribute('tabindex', '-1');
     clearTimeout(idleTimer);
     idleTimer = setTimeout(showCue, IDLE_DELAY);
   }
 
-  ['scroll', 'mousemove', 'touchstart', 'keydown', 'wheel'].forEach((evt) => {
-    window.addEventListener(evt, resetIdleTimer, { passive: true });
+  // Phase-aware "next" target, shared by every scroll cue on the site. A
+  // page can opt in to a scripted sequence by setting window.griotScrollPhases
+  // to an ordered array of phases - each one a DOM element (its top is the
+  // target), a number (a raw scrollY target), or a function returning either
+  // (for targets tied to live state, e.g. a GSAP ScrollTrigger's pinned
+  // range) - so clicking the cue steps through that page's own narrative
+  // beats instead of a blind fixed-distance scroll. releases.html uses this
+  // for its 5-phase hero collapse -> Jungli -> Sun Burna video -> All
+  // Releases sequence. Pages that don't define phases get a sensible
+  // default: advance through top-level <section> elements in document
+  // order. Either way, once every phase behind the current scroll position
+  // is exhausted, it falls back to a plain "next screenful" scroll.
+  const SCREEN_FRACTION = 0.92;
+  const PHASE_EPSILON = 24; // px of slack so an already-reached phase isn't re-targeted
+
+  let autoSectionPhases = null;
+  function defaultPhases() {
+    if (autoSectionPhases === null) {
+      autoSectionPhases = Array.from(document.querySelectorAll('main > section, body > section'));
+    }
+    return autoSectionPhases;
+  }
+
+  // The site nav (.staggered-menu-header) is a fixed overlay pinned to the
+  // very top of the viewport, so landing an element's top exactly at
+  // window.scrollY (y=0 in viewport terms) tucks its title straight
+  // underneath it. Measured live since the header's own height flexes with
+  // viewport width (its padding uses clamp()).
+  function navClearance() {
+    const header = document.querySelector('.staggered-menu-header');
+    return header ? header.getBoundingClientRect().height + 16 : 0;
+  }
+
+  function resolvePhaseY(phase) {
+    if (typeof phase === 'function') phase = phase();
+    if (phase instanceof Element) return phase.getBoundingClientRect().top + window.scrollY - navClearance();
+    return typeof phase === 'number' && !isNaN(phase) ? phase : null;
+  }
+
+  function nextPhaseY() {
+    const explicit = Array.isArray(window.griotScrollPhases) ? window.griotScrollPhases : null;
+    const phases = explicit && explicit.length ? explicit : defaultPhases();
+    const currentY = window.scrollY;
+    for (let i = 0; i < phases.length; i++) {
+      const y = resolvePhaseY(phases[i]);
+      if (y !== null && y > currentY + PHASE_EPSILON) return y;
+    }
+    return null;
+  }
+
+  function scrollToNext() {
+    const targetY = nextPhaseY();
+    if (targetY !== null) {
+      window.scrollTo({ top: targetY, left: 0, behavior: 'smooth' });
+    } else {
+      window.scrollBy({ top: window.innerHeight * SCREEN_FRACTION, left: 0, behavior: 'smooth' });
+    }
+  }
+
+  cue.addEventListener('click', scrollToNext);
+  cue.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      scrollToNext();
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    if (cue.classList.contains('is-visible')) updateCuePosition();
+  }, { passive: true });
+
+  // Deliberately excludes 'mousemove': hiding on every cursor twitch meant
+  // the cue vanished the instant a visitor started moving toward it to
+  // click, making it unclickable by mouse. Only genuine navigation - an
+  // actual scroll, a key press, or a tap elsewhere on the page - counts as
+  // "the visitor's moved on" and hides it. (The cue.contains() guard still
+  // matters for 'keydown' and 'touchstart' fired on the cue itself.)
+  ['scroll', 'touchstart', 'keydown', 'wheel'].forEach((evt) => {
+    window.addEventListener(evt, (e) => {
+      if (cue.contains(e.target)) return;
+      resetIdleTimer();
+    }, { passive: true });
   });
 
   resetIdleTimer();
