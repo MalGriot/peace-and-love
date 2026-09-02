@@ -108,16 +108,14 @@ a{color:inherit}
 /* Once the page has scrolled, page content can sit directly behind this
    fixed header (it's transparent by default) - a heading landing in this
    band would otherwise collide with the logo/menu button. A ::before layer
-   (not the header itself) carries the tint/blur so its bottom-edge fade
-   never touches the logo/menu button's own opacity. Toggled by
-   initStaggeredMenu()'s scroll listener in shared.js. */
+   (not the header itself) carries the matte fill so its bottom-edge fade
+   never touches the logo/menu button's own opacity. Solid through most of
+   the header's height, only fading out right at the bottom edge. Toggled
+   by initStaggeredMenu()'s scroll listener in shared.js. */
 .staggered-menu-header::before{
   content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
   opacity:0;transition:opacity .3s ease;
-  background:linear-gradient(to bottom, color-mix(in srgb, var(--ink) 82%, transparent), transparent);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  -webkit-mask-image:linear-gradient(to bottom, #000 55%, transparent);
-  mask-image:linear-gradient(to bottom, #000 55%, transparent);
+  background:linear-gradient(to bottom, var(--ink) 0%, var(--ink) 75%, transparent 100%);
 }
 .staggered-menu-header.is-scrolled::before{opacity:1}
 .staggered-menu-header > *{pointer-events:auto}
