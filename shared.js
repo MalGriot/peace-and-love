@@ -816,6 +816,16 @@ function initStaggeredMenu() {
   const panel = wrapper.querySelector('.staggered-menu-panel');
   const backdrop = wrapper.querySelector('.sm-backdrop');
   const closeBtn = wrapper.querySelector('.sm-panel-close');
+  const header = wrapper.querySelector('.staggered-menu-header');
+
+  // The header is fixed and transparent by default, so a scrolled-up heading
+  // can land directly behind the logo/menu button. Give it a background once
+  // the page has scrolled at all, so it always reads over moving content.
+  if (header) {
+    const updateScrolled = () => header.classList.toggle('is-scrolled', window.scrollY > 8);
+    updateScrolled();
+    window.addEventListener('scroll', updateScrolled, { passive: true });
+  }
 
   function setOpen(open) {
     wrapper.classList.toggle('is-open', open);

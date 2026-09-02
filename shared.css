@@ -104,6 +104,15 @@ a{color:inherit}
   position:absolute;top:0;left:0;right:0;pointer-events:none;
   display:flex;align-items:center;justify-content:space-between;
   padding:22px clamp(20px,4vw,56px);
+  background:transparent;transition:background .3s ease,backdrop-filter .3s ease;
+}
+/* Once the page has scrolled, page content can sit directly behind this
+   fixed header (it's transparent by default) - a heading landing in this
+   band would otherwise collide with the logo/menu button. Toggled by
+   initStaggeredMenu()'s scroll listener in shared.js. */
+.staggered-menu-header.is-scrolled{
+  background:color-mix(in srgb, var(--ink) 82%, transparent);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
 }
 .staggered-menu-header > *{pointer-events:auto}
 .sm-logo{
