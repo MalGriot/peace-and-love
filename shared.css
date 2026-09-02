@@ -104,16 +104,22 @@ a{color:inherit}
   position:absolute;top:0;left:0;right:0;pointer-events:none;
   display:flex;align-items:center;justify-content:space-between;
   padding:22px clamp(20px,4vw,56px);
-  background:transparent;transition:background .3s ease,backdrop-filter .3s ease;
 }
 /* Once the page has scrolled, page content can sit directly behind this
    fixed header (it's transparent by default) - a heading landing in this
-   band would otherwise collide with the logo/menu button. Toggled by
+   band would otherwise collide with the logo/menu button. A ::before layer
+   (not the header itself) carries the tint/blur so its bottom-edge fade
+   never touches the logo/menu button's own opacity. Toggled by
    initStaggeredMenu()'s scroll listener in shared.js. */
-.staggered-menu-header.is-scrolled{
-  background:color-mix(in srgb, var(--ink) 82%, transparent);
+.staggered-menu-header::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  opacity:0;transition:opacity .3s ease;
+  background:linear-gradient(to bottom, color-mix(in srgb, var(--ink) 82%, transparent), transparent);
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  -webkit-mask-image:linear-gradient(to bottom, #000 55%, transparent);
+  mask-image:linear-gradient(to bottom, #000 55%, transparent);
 }
+.staggered-menu-header.is-scrolled::before{opacity:1}
 .staggered-menu-header > *{pointer-events:auto}
 .sm-logo{
   font-family:var(--font-display);font-size:16px;letter-spacing:-.03em;text-transform:uppercase;
