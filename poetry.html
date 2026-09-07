@@ -14,6 +14,29 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://malgriot.github.io/peace-and-love/img/og/share-contact.png">
 <link rel="canonical" href="https://malgriot.github.io/peace-and-love/poetry.html">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Mal Griot",
+  "alternateName": "MAL GRIOT",
+  "jobTitle": "Vocalist, Spoken-Word Artist, MC/Host, Voice Actor",
+  "url": "https://malgriot.github.io/peace-and-love/",
+  "image": "https://malgriot.github.io/peace-and-love/img/poetry-home.jpg",
+  "knowsAbout": ["Spoken-word poetry", "Poetry readings", "Storytelling"],
+  "sameAs": [
+    "https://instagram.com/yep.that.malcolm",
+    "https://www.linkedin.com/in/malgriot/",
+    "https://open.spotify.com/artist/61bgVlMQw2S0t6d8mVPVIS",
+    "https://soundcloud.com/mal-griot",
+    "https://music.apple.com/us/artist/mal-griot/1773454818",
+    "https://music.youtube.com/channel/UC2ouYdd3qmP9vSvLpKD8-CQ",
+    "https://music.amazon.com/artists/B0DTP5MFVP/mal-griot",
+    "https://tidal.com/artist/53475605",
+    "https://www.youtube.com/@MalGriot"
+  ]
+}
+</script>
 <link rel="icon" href="img/brand/favicon.ico">
 <link rel="apple-touch-icon" href="img/brand/apple-touch-icon.png">
 <link rel="stylesheet" href="shared.css">
@@ -429,24 +452,8 @@
   .po-pl-row-tag{display:none}
 }
 
-/* ---------- Ko-fi checkout modal: clicking "Get the book" opens the
-   shop item in an in-page overlay (iframe) instead of navigating away.
-   ?embed=true is Ko-fi's supported param for iframe-embedding a shop/
-   checkout page. ---------- */
-.kofi-modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
-.kofi-modal.is-open{display:flex}
-.kofi-modal__backdrop{position:absolute;inset:0;background:rgba(18,16,15,.82);backdrop-filter:blur(2px)}
-.kofi-modal__panel{position:relative;width:100%;max-width:680px;height:min(80vh,760px);background:#1c1815;border:1px solid rgba(239,230,216,.14);border-radius:12px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.5)}
-.kofi-modal__frame{width:100%;height:100%;border:none;display:block}
-.kofi-modal__close{
-  position:absolute;top:10px;right:10px;z-index:1;
-  width:34px;height:34px;border-radius:999px;
-  background:rgba(18,16,15,.7);border:1px solid rgba(239,230,216,.3);color:var(--paper-fixed);
-  display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;line-height:1;
-  transition:background .2s ease,border-color .2s ease,color .2s ease;
-}
-.kofi-modal__close:hover{background:var(--gold);border-color:var(--gold);color:#12100f}
 </style>
+<link rel="stylesheet" href="book-shop.css">
 </head>
 <body>
 
@@ -499,7 +506,7 @@
     <h1 class="po-hero__title">Words that<br>move first.</h1>
     <p class="po-hero__desc">Before a song has a melody, before a set has a shape, there's the page. Ninety-plus pieces Mal sorts by theme, not chronology, chasing the feeling before he's found the words for it. Some become lyrics. Some become the pause before a verse on stage. This is where the rest of the work starts.</p>
     <div class="po-hero__ctas">
-      <a href="#book" class="po-cta po-cta--solid">Get the book<svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a href="#book" class="po-cta po-cta--solid" id="book-shop-open-hero">Get the book<svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       <a href="#listen" class="po-cta po-cta--ghost">Hear the pieces</a>
     </div>
   </div>
@@ -529,7 +536,7 @@
   <p class="po-book__flip-hint">Drag a corner, or use the arrows</p>
 
   <div class="po-book__cta">
-    <button type="button" class="po-cta po-cta--solid" id="kofi-book-open">
+    <button type="button" class="po-cta po-cta--solid" id="book-shop-open">
       Get the book
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
@@ -730,49 +737,18 @@
   </button>
 </div>
 
-<div class="kofi-modal" id="kofi-book-modal" role="dialog" aria-modal="true" aria-label="Buy the book on Ko-fi">
-  <div class="kofi-modal__backdrop"></div>
-  <div class="kofi-modal__panel">
-    <button type="button" class="kofi-modal__close" aria-label="Close">&times;</button>
-    <iframe class="kofi-modal__frame" id="kofi-book-frame" data-src="https://ko-fi.com/s/dc969df655?embed=true" title="Buy the book on Ko-fi"></iframe>
+<div class="bshop-modal" id="bshop-modal" role="dialog" aria-modal="true" aria-label="Buy falling under where">
+  <div class="bshop-modal__backdrop"></div>
+  <div class="bshop-modal__panel">
+    <button type="button" class="bshop-modal__close" aria-label="Close">&times;</button>
+    <div class="bshop-modal__body"></div>
   </div>
 </div>
 
 <div id="chrome-footer"></div>
 <div id="chrome-chat"></div>
 <div id="chrome-player"></div>
-<script>
-// Ko-fi checkout modal: lazy-loads the iframe on first open (not on page
-// load) so the Ko-fi embed never fires an extra request for visitors who
-// never click "Get the book". Falls back to opening the shop link in a new
-// tab if the iframe fails to load (some ad-blockers block ko-fi.com frames).
-(function () {
-  var openBtn = document.getElementById('kofi-book-open');
-  var modal = document.getElementById('kofi-book-modal');
-  if (!openBtn || !modal) return;
-  var closeBtn = modal.querySelector('.kofi-modal__close');
-  var backdrop = modal.querySelector('.kofi-modal__backdrop');
-  var frame = document.getElementById('kofi-book-frame');
-  var loaded = false;
-
-  function open() {
-    if (!loaded) { frame.src = frame.dataset.src; loaded = true; }
-    modal.classList.add('is-open');
-    document.body.style.overflow = 'hidden';
-  }
-  function close() {
-    modal.classList.remove('is-open');
-    document.body.style.overflow = '';
-  }
-
-  openBtn.addEventListener('click', open);
-  closeBtn.addEventListener('click', close);
-  backdrop.addEventListener('click', close);
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && modal.classList.contains('is-open')) close();
-  });
-})();
-</script>
+<script src="book-shop.js"></script>
 
 <script src="shared.js"></script>
 <script src="chat.js"></script>

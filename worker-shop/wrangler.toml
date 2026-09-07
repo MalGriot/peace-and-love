@@ -1,0 +1,32 @@
+name = "mal-griot-book-shop"
+main = "src/index.js"
+compatibility_date = "2026-08-01"
+
+# Created once via: wrangler d1 create book-shop
+# Paste the printed database_id below.
+[[d1_databases]]
+binding = "DB"
+database_name = "book-shop"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+
+# Created once via: wrangler r2 bucket create mal-griot-book-private
+# The bucket must NOT be given public access — that's what keeps the PDF
+# unreachable by anyone who doesn't hold a freshly issued download token.
+[[r2_buckets]]
+binding = "PDF_BUCKET"
+bucket_name = "mal-griot-book-private"
+
+# Secrets (never committed): set each with `wrangler secret put <NAME>`
+#   RAZORPAY_KEY_ID          - Razorpay dashboard > Settings > API Keys
+#   RAZORPAY_KEY_SECRET      - same page, shown once at creation
+#   DOWNLOAD_TOKEN_SECRET    - any long random string, e.g. `openssl rand -hex 32`
+#   RESEND_API_KEY           - optional; omit to disable confirmation emails
+#   RESEND_FROM              - optional, e.g. "Mal Griot <books@yourdomain.com>"
+
+[vars]
+# Non-secret runtime config. Prices are in whole INR rupees.
+DOWNLOAD_LINK_TTL_SECONDS = "86400"
+# This worker's own public URL, used to build the absolute download link
+# returned to the browser and emailed to the customer. Update after your
+# first `wrangler deploy` prints the real *.workers.dev URL.
+SELF_URL = "https://mal-griot-book-shop.YOUR-SUBDOMAIN.workers.dev"
