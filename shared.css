@@ -410,7 +410,7 @@ a{color:inherit}
   70%{transform:scale(1.55);opacity:0}
   100%{transform:scale(1.55);opacity:0}
 }
-.mini-player__art{width:34px;height:34px;border-radius:6px;object-fit:cover;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.mini-player__art{width:34px;height:34px;border-radius:6px;object-fit:cover;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.4);-webkit-user-drag:none;user-select:none}
 .mini-player__info{min-width:0}
 .mini-player__title-stack{position:relative}
 .mini-player__title-plain{font-size:12.5px;color:var(--paper-fixed);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:none}
@@ -436,18 +436,46 @@ a{color:inherit}
 .mini-player__skip:hover{color:var(--brass)}
 @media (max-width:560px){.mini-player__info{display:none}}
 
-.mini-player__hint{
-  position:absolute;bottom:calc(100% + 12px);left:50%;transform:translateX(-50%) translateY(6px);
-  white-space:nowrap;padding:8px 14px;border-radius:999px;
-  background:var(--paper);color:var(--ink);font-size:11.5px;font-weight:500;letter-spacing:.02em;
+/* Shared first-hover/first-tap explainer cards - one each for the
+   mini-player, the chat widget, and the nav menu button. A visitor triggers
+   whichever one they reach first (hover on desktop, tap on mobile), then the
+   other two follow in turn, 7s apart. Shown once ever, orchestrated by
+   initFirstHoverTours() in shared.js (griotToursSeen localStorage flag). */
+.tour-card{
+  position:absolute;z-index:5;width:min(230px,78vw);padding:14px 16px;border-radius:14px;text-align:left;
+  background:var(--paper);color:var(--ink);
   opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s ease;
-  box-shadow:0 10px 24px rgba(0,0,0,.35);
+  box-shadow:0 14px 32px rgba(0,0,0,.4);
 }
-.mini-player__hint::after{
-  content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
-  border:5px solid transparent;border-top-color:var(--paper);
+.tour-card::after{content:"";position:absolute;border:6px solid transparent}
+.tour-card.is-visible{opacity:1;pointer-events:auto;animation:tour-levitate 3.6s ease-in-out infinite}
+@keyframes tour-levitate{0%,100%{translate:0 0}50%{translate:0 -6px}}
+@media (prefers-reduced-motion: reduce){.tour-card.is-visible{animation:none}}
+.tour-card-close{
+  position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;
+  background:none;border:none;font-size:15px;line-height:1;color:var(--ink);opacity:.5;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;transition:opacity .2s ease;
 }
-.mini-player__hint.is-visible{opacity:1;transform:translateX(-50%) translateY(0)}
+.tour-card-close:hover{opacity:1}
+.tour-card-title{margin:0 0 8px;font-size:12px;font-weight:600;letter-spacing:.03em;padding-right:16px}
+.tour-card-list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.tour-card-list li{display:flex;align-items:center;gap:8px;font-size:11.5px;line-height:1.3}
+.tour-card-icon{flex-shrink:0;min-width:28px;text-align:center;font-size:12px;color:var(--brass)}
+
+/* mini-player: above it, centered, arrow pointing down */
+.mini-player__tour{left:50%;bottom:calc(100% + 14px);transform:translateX(-50%) translateY(6px)}
+.mini-player__tour.is-visible{transform:translateX(-50%) translateY(0)}
+.mini-player__tour::after{top:100%;left:50%;transform:translateX(-50%);border-top-color:var(--paper)}
+
+/* chat widget: above it, right-aligned to match its bottom-right dock, arrow pointing down */
+.chat-widget__tour{right:0;bottom:calc(100% + 14px);transform:translateY(6px)}
+.chat-widget__tour.is-visible{transform:translateY(0)}
+.chat-widget__tour::after{top:100%;right:20px;border-top-color:var(--paper)}
+
+/* nav menu: beneath the toggle button, right-aligned, arrow pointing up */
+.nav-menu__tour{top:100%;right:clamp(20px,4vw,56px);margin-top:14px;transform:translateY(-6px)}
+.nav-menu__tour.is-visible{transform:translateY(0)}
+.nav-menu__tour::after{bottom:100%;right:20px;border-bottom-color:var(--paper)}
 
 .sc-widget{width:0;height:0;opacity:0;position:absolute;pointer-events:none}
 
