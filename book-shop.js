@@ -8,7 +8,7 @@
 // Left pointing at localhost until the worker is deployed for the first
 // time; the modal falls back to a friendly "not set up yet" state if it
 // can't reach this URL, rather than breaking the page.
-var BOOK_SHOP_WORKER_URL = 'https://mal-griot-book-shop.YOUR-SUBDOMAIN.workers.dev';
+var BOOK_SHOP_WORKER_URL = 'https://mal-griot-book-shop.malgriot.workers.dev';
 
 (function () {
   var openButtons = ['book-shop-open', 'book-shop-open-hero']; // element id(s) that open the shop

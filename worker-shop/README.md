@@ -38,7 +38,7 @@ npm run db:init:remote
 # book-sized file within its per-value limit.
 npx wrangler kv namespace create BOOK_FILES
 # → copy the printed id into wrangler.toml's [[kv_namespaces]] block
-npx wrangler kv key put --binding=BOOK_FILES "falling-under-where.pdf" --path=/path/to/falling-under-where.pdf --remote
+npx wrangler kv key put --binding=BOOK_FILES "falling-under-where.pdf" --path=/path/to/falling-under-where.pdf
 
 # Secrets — never committed, never in wrangler.toml
 npx wrangler secret put RAZORPAY_KEY_ID

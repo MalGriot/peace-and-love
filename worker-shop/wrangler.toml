@@ -32,4 +32,4 @@ DOWNLOAD_LINK_TTL_SECONDS = "86400"
 # This worker's own public URL, used to build the absolute download link
 # returned to the browser and emailed to the customer. Update after your
 # first `wrangler deploy` prints the real *.workers.dev URL.
-SELF_URL = "https://mal-griot-book-shop.YOUR-SUBDOMAIN.workers.dev"
+SELF_URL = "https://mal-griot-book-shop.malgriot.workers.dev"
