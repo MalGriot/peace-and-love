@@ -624,6 +624,43 @@
   var pendingVideoId = null;
   var suppressPauseBroadcast = false; // true while we're pausing this playlist ourselves, to avoid an echo
 
+  // YouTube embeds can run a monetized pre-roll ad before the actual track,
+  // and the IFrame Player API has no "this is an ad" signal and no control
+  // over the ad itself (pause/play only reach the real content player) - so
+  // instead of trying to detect or skip the ad, every load starts muted.
+  // getDuration() reports the AD's own (short) duration while one is
+  // running and only reflects the real track (well over a minute, for
+  // anything in this playlist) once content actually starts, so polling it
+  // fast catches that handoff within a fraction of a second - there's no ad
+  // to sit through when there wasn't one, and no long blind wait when there
+  // was. CONTENT_FALLBACK_MS is just a safety net (an unusually short real
+  // track, or a duration read that never looks "long enough") so playback
+  // is never left muted or stuck refusing to advance past ENDED.
+  var POLL_MS = 150;
+  var CONTENT_FALLBACK_MS = 20000;
+  var contentConfirmed = false;
+  var loadStartedAt = 0;
+  var pollTimer = null;
+
+  function confirmContent(){
+    if(contentConfirmed) return;
+    contentConfirmed = true;
+    if(pollTimer){ clearInterval(pollTimer); pollTimer = null; }
+    if(player && player.unMute) player.unMute();
+  }
+
+  function beginLoadGuards(){
+    contentConfirmed = false;
+    loadStartedAt = Date.now();
+    if(pollTimer){ clearInterval(pollTimer); pollTimer = null; }
+    if(player && player.mute) player.mute();
+    pollTimer = setInterval(function(){
+      if(!player || !player.getDuration) return;
+      var d = player.getDuration();
+      if(d > 60 || Date.now() - loadStartedAt > CONTENT_FALLBACK_MS) confirmContent();
+    }, POLL_MS);
+  }
+
   // A track elsewhere on the site (Jungli clip, a Spotify/SoundCloud release
   // on another page) taking over the mini-player should pause this playlist,
   // and vice versa - same griot:* event bus everything else coordinates through.
@@ -677,6 +714,7 @@
       pendingVideoId = rows[idx].dataset.yt;
       return;
     }
+    beginLoadGuards();
     player.loadVideoById(rows[idx].dataset.yt);
     if(autoplay === false) player.pauseVideo();
   }
@@ -692,24 +730,32 @@
 
     var row = rows[idx];
     videoHost.innerHTML = '<iframe id="ab-discover-video-iframe" src="https://www.youtube.com/embed/' +
-      encodeURIComponent(row.dataset.yt) + '?enablejsapi=1&autoplay=1&playsinline=1" ' +
+      encodeURIComponent(row.dataset.yt) + '?enablejsapi=1&autoplay=1&playsinline=1&mute=1" ' +
       'allow="autoplay; encrypted-media" frameborder="0"></iframe>';
 
     player = new YT.Player('ab-discover-video-iframe', {
       events: {
         onReady: function(){
           playerReady = true;
+          beginLoadGuards();
           if(pendingVideoId){ player.loadVideoById(pendingVideoId); pendingVideoId = null; }
         },
         onStateChange: function(e){
           if(e.data === YT.PlayerState.PLAYING){
             setPlayingUI(true);
+            if(player.getDuration && player.getDuration() > 60) confirmContent();
             if(!suppressPauseBroadcast) window.dispatchEvent(new CustomEvent('griot:pause-mini-player'));
             window.dispatchEvent(new CustomEvent('griot:mini-player-playing'));
           } else if(e.data === YT.PlayerState.PAUSED){
             setPlayingUI(false);
           } else if(e.data === YT.PlayerState.ENDED){
-            playNext();
+            // An ad "ending" fires this same event - only treat it as the
+            // real track finishing once we've confirmed real content (a
+            // normal-length duration) or enough time has passed that this
+            // can't just be an ad (see beginLoadGuards above).
+            if(contentConfirmed || Date.now() - loadStartedAt > CONTENT_FALLBACK_MS){
+              playNext();
+            }
           }
         }
       }
