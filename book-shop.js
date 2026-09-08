@@ -10,6 +10,15 @@
 // can't reach this URL, rather than breaking the page.
 var BOOK_SHOP_WORKER_URL = 'https://mal-griot-book-shop.malgriot.workers.dev';
 
+// Manual UPI fallback: shown alongside the Razorpay button while the
+// Razorpay account isn't fully activated for live settlement yet. This
+// path has no automatic verification — the customer pays this VPA
+// directly, then sends proof over WhatsApp for Mal to confirm and fulfill
+// by hand. Remove this block (and its markup in renderCheckout) once
+// Razorpay is fully live and this stopgap is no longer needed.
+var MANUAL_UPI_VPA = 'sumtinels@okhdfcbank';
+var MANUAL_UPI_WHATSAPP = '917718816239';
+
 (function () {
   var openButtons = ['book-shop-open', 'book-shop-open-hero']; // element id(s) that open the shop
   var modal = document.getElementById('bshop-modal');
@@ -171,7 +180,14 @@ var BOOK_SHOP_WORKER_URL = 'https://mal-griot-book-shop.malgriot.workers.dev';
       '<div class="bshop-summary" id="bshop-summary"></div>' +
       '<p class="bshop-error" id="bshop-form-error" style="display:none"></p>' +
       '<button type="submit" class="po-cta po-cta--solid bshop-submit" id="bshop-pay-btn">Pay ' + money(basePrice) + '<svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
-      '</form>';
+      '</form>' +
+      '<div class="bshop-upi">' +
+      '<p class="bshop-upi__divider">or pay by UPI directly</p>' +
+      '<img class="bshop-upi__qr" src="img/book/upi-qr.png" alt="UPI QR code for ' + escapeHtml(MANUAL_UPI_VPA) + '" width="120" height="120">' +
+      '<p class="bshop-upi__vpa">Scan and pay <strong id="bshop-upi-amount">' + money(basePrice) + '</strong> to <strong>' + escapeHtml(MANUAL_UPI_VPA) + '</strong></p>' +
+      '<p class="bshop-upi__note">This isn\'t verified automatically. After paying, tap below to send your payment screenshot and details over WhatsApp — Mal will confirm and get your book to you personally.</p>' +
+      '<a class="po-cta po-cta--ghost bshop-upi__whatsapp" id="bshop-upi-whatsapp" href="#" target="_blank" rel="noopener">Send payment proof on WhatsApp</a>' +
+      '</div>';
 
     body.querySelector('.bshop-back').addEventListener('click', renderEditions);
 
@@ -179,11 +195,26 @@ var BOOK_SHOP_WORKER_URL = 'https://mal-griot-book-shop.malgriot.workers.dev';
     var payBtn = document.getElementById('bshop-pay-btn');
     var signedBox = document.getElementById('bshop-signed');
     var countryInput = document.getElementById('bshop-country');
+    var upiAmountEl = document.getElementById('bshop-upi-amount');
+    var upiWhatsappBtn = document.getElementById('bshop-upi-whatsapp');
+    var currentTotal = basePrice;
+
+    function refreshUpiWhatsappLink() {
+      var name = (document.getElementById('bshop-name') || {}).value || '';
+      var email = (document.getElementById('bshop-email') || {}).value || '';
+      var message =
+        'Hi Mal, I just paid ' + money(currentTotal) + ' via UPI for ' + config.bookTitle + ' (' + editionLabel + ').\n' +
+        'Name: ' + name + '\nEmail: ' + email + '\n(attaching payment screenshot)';
+      upiWhatsappBtn.href = 'https://wa.me/' + MANUAL_UPI_WHATSAPP + '?text=' + encodeURIComponent(message);
+    }
 
     function refreshSummary() {
       if (!wantsShipping) {
         summaryEl.innerHTML = '';
         payBtn.innerHTML = 'Pay ' + money(basePrice) + payBtn.querySelector('svg').outerHTML;
+        currentTotal = basePrice;
+        upiAmountEl.textContent = money(currentTotal);
+        refreshUpiWhatsappLink();
         return;
       }
       var country = countryInput.value.trim().toLowerCase();
@@ -196,12 +227,17 @@ var BOOK_SHOP_WORKER_URL = 'https://mal-griot-book-shop.malgriot.workers.dev';
         '<div class="bshop-summary__row"><span>Shipping' + (country ? '' : ' (enter country)') + '</span><span>' + money(shipping) + '</span></div>' +
         '<div class="bshop-summary__row bshop-summary__row--total"><span>Total</span><span>' + money(total) + '</span></div>';
       payBtn.innerHTML = 'Pay ' + money(total) + '<svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      currentTotal = total;
+      upiAmountEl.textContent = money(currentTotal);
+      refreshUpiWhatsappLink();
     }
 
     if (wantsShipping) {
       countryInput.addEventListener('input', refreshSummary);
       if (signedBox) signedBox.addEventListener('change', refreshSummary);
     }
+    document.getElementById('bshop-name').addEventListener('input', refreshUpiWhatsappLink);
+    document.getElementById('bshop-email').addEventListener('input', refreshUpiWhatsappLink);
     refreshSummary();
 
     document.getElementById('bshop-form').addEventListener('submit', function (e) {
