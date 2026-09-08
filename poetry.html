@@ -362,13 +362,12 @@
 
 .po-pl-table{border:1px solid rgba(239,230,216,.1);border-top:none;border-radius:0 0 20px 20px;max-height:213px;overflow-y:auto;overscroll-behavior:contain}
 .po-pl-row{
-  display:grid;grid-template-columns:36px 1fr auto;gap:16px;align-items:center;
+  display:grid;grid-template-columns:36px 1fr;gap:16px;align-items:center;
   padding:11px clamp(20px,4vw,36px);cursor:pointer;background:#17130f;color:var(--paper-fixed);
   border-top:1px solid rgba(239,230,216,.06);transition:background .15s ease;
 }
 .po-pl-row:hover{background:rgba(224,178,106,.08)}
 .po-pl-row.is-active{background:rgba(224,178,106,.14)}
-.po-pl-row.is-active .po-pl-row-title{color:var(--gold)}
 .po-pl-row-index{
   font-family:var(--font-body);font-size:13px;color:var(--paper-fixed-faint);text-align:center;position:relative;
 }
@@ -386,70 +385,26 @@
 .po-pl-row-eq i:nth-child(2){height:100%;animation-delay:-.2s}
 .po-pl-row-eq i:nth-child(3){height:65%;animation-delay:-.9s}
 @keyframes po-pl-eq{0%,100%{height:20%}50%{height:100%}}
-.po-pl-row-main{min-width:0}
+.po-pl-row-main{min-width:0;display:flex;flex-direction:column;justify-content:center}
 .po-pl-row-title{
-  font-family:var(--font-body);font-weight:500;font-size:14.5px;color:var(--paper-fixed);
+  display:block;font-family:var(--font-body);font-weight:500;font-size:14.5px;color:var(--paper-fixed);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
+.po-pl-row:hover .po-pl-row-title{color:var(--gold)}
+.po-pl-row.is-active .po-pl-row-title{color:var(--gold);font-weight:700}
 .po-pl-row-artist{
-  font-size:12.5px;color:var(--paper-fixed-dim);margin-top:2px;
+  display:block;font-size:12.5px;color:var(--paper-fixed-dim);margin-top:2px;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-.po-pl-row-tag{
-  font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-fixed-faint);
-  border:1px solid rgba(239,230,216,.2);border-radius:999px;padding:4px 10px;white-space:nowrap;
 }
 
-/* Persistent now-playing bar: docks to the bottom of the viewport once a
-   track has been started, so the song keeps going while the reader
-   scrolls back up into the book/clips sections above. Holds a small
-   YouTube iframe (real video, muted visually-small rather than removed,
-   since the IFrame API needs a live player element to control playback
-   and report progress) plus transport controls mirroring the row state. */
-.po-pl-bar{
-  position:fixed;left:0;right:0;bottom:0;z-index:150;
-  display:flex;align-items:center;gap:14px;
-  padding:10px clamp(14px,3vw,28px);
-  background:rgba(18,16,15,.96);backdrop-filter:blur(8px);color:var(--paper-fixed);
-  border-top:1px solid rgba(239,230,216,.14);
-  transform:translateY(110%);transition:transform .35s ease;
-}
-.po-pl-bar.is-open{transform:translateY(0)}
-.po-pl-bar-video{flex:none;width:64px;height:64px;border-radius:6px;overflow:hidden;background:#000;position:relative}
-.po-pl-bar-video iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
-.po-pl-bar-meta{flex:1 1 auto;min-width:0}
-.po-pl-bar-title{font-size:13.5px;font-weight:600;color:var(--paper-fixed);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.po-pl-bar-artist{font-size:12px;color:var(--paper-fixed-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.po-pl-bar-transport{display:flex;align-items:center;gap:10px;flex:none}
-.po-pl-bar-btn{
-  width:34px;height:34px;border-radius:999px;border:1px solid rgba(239,230,216,.22);background:transparent;
-  color:var(--paper-fixed);display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;
-  transition:border-color .2s,color .2s,background .2s;
-}
-.po-pl-bar-btn:hover{border-color:var(--gold);color:var(--gold)}
-.po-pl-bar-btn--play{width:38px;height:38px;background:var(--gold);border-color:var(--gold);color:#12100f}
-.po-pl-bar-btn--play:hover{background:var(--paper);border-color:var(--paper);color:#12100f}
-.po-pl-bar-btn--play .po-pl-icon-pause{display:none}
-.po-pl-bar-btn--play.is-playing .po-pl-icon-play{display:none}
-.po-pl-bar-btn--play.is-playing .po-pl-icon-pause{display:block}
-.po-pl-bar-close{
-  flex:none;width:28px;height:28px;border-radius:999px;border:none;background:transparent;color:var(--paper-fixed-faint);
-  cursor:pointer;display:flex;align-items:center;justify-content:center;transition:color .2s;
-}
-.po-pl-bar-close:hover{color:var(--paper-fixed)}
-.po-pl-bar-progress{flex:1 1 100%;order:4;display:flex;align-items:center;gap:8px;width:100%;margin-top:6px}
-.po-pl-bar-time{font-size:10.5px;color:var(--paper-fixed-faint);flex:none;min-width:32px}
-.po-pl-bar-time--end{text-align:right}
-.po-pl-bar-track{flex:1 1 auto;height:3px;border-radius:999px;background:rgba(239,230,216,.16);position:relative;cursor:pointer}
-.po-pl-bar-fill{position:absolute;left:0;top:0;bottom:0;width:0%;background:var(--gold);border-radius:999px}
+/* Playlist audio plays through the site's shared persistent mini-player
+   (see shared.js window.griotMiniPlayer) rather than a dedicated bar of
+   its own - keeps one now-playing surface across the whole site instead
+   of two. The YouTube IFrame API still needs a live element to attach to
+   for playback/progress, so it's kept off-screen instead of removed. */
+.po-pl-bar-video{position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
 @media (max-width:640px){
-  .po-pl-bar{flex-wrap:wrap}
-  .po-pl-bar-meta{order:2;flex:1 1 auto}
-  .po-pl-bar-video{order:1}
-  .po-pl-bar-transport{order:3}
-  .po-pl-bar-close{order:5}
   .po-pl-row{grid-template-columns:28px 1fr;}
-  .po-pl-row-tag{display:none}
 }
 
 </style>
@@ -609,133 +564,87 @@
     <div class="po-pl-row" data-yt="PejSowt84n8" data-title="aaaaa" data-artist="Kiefer">
       <span class="po-pl-row-index"><span class="po-pl-row-num">1</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
       <span class="po-pl-row-main"><span class="po-pl-row-title">aaaaa</span><span class="po-pl-row-artist">Kiefer</span></span>
-      <span class="po-pl-row-tag">YouTube</span>
     </div>
     <div class="po-pl-row" data-yt="JiP7jKdAhD0" data-title="In A Sentimental Mood" data-artist="Duke Ellington, John Coltrane">
       <span class="po-pl-row-index"><span class="po-pl-row-num">2</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
       <span class="po-pl-row-main"><span class="po-pl-row-title">In A Sentimental Mood</span><span class="po-pl-row-artist">Duke Ellington, John Coltrane</span></span>
-      <span class="po-pl-row-tag">YouTube</span>
     </div>
     <div class="po-pl-row" data-yt="EhQlUdtZsmM" data-title="Eko" data-artist="Mndsgn">
       <span class="po-pl-row-index"><span class="po-pl-row-num">3</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
       <span class="po-pl-row-main"><span class="po-pl-row-title">Eko</span><span class="po-pl-row-artist">Mndsgn</span></span>
-      <span class="po-pl-row-tag">YouTube</span>
     </div>
     <div class="po-pl-row" data-yt="Su3tHaGUIZE" data-title="Space Gangster" data-artist="Woo Park">
       <span class="po-pl-row-index"><span class="po-pl-row-num">4</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
       <span class="po-pl-row-main"><span class="po-pl-row-title">Space Gangster</span><span class="po-pl-row-artist">Woo Park</span></span>
-      <span class="po-pl-row-tag">YouTube</span>
     </div>
     <div class="po-pl-row" data-yt="5nj1HWC-dQs" data-title="Mystic Brew" data-artist="Ronnie Foster">
       <span class="po-pl-row-index"><span class="po-pl-row-num">5</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
       <span class="po-pl-row-main"><span class="po-pl-row-title">Mystic Brew</span><span class="po-pl-row-artist">Ronnie Foster</span></span>
-      <span class="po-pl-row-tag">YouTube</span>
     </div>
     <div class="po-pl-row" data-yt="rqoIZ3UFo0M" data-title="C U R R E N T" data-artist="Photay, Carlos Niño">
       <span class="po-pl-row-index"><span class="po-pl-row-num">6</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
       <span class="po-pl-row-main"><span class="po-pl-row-title">C U R R E N T</span><span class="po-pl-row-artist">Photay, Carlos Niño</span></span>
-      <span class="po-pl-row-tag">YouTube</span>
     </div>
     <div class="po-pl-row" data-yt="LSfvgxVnTF8" data-title="Rise" data-artist="Mansur Brown">
       <span class="po-pl-row-index"><span class="po-pl-row-num">7</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
       <span class="po-pl-row-main"><span class="po-pl-row-title">Rise</span><span class="po-pl-row-artist">Mansur Brown</span></span>
-      <span class="po-pl-row-tag">YouTube</span>
     </div>
     <div class="po-pl-row" data-yt="kfn-O-cifog" data-title="Abay" data-artist="Gigi (Illuminated Audio)">
       <span class="po-pl-row-index"><span class="po-pl-row-num">8</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
       <span class="po-pl-row-main"><span class="po-pl-row-title">Abay</span><span class="po-pl-row-artist">Gigi (Illuminated Audio)</span></span>
-      <span class="po-pl-row-tag">YouTube</span>
     </div>
     <div class="po-pl-row" data-yt="clf_CxHVRrk" data-title="Ike's Mood 1" data-artist="Isaac Hayes">
       <span class="po-pl-row-index"><span class="po-pl-row-num">9</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
       <span class="po-pl-row-main"><span class="po-pl-row-title">Ike's Mood 1</span><span class="po-pl-row-artist">Isaac Hayes</span></span>
-      <span class="po-pl-row-tag">YouTube</span>
     </div>
     <div class="po-pl-row" data-yt="8DgAhgmpXNA" data-title="me Yesterday//Corded" data-artist="Flying Lotus">
       <span class="po-pl-row-index"><span class="po-pl-row-num">10</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
       <span class="po-pl-row-main"><span class="po-pl-row-title">me Yesterday//Corded</span><span class="po-pl-row-artist">Flying Lotus</span></span>
-      <span class="po-pl-row-tag">YouTube</span>
     </div>
     <div class="po-pl-row" data-yt="opF14Cq4eDQ" data-title="Perspectives" data-artist="Chief Xian aTunde Adjuah">
       <span class="po-pl-row-index"><span class="po-pl-row-num">11</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
       <span class="po-pl-row-main"><span class="po-pl-row-title">Perspectives</span><span class="po-pl-row-artist">Chief Xian aTunde Adjuah</span></span>
-      <span class="po-pl-row-tag">YouTube</span>
     </div>
     <div class="po-pl-row" data-yt="5vjBc1TvWFs" data-title="Outro 4 NYC" data-artist="Vondelpark">
       <span class="po-pl-row-index"><span class="po-pl-row-num">12</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
       <span class="po-pl-row-main"><span class="po-pl-row-title">Outro 4 NYC</span><span class="po-pl-row-artist">Vondelpark</span></span>
-      <span class="po-pl-row-tag">YouTube</span>
     </div>
     <div class="po-pl-row" data-yt="PEeZmxHvaPU" data-title="Verbena Tea w Rebekah Raff" data-artist="Teebs">
       <span class="po-pl-row-index"><span class="po-pl-row-num">13</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
       <span class="po-pl-row-main"><span class="po-pl-row-title">Verbena Tea w Rebekah Raff</span><span class="po-pl-row-artist">Teebs</span></span>
-      <span class="po-pl-row-tag">YouTube</span>
     </div>
     <div class="po-pl-row" data-yt="NJWm7o0MlTE" data-title="Dreamflower" data-artist="Tarika Blue">
       <span class="po-pl-row-index"><span class="po-pl-row-num">14</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
       <span class="po-pl-row-main"><span class="po-pl-row-title">Dreamflower</span><span class="po-pl-row-artist">Tarika Blue</span></span>
-      <span class="po-pl-row-tag">YouTube</span>
     </div>
     <div class="po-pl-row" data-yt="zJh2wkikFlI" data-title="Mahal" data-artist="Glass Beams">
       <span class="po-pl-row-index"><span class="po-pl-row-num">15</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
       <span class="po-pl-row-main"><span class="po-pl-row-title">Mahal</span><span class="po-pl-row-artist">Glass Beams</span></span>
-      <span class="po-pl-row-tag">YouTube</span>
     </div>
     <div class="po-pl-row" data-yt="tsuZpmsvW6I" data-title="Today" data-artist="Sam Gendel, Sam Wilkes">
       <span class="po-pl-row-index"><span class="po-pl-row-num">16</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
       <span class="po-pl-row-main"><span class="po-pl-row-title">Today</span><span class="po-pl-row-artist">Sam Gendel, Sam Wilkes</span></span>
-      <span class="po-pl-row-tag">YouTube</span>
     </div>
     <div class="po-pl-row" data-yt="eqSEw7Z_9eE" data-title="Smoke &amp; Mirrors" data-artist="TOKiMONSTA">
       <span class="po-pl-row-index"><span class="po-pl-row-num">17</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
       <span class="po-pl-row-main"><span class="po-pl-row-title">Smoke &amp; Mirrors</span><span class="po-pl-row-artist">TOKiMONSTA</span></span>
-      <span class="po-pl-row-tag">YouTube</span>
     </div>
     <div class="po-pl-row" data-yt="jTYpNDw_YHM" data-title="boyboy" data-artist="Bella Boo">
       <span class="po-pl-row-index"><span class="po-pl-row-num">18</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
       <span class="po-pl-row-main"><span class="po-pl-row-title">boyboy</span><span class="po-pl-row-artist">Bella Boo</span></span>
-      <span class="po-pl-row-tag">YouTube</span>
     </div>
     <div class="po-pl-row" data-yt="cTjF2_-bneM" data-title="Black Sands" data-artist="Bonobo">
       <span class="po-pl-row-index"><span class="po-pl-row-num">19</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
       <span class="po-pl-row-main"><span class="po-pl-row-title">Black Sands</span><span class="po-pl-row-artist">Bonobo</span></span>
-      <span class="po-pl-row-tag">YouTube</span>
     </div>
     <div class="po-pl-row" data-yt="S-Xm7s9eGxU" data-title="Gymnopédie No.1" data-artist="Erik Satie">
       <span class="po-pl-row-index"><span class="po-pl-row-num">20</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
       <span class="po-pl-row-main"><span class="po-pl-row-title">Gymnopédie No.1</span><span class="po-pl-row-artist">Erik Satie</span></span>
-      <span class="po-pl-row-tag">YouTube</span>
     </div>
   </nav>
 </section>
 
-<div class="po-pl-bar" id="po-pl-bar">
-  <div class="po-pl-bar-video" id="po-pl-bar-video"></div>
-  <div class="po-pl-bar-meta">
-    <div class="po-pl-bar-title" id="po-pl-bar-title">-</div>
-    <div class="po-pl-bar-artist" id="po-pl-bar-artist">-</div>
-  </div>
-  <div class="po-pl-bar-transport">
-    <button type="button" class="po-pl-bar-btn" id="po-pl-bar-prev" aria-label="Previous track">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zM20 6v12l-10-6z"/></svg>
-    </button>
-    <button type="button" class="po-pl-bar-btn po-pl-bar-btn--play" id="po-pl-bar-play" aria-label="Play/Pause">
-      <svg class="po-pl-icon-play" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-      <svg class="po-pl-icon-pause" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
-    </button>
-    <button type="button" class="po-pl-bar-btn" id="po-pl-bar-next" aria-label="Next track">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM4 6v12l10-6z"/></svg>
-    </button>
-  </div>
-  <div class="po-pl-bar-progress">
-    <span class="po-pl-bar-time" id="po-pl-bar-time-cur">0:00</span>
-    <div class="po-pl-bar-track" id="po-pl-bar-track"><div class="po-pl-bar-fill" id="po-pl-bar-fill"></div></div>
-    <span class="po-pl-bar-time po-pl-bar-time--end" id="po-pl-bar-time-end">0:00</span>
-  </div>
-  <button type="button" class="po-pl-bar-close" id="po-pl-bar-close" aria-label="Close player">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-  </button>
-</div>
+<div class="po-pl-bar-video" id="po-pl-bar-video" aria-hidden="true"></div>
 
 <div class="bshop-modal" id="bshop-modal" role="dialog" aria-modal="true" aria-label="Buy falling under where">
   <div class="bshop-modal__backdrop"></div>
@@ -1250,39 +1159,31 @@
 </script>
 <script>
 // The Playlist - Discover-Weekly-style card wired to real YouTube audio.
-// One shared YT.Player lives in the fixed bottom bar; clicking a row (or
-// the header "play all") loads that video into it, opens the bar, and
-// starts playback. The bar stays docked while the reader scrolls back up
-// through the book/clips sections, same as Spotify's persistent player.
+// One shared YT.Player lives in an off-screen host; clicking a row (or the
+// header "play all") loads that video into it and hands the site's shared
+// persistent mini-player (see shared.js window.griotMiniPlayer, the same
+// hook Spotify release panels use) its title/art and transport, so the
+// playlist plays through that one now-playing surface instead of a bar of
+// its own. The mini-player stays docked while the reader scrolls back up
+// through the book/clips sections above.
 (function () {
   var table = document.getElementById('po-pl-table');
-  var bar = document.getElementById('po-pl-bar');
-  if (!table || !bar) return;
+  var videoHost = document.getElementById('po-pl-bar-video');
+  if (!table || !videoHost) return;
 
   var rows = Array.prototype.slice.call(table.querySelectorAll('.po-pl-row'));
   var playAllBtn = document.getElementById('po-pl-play-all');
-  var barPlayBtn = document.getElementById('po-pl-bar-play');
-  var barPrevBtn = document.getElementById('po-pl-bar-prev');
-  var barNextBtn = document.getElementById('po-pl-bar-next');
-  var barCloseBtn = document.getElementById('po-pl-bar-close');
-  var barTitle = document.getElementById('po-pl-bar-title');
-  var barArtist = document.getElementById('po-pl-bar-artist');
-  var barTrack = document.getElementById('po-pl-bar-track');
-  var barFill = document.getElementById('po-pl-bar-fill');
-  var barTimeCur = document.getElementById('po-pl-bar-time-cur');
-  var barTimeEnd = document.getElementById('po-pl-bar-time-end');
 
   var player = null;
   var playerReady = false;
   var current = -1;
-  var pollTimer = null;
   var pendingVideoId = null;
   var suppressPauseBroadcast = false; // true while we're pausing the playlist ourselves, to avoid an echo
 
-  // Playing a playlist track should pause the shared mini-player (and any
-  // Spotify/SoundCloud release panel driving it, see releases.html), and
-  // vice versa - the mini-player starting up should pause this playlist.
-  // Same griot:* event bus the rest of the site already coordinates through.
+  // Playing a playlist track should pause the shared mini-player's own
+  // SoundCloud/Spotify source (see releases.html), and vice versa - the
+  // mini-player starting up should pause this playlist. Same griot:* event
+  // bus the rest of the site already coordinates through.
   window.addEventListener('griot:mini-player-playing', function () {
     if (!player || !player.pauseVideo) return;
     suppressPauseBroadcast = true;
@@ -1290,44 +1191,35 @@
     setTimeout(function () { suppressPauseBroadcast = false; }, 300);
   });
 
-  function formatTime(s) {
-    if (!isFinite(s) || s < 0) s = 0;
-    var m = Math.floor(s / 60);
-    var sec = Math.floor(s % 60);
-    return m + ':' + (sec < 10 ? '0' : '') + sec;
-  }
-
   function setPlayingUI(isPlaying) {
     playAllBtn.classList.toggle('is-playing', isPlaying);
-    barPlayBtn.classList.toggle('is-playing', isPlaying);
     rows.forEach(function (r, i) { r.classList.toggle('is-active', i === current && isPlaying); });
     if (current >= 0 && !isPlaying) rows[current].classList.remove('is-active');
+    if (window.griotMiniPlayer && window.griotMiniPlayer.isExternalActive()) {
+      window.griotMiniPlayer.updateExternalPlaying(isPlaying);
+    }
   }
 
-  function stopPoll() {
-    if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
-  }
-
-  function startPoll() {
-    stopPoll();
-    pollTimer = setInterval(function () {
-      if (!player || !player.getCurrentTime) return;
-      var cur = player.getCurrentTime() || 0;
-      var dur = player.getDuration() || 0;
-      barTimeCur.textContent = formatTime(cur);
-      barTimeEnd.textContent = formatTime(dur);
-      barFill.style.width = (dur ? (cur / dur) * 100 : 0) + '%';
-    }, 400);
+  function pushToMiniPlayer(idx, isPlaying) {
+    if (!window.griotMiniPlayer) return;
+    var row = rows[idx];
+    window.griotMiniPlayer.setExternal({
+      title: row.dataset.title,
+      artist: row.dataset.artist,
+      art: 'https://img.youtube.com/vi/' + row.dataset.yt + '/mqdefault.jpg',
+      isPlaying: isPlaying,
+      onToggle: function () { playIndex(current); },
+      onNext: rows.length > 1 ? playNext : null,
+      onPrev: rows.length > 1 ? playPrev : null,
+    });
   }
 
   function loadIndex(idx, autoplay) {
     if (idx < 0 || idx >= rows.length) return;
     current = idx;
     var row = rows[idx];
-    barTitle.textContent = row.dataset.title;
-    barArtist.textContent = row.dataset.artist;
-    bar.classList.add('is-open');
     rows.forEach(function (r, i) { r.classList.toggle('is-active', i === idx); });
+    pushToMiniPlayer(idx, !!autoplay);
 
     if (!playerReady || !player.loadVideoById) {
       pendingVideoId = row.dataset.yt;
@@ -1344,17 +1236,14 @@
       return;
     }
     current = idx;
-    var row = rows[idx];
-    barTitle.textContent = row.dataset.title;
-    barArtist.textContent = row.dataset.artist;
-    bar.classList.add('is-open');
     rows.forEach(function (r, i) { r.classList.toggle('is-active', i === idx); });
+    pushToMiniPlayer(idx, true);
 
     // Build the iframe directly (matching the Clips & Audio embed pattern
     // above) rather than letting `new YT.Player` construct one from an
     // empty div - attaching the API to an existing embed iframe is the
     // path that reliably initializes here.
-    var videoHost = document.getElementById('po-pl-bar-video');
+    var row = rows[idx];
     videoHost.innerHTML = '<iframe id="po-pl-bar-iframe" src="https://www.youtube.com/embed/' +
       encodeURIComponent(row.dataset.yt) + '?enablejsapi=1&autoplay=1&playsinline=1" ' +
       'allow="autoplay; encrypted-media" frameborder="0"></iframe>';
@@ -1368,11 +1257,10 @@
         onStateChange: function (e) {
           if (e.data === YT.PlayerState.PLAYING) {
             setPlayingUI(true);
-            startPoll();
             if (!suppressPauseBroadcast) window.dispatchEvent(new CustomEvent('griot:pause-mini-player'));
           }
-          else if (e.data === YT.PlayerState.PAUSED) { setPlayingUI(false); stopPoll(); }
-          else if (e.data === YT.PlayerState.ENDED) { stopPoll(); playNext(); }
+          else if (e.data === YT.PlayerState.PAUSED) { setPlayingUI(false); }
+          else if (e.data === YT.PlayerState.ENDED) { playNext(); }
         }
       }
     });
@@ -1401,27 +1289,6 @@
       var state = player.getPlayerState();
       if (state === 1) player.pauseVideo(); else player.playVideo();
     }
-  });
-
-  barPlayBtn.addEventListener('click', function () {
-    if (!player || !player.getPlayerState) return;
-    var state = player.getPlayerState();
-    if (state === 1) player.pauseVideo(); else player.playVideo();
-  });
-  barNextBtn.addEventListener('click', playNext);
-  barPrevBtn.addEventListener('click', playPrev);
-
-  barCloseBtn.addEventListener('click', function () {
-    if (player && player.pauseVideo) player.pauseVideo();
-    bar.classList.remove('is-open');
-  });
-
-  barTrack.addEventListener('click', function (e) {
-    if (!player || !player.getDuration) return;
-    var rect = barTrack.getBoundingClientRect();
-    var ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
-    var dur = player.getDuration() || 0;
-    player.seekTo(dur * ratio, true);
   });
 })();
 </script>

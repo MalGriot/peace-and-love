@@ -3,8 +3,8 @@
 A small Cloudflare Worker that powers the "f a l l i n g under where" purchase
 flow on the Poetry page: creates Razorpay orders, verifies payments
 server-side, tracks orders and physical inventory in D1, and hands out
-time-limited signed download links for the PDF (stored privately in R2 —
-never in this git repo, never on GitHub Pages).
+time-limited signed download links for the PDF (stored privately in Workers
+KV — never in this git repo, never on GitHub Pages).
 
 Deployed independently of the static site, same pattern as `worker/` (the
 chat bot worker) next to it.
@@ -17,7 +17,7 @@ file behind a login. This worker is the smallest layer that can:
 - decide the real price/shipping/total for an order (never trust a number
   the browser sends),
 - verify a Razorpay payment signature server-side before marking anything paid,
-- keep the PDF in a private R2 bucket and only ever serve it behind a
+- keep the PDF in private Workers KV storage and only ever serve it behind a
   signed, expiring token — never a public URL anyone could discover by
   viewing page source.
 

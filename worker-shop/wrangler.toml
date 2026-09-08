@@ -7,14 +7,17 @@ compatibility_date = "2026-08-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "book-shop"
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_id = "1fb00b5b-1578-4ba4-bca2-a1696c26a339"
 
-# Created once via: wrangler r2 bucket create mal-griot-book-private
-# The bucket must NOT be given public access — that's what keeps the PDF
-# unreachable by anyone who doesn't hold a freshly issued download token.
-[[r2_buckets]]
-binding = "PDF_BUCKET"
-bucket_name = "mal-griot-book-private"
+# Created once via: wrangler kv namespace create BOOK_FILES
+# (R2 would be the more conventional home for a file this size, but it
+# requires a payment method on file even on its free tier; KV needs none
+# and easily covers a book-sized PDF within its per-value limit.) Nothing
+# here is ever served automatically — the worker only reads it from inside
+# handleDownload, gated behind a verified, expiring token.
+[[kv_namespaces]]
+binding = "BOOK_FILES"
+id = "ae92e6d1852c43edb226e3421d882e8b"
 
 # Secrets (never committed): set each with `wrangler secret put <NAME>`
 #   RAZORPAY_KEY_ID          - Razorpay dashboard > Settings > API Keys

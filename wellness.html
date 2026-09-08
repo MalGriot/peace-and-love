@@ -331,9 +331,10 @@
 <div id="gate" aria-hidden="true">
   <div class="gate__light"></div>
   <div class="gate__lines">
-    <p class="gate__line" data-line="1">Take a breath.</p>
-    <p class="gate__line" data-line="2">Nothing to do.</p>
-    <p class="gate__line" data-line="3">You're here.</p>
+    <p class="gate__line" data-line="1">This is a call to inaction.</p>
+    <p class="gate__line" data-line="2">Take a breath.</p>
+    <p class="gate__line" data-line="3">Nothing to do.</p>
+    <p class="gate__line" data-line="4">You're here.</p>
   </div>
   <button class="gate__skip" id="gate-skip" type="button">Skip →</button>
 </div>
@@ -622,18 +623,20 @@ window.addEventListener('pageshow', function(){
 
   document.body.classList.add('gate-lock', 'gate-active');
 
-  at(150,   function () { gate.setAttribute('data-phase', 'in1'); setLine(1); });   // inhale: "Take a breath."
+  at(150,   function () { gate.setAttribute('data-phase', 'in1'); setLine(1); });   // inhale: "This is a call to inaction."
   at(3200,  function () { gate.setAttribute('data-phase', 'hold1'); });             // hold
   at(3400,  function () { setLine(0); });                                          // line 1 fades
-  at(4300,  function () { gate.setAttribute('data-phase', 'out1'); setLine(2); });  // exhale: "Nothing to do."
-  at(7600,  function () { setLine(0); });                                          // line 2 fades
-  at(8000,  function () {                                                          // second inhale, the reveal
+  at(4100,  function () { setLine(2); });                                          // "Take a breath."
+  at(7300,  function () { setLine(0); });                                          // line 2 fades
+  at(7500,  function () { gate.setAttribute('data-phase', 'out1'); setLine(3); });  // exhale: "Nothing to do."
+  at(10800, function () { setLine(0); });                                          // line 3 fades
+  at(11200, function () {                                                          // second inhale, the reveal
     gate.setAttribute('data-phase', 'in2');
-    setLine(3);                                                                    // "You're here."
+    setLine(4);                                                                    // "You're here."
     document.body.classList.add('gate-revealing');
   });
-  at(11400, function () { setLine(0); });
-  at(12600, dismiss);
+  at(14600, function () { setLine(0); });
+  at(15800, dismiss);
 
   skip.addEventListener('click', dismiss);
 })();
