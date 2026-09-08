@@ -40,6 +40,14 @@ function renderChrome(active) {
             <span class="sm-icon-line sm-icon-line-v"></span>
           </span>
         </button>
+        <div class="tour-card nav-menu__tour" id="navTour">
+          <button type="button" class="tour-card-close" id="navTourClose" aria-label="Close">&times;</button>
+          <p class="tour-card-title">Site menu</p>
+          <ul class="tour-card-list">
+            <li><span class="tour-card-icon">☰</span>Every page, one tap away</li>
+            <li><span class="tour-card-icon">◐</span>Switch light / dark mode inside, or just press "L"</li>
+          </ul>
+        </div>
       </header>
       <aside class="staggered-menu-panel" aria-hidden="true">
         <button type="button" class="sm-panel-close" aria-label="Close menu">
@@ -93,14 +101,16 @@ function renderChrome(active) {
   if (chatSlot) chatSlot.outerHTML = chatWidgetHtml();
 
   // The mini-player only shows by default on pages with their own New Album
-  // listening stage (Voice, and now the Music/discography page). On the
-  // other satellite pages it stays out of the DOM entirely until the
-  // visitor has pressed play at least once (tracked in localStorage).
+  // listening stage (Voice, the Music/discography page), and on Poetry and
+  // About (whose playlists play through this same shared mini-player instead
+  // of a bar of their own, so it needs to exist from page load). On the other
+  // satellite pages it stays out of the DOM entirely until the visitor has
+  // pressed play at least once (tracked in localStorage).
   // Home (index.html) never gets it, since it doesn't call renderChrome at all.
   if (playerSlot) {
     let activated = false;
     try { activated = localStorage.getItem('griotPlayerActivated') === '1'; } catch (e) {}
-    if (active === 'music' || active === 'discography' || activated) {
+    if (active === 'music' || active === 'discography' || active === 'poetry' || active === 'about' || activated) {
       playerSlot.outerHTML = playerHtml;
     } else {
       playerSlot.remove();
@@ -115,6 +125,14 @@ function renderChrome(active) {
 function chatWidgetHtml() {
   return `
     <div class="chat-widget" id="chat">
+      <div class="tour-card chat-widget__tour" id="chatTour">
+        <button type="button" class="tour-card-close" id="chatTourClose" aria-label="Close">&times;</button>
+        <p class="tour-card-title">Chat with Mal</p>
+        <ul class="tour-card-list">
+          <li><span class="tour-card-icon">💬</span>Ask about music, gigs, or booking</li>
+          <li><span class="tour-card-icon">⚡</span>Get quick answers, any time</li>
+        </ul>
+      </div>
       <button type="button" class="chat-widget__btn" id="chatBtn" aria-label="Open chat">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
       </button>
@@ -150,7 +168,15 @@ function chatWidgetHtml() {
 // index.html, which has no slot and never calls renderChrome.
 const playerHtml = `
   <div class="mini-player" id="miniPlayer">
-    <div class="mini-player__hint" id="miniHint"></div>
+    <div class="tour-card mini-player__tour" id="miniTour">
+      <button type="button" class="tour-card-close" id="miniTourClose" aria-label="Close">&times;</button>
+      <p class="tour-card-title">Mal's mini player</p>
+      <ul class="tour-card-list">
+        <li><span class="tour-card-icon">⏮ ⏭</span>Skip between tracks</li>
+        <li><span class="tour-card-icon">⏯</span>Play / pause</li>
+        <li><span class="tour-card-icon">✥</span>Drag it anywhere on screen</li>
+      </ul>
+    </div>
     <button type="button" class="mini-player__skip" id="miniPrev" aria-label="Previous track">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zM20 6L10 12l10 6z"/></svg>
     </button>
@@ -158,7 +184,7 @@ const playerHtml = `
       <svg id="miniIconPlay" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
       <svg id="miniIconPause" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
     </button>
-    <img class="mini-player__art" id="miniArt" alt="">
+    <img class="mini-player__art" id="miniArt" alt="" draggable="false">
     <div class="mini-player__info">
       <div class="mini-player__title-stack">
         <div class="mini-player__title-plain" id="miniTitlePlain">breathe love d e e p</div>
@@ -227,7 +253,8 @@ function initMiniPlayer() {
   const miniArt = document.getElementById('miniArt');
   const miniIconPlay = document.getElementById('miniIconPlay');
   const miniIconPause = document.getElementById('miniIconPause');
-  const miniHint = document.getElementById('miniHint');
+  const miniTour = document.getElementById('miniTour');
+  const miniTourClose = document.getElementById('miniTourClose');
   const miniArtist = document.getElementById('miniArtist');
   const miniArtistDup = document.getElementById('miniArtistDup');
   const miniArtistTrack = document.getElementById('miniArtistTrack');
@@ -340,8 +367,8 @@ function initMiniPlayer() {
     }
   }
 
-  function dismissHint() {
-    if (miniHint) miniHint.classList.remove('is-visible');
+  function dismissTour() {
+    if (miniTour) miniTour.classList.remove('is-visible');
     miniPlayer.classList.remove('is-pulsing');
   }
 
@@ -359,7 +386,7 @@ function initMiniPlayer() {
       const activeTile = tracksWrap.querySelector('.listen__track.is-active');
       if (activeTile) activeTile.classList.toggle('is-playing', bldPlaying);
     }
-    if (isPlaying) dismissHint();
+    if (isPlaying) dismissTour();
   }
 
   function activate(index) {
@@ -599,13 +626,8 @@ function initMiniPlayer() {
   }
 
   miniPlayer.classList.add('is-visible', 'is-pulsing');
-  if (miniHint) {
-    const isMobile = window.matchMedia('(max-width:560px)').matches;
-    miniHint.textContent = isMobile ? 'Tap to listen' : 'Press play to listen';
-    requestAnimationFrame(() => miniHint.classList.add('is-visible'));
-    setTimeout(dismissHint, 6000);
-  }
-  miniPlayer.addEventListener('click', dismissHint, { once: true });
+  if (miniTourClose) miniTourClose.addEventListener('click', (e) => { e.stopPropagation(); dismissTour(); });
+  miniPlayer.addEventListener('click', dismissTour, { once: true });
 
   initMiniPlayerDrag(miniPlayer);
 
@@ -644,7 +666,7 @@ function initMiniPlayer() {
       miniPrevBtn.style.visibility = source.onPrev ? '' : 'hidden';
       setPlaying(!!source.isPlaying);
       miniPlayer.classList.add('is-visible');
-      dismissHint();
+      dismissTour();
       if (source.uri) {
         try { localStorage.setItem('griotPlayerActivated', '1'); } catch (e) {}
         spotifyResumeState = { uri: source.uri, title: source.title, artist: source.artist, art: source.art, playing: !!source.isPlaying };
@@ -803,6 +825,74 @@ function initMiniPlayerDrag(miniPlayer) {
   miniPlayer.addEventListener('pointerup', endDrag);
   miniPlayer.addEventListener('pointercancel', endDrag);
   window.addEventListener('resize', () => place(anchor));
+}
+
+// Orchestrates the three first-hover/first-tap explainer cards (mini-player,
+// chat widget, nav menu): whichever the visitor reaches first (hover on
+// desktop, tap on mobile) shows immediately, then the other two follow
+// automatically in turn - mini-player, chat, nav, wrapping past whichever
+// one already went - each shown for 7s. If the visitor hovers a different
+// one of the three while an earlier card is still open, it pops up right
+// away too rather than waiting its turn, so cards can overlap. Runs once
+// ever, tracked via the griotToursSeen localStorage flag.
+function initFirstHoverTours() {
+  let seen = false;
+  try { seen = localStorage.getItem('griotToursSeen') === '1'; } catch (e) {}
+  if (seen) return;
+
+  const allSteps = [
+    { tour: document.getElementById('miniTour'), trigger: document.getElementById('miniPlayer') },
+    { tour: document.getElementById('chatTour'), trigger: document.getElementById('chatBtn') },
+    { tour: document.getElementById('navTour'), trigger: document.querySelector('.sm-toggle') },
+  ].filter((s) => s.tour && s.trigger);
+  if (!allSteps.length) return;
+
+  let order = null; // rotated to start with whichever step is reached first
+  let shownCount = 0;
+
+  function markDoneIfComplete() {
+    if (shownCount >= order.length) {
+      try { localStorage.setItem('griotToursSeen', '1'); } catch (e) {}
+    }
+  }
+
+  function closeStep(step) {
+    if (step.timer) { clearTimeout(step.timer); step.timer = null; }
+    step.tour.classList.remove('is-visible');
+  }
+
+  function cascadeNext(fromStep) {
+    const next = order[order.indexOf(fromStep) + 1];
+    if (next && !next.shown) showStep(next);
+  }
+
+  function showStep(step) {
+    if (step.shown) return;
+    step.shown = true;
+    shownCount++;
+    step.trigger.removeEventListener('pointerenter', onTrigger);
+    step.trigger.removeEventListener('click', onTrigger);
+    step.tour.classList.add('is-visible');
+    step.timer = setTimeout(() => { closeStep(step); cascadeNext(step); }, 7000);
+    const closeBtn = step.tour.querySelector('.tour-card-close');
+    if (closeBtn) closeBtn.addEventListener('click', (ev) => { ev.stopPropagation(); closeStep(step); cascadeNext(step); });
+    markDoneIfComplete();
+  }
+
+  function onTrigger(e) {
+    const step = allSteps.find((s) => s.trigger === e.currentTarget);
+    if (!step || step.shown) return;
+    if (!order) {
+      const startIdx = allSteps.indexOf(step);
+      order = allSteps.slice(startIdx).concat(allSteps.slice(0, startIdx));
+    }
+    showStep(step);
+  }
+
+  allSteps.forEach((s) => {
+    s.trigger.addEventListener('pointerenter', onTrigger);
+    s.trigger.addEventListener('click', onTrigger);
+  });
 }
 
 // Staggered-menu nav: hamburger toggle opens a slide-in panel listing every
@@ -995,6 +1085,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   initChat();
   initMiniPlayer();
+  initFirstHoverTours();
   initAnimatedFavicon();
   initEmberField();
   initScrollCue();
