@@ -70,52 +70,98 @@
   .ab-footer__row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
   .ab-footer__note{font-size:12px;color:var(--paper-faint);margin:10px 0 0}
 
-  /* ---- weekly playlist widget: presented as a playlist Mal curated
-     himself, though under the hood the tracks are sourced from his own
-     Discover Weekly. Rather than embedding Spotify's playlist iframe (whose
-     cover art and header literally read "Discover Weekly"), each track is
-     rendered as its own .release row with a click-to-expand accordion
-     (see the release-panel script below, which already branches on
-     open.spotify.com/track/ links), so a click still opens an inline
-     single-track embed that only ever shows that track's own name/art,
-     never the playlist's, so no "Discover Weekly" branding leaks through.
-     The track data itself (title/artist/art/id) is static markup, refreshed
-     by a weekly routine rather than fetched live client-side. ---- */
-  .ab-discover{padding:0 clamp(20px,5vw,64px) 90px;max-width:900px;margin:0 auto;--discover-accent:#93a89e}
-  .ab-discover__inner{background:transparent;border:1px solid rgba(239,230,216,.08);border-radius:16px;padding:clamp(22px,4vw,34px)}
-  .ab-discover__head{max-width:560px;margin:0 auto;text-align:center}
-  .ab-discover__eyebrow{display:inline-block;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--discover-accent);margin-bottom:10px;font-family:var(--font-body);font-weight:600}
-  .ab-discover h2{font-family:var(--font-display);font-weight:400;font-size:clamp(20px,2.4vw,26px);margin:0 0 10px}
-  .ab-discover p{color:var(--paper-dim);margin:0;line-height:1.6;font-size:13.5px}
-  .ab-discover__list{margin-top:20px;border-top:1px solid rgba(239,230,216,.07);max-height:282px;overflow-y:auto;overscroll-behavior:contain;scrollbar-color:var(--discover-accent) transparent;scrollbar-width:thin}
-  .ab-discover__list::-webkit-scrollbar{width:6px}
-  .ab-discover__list::-webkit-scrollbar-track{background:transparent}
-  .ab-discover__list::-webkit-scrollbar-thumb{background:var(--discover-accent);border-radius:999px}
+  /* ---------- Discover Weekly playlist card: identical component to the
+     playlist on poetry.html (same markup shape, same CSS, same JS below,
+     copied verbatim) - a big-cover Spotify-style playlist card (cover,
+     header stats, a "play all" button, numbered track rows) restyled in
+     the site's own ink/gold palette. Track audio comes from YouTube via
+     the IFrame API, driven through a single hidden/compact player docked
+     off-screen, playing through the site's shared persistent mini-player
+     (see shared.js window.griotMiniPlayer) instead of a bar of its own. ---------- */
+  .po-playlist{max-width:1000px;margin:0 auto}
+  .po-pl-card{
+    display:flex;gap:clamp(20px,4vw,40px);align-items:flex-end;flex-wrap:wrap;
+    padding:clamp(28px,5vw,44px) clamp(20px,4vw,36px) clamp(32px,5vw,40px);
+    background:linear-gradient(180deg,rgba(224,178,106,.14) 0%,rgba(28,24,21,0) 65%),#1c1815;
+    border:1px solid rgba(239,230,216,.1);border-radius:20px 20px 0 0;color:var(--paper-fixed);
+  }
+  .po-pl-cover{
+    flex:none;width:clamp(140px,22vw,200px);height:clamp(140px,22vw,200px);
+    border-radius:8px;overflow:hidden;box-shadow:0 20px 46px rgba(0,0,0,.5);
+  }
+  .po-pl-cover img{width:100%;height:100%;object-fit:cover;display:block}
+  .po-pl-meta{flex:1 1 260px;min-width:0}
+  .po-pl-kicker{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);font-weight:600}
+  .po-pl-title{
+    font-family:var(--font-display);font-weight:400;line-height:1.02;margin:12px 0 14px;
+    font-size:clamp(30px,5vw,56px);color:var(--paper-fixed);
+  }
+  .po-pl-sub{font-size:14px;line-height:1.6;color:var(--paper-fixed-dim);max-width:56ch;margin:0 0 12px}
+  .po-pl-stats{font-size:12.5px;color:var(--paper-fixed-faint)}
+  .po-pl-stats strong{color:var(--paper-fixed-dim);font-weight:600}
+  .po-pl-controls{
+    display:flex;align-items:center;gap:18px;padding:20px clamp(20px,4vw,36px);
+    background:#1c1815;border:1px solid rgba(239,230,216,.1);border-top:none;color:var(--paper-fixed);
+  }
+  .po-pl-play{
+    flex:none;width:56px;height:56px;border-radius:999px;border:none;cursor:pointer;
+    background:var(--gold);color:#12100f;display:flex;align-items:center;justify-content:center;
+    transition:background .2s ease,transform .15s ease;
+  }
+  .po-pl-play:hover{background:var(--paper);transform:scale(1.05)}
+  .po-pl-play svg{margin-left:2px}
+  .po-pl-play.is-playing svg{margin-left:0}
+  .po-pl-play .po-pl-icon-pause{display:none}
+  .po-pl-play.is-playing .po-pl-icon-play{display:none}
+  .po-pl-play.is-playing .po-pl-icon-pause{display:block}
+  .po-pl-controls-label{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-fixed-faint)}
 
-  /* ---- .release: a compact track row (art/title/credits/play), reused
-     from releases.html's discography rows but scaled down and de-accented
-     (sage instead of brass) so it reads as a small parting gift rather than
-     a second discography competing with the real one. Rows play through
-     YouTube (audio-only surface, no visible Spotify/YouTube chrome) into
-     the shared mini-player - see the script below, same mechanism as the
-     playlist on poetry.html. ---- */
-  .release{display:grid;grid-template-columns:28px 1fr auto;gap:12px;align-items:center;padding:11px 4px;border-bottom:1px solid rgba(239,230,216,.08);transition:background .3s ease;position:relative;--release-accent:var(--discover-accent);cursor:pointer}
-  .release:last-child{border-bottom:none}
-  .release:hover,.release.is-active{background:rgba(239,230,216,.03)}
-  .release__year{font-family:var(--font-display);font-size:11px;color:var(--paper-dim);letter-spacing:.05em}
-  .release.is-active .release__year{color:var(--release-accent)}
-  .release__art-stage{position:relative;width:38px;height:38px;flex:none}
-  .release__art{width:38px;height:38px;object-fit:cover;border-radius:4px;box-shadow:0 6px 14px rgba(0,0,0,.4);transition:transform .35s ease;background:rgba(239,230,216,.06);display:block}
-  .release:hover .release__art{transform:scale(1.04)}
-  .release__main{display:flex;gap:12px;align-items:center;min-width:0}
-  .release__title{font-family:var(--font-display);font-weight:400;font-size:14px;margin:0 0 2px;transition:color .25s ease}
-  .release:hover .release__title,.release.is-active .release__title{color:var(--release-accent)}
-  .release__credits{display:block;font-size:11px;letter-spacing:.02em;color:var(--release-accent);max-height:0;opacity:0;visibility:hidden;overflow:hidden;margin-top:0;transition:max-height .35s ease,opacity .3s ease,margin-top .35s ease,visibility 0s linear .35s}
-  .release:hover .release__credits,.release.is-active .release__credits{max-height:40px;opacity:1;visibility:visible;margin-top:2px;transition-delay:0s}
-  .release__play{width:28px;height:28px;border-radius:999px;border:1px solid rgba(239,230,216,.25);display:flex;align-items:center;justify-content:center;color:var(--paper);flex:none;transition:background .2s,border-color .2s}
-  .release__play svg{width:12px;height:12px}
-  .release:hover .release__play,.release.is-active .release__play{background:var(--release-accent);border-color:var(--release-accent);color:#12100f}
-  .release-video-host{position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
+  .po-pl-table{border:1px solid rgba(239,230,216,.1);border-top:none;border-radius:0 0 20px 20px;max-height:213px;overflow-y:auto;overscroll-behavior:contain}
+  .po-pl-row{
+    display:grid;grid-template-columns:36px 1fr;gap:16px;align-items:center;
+    padding:11px clamp(20px,4vw,36px);cursor:pointer;background:#17130f;color:var(--paper-fixed);
+    border-top:1px solid rgba(239,230,216,.06);transition:background .15s ease;
+  }
+  .po-pl-row:hover{background:rgba(224,178,106,.08)}
+  .po-pl-row.is-active{background:rgba(224,178,106,.14)}
+  .po-pl-row-index{
+    font-family:var(--font-body);font-size:13px;color:var(--paper-fixed-faint);text-align:center;position:relative;
+  }
+  .po-pl-row-index .po-pl-row-eq{display:none}
+  .po-pl-row-index .po-pl-row-playicon{display:none}
+  .po-pl-row:hover .po-pl-row-index .po-pl-row-num{display:none}
+  .po-pl-row:hover .po-pl-row-index .po-pl-row-playicon{display:block;margin:0 auto}
+  .po-pl-row.is-active .po-pl-row-index .po-pl-row-num{display:none}
+  .po-pl-row.is-active .po-pl-row-index .po-pl-row-eq{display:flex}
+  .po-pl-row.is-active:hover .po-pl-row-index .po-pl-row-eq{display:none}
+  .po-pl-row.is-active:hover .po-pl-row-index .po-pl-row-playicon{display:block;margin:0 auto}
+  .po-pl-row-eq{align-items:flex-end;justify-content:center;gap:2px;height:14px}
+  .po-pl-row-eq i{width:2px;background:var(--gold);animation:po-pl-eq 1s ease-in-out infinite}
+  .po-pl-row-eq i:nth-child(1){height:40%;animation-delay:-.6s}
+  .po-pl-row-eq i:nth-child(2){height:100%;animation-delay:-.2s}
+  .po-pl-row-eq i:nth-child(3){height:65%;animation-delay:-.9s}
+  @keyframes po-pl-eq{0%,100%{height:20%}50%{height:100%}}
+  .po-pl-row-main{min-width:0;display:flex;flex-direction:column;justify-content:center}
+  .po-pl-row-title{
+    display:block;font-family:var(--font-body);font-weight:500;font-size:14.5px;color:var(--paper-fixed);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .po-pl-row:hover .po-pl-row-title{color:var(--gold)}
+  .po-pl-row.is-active .po-pl-row-title{color:var(--gold);font-weight:700}
+  .po-pl-row-artist{
+    display:block;font-size:12.5px;color:var(--paper-fixed-dim);margin-top:2px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+
+  /* Playlist audio plays through the site's shared persistent mini-player
+     (see shared.js window.griotMiniPlayer) rather than a dedicated bar of
+     its own - keeps one now-playing surface across the whole site instead
+     of two. The YouTube IFrame API still needs a live element to attach to
+     for playback/progress, so it's kept off-screen instead of removed. */
+  .po-pl-bar-video{position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
+  @media (max-width:640px){
+    .po-pl-row{grid-template-columns:28px 1fr;}
+  }
 </style>
 </head>
 <body>
@@ -167,367 +213,127 @@
   </div>
 </section>
 
-<section class="ab-discover reveal">
-  <div class="ab-discover__inner">
-    <div class="ab-discover__head">
-      <span class="ab-discover__eyebrow">Currently On Repeat</span>
-      <h2>What's Shaping The Sound</h2>
-      <p>The catalog above didn't arrive from nowhere. This is the rotation feeding it: Afro-house, funk, soul, jazz, neo-soul, whatever won't leave his ears this week. Refreshed every Monday with what's actually playing while he writes. If you want to hear the room the songs come from, this is it.</p>
-    </div>
-
-    <div class="ab-discover__list">
-      <div class="release reveal" data-yt="vA3-j-zgnHQ" data-title="ALL OF MY LIFE" data-artist="DAMEDAME*" tabindex="0" role="button" aria-label="Play ALL OF MY LIFE | DAMEDAME* on YouTube">
-        <span class="release__year">01</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/vA3-j-zgnHQ/mqdefault.jpg" alt="ALL OF MY LIFE | DAMEDAME*"></div>
-          <div>
-            <h3 class="release__title">ALL OF MY LIFE</h3>
-            <span class="release__credits">DAMEDAME*</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
-      <div class="release reveal" data-yt="OgtRucLACgY" data-title="iBanga" data-artist="Sakhile" tabindex="0" role="button" aria-label="Play iBanga | Sakhile on YouTube">
-        <span class="release__year">02</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/OgtRucLACgY/mqdefault.jpg" alt="iBanga | Sakhile"></div>
-          <div>
-            <h3 class="release__title">iBanga</h3>
-            <span class="release__credits">Sakhile</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
-      <div class="release reveal" data-yt="Ws2MrJIgo8E" data-title="Needy Bees" data-artist="Nick Hakim" tabindex="0" role="button" aria-label="Play Needy Bees | Nick Hakim on YouTube">
-        <span class="release__year">03</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/Ws2MrJIgo8E/mqdefault.jpg" alt="Needy Bees | Nick Hakim"></div>
-          <div>
-            <h3 class="release__title">Needy Bees</h3>
-            <span class="release__credits">Nick Hakim</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
-      <div class="release reveal" data-yt="dKCFzFE8vP4" data-title="Don't Rush" data-artist="Namas, Keysuna" tabindex="0" role="button" aria-label="Play Don't Rush | Namas, Keysuna on YouTube">
-        <span class="release__year">04</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/dKCFzFE8vP4/mqdefault.jpg" alt="Don't Rush | Namas, Keysuna"></div>
-          <div>
-            <h3 class="release__title">Don't Rush</h3>
-            <span class="release__credits">Namas, Keysuna</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
-      <div class="release reveal" data-yt="EYpIFcr0qKw" data-title="Moon &amp; I" data-artist="Azekel, Céline Dessberg" tabindex="0" role="button" aria-label="Play Moon &amp; I | Azekel, Céline Dessberg on YouTube">
-        <span class="release__year">05</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/EYpIFcr0qKw/mqdefault.jpg" alt="Moon &amp; I | Azekel, Céline Dessberg"></div>
-          <div>
-            <h3 class="release__title">Moon &amp; I</h3>
-            <span class="release__credits">Azekel, Céline Dessberg</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
-      <div class="release reveal" data-yt="f0DxuE2TqkY" data-title="MAKEDA" data-artist="Cor Blanco" tabindex="0" role="button" aria-label="Play MAKEDA | Cor Blanco on YouTube">
-        <span class="release__year">06</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/f0DxuE2TqkY/mqdefault.jpg" alt="MAKEDA | Cor Blanco"></div>
-          <div>
-            <h3 class="release__title">MAKEDA</h3>
-            <span class="release__credits">Cor Blanco</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
-      <div class="release reveal" data-yt="mdadFmZWl5I" data-title="Ride With Me" data-artist="Pip Millett" tabindex="0" role="button" aria-label="Play Ride With Me | Pip Millett on YouTube">
-        <span class="release__year">07</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/mdadFmZWl5I/mqdefault.jpg" alt="Ride With Me | Pip Millett"></div>
-          <div>
-            <h3 class="release__title">Ride With Me</h3>
-            <span class="release__credits">Pip Millett</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
-      <div class="release reveal" data-yt="vUsHHa1_6U8" data-title="Life Called River" data-artist="The Mighty Tiny &amp; The Many Few" tabindex="0" role="button" aria-label="Play Life Called River | The Mighty Tiny &amp; The Many Few on YouTube">
-        <span class="release__year">08</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/vUsHHa1_6U8/mqdefault.jpg" alt="Life Called River | The Mighty Tiny &amp; The Many Few"></div>
-          <div>
-            <h3 class="release__title">Life Called River</h3>
-            <span class="release__credits">The Mighty Tiny &amp; The Many Few</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
-      <div class="release reveal" data-yt="uL3m1AMrB98" data-title="it's so nice" data-artist="Tia Gordon" tabindex="0" role="button" aria-label="Play it's so nice | Tia Gordon on YouTube">
-        <span class="release__year">09</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/uL3m1AMrB98/mqdefault.jpg" alt="it's so nice | Tia Gordon"></div>
-          <div>
-            <h3 class="release__title">it's so nice</h3>
-            <span class="release__credits">Tia Gordon</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
-      <div class="release reveal" data-yt="89kAOkDsEsM" data-title="Only" data-artist="Little Simz, Lydia Kitto" tabindex="0" role="button" aria-label="Play Only | Little Simz, Lydia Kitto on YouTube">
-        <span class="release__year">10</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/89kAOkDsEsM/mqdefault.jpg" alt="Only | Little Simz, Lydia Kitto"></div>
-          <div>
-            <h3 class="release__title">Only</h3>
-            <span class="release__credits">Little Simz, Lydia Kitto</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
-      <div class="release reveal" data-yt="ebOLAmibcxg" data-title="Virtual U" data-artist="oso leone" tabindex="0" role="button" aria-label="Play Virtual U | oso leone on YouTube">
-        <span class="release__year">11</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/ebOLAmibcxg/mqdefault.jpg" alt="Virtual U | oso leone"></div>
-          <div>
-            <h3 class="release__title">Virtual U</h3>
-            <span class="release__credits">oso leone</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
-      <div class="release reveal" data-yt="R6sa1NDk-y0" data-title="Even When You're Gone" data-artist="Arjuna Oakes, Serebii" tabindex="0" role="button" aria-label="Play Even When You're Gone | Arjuna Oakes, Serebii on YouTube">
-        <span class="release__year">12</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/R6sa1NDk-y0/mqdefault.jpg" alt="Even When You're Gone | Arjuna Oakes, Serebii"></div>
-          <div>
-            <h3 class="release__title">Even When You're Gone</h3>
-            <span class="release__credits">Arjuna Oakes, Serebii</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
-      <div class="release reveal" data-yt="UnvRrUjQ0fw" data-title="Can We Do This?" data-artist="Speakers Corner Quartet, Kwake Bass, Raven Bush, Peter Bennie, Biscuit, Sampha" tabindex="0" role="button" aria-label="Play Can We Do This? | Speakers Corner Quartet, Kwake Bass, Raven Bush, Peter Bennie, Biscuit, Sampha on YouTube">
-        <span class="release__year">13</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/UnvRrUjQ0fw/mqdefault.jpg" alt="Can We Do This? | Speakers Corner Quartet, Kwake Bass, Raven Bush, Peter Bennie, Biscuit, Sampha"></div>
-          <div>
-            <h3 class="release__title">Can We Do This?</h3>
-            <span class="release__credits">Speakers Corner Quartet, Kwake Bass, Raven Bush, Peter Bennie, Biscuit, Sampha</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
-      <div class="release reveal" data-yt="EKI4fQMQwXs" data-title="IF SHE LAUGHS" data-artist="_BY.ALEXANDER" tabindex="0" role="button" aria-label="Play IF SHE LAUGHS | _BY.ALEXANDER on YouTube">
-        <span class="release__year">14</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/EKI4fQMQwXs/mqdefault.jpg" alt="IF SHE LAUGHS | _BY.ALEXANDER"></div>
-          <div>
-            <h3 class="release__title">IF SHE LAUGHS</h3>
-            <span class="release__credits">_BY.ALEXANDER</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
-      <div class="release reveal" data-yt="43bEearc0DE" data-title="Fool's Gold" data-artist="Yazmin Lacey" tabindex="0" role="button" aria-label="Play Fool's Gold | Yazmin Lacey on YouTube">
-        <span class="release__year">15</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/43bEearc0DE/mqdefault.jpg" alt="Fool's Gold | Yazmin Lacey"></div>
-          <div>
-            <h3 class="release__title">Fool's Gold</h3>
-            <span class="release__credits">Yazmin Lacey</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
-      <div class="release reveal" data-yt="bhqgA1M-LQM" data-title="On Your Side" data-artist="Latanya Alberto" tabindex="0" role="button" aria-label="Play On Your Side | Latanya Alberto on YouTube">
-        <span class="release__year">16</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/bhqgA1M-LQM/mqdefault.jpg" alt="On Your Side | Latanya Alberto"></div>
-          <div>
-            <h3 class="release__title">On Your Side</h3>
-            <span class="release__credits">Latanya Alberto</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
-      <div class="release reveal" data-yt="vqzqJ9rAYvk" data-title="Give Up The Fear" data-artist="Nia Smith" tabindex="0" role="button" aria-label="Play Give Up The Fear | Nia Smith on YouTube">
-        <span class="release__year">17</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/vqzqJ9rAYvk/mqdefault.jpg" alt="Give Up The Fear | Nia Smith"></div>
-          <div>
-            <h3 class="release__title">Give Up The Fear</h3>
-            <span class="release__credits">Nia Smith</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
-      <div class="release reveal" data-yt="xMhM_am0rWA" data-title="In the Name of Love" data-artist="Victoria Noelle" tabindex="0" role="button" aria-label="Play In the Name of Love | Victoria Noelle on YouTube">
-        <span class="release__year">18</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/xMhM_am0rWA/mqdefault.jpg" alt="In the Name of Love | Victoria Noelle"></div>
-          <div>
-            <h3 class="release__title">In the Name of Love</h3>
-            <span class="release__credits">Victoria Noelle</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
-      <div class="release reveal" data-yt="Cd9ZcafH4aE" data-title="days for you" data-artist="Ted Jasper" tabindex="0" role="button" aria-label="Play days for you | Ted Jasper on YouTube">
-        <span class="release__year">19</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/Cd9ZcafH4aE/mqdefault.jpg" alt="days for you | Ted Jasper"></div>
-          <div>
-            <h3 class="release__title">days for you</h3>
-            <span class="release__credits">Ted Jasper</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
-      <div class="release reveal" data-yt="ue1mbb91384" data-title="Planes" data-artist="Olive Jones" tabindex="0" role="button" aria-label="Play Planes | Olive Jones on YouTube">
-        <span class="release__year">20</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/ue1mbb91384/mqdefault.jpg" alt="Planes | Olive Jones"></div>
-          <div>
-            <h3 class="release__title">Planes</h3>
-            <span class="release__credits">Olive Jones</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
-      <div class="release reveal" data-yt="I0favLymjfg" data-title="No Others" data-artist="Momoko Gill" tabindex="0" role="button" aria-label="Play No Others | Momoko Gill on YouTube">
-        <span class="release__year">21</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/I0favLymjfg/mqdefault.jpg" alt="No Others | Momoko Gill"></div>
-          <div>
-            <h3 class="release__title">No Others</h3>
-            <span class="release__credits">Momoko Gill</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
-      <div class="release reveal" data-yt="9WPxZCH-KzY" data-title="Sous la pluie" data-artist="LaBlue, Astrønne" tabindex="0" role="button" aria-label="Play Sous la pluie | LaBlue, Astrønne on YouTube">
-        <span class="release__year">22</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/9WPxZCH-KzY/mqdefault.jpg" alt="Sous la pluie | LaBlue, Astrønne"></div>
-          <div>
-            <h3 class="release__title">Sous la pluie</h3>
-            <span class="release__credits">LaBlue, Astrønne</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
-      <div class="release reveal" data-yt="jWTkz9xwz2k" data-title="Diamond Miner" data-artist="Crayon, FKJ, ELIZA" tabindex="0" role="button" aria-label="Play Diamond Miner | Crayon, FKJ, ELIZA on YouTube">
-        <span class="release__year">23</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/jWTkz9xwz2k/mqdefault.jpg" alt="Diamond Miner | Crayon, FKJ, ELIZA"></div>
-          <div>
-            <h3 class="release__title">Diamond Miner</h3>
-            <span class="release__credits">Crayon, FKJ, ELIZA</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
-      <div class="release reveal" data-yt="GYNl8Fm8J5Y" data-title="Painless Melody" data-artist="Braye" tabindex="0" role="button" aria-label="Play Painless Melody | Braye on YouTube">
-        <span class="release__year">24</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/GYNl8Fm8J5Y/mqdefault.jpg" alt="Painless Melody | Braye"></div>
-          <div>
-            <h3 class="release__title">Painless Melody</h3>
-            <span class="release__credits">Braye</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
-      <div class="release reveal" data-yt="h-IkLkF6btI" data-title="Sunshine" data-artist="anaiis" tabindex="0" role="button" aria-label="Play Sunshine | anaiis on YouTube">
-        <span class="release__year">25</span>
-        <div class="release__main">
-          <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/h-IkLkF6btI/mqdefault.jpg" alt="Sunshine | anaiis"></div>
-          <div>
-            <h3 class="release__title">Sunshine</h3>
-            <span class="release__credits">anaiis</span>
-          </div>
-        </div>
-        <span class="release__play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-
+<section class="po-section po-playlist" id="discover-weekly">
+  <div class="po-pl-card reveal">
+    <div class="po-pl-cover"><img src="img/about-2.jpg" alt="Mal Griot in the studio"></div>
+    <div class="po-pl-meta">
+      <span class="po-pl-kicker">Currently On Repeat</span>
+      <h2 class="po-pl-title">What's Shaping The Sound</h2>
+      <p class="po-pl-sub">The catalog above didn't arrive from nowhere. This is the rotation feeding it: Afro-house, funk, soul, jazz, neo-soul, whatever won't leave his ears this week. Refreshed every Monday with what's actually playing while he writes.</p>
+      <p class="po-pl-stats"><strong>Mal Griot</strong> · 25 songs</p>
     </div>
   </div>
+  <div class="po-pl-controls reveal">
+    <button type="button" class="po-pl-play" id="po-pl-play-all" aria-label="Play playlist">
+      <svg class="po-pl-icon-play" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      <svg class="po-pl-icon-pause" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+    </button>
+    <span class="po-pl-controls-label">Play the playlist</span>
+  </div>
+  <nav class="po-pl-table reveal" id="po-pl-table" aria-label="Discover Weekly playlist">
+    <!-- data-yt = YouTube video ID. Rows are click-to-play, driven by the
+         shared IFrame API player docked off-screen below. -->
+    <div class="po-pl-row" data-yt="vA3-j-zgnHQ" data-title="ALL OF MY LIFE" data-artist="DAMEDAME*">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">1</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">ALL OF MY LIFE</span><span class="po-pl-row-artist">DAMEDAME*</span></span>
+    </div>
+    <div class="po-pl-row" data-yt="OgtRucLACgY" data-title="iBanga" data-artist="Sakhile">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">2</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">iBanga</span><span class="po-pl-row-artist">Sakhile</span></span>
+    </div>
+    <div class="po-pl-row" data-yt="Ws2MrJIgo8E" data-title="Needy Bees" data-artist="Nick Hakim">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">3</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">Needy Bees</span><span class="po-pl-row-artist">Nick Hakim</span></span>
+    </div>
+    <div class="po-pl-row" data-yt="dKCFzFE8vP4" data-title="Don't Rush" data-artist="Namas, Keysuna">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">4</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">Don't Rush</span><span class="po-pl-row-artist">Namas, Keysuna</span></span>
+    </div>
+    <div class="po-pl-row" data-yt="EYpIFcr0qKw" data-title="Moon &amp; I" data-artist="Azekel, Céline Dessberg">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">5</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">Moon &amp; I</span><span class="po-pl-row-artist">Azekel, Céline Dessberg</span></span>
+    </div>
+    <div class="po-pl-row" data-yt="f0DxuE2TqkY" data-title="MAKEDA" data-artist="Cor Blanco">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">6</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">MAKEDA</span><span class="po-pl-row-artist">Cor Blanco</span></span>
+    </div>
+    <div class="po-pl-row" data-yt="mdadFmZWl5I" data-title="Ride With Me" data-artist="Pip Millett">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">7</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">Ride With Me</span><span class="po-pl-row-artist">Pip Millett</span></span>
+    </div>
+    <div class="po-pl-row" data-yt="vUsHHa1_6U8" data-title="Life Called River" data-artist="The Mighty Tiny &amp; The Many Few">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">8</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">Life Called River</span><span class="po-pl-row-artist">The Mighty Tiny &amp; The Many Few</span></span>
+    </div>
+    <div class="po-pl-row" data-yt="uL3m1AMrB98" data-title="it's so nice" data-artist="Tia Gordon">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">9</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">it's so nice</span><span class="po-pl-row-artist">Tia Gordon</span></span>
+    </div>
+    <div class="po-pl-row" data-yt="89kAOkDsEsM" data-title="Only" data-artist="Little Simz, Lydia Kitto">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">10</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">Only</span><span class="po-pl-row-artist">Little Simz, Lydia Kitto</span></span>
+    </div>
+    <div class="po-pl-row" data-yt="ebOLAmibcxg" data-title="Virtual U" data-artist="oso leone">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">11</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">Virtual U</span><span class="po-pl-row-artist">oso leone</span></span>
+    </div>
+    <div class="po-pl-row" data-yt="R6sa1NDk-y0" data-title="Even When You're Gone" data-artist="Arjuna Oakes, Serebii">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">12</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">Even When You're Gone</span><span class="po-pl-row-artist">Arjuna Oakes, Serebii</span></span>
+    </div>
+    <div class="po-pl-row" data-yt="UnvRrUjQ0fw" data-title="Can We Do This?" data-artist="Speakers Corner Quartet, Kwake Bass, Raven Bush, Peter Bennie, Biscuit, Sampha">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">13</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">Can We Do This?</span><span class="po-pl-row-artist">Speakers Corner Quartet, Kwake Bass, Raven Bush, Peter Bennie, Biscuit, Sampha</span></span>
+    </div>
+    <div class="po-pl-row" data-yt="EKI4fQMQwXs" data-title="IF SHE LAUGHS" data-artist="_BY.ALEXANDER">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">14</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">IF SHE LAUGHS</span><span class="po-pl-row-artist">_BY.ALEXANDER</span></span>
+    </div>
+    <div class="po-pl-row" data-yt="43bEearc0DE" data-title="Fool's Gold" data-artist="Yazmin Lacey">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">15</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">Fool's Gold</span><span class="po-pl-row-artist">Yazmin Lacey</span></span>
+    </div>
+    <div class="po-pl-row" data-yt="bhqgA1M-LQM" data-title="On Your Side" data-artist="Latanya Alberto">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">16</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">On Your Side</span><span class="po-pl-row-artist">Latanya Alberto</span></span>
+    </div>
+    <div class="po-pl-row" data-yt="vqzqJ9rAYvk" data-title="Give Up The Fear" data-artist="Nia Smith">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">17</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">Give Up The Fear</span><span class="po-pl-row-artist">Nia Smith</span></span>
+    </div>
+    <div class="po-pl-row" data-yt="xMhM_am0rWA" data-title="In the Name of Love" data-artist="Victoria Noelle">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">18</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">In the Name of Love</span><span class="po-pl-row-artist">Victoria Noelle</span></span>
+    </div>
+    <div class="po-pl-row" data-yt="Cd9ZcafH4aE" data-title="days for you" data-artist="Ted Jasper">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">19</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">days for you</span><span class="po-pl-row-artist">Ted Jasper</span></span>
+    </div>
+    <div class="po-pl-row" data-yt="ue1mbb91384" data-title="Planes" data-artist="Olive Jones">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">20</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">Planes</span><span class="po-pl-row-artist">Olive Jones</span></span>
+    </div>
+    <div class="po-pl-row" data-yt="I0favLymjfg" data-title="No Others" data-artist="Momoko Gill">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">21</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">No Others</span><span class="po-pl-row-artist">Momoko Gill</span></span>
+    </div>
+    <div class="po-pl-row" data-yt="9WPxZCH-KzY" data-title="Sous la pluie" data-artist="LaBlue, Astrønne">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">22</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">Sous la pluie</span><span class="po-pl-row-artist">LaBlue, Astrønne</span></span>
+    </div>
+    <div class="po-pl-row" data-yt="jWTkz9xwz2k" data-title="Diamond Miner" data-artist="Crayon, FKJ, ELIZA">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">23</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">Diamond Miner</span><span class="po-pl-row-artist">Crayon, FKJ, ELIZA</span></span>
+    </div>
+    <div class="po-pl-row" data-yt="GYNl8Fm8J5Y" data-title="Painless Melody" data-artist="Braye">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">24</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">Painless Melody</span><span class="po-pl-row-artist">Braye</span></span>
+    </div>
+    <div class="po-pl-row" data-yt="h-IkLkF6btI" data-title="Sunshine" data-artist="anaiis">
+      <span class="po-pl-row-index"><span class="po-pl-row-num">25</span><svg class="po-pl-row-playicon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="po-pl-row-eq"><i></i><i></i><i></i></span></span>
+      <span class="po-pl-row-main"><span class="po-pl-row-title">Sunshine</span><span class="po-pl-row-artist">anaiis</span></span>
+    </div>
+  </nav>
 </section>
 
 <section class="ab-footer">
@@ -542,7 +348,7 @@
 <div id="chrome-footer"></div>
 <div id="chrome-chat"></div>
 <div id="chrome-player"></div>
-<div class="release-video-host" id="ab-discover-video"></div>
+<div class="po-pl-bar-video" id="po-pl-bar-video" aria-hidden="true"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
@@ -601,201 +407,178 @@
 })();
 </script>
 <script>
-(function(){
-  // "Currently On Repeat" playlist: Discover-Weekly-style rows wired to real
-  // YouTube audio, same mechanism as the playlist on poetry.html. Rows load
-  // into one shared off-screen YouTube iframe and hand transport/title/art to
-  // the site's persistent mini-player (window.griotMiniPlayer in shared.js) -
-  // no Spotify (or bare YouTube) player surface is ever shown. A track
-  // finishing (YT.PlayerState.ENDED) auto-advances to the next row.
-  var list = document.querySelector('.ab-discover__list');
-  var videoHost = document.getElementById('ab-discover-video');
-  if(!list || !videoHost) return;
+// The Playlist - Discover-Weekly-style card wired to real YouTube audio.
+// One shared YT.Player lives in an off-screen host; clicking a row (or the
+// header "play all") loads that video into it and hands the site's shared
+// persistent mini-player (see shared.js window.griotMiniPlayer, the same
+// hook Spotify release panels use) its title/art and transport, so the
+// playlist plays through that one now-playing surface instead of a bar of
+// its own. The mini-player stays docked while the reader scrolls back up
+// through the book/clips sections above.
+(function () {
+  var table = document.getElementById('po-pl-table');
+  var videoHost = document.getElementById('po-pl-bar-video');
+  if (!table || !videoHost) return;
 
-  var rows = Array.prototype.slice.call(list.querySelectorAll('.release'));
-  if(!rows.length) return;
-
-  var PLAY_ICON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
-  var STOP_ICON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+  var rows = Array.prototype.slice.call(table.querySelectorAll('.po-pl-row'));
+  var playAllBtn = document.getElementById('po-pl-play-all');
 
   var player = null;
   var playerReady = false;
   var current = -1;
   var pendingVideoId = null;
-  var suppressPauseBroadcast = false; // true while we're pausing this playlist ourselves, to avoid an echo
+  var suppressPauseBroadcast = false; // true while we're pausing the playlist ourselves, to avoid an echo
 
   // YouTube embeds can run a monetized pre-roll ad before the actual track,
-  // and the IFrame Player API has no "this is an ad" signal and no control
-  // over the ad itself (pause/play only reach the real content player) - so
-  // instead of trying to detect or skip the ad, every load starts muted.
-  // getDuration() reports the AD's own (short) duration while one is
-  // running and only reflects the real track (well over a minute, for
-  // anything in this playlist) once content actually starts, so polling it
-  // fast catches that handoff within a fraction of a second - there's no ad
-  // to sit through when there wasn't one, and no long blind wait when there
-  // was. CONTENT_FALLBACK_MS is just a safety net (an unusually short real
-  // track, or a duration read that never looks "long enough") so playback
-  // is never left muted or stuck refusing to advance past ENDED.
-  var POLL_MS = 150;
-  var CONTENT_FALLBACK_MS = 20000;
+  // and the IFrame Player API has no documented "this is an ad" signal and
+  // no control over the ad itself (pause/play only reach the real content
+  // player). Two different detection heuristics were tried here (duration,
+  // then the player's loaded video id) and both turned out worthless - the
+  // API reports the target content's own metadata immediately, even while
+  // an ad is still the thing actually playing, so either one "confirmed"
+  // real content and unmuted right into the ad. With no reliable signal
+  // available, this is a flat timer instead: every load starts muted and
+  // unmutes after UNMUTE_DELAY_MS regardless of whether there was an ad.
+  // That's a real tradeoff (a short silent moment even when there's no ad;
+  // a longer ad may still be audible past the window), not a fix for the
+  // ad itself - there isn't one available through this API.
+  var UNMUTE_DELAY_MS = 5000;
   var contentConfirmed = false;
   var loadStartedAt = 0;
-  var pollTimer = null;
+  var unmuteTimer = null;
 
-  function confirmContent(){
-    if(contentConfirmed) return;
+  function confirmContent() {
+    if (contentConfirmed) return;
     contentConfirmed = true;
-    if(pollTimer){ clearInterval(pollTimer); pollTimer = null; }
-    if(player && player.unMute) player.unMute();
+    if (unmuteTimer) { clearTimeout(unmuteTimer); unmuteTimer = null; }
+    if (player && player.unMute) player.unMute();
   }
 
-  function beginLoadGuards(){
+  function beginLoadGuards() {
     contentConfirmed = false;
     loadStartedAt = Date.now();
-    if(pollTimer){ clearInterval(pollTimer); pollTimer = null; }
-    if(player && player.mute) player.mute();
-    pollTimer = setInterval(function(){
-      if(!player || !player.getDuration) return;
-      var d = player.getDuration();
-      if(d > 60 || Date.now() - loadStartedAt > CONTENT_FALLBACK_MS) confirmContent();
-    }, POLL_MS);
+    if (unmuteTimer) clearTimeout(unmuteTimer);
+    if (player && player.mute) player.mute();
+    unmuteTimer = setTimeout(confirmContent, UNMUTE_DELAY_MS);
   }
 
-  // A track elsewhere on the site (Jungli clip, a Spotify/SoundCloud release
-  // on another page) taking over the mini-player should pause this playlist,
-  // and vice versa - same griot:* event bus everything else coordinates through.
-  window.addEventListener('griot:mini-player-playing', function(){
-    if(!player || !player.pauseVideo) return;
+  // Playing a playlist track should pause the shared mini-player's own
+  // SoundCloud/Spotify source (see releases.html), and vice versa - the
+  // mini-player starting up should pause this playlist. Same griot:* event
+  // bus the rest of the site already coordinates through.
+  window.addEventListener('griot:mini-player-playing', function () {
+    if (!player || !player.pauseVideo) return;
     suppressPauseBroadcast = true;
     player.pauseVideo();
-    setTimeout(function(){ suppressPauseBroadcast = false; }, 300);
-  });
-  window.addEventListener('griot:pause-mini-player', function(){
-    if(!player || !player.pauseVideo || suppressPauseBroadcast) return;
-    player.pauseVideo();
+    setTimeout(function () { suppressPauseBroadcast = false; }, 300);
   });
 
-  function setRowIcon(row, isActive){
-    var btn = row.querySelector('.release__play');
-    if(btn) btn.innerHTML = isActive ? STOP_ICON : PLAY_ICON;
-  }
-
-  function setPlayingUI(isPlaying){
-    rows.forEach(function(r, i){
-      r.classList.toggle('is-active', i === current && isPlaying);
-      setRowIcon(r, i === current && isPlaying);
-    });
-    if(window.griotMiniPlayer && window.griotMiniPlayer.isExternalActive()){
+  function setPlayingUI(isPlaying) {
+    playAllBtn.classList.toggle('is-playing', isPlaying);
+    rows.forEach(function (r, i) { r.classList.toggle('is-active', i === current && isPlaying); });
+    if (current >= 0 && !isPlaying) rows[current].classList.remove('is-active');
+    if (window.griotMiniPlayer && window.griotMiniPlayer.isExternalActive()) {
       window.griotMiniPlayer.updateExternalPlaying(isPlaying);
     }
   }
 
-  function pushToMiniPlayer(idx, isPlaying){
-    if(!window.griotMiniPlayer) return;
+  function pushToMiniPlayer(idx, isPlaying) {
+    if (!window.griotMiniPlayer) return;
     var row = rows[idx];
     window.griotMiniPlayer.setExternal({
       title: row.dataset.title,
       artist: row.dataset.artist,
       art: 'https://img.youtube.com/vi/' + row.dataset.yt + '/mqdefault.jpg',
       isPlaying: isPlaying,
-      onToggle: function(){ playIndex(current); },
+      onToggle: function () { playIndex(current); },
       onNext: rows.length > 1 ? playNext : null,
-      onPrev: rows.length > 1 ? playPrev : null
+      onPrev: rows.length > 1 ? playPrev : null,
     });
   }
 
-  function loadIndex(idx, autoplay){
-    if(idx < 0 || idx >= rows.length) return;
+  function loadIndex(idx, autoplay) {
+    if (idx < 0 || idx >= rows.length) return;
     current = idx;
-    rows.forEach(function(r, i){ r.classList.toggle('is-active', i === idx); setRowIcon(r, i === idx); });
+    var row = rows[idx];
+    rows.forEach(function (r, i) { r.classList.toggle('is-active', i === idx); });
     pushToMiniPlayer(idx, !!autoplay);
 
-    if(!playerReady || !player.loadVideoById){
-      pendingVideoId = rows[idx].dataset.yt;
+    if (!playerReady || !player.loadVideoById) {
+      pendingVideoId = row.dataset.yt;
       return;
     }
     beginLoadGuards();
-    player.loadVideoById(rows[idx].dataset.yt);
-    if(autoplay === false) player.pauseVideo();
+    player.loadVideoById(row.dataset.yt);
+    if (autoplay === false) player.pauseVideo();
   }
 
-  function wireYouTube(idx){
-    if(typeof YT === 'undefined' || !YT.Player){
-      setTimeout(function(){ wireYouTube(idx); }, 300);
+  function ensurePlayer(idx) {
+    if (player) { loadIndex(idx, true); return; }
+    if (typeof YT === 'undefined' || !YT.Player) {
+      setTimeout(function () { ensurePlayer(idx); }, 300);
       return;
     }
     current = idx;
-    rows.forEach(function(r, i){ r.classList.toggle('is-active', i === idx); setRowIcon(r, i === idx); });
+    rows.forEach(function (r, i) { r.classList.toggle('is-active', i === idx); });
     pushToMiniPlayer(idx, true);
 
+    // Build the iframe directly (matching the Clips & Audio embed pattern
+    // above) rather than letting `new YT.Player` construct one from an
+    // empty div - attaching the API to an existing embed iframe is the
+    // path that reliably initializes here.
     var row = rows[idx];
-    videoHost.innerHTML = '<iframe id="ab-discover-video-iframe" src="https://www.youtube.com/embed/' +
+    videoHost.innerHTML = '<iframe id="po-pl-bar-iframe" src="https://www.youtube.com/embed/' +
       encodeURIComponent(row.dataset.yt) + '?enablejsapi=1&autoplay=1&playsinline=1&mute=1" ' +
       'allow="autoplay; encrypted-media" frameborder="0"></iframe>';
 
-    player = new YT.Player('ab-discover-video-iframe', {
+    player = new YT.Player('po-pl-bar-iframe', {
       events: {
-        onReady: function(){
+        onReady: function () {
           playerReady = true;
           beginLoadGuards();
-          if(pendingVideoId){ player.loadVideoById(pendingVideoId); pendingVideoId = null; }
+          if (pendingVideoId) { player.loadVideoById(pendingVideoId); pendingVideoId = null; }
         },
-        onStateChange: function(e){
-          if(e.data === YT.PlayerState.PLAYING){
+        onStateChange: function (e) {
+          if (e.data === YT.PlayerState.PLAYING) {
             setPlayingUI(true);
-            if(player.getDuration && player.getDuration() > 60) confirmContent();
-            if(!suppressPauseBroadcast) window.dispatchEvent(new CustomEvent('griot:pause-mini-player'));
-            window.dispatchEvent(new CustomEvent('griot:mini-player-playing'));
-          } else if(e.data === YT.PlayerState.PAUSED){
-            setPlayingUI(false);
-          } else if(e.data === YT.PlayerState.ENDED){
-            // An ad "ending" fires this same event - only treat it as the
-            // real track finishing once we've confirmed real content (a
-            // normal-length duration) or enough time has passed that this
-            // can't just be an ad (see beginLoadGuards above).
-            if(contentConfirmed || Date.now() - loadStartedAt > CONTENT_FALLBACK_MS){
-              playNext();
-            }
+            if (!suppressPauseBroadcast) window.dispatchEvent(new CustomEvent('griot:pause-mini-player'));
+          }
+          else if (e.data === YT.PlayerState.PAUSED) { setPlayingUI(false); }
+          else if (e.data === YT.PlayerState.ENDED) {
+            // An ad ending fires this same event - within the mute window
+            // (see beginLoadGuards above) that's almost certainly what just
+            // happened, not the real track finishing, so ENDED is ignored
+            // until the flat unmute timer has confirmed we're past it.
+            if (contentConfirmed) playNext();
           }
         }
       }
     });
   }
 
-  function ensurePlayer(idx){
-    if(player){ loadIndex(idx, true); return; }
-    if(window.YT && window.YT.Player){ wireYouTube(idx); return; }
-    var existing = document.querySelector('script[src="https://www.youtube.com/iframe_api"]');
-    var prevReady = window.onYouTubeIframeAPIReady;
-    window.onYouTubeIframeAPIReady = function(){
-      if(prevReady) prevReady();
-      wireYouTube(idx);
-    };
-    if(!existing){
-      var script = document.createElement('script');
-      script.src = 'https://www.youtube.com/iframe_api';
-      document.head.appendChild(script);
-    }
-  }
-
-  function playIndex(idx){
-    if(!player){ ensurePlayer(idx); return; }
-    if(idx === current){
+  function playIndex(idx) {
+    if (!player) { ensurePlayer(idx); return; }
+    if (idx === current) {
       var state = player.getPlayerState ? player.getPlayerState() : -1;
-      if(state === 1) player.pauseVideo(); else player.playVideo();
+      if (state === 1) player.pauseVideo(); else player.playVideo();
       return;
     }
     loadIndex(idx, true);
   }
 
-  function playNext(){ playIndex((current + 1) % rows.length); }
-  function playPrev(){ playIndex((current - 1 + rows.length) % rows.length); }
+  function playNext() { if (current < rows.length - 1) playIndex(current + 1); }
+  function playPrev() { if (current > 0) playIndex(current - 1); }
 
-  rows.forEach(function(row, i){
-    row.addEventListener('click', function(){ playIndex(i); });
-    row.addEventListener('keydown', function(e){
-      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); playIndex(i); }
-    });
+  rows.forEach(function (row, i) {
+    row.addEventListener('click', function () { playIndex(i); });
+  });
+
+  playAllBtn.addEventListener('click', function () {
+    if (current === -1) { playIndex(0); return; }
+    if (player && player.getPlayerState) {
+      var state = player.getPlayerState();
+      if (state === 1) player.pauseVideo(); else player.playVideo();
+    }
   });
 })();
 </script>
