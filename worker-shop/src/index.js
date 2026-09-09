@@ -236,12 +236,12 @@ async function handleDownload(request, env, url) {
     return new Response('No digital edition on this order.', { status: 403 });
   }
 
-  const bytes = await env.BOOK_FILES.get(BOOK_CONFIG.PDF_FILE, 'arrayBuffer');
-  if (!bytes) return new Response('File temporarily unavailable.', { status: 500 });
+  const object = await env.PDF_BUCKET.get(BOOK_CONFIG.PDF_FILE);
+  if (!object) return new Response('File temporarily unavailable.', { status: 500 });
 
   markPdfDownloaded(env.DB, order.id).catch(() => {});
 
-  return new Response(bytes, {
+  return new Response(object.body, {
     status: 200,
     headers: {
       'Content-Type': 'application/pdf',

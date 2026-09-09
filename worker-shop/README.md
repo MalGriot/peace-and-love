@@ -3,8 +3,8 @@
 A small Cloudflare Worker that powers the "f a l l i n g under where" purchase
 flow on the Poetry page: creates Razorpay orders, verifies payments
 server-side, tracks orders and physical inventory in D1, and hands out
-time-limited signed download links for the PDF (stored privately in Workers
-KV — never in this git repo, never on GitHub Pages).
+time-limited signed download links for the PDF (stored privately in R2 —
+never in this git repo, never on GitHub Pages).
 
 Deployed independently of the static site, same pattern as `worker/` (the
 chat bot worker) next to it.
@@ -17,7 +17,7 @@ file behind a login. This worker is the smallest layer that can:
 - decide the real price/shipping/total for an order (never trust a number
   the browser sends),
 - verify a Razorpay payment signature server-side before marking anything paid,
-- keep the PDF in private Workers KV storage and only ever serve it behind a
+- keep the PDF in a private R2 bucket and only ever serve it behind a
   signed, expiring token — never a public URL anyone could discover by
   viewing page source.
 
@@ -33,12 +33,12 @@ npx wrangler d1 create book-shop
 # → copy the printed database_id into wrangler.toml's [[d1_databases]] block
 npm run db:init:remote
 
-# Private storage for the PDF. Chosen over R2 because R2 requires a payment
-# method on file even at zero cost; KV needs none and easily covers a
-# book-sized file within its per-value limit.
-npx wrangler kv namespace create BOOK_FILES
-# → copy the printed id into wrangler.toml's [[kv_namespaces]] block
-npx wrangler kv key put --binding=BOOK_FILES "falling-under-where.pdf" --path=/path/to/falling-under-where.pdf
+# Private bucket for the PDF. Do NOT enable public access on this bucket.
+# (R2 needs a payment method on file to enable, even at zero cost — if you
+# don't have a card yet, Workers KV is a no-card alternative; see git
+# history around the R2-to-KV switch for that version of this step.)
+npx wrangler r2 bucket create mal-griot-book-private
+npx wrangler r2 object put mal-griot-book-private/falling-under-where.pdf --file=/path/to/falling-under-where.pdf
 
 # Secrets — never committed, never in wrangler.toml
 npx wrangler secret put RAZORPAY_KEY_ID
@@ -91,7 +91,7 @@ object server-side regardless of what the browser sends.
 npm run dev
 ```
 
-D1 and KV bindings run against local emulated storage by default (separate
+D1 and R2 bindings run against local emulated storage by default (separate
 from your remote/production data) — see `wrangler dev` docs if you want to
 target the remote resources instead. Point `book-shop.js`'s
 `BOOK_SHOP_WORKER_URL` at the printed `http://127.0.0.1:8787` while testing.
@@ -104,7 +104,7 @@ npm test
 
 Covers the pure logic (pricing/shipping math, signed-download-token
 signing/verification/expiry) with Node's built-in test runner — no live
-Razorpay, D1, or KV calls are made.
+Razorpay, D1, or R2 calls are made.
 
 ## Order lifecycle
 
