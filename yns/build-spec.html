@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Yass & Sass Build Spec</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f0f1f3;
+  --surface:#ffffff;
+  --ink:#16161a;
+  --muted:#6b6f76;
+  --line:#d8dadf;
+  --line-soft:#e6e7ea;
+  --tag-p1-bg:#e7e9ee;
+  --tag-p1-ink:#3a3d45;
+  --tag-p2-bg:#eef0ea;
+  --tag-p2-ink:#454b39;
+  --accent-a:#7c5cff;
+  --accent-b:#00c2c7;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f0f12;
+    --surface:#18181c;
+    --ink:#e9e9ec;
+    --muted:#9a9ea6;
+    --line:#2a2a30;
+    --line-soft:#232328;
+    --tag-p1-bg:#26262d;
+    --tag-p1-ink:#c7c9d1;
+    --tag-p2-bg:#20241d;
+    --tag-p2-ink:#c4cbb8;
+    --accent-a:#9b82ff;
+    --accent-b:#3fd6da;
+  }
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.page{
+  max-width:760px;
+  margin:0 auto;
+  padding:64px 24px 96px;
+}
+
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:0.72rem;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--muted);
+  display:flex;
+  gap:10px;
+  align-items:center;
+  margin-bottom:18px;
+}
+.eyebrow a{color:inherit;text-decoration:none;border-bottom:1px solid var(--line);}
+.eyebrow a:hover{border-color:var(--muted);}
+.eyebrow .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent-a),var(--accent-b));
+  flex:none;
+}
+
+h1{
+  font-family:"Unbounded",system-ui,sans-serif;
+  font-weight:600;
+  font-size:clamp(1.9rem,4vw,2.5rem);
+  line-height:1.15;
+  letter-spacing:-0.01em;
+  margin:0 0 8px;
+}
+.subtitle{
+  color:var(--muted);
+  font-size:1rem;
+  max-width:56ch;
+  line-height:1.55;
+  margin:0 0 40px;
+}
+
+.summary{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:48px;
+}
+.summary-cell{
+  background:var(--surface);
+  padding:18px 16px;
+}
+.summary-cell .k{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:0.68rem;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--muted);
+  display:block;
+  margin-bottom:6px;
+}
+.summary-cell .v{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:1.15rem;
+  font-variant-numeric:tabular-nums;
+}
+.summary-cell .v.note{
+  font-family:"IBM Plex Sans",system-ui,sans-serif;
+  font-size:0.82rem;
+  color:var(--muted);
+}
+
+section.group{
+  margin-bottom:44px;
+}
+.group-head{
+  display:flex;
+  align-items:baseline;
+  gap:12px;
+  margin-bottom:16px;
+  padding-bottom:10px;
+  border-bottom:1px solid var(--line);
+}
+.group-head h2{
+  font-family:"Unbounded",system-ui,sans-serif;
+  font-weight:500;
+  font-size:1.05rem;
+  margin:0;
+}
+.group-head .count{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:0.75rem;
+  color:var(--muted);
+}
+
+.item{
+  display:flex;
+  gap:16px;
+  padding:14px 0;
+  border-bottom:1px solid var(--line-soft);
+}
+.item:last-child{border-bottom:none;}
+.item-main{flex:1;min-width:0;}
+.item-title{
+  font-weight:600;
+  font-size:0.96rem;
+  margin:0 0 3px;
+}
+.item-desc{
+  color:var(--muted);
+  font-size:0.87rem;
+  line-height:1.5;
+  margin:0;
+}
+.tag{
+  flex:none;
+  font-family:"IBM Plex Mono",monospace;
+  font-size:0.66rem;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  padding:4px 8px;
+  border-radius:5px;
+  height:fit-content;
+  white-space:nowrap;
+}
+.tag.p1{background:var(--tag-p1-bg);color:var(--tag-p1-ink);}
+.tag.p2{background:var(--tag-p2-bg);color:var(--tag-p2-ink);}
+
+.footnote{
+  margin-top:56px;
+  padding-top:24px;
+  border-top:1px solid var(--line);
+  color:var(--muted);
+  font-size:0.82rem;
+  line-height:1.6;
+}
+.footnote strong{color:var(--ink);}
+
+@media (max-width:520px){
+  .summary{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="eyebrow"><span class="dot"></span>Yass & Sass / Omi's Club — build spec &nbsp;·&nbsp; <a href="index.html">all YNS docs</a></div>
+  <h1>Itemized tech deliverables</h1>
+  <p class="subtitle">Everything implied by the 10 Sept architecture review, broken out by integrations, APIs, database, deployment, and features — for pricing this against the studio's quote before the 12th Bangalore session.</p>
+
+  <div class="summary">
+    <div class="summary-cell">
+      <span class="k">Studio quote — Phase 1</span>
+      <span class="v">₹75,000</span>
+      <span class="v note">Landing / genre worlds / design system</span>
+    </div>
+    <div class="summary-cell">
+      <span class="k">Studio quote — Phase 2</span>
+      <span class="v">₹1,25,000</span>
+      <span class="v note">Shop build, Razorpay + profiles</span>
+    </div>
+    <div class="summary-cell">
+      <span class="k">Hosting cost, launch</span>
+      <span class="v">₹0</span>
+      <span class="v note">Vercel + Supabase free tier</span>
+    </div>
+  </div>
+
+  <section class="group">
+    <div class="group-head"><h2>Integrations</h2><span class="count">04</span></div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Razorpay checkout</p><p class="item-desc">Payment gateway for the shop — cards, UPI, wallets. Needed only once retail opens.</p></div>
+      <span class="tag p2">Phase 2</span>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">YouTube media embeds</p><p class="item-desc">Audio/video sourced from YouTube rather than self-hosted, to keep page weight down. Ad-skip workaround already scoped.</p></div>
+      <span class="tag p1">Phase 1</span>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Supabase Auth</p><p class="item-desc">Sign-in for shopper profiles and order history — provider-level, not a custom build.</p></div>
+      <span class="tag p2">Phase 2</span>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Cross-nav between brands</p><p class="item-desc">Omi's Club (yasandsass.in/omisclub) and the parent Yass & Sass site link and share nav without merging domains.</p></div>
+      <span class="tag p1">Phase 1</span>
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="group-head"><h2>APIs</h2><span class="count">04</span></div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Vibe → genre-world routing</p><p class="item-desc">Serves the 3-option ('psychedelic', 'house/disco', 'techno') landing choice into its matching retail world.</p></div>
+      <span class="tag p1">Phase 1</span>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Community content API</p><p class="item-desc">DJs, angels, etiquette, and safety content per genre-world, editable without a redeploy.</p></div>
+      <span class="tag p1">Phase 1</span>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Product catalog API</p><p class="item-desc">Listings, variants, and stock for the clothing line, scoped per genre-world.</p></div>
+      <span class="tag p2">Phase 2</span>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Orders & profile API</p><p class="item-desc">Cart, order history, and saved profile details tied to Supabase Auth.</p></div>
+      <span class="tag p2">Phase 2</span>
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="group-head"><h2>Database</h2><span class="count">04</span></div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Supabase (Postgres) project</p><p class="item-desc">Single free-tier project through community launch; upgrade tier when retail goes live.</p></div>
+      <span class="tag p1">Phase 1</span>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Genre & content tables</p><p class="item-desc">Genre taxonomy, community posts, DJ bios, event/safety copy — all queryable by genre-world.</p></div>
+      <span class="tag p1">Phase 1</span>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Catalog & order tables</p><p class="item-desc">Products, variants, inventory counts, orders, and line items — all settled through the Yass & Sass entity for clean tax and finance.</p></div>
+      <span class="tag p2">Phase 2</span>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Profile tables</p><p class="item-desc">Shopper profile fields linked 1:1 to Supabase Auth users.</p></div>
+      <span class="tag p2">Phase 2</span>
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="group-head"><h2>Deployment</h2><span class="count">04</span></div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Vercel hosting, free tier</p><p class="item-desc">Start free; upgrade only once the shop is live and traffic justifies it.</p></div>
+      <span class="tag p1">Phase 1</span>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Git-based CI/CD</p><p class="item-desc">Push-to-deploy from the repo, no manual release step.</p></div>
+      <span class="tag p1">Phase 1</span>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Domain & subpage routing</p><p class="item-desc">yasandsass.in root with /omisclub as a distinctly branded subpage, not a separate domain.</p></div>
+      <span class="tag p1">Phase 1</span>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Staging environment</p><p class="item-desc">Separate env/config for the shop build so Razorpay integration is tested before it touches real orders.</p></div>
+      <span class="tag p2">Phase 2</span>
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="group-head"><h2>Features</h2><span class="count">08</span></div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">'What's your vibe?' entry</p><p class="item-desc">Blank landing page, 3 genre options, no retail visible until a vibe is chosen.</p></div>
+      <span class="tag p1">Phase 1</span>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Genre selection cards</p><p class="item-desc">Word-led, with a small pop-up image per vibe — not blank text, not a busy grid.</p></div>
+      <span class="tag p1">Phase 1</span>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Iridescent landing shine</p><p class="item-desc">Black/white base; a moving iridescent (not fluorescent) shine confined to the landing background only.</p></div>
+      <span class="tag p1">Phase 1</span>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Genre-world retail pages</p><p class="item-desc">Each vibe routes to its own retail page, sharing one design system.</p></div>
+      <span class="tag p1">Phase 1</span>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Community sections</p><p class="item-desc">DJs, angels, etiquette, and safety content, reachable from within each genre-world.</p></div>
+      <span class="tag p1">Phase 1</span>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Clothing shown as video</p><p class="item-desc">Product presentation is motion, not static photography, across every genre-world.</p></div>
+      <span class="tag p2">Phase 2</span>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Cart & Razorpay checkout</p><p class="item-desc">Full purchase flow once products are curated and ready to ship.</p></div>
+      <span class="tag p2">Phase 2</span>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Shopper profiles</p><p class="item-desc">Saved details and order history behind Supabase Auth sign-in.</p></div>
+      <span class="tag p2">Phase 2</span>
+    </div>
+  </section>
+
+  <p class="footnote"><strong>Source:</strong> 10 Sept 2026 architecture review notes. Brand hierarchy (Omi's Club vs. Yass & Sass as parent) is still unresolved and not itemized here — pending the 12th Bangalore session.</p>
+</div>
+</body>
+</html>

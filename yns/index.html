@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>YNS Document Hub</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f0f1f3;
+  --surface:#ffffff;
+  --ink:#16161a;
+  --muted:#6b6f76;
+  --line:#d8dadf;
+  --accent-a:#7c5cff;
+  --accent-b:#00c2c7;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f0f12;
+    --surface:#18181c;
+    --ink:#e9e9ec;
+    --muted:#9a9ea6;
+    --line:#2a2a30;
+    --accent-a:#9b82ff;
+    --accent-b:#3fd6da;
+  }
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.page{
+  max-width:640px;
+  margin:0 auto;
+  padding:72px 24px 96px;
+}
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:0.72rem;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--muted);
+  display:flex;
+  gap:10px;
+  align-items:center;
+  margin-bottom:18px;
+}
+.eyebrow .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent-a),var(--accent-b));
+  flex:none;
+}
+h1{
+  font-family:"Unbounded",system-ui,sans-serif;
+  font-weight:600;
+  font-size:clamp(1.9rem,4vw,2.4rem);
+  line-height:1.15;
+  letter-spacing:-0.01em;
+  margin:0 0 10px;
+}
+.subtitle{
+  color:var(--muted);
+  font-size:1rem;
+  max-width:52ch;
+  line-height:1.55;
+  margin:0 0 48px;
+}
+.list{
+  display:flex;
+  flex-direction:column;
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:hidden;
+}
+a.doc{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  background:var(--surface);
+  padding:22px 22px;
+  text-decoration:none;
+  color:inherit;
+}
+a.doc:hover, a.doc:focus-visible{
+  background:color-mix(in srgb, var(--surface) 88%, var(--accent-a));
+  outline:none;
+}
+a.doc:focus-visible{
+  box-shadow:inset 0 0 0 2px var(--accent-a);
+}
+.doc-index{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:0.78rem;
+  color:var(--muted);
+  flex:none;
+  width:24px;
+}
+.doc-main{flex:1;min-width:0;}
+.doc-title{
+  font-weight:600;
+  font-size:1.02rem;
+  margin:0 0 3px;
+}
+.doc-desc{
+  color:var(--muted);
+  font-size:0.86rem;
+  line-height:1.5;
+  margin:0;
+}
+.doc-arrow{
+  flex:none;
+  color:var(--muted);
+  font-size:1.1rem;
+}
+.footnote{
+  margin-top:48px;
+  color:var(--muted);
+  font-size:0.8rem;
+  line-height:1.6;
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="eyebrow"><span class="dot"></span>YNS — Yass & Sass</div>
+  <h1>Project documents</h1>
+  <p class="subtitle">The three working documents for the site build, in one place — brief, identity, and tech spec.</p>
+
+  <div class="list">
+    <a class="doc" href="ceo-brief.html">
+      <span class="doc-index">01</span>
+      <span class="doc-main">
+        <p class="doc-title">Website Brief</p>
+        <p class="doc-desc">What the site is, how it's sequenced, and what the build has to prove world by world.</p>
+      </span>
+      <span class="doc-arrow">→</span>
+    </a>
+    <a class="doc" href="brand-guidelines.html">
+      <span class="doc-index">02</span>
+      <span class="doc-main">
+        <p class="doc-title">Brand Guidelines</p>
+        <p class="doc-desc">Identity, logo lockups, iridescent system, and voice — V1, Bangalore.</p>
+      </span>
+      <span class="doc-arrow">→</span>
+    </a>
+    <a class="doc" href="build-spec.html">
+      <span class="doc-index">03</span>
+      <span class="doc-main">
+        <p class="doc-title">Build Spec</p>
+        <p class="doc-desc">Itemized deliverables — integrations, APIs, database, deployment, features — pricing this against the studio's quote.</p>
+      </span>
+      <span class="doc-arrow">→</span>
+    </a>
+  </div>
+
+  <p class="footnote">Unlisted page — not linked from the main site, not in the sitemap, not indexed.</p>
+</div>
+</body>
+</html>
