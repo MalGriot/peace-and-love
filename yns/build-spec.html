@@ -321,11 +321,11 @@ td.deliverables-col{color:var(--muted);}
 </head>
 <body>
 <div class="page">
-  <div class="eyebrow"><span class="dot"></span>Yass & Sass / Omi's Club — build spec &nbsp;·&nbsp; <a href="index.html">all YNS docs</a></div>
-  <h1>Technical build specification</h1>
-  <p class="subtitle">What each phase covers, how the underlying systems are structured, and how the design and implementation work relates to the infrastructure the site runs on.</p>
+  <div class="eyebrow"><span class="dot"></span>Yass & Sass / Omi's Club: build spec &nbsp;·&nbsp; <a href="index.html">all YNS docs</a></div>
+  <h1>How I'm building this</h1>
+  <p class="subtitle">What I'm delivering in each phase, how I've structured the systems underneath it, and how my design and implementation work relates to the infrastructure the site runs on.</p>
 
-  <p class="thesis">The infrastructure is inexpensive. The implementation isn't.</p>
+  <p class="thesis">My philosophy: inexpensive infrastructure + high-equity implementation.</p>
 
   <div class="summary">
     <div class="summary-cell">
@@ -346,248 +346,248 @@ td.deliverables-col{color:var(--muted);}
   </div>
 
   <!-- PHASE 1 -->
-  <div class="phase-head"><h2>Phase 1 — Community launch</h2><span class="phase-amount">₹75,000</span></div>
-  <p class="phase-intro">Builds and ships the landing experience, the three genre worlds, the community content within them, and the foundation the site runs on. No commerce in this phase.</p>
+  <div class="phase-head"><h2>Phase 1: Community launch</h2><span class="phase-amount">₹75,000</span></div>
+  <p class="phase-intro">I'm building and shipping the landing experience, the three genre worlds, the community content inside them, and the foundation the site runs on. No commerce in this phase.</p>
 
   <section class="group">
     <div class="group-head"><h3>Experience architecture</h3></div>
     <div class="item">
-      <div class="item-main"><p class="item-title">"What's your vibe?" entry</p><p class="item-desc">Blank landing prompt — no retail or product content is shown until a genre is chosen.</p></div>
+      <div class="item-main"><p class="item-title">"What's your vibe?" entry</p><p class="item-desc">I start with a blank prompt. No retail or product content shows until a genre is chosen.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Three genre pathways</p><p class="item-desc">Psychedelic, house/disco, and techno — each a distinct route into its own world, not a filter applied to one shared page.</p></div>
+      <div class="item-main"><p class="item-title">Three genre pathways</p><p class="item-desc">I route psychedelic, house/disco, and techno as three distinct paths into their own world, not as a filter on one shared page.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Genre-specific worlds</p><p class="item-desc">Each pathway leads to a retail-facing world with its own visual treatment and content, built on one shared design system.</p></div>
+      <div class="item-main"><p class="item-title">Genre-specific worlds</p><p class="item-desc">Each pathway leads to a retail-facing world I build with its own visual treatment and content, on one shared design system.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Retail / community relationship</p><p class="item-desc">Community content — DJs, angels, etiquette, safety — is reachable from inside each genre-world rather than living as a separate top-level section.</p></div>
+      <div class="item-main"><p class="item-title">Retail / community relationship</p><p class="item-desc">I make community content (DJs, angels, etiquette, safety) reachable from inside each genre-world, rather than a separate top-level section.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Omi's Club cross-navigation</p><p class="item-desc">Omi's Club lives at yasandsass.in/omisclub as its own branded subpath, cross-linked with the genre-worlds — one domain, two brand presentations, shared navigation.</p></div>
+      <div class="item-main"><p class="item-title">Omi's Club cross-navigation</p><p class="item-desc">I'm placing Omi's Club at yasandsass.in/omisclub as its own branded subpath, cross-linked with the genre-worlds: one domain, two brand presentations, shared navigation.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Responsive behavior</p><p class="item-desc">The entry flow, genre routing, and every genre-world are built for phone, tablet, and desktop, not designed for one and adapted after.</p></div>
+      <div class="item-main"><p class="item-title">Responsive behavior</p><p class="item-desc">I build the entry flow, genre routing, and every genre-world for phone, tablet, and desktop from the start, not designed for one and adapted after.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Information architecture</p><p class="item-desc">Defines how a visitor moves from an unbranded entry point through a genre choice into a fully-styled world and back out to community content and Omi's Club — a structure the routing and navigation are built against.</p></div>
+      <div class="item-main"><p class="item-title">Information architecture</p><p class="item-desc">I define how a visitor moves from an unbranded entry point through a genre choice into a fully-styled world and back out to community content and Omi's Club, then build the routing and navigation against that structure.</p></div>
     </div>
   </section>
 
   <section class="group">
     <div class="group-head"><h3>Design system implementation</h3></div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Typography and spacing rules</p><p class="item-desc">Applied consistently across the landing, genre worlds, and community sections rather than set per page.</p></div>
+      <div class="item-main"><p class="item-title">Typography and spacing rules</p><p class="item-desc">I apply these consistently across the landing, genre worlds, and community sections, rather than setting them per page.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Reusable UI components</p><p class="item-desc">Navigation, cards, section layouts, and buttons built once and shared across all three genre worlds.</p></div>
+      <div class="item-main"><p class="item-title">Reusable UI components</p><p class="item-desc">I build navigation, cards, section layouts, and buttons once and share them across all three genre worlds.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Genre-specific visual treatments</p><p class="item-desc">Each world carries its own mood within the shared system, distinguishing psychedelic, house/disco, and techno without three separate design languages.</p></div>
+      <div class="item-main"><p class="item-title">Genre-specific visual treatments</p><p class="item-desc">I give each world its own mood within the shared system, distinguishing psychedelic, house/disco, and techno without three separate design languages.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Navigation and interaction states</p><p class="item-desc">Hover, focus, active, and menu open/closed states defined once and reused everywhere.</p></div>
+      <div class="item-main"><p class="item-title">Navigation and interaction states</p><p class="item-desc">I define hover, focus, active, and menu open/closed states once and reuse them everywhere.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Responsive components</p><p class="item-desc">The same components adapt across breakpoints, rather than shipping separate mobile and desktop markup.</p></div>
+      <div class="item-main"><p class="item-title">Responsive components</p><p class="item-desc">I build components to adapt across breakpoints, rather than shipping separate mobile and desktop markup.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Black/white base with iridescent landing shine</p><p class="item-desc">The agreed visual direction, implemented as a moving iridescent effect confined to the landing background — a built interaction, not a static asset.</p></div>
+      <div class="item-main"><p class="item-title">Black/white base with iridescent landing shine</p><p class="item-desc">I'm implementing the agreed visual direction as a moving iridescent effect confined to the landing background, a built interaction, not a static asset.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Genre-cue imagery on vibe selection</p><p class="item-desc">Small pop-up visuals per genre alongside the word-led selection — not a blank text list, not a busy photo grid.</p></div>
+      <div class="item-main"><p class="item-title">Genre-cue imagery on vibe selection</p><p class="item-desc">I pair small pop-up visuals per genre with the word-led selection, not a blank text list, not a busy photo grid.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Video-based clothing presentation</p><p class="item-desc">Clothing shown as video rather than static photography across the genre-worlds — a presentation decision that touches both the design system and the media pipeline below.</p></div>
+      <div class="item-main"><p class="item-title">Video-based clothing presentation</p><p class="item-desc">I show clothing as video rather than static photography across the genre-worlds, a decision that touches both the design system and the media pipeline below.</p></div>
     </div>
   </section>
 
   <section class="group">
     <div class="group-head"><h3>Content / data architecture</h3></div>
-    <p class="group-note">What the application needs to represent: genres, the DJs/angels/etiquette/safety content tied to each one, and — from Phase 2 — the products associated with each genre. Genre and community content is stored as data in Supabase rather than hardcoded into page markup, so it can be updated by editing rows directly in the database, without a code deploy. This is a data model, not a content-management interface — there's no separate admin screen; edits happen in Supabase itself. Page structure, navigation, and design-system components remain frontend code.</p>
+    <p class="group-note">I model what the application needs to represent: genres, the DJs/angels/etiquette/safety content tied to each one, and, from Phase 2, the products associated with each genre. I store genre and community content as data in Supabase rather than hardcoding it into page markup, so it can be updated by editing rows directly in the database, without a code deploy. That's a data model, not a content-management interface: there's no separate admin screen; edits happen in Supabase itself. Page structure, navigation, and design-system components stay frontend code.</p>
     <div class="item">
-      <div class="item-main"><p class="item-title">Genre records</p><p class="item-desc">The three genres as structured entries, not hardcoded strings scattered across pages.</p></div>
+      <div class="item-main"><p class="item-title">Genre records</p><p class="item-desc">I model the three genres as structured entries, not hardcoded strings scattered across pages.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Community content per genre</p><p class="item-desc">DJ bios, angels, etiquette, and safety information, each related to the genre-world it belongs to.</p></div>
+      <div class="item-main"><p class="item-title">Community content per genre</p><p class="item-desc">I relate DJ bios, angels, etiquette, and safety information to the genre-world each one belongs to.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Genre-to-content relationships</p><p class="item-desc">Modeled in the schema so each world's page only retrieves and displays what's relevant to it.</p></div>
+      <div class="item-main"><p class="item-title">Genre-to-content relationships</p><p class="item-desc">I model these in the schema so each world's page retrieves and displays only what's relevant to it.</p></div>
     </div>
   </section>
 
   <section class="group">
     <div class="group-head"><h3>Media implementation</h3></div>
     <div class="item">
-      <div class="item-main"><p class="item-title">YouTube-sourced audio/video</p><p class="item-desc">Used instead of self-hosted media to keep page weight and hosting cost down.</p></div>
+      <div class="item-main"><p class="item-title">YouTube-sourced audio/video</p><p class="item-desc">I use YouTube instead of self-hosted media to keep page weight and hosting cost down.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Context-aware playback strategy</p><p class="item-desc">Ambient background audio and featured content are embedded and loaded differently, rather than using one generic embed everywhere.</p></div>
+      <div class="item-main"><p class="item-title">Context-aware playback strategy</p><p class="item-desc">I embed and load ambient background audio differently from featured content, rather than using one generic embed everywhere.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Video-based clothing loading</p><p class="item-desc">Video is heavier than static images; genre-world pages need their own loading approach so they stay responsive with video product presentation in place.</p></div>
+      <div class="item-main"><p class="item-title">Video-based clothing loading</p><p class="item-desc">Video is heavier than static images, so I give genre-world pages their own loading approach to keep them responsive with video product presentation in place.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Pre-roll mute window</p><p class="item-desc">An already-scoped workaround that mutes YouTube's pre-roll ad audio on embedded playlists for a fixed window, then unmutes for real content. It does not detect or block ads — it's a narrow playback fix, not a general ad-blocking system.</p></div>
+      <div class="item-main"><p class="item-title">Pre-roll mute window</p><p class="item-desc">I already scoped and built a workaround that mutes YouTube's pre-roll ad audio on embedded playlists for a fixed window, then unmutes for real content. It doesn't detect or block ads. It's a narrow playback fix, not a general ad-blocking system.</p></div>
     </div>
   </section>
 
   <section class="group">
     <div class="group-head"><h3>Application foundation</h3></div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Supabase project setup</p><p class="item-desc">Schema design for genres and community content, table relationships, and initial Postgres configuration.</p></div>
+      <div class="item-main"><p class="item-title">Supabase project setup</p><p class="item-desc">I design the schema for genres and community content, the table relationships, and the initial Postgres configuration.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Vercel project setup</p><p class="item-desc">Environment variables, build configuration, and git-based deployment, so pushes to the repository publish automatically.</p></div>
+      <div class="item-main"><p class="item-title">Vercel project setup</p><p class="item-desc">I configure environment variables and the build, and wire up git-based deployment so pushes to the repository publish automatically.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Domain and subpath routing</p><p class="item-desc">yasandsass.in serves the main site; /omisclub is a routed subpath with its own branding, not a separate domain or a separate deploy.</p></div>
+      <div class="item-main"><p class="item-title">Domain and subpath routing</p><p class="item-desc">I serve the main site from yasandsass.in and route /omisclub as a subpath with its own branding, not a separate domain or a separate deploy.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">No customer auth in this phase</p><p class="item-desc">Authentication is not part of Phase 1 — it begins in Phase 2, alongside the shop.</p></div>
+      <div class="item-main"><p class="item-title">No customer auth in this phase</p><p class="item-desc">I'm not building authentication in Phase 1. It starts in Phase 2, alongside the shop.</p></div>
     </div>
   </section>
 
   <section class="group">
     <div class="group-head"><h3>QA / delivery</h3></div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Responsive testing</p><p class="item-desc">Phone, tablet, and desktop, across the entry flow, all three genre-worlds, and community sections.</p></div>
+      <div class="item-main"><p class="item-title">Responsive testing</p><p class="item-desc">I test phone, tablet, and desktop across the entry flow, all three genre-worlds, and community sections.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Navigation / user-flow testing</p><p class="item-desc">Vibe selection → genre-world → community content → cross-nav into Omi's Club, and back.</p></div>
+      <div class="item-main"><p class="item-title">Navigation / user-flow testing</p><p class="item-desc">I test vibe selection into genre-world into community content into cross-nav into Omi's Club, and back.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Content / data testing</p><p class="item-desc">Each genre-world correctly retrieves and displays only its own DJs, events, and safety content.</p></div>
+      <div class="item-main"><p class="item-title">Content / data testing</p><p class="item-desc">I confirm each genre-world retrieves and displays only its own DJs, events, and safety content.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Deployment testing</p><p class="item-desc">Verified against the actual Vercel + Supabase configuration, not just local development.</p></div>
+      <div class="item-main"><p class="item-title">Deployment testing</p><p class="item-desc">I verify this against the actual Vercel and Supabase configuration, not just local development.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Launch readiness</p><p class="item-desc">Fixes from testing applied, and sign-off that the Phase 1 site is ready to show or launch.</p></div>
+      <div class="item-main"><p class="item-title">Launch readiness</p><p class="item-desc">I apply fixes from testing and sign off that the Phase 1 site is ready to show or launch.</p></div>
     </div>
   </section>
 
   <!-- PHASE 2 -->
-  <div class="phase-head"><h2>Phase 2 — Commerce launch</h2><span class="phase-amount">₹1,25,000</span></div>
-  <p class="phase-intro">Adds the retail layer once product is ready to ship: catalog, cart, checkout, payment, accounts, and orders — built on top of the Phase 1 foundation.</p>
+  <div class="phase-head"><h2>Phase 2: Commerce launch</h2><span class="phase-amount">₹1,25,000</span></div>
+  <p class="phase-intro">Once product is ready to ship, I add the retail layer: catalog, cart, checkout, payment, accounts, and orders, built on top of the Phase 1 foundation.</p>
 
   <section class="group">
     <div class="group-head"><h3>Product system</h3></div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Products and variants</p><p class="item-desc">Size/color as applicable, with stock counts per variant.</p></div>
+      <div class="item-main"><p class="item-title">Products and variants</p><p class="item-desc">I build size/color variants as applicable, with stock counts per variant.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Genre relationships</p><p class="item-desc">Each product is associated with a genre-world, so it appears in the correct retail context.</p></div>
+      <div class="item-main"><p class="item-title">Genre relationships</p><p class="item-desc">I associate each product with a genre-world, so it appears in the correct retail context.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Product media</p><p class="item-desc">Video presentation, per the agreed clothing-as-video direction.</p></div>
+      <div class="item-main"><p class="item-title">Product media</p><p class="item-desc">I give each product video presentation, per the agreed clothing-as-video direction.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Product state</p><p class="item-desc">In stock, out of stock, or hidden, reflected in what's shown to a shopper.</p></div>
+      <div class="item-main"><p class="item-title">Product state</p><p class="item-desc">I reflect in stock, out of stock, or hidden state in what's shown to a shopper.</p></div>
     </div>
   </section>
 
   <section class="group">
     <div class="group-head"><h3>Shopping flow</h3></div>
-    <p class="group-note">Product discovery within a genre-world → product detail → variant selection → cart → quantity/state management → checkout → payment → confirmation. This is the flow being built; anything beyond it — wishlists, reviews, recommendations — is out of scope unless separately agreed.</p>
+    <p class="group-note">This is the flow I'm building: product discovery within a genre-world → product detail → variant selection → cart → quantity/state management → checkout → payment → confirmation. Anything beyond it (wishlists, reviews, recommendations) is out of scope unless we agree to add it separately.</p>
   </section>
 
   <section class="group">
     <div class="group-head"><h3>Payment integration</h3></div>
-    <p class="group-note">Razorpay handles the payment transaction itself. The development work is everything around it.</p>
+    <p class="group-note">Razorpay handles the payment transaction itself. I build everything around it.</p>
     <div class="item">
-      <div class="item-main"><p class="item-title">Checkout initiation</p><p class="item-desc">Moving a cart into a payable checkout session.</p></div>
+      <div class="item-main"><p class="item-title">Checkout initiation</p><p class="item-desc">I move a cart into a payable checkout session.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Payment handling and verification</p><p class="item-desc">Handling the return from Razorpay and verifying the payment server-side, rather than trusting the client.</p></div>
+      <div class="item-main"><p class="item-title">Payment handling and verification</p><p class="item-desc">I handle the return from Razorpay and verify the payment server-side, rather than trusting the client.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Success / failure states</p><p class="item-desc">Shopper-facing outcomes for both a confirmed and a declined or interrupted payment.</p></div>
+      <div class="item-main"><p class="item-title">Success / failure states</p><p class="item-desc">I build shopper-facing outcomes for both a confirmed and a declined or interrupted payment.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Order creation tied to verified payment</p><p class="item-desc">An order exists once payment is confirmed — not on cart submission alone.</p></div>
+      <div class="item-main"><p class="item-title">Order creation tied to verified payment</p><p class="item-desc">I create the order once payment is confirmed, not on cart submission alone.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Test/staging and production configuration</p><p class="item-desc">Separate Razorpay configuration so the payment flow is exercised before it touches real transactions.</p></div>
+      <div class="item-main"><p class="item-title">Test/staging and production configuration</p><p class="item-desc">I keep separate Razorpay configuration so I can exercise the payment flow before it touches real transactions.</p></div>
     </div>
   </section>
 
   <section class="group">
     <div class="group-head"><h3>Customer accounts</h3></div>
-    <p class="group-note">Supabase Authentication provides sign-in. The development work is wiring it into the shop.</p>
+    <p class="group-note">Supabase Authentication provides sign-in. I wire it into the shop.</p>
     <div class="item">
-      <div class="item-main"><p class="item-title">Authenticated vs. anonymous state</p><p class="item-desc">The shop behaves correctly whether or not a shopper is signed in.</p></div>
+      <div class="item-main"><p class="item-title">Authenticated vs. anonymous state</p><p class="item-desc">I build the shop to behave correctly whether or not a shopper is signed in.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Customer profile</p><p class="item-desc">Profile fields scoped to the signed-in user.</p></div>
+      <div class="item-main"><p class="item-title">Customer profile</p><p class="item-desc">I scope profile fields to the signed-in user.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Order history</p><p class="item-desc">Gated behind sign-in, scoped to that customer's own orders.</p></div>
+      <div class="item-main"><p class="item-title">Order history</p><p class="item-desc">I gate this behind sign-in, scoped to that customer's own orders.</p></div>
     </div>
   </section>
 
   <section class="group">
     <div class="group-head"><h3>Order system</h3></div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Orders and line items</p><p class="item-desc">Each order records what was bought, tied to the customer who bought it.</p></div>
+      <div class="item-main"><p class="item-title">Orders and line items</p><p class="item-desc">Each order I create records what was bought, tied to the customer who bought it.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Payment and inventory relationship</p><p class="item-desc">A completed order reflects both a confirmed payment and a stock deduction.</p></div>
+      <div class="item-main"><p class="item-title">Payment and inventory relationship</p><p class="item-desc">I tie a completed order to both a confirmed payment and a stock deduction.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Order state</p><p class="item-desc">Scoped to what the Phase 2 shop needs (e.g. paid, fulfilled) — not a full order-management back office.</p></div>
+      <div class="item-main"><p class="item-title">Order state</p><p class="item-desc">I scope this to what the Phase 2 shop needs (paid, fulfilled), not a full order-management back office.</p></div>
     </div>
   </section>
 
   <section class="group">
     <div class="group-head"><h3>Production / QA</h3></div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Staging environment</p><p class="item-desc">The full purchase flow, including Razorpay, exercised before it's live.</p></div>
+      <div class="item-main"><p class="item-title">Staging environment</p><p class="item-desc">I exercise the full purchase flow, including Razorpay, in staging before it's live.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Production deployment</p><p class="item-desc">Once staging is signed off.</p></div>
+      <div class="item-main"><p class="item-title">Production deployment</p><p class="item-desc">I deploy to production once staging is signed off.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Integration testing</p><p class="item-desc">Product, cart, checkout, payment, and order creation tested together, not only in isolation.</p></div>
+      <div class="item-main"><p class="item-title">Integration testing</p><p class="item-desc">I test product, cart, checkout, payment, and order creation together, not only in isolation.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Payment testing</p><p class="item-desc">Successful, failed, and declined payments, and the resulting order and shopper-facing states for each.</p></div>
+      <div class="item-main"><p class="item-title">Payment testing</p><p class="item-desc">I test successful, failed, and declined payments, and the resulting order and shopper-facing states for each.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Error handling and launch support</p><p class="item-desc">Interrupted or failed payments handled gracefully; support through the shop's launch.</p></div>
+      <div class="item-main"><p class="item-title">Error handling and launch support</p><p class="item-desc">I handle interrupted or failed payments gracefully, and support the shop through launch.</p></div>
     </div>
   </section>
 
   <!-- INFRASTRUCTURE VS IMPLEMENTATION -->
   <div class="prose">
     <h2>Infrastructure vs. implementation</h2>
-    <p>The services below are separate from the development fee. They're the platforms the application is built on and, in some cases, carry their own ongoing or per-transaction cost — set by those providers, not by this project.</p>
+    <p>The services below sit outside my development fee. They're the platforms I build on, and some carry their own ongoing or per-transaction cost, set by those providers, not by me.</p>
     <div class="cols">
       <div class="col infra">
         <h4>Infrastructure</h4>
         <ul>
-          <li><strong>Vercel</strong> — hosting/deployment platform. The initial build runs on its free tier.</li>
-          <li><strong>Supabase</strong> — database, auth, and backend services. The initial build runs on its free tier; as traffic and, later, commerce volume grow, this typically moves to a paid tier, priced by Supabase and scaled to the site's own usage — separate from this quote.</li>
-          <li><strong>Razorpay</strong> — payment infrastructure, with a per-transaction fee set by Razorpay.</li>
-          <li><strong>YouTube</strong> — external media hosting for audio/video.</li>
-          <li><strong>Domain</strong> — the existing yasandsass.in registration.</li>
+          <li><strong>Vercel:</strong> hosting/deployment platform. I run the initial build on its free tier.</li>
+          <li><strong>Supabase:</strong> database, auth, and backend services. I run the initial build on its free tier; as traffic and, later, commerce volume grow, this typically moves to a paid tier, priced by Supabase and scaled to the site's own usage, separate from my quote.</li>
+          <li><strong>Razorpay:</strong> payment infrastructure, with a per-transaction fee set by Razorpay.</li>
+          <li><strong>YouTube:</strong> external media hosting for audio/video.</li>
+          <li><strong>Domain:</strong> the existing yasandsass.in registration.</li>
         </ul>
       </div>
       <div class="col">
         <h4>Implementation</h4>
         <ul>
-          <li>Information architecture and experience design</li>
-          <li>Design system implementation across genre-worlds</li>
-          <li>Database/schema design and data relationships</li>
-          <li>Application logic connecting the frontend to Supabase</li>
-          <li>Frontend implementation of every screen and component</li>
-          <li>Third-party integrations (YouTube; Razorpay in Phase 2)</li>
-          <li>Authentication and account wiring (Phase 2)</li>
-          <li>Commerce flows — product, cart, checkout, orders (Phase 2)</li>
-          <li>Payment and order-state logic (Phase 2)</li>
-          <li>Responsive behavior across breakpoints</li>
-          <li>Testing across devices, flows, data, and integrations</li>
-          <li>Deployment configuration and production delivery</li>
+          <li>I design the information architecture and experience</li>
+          <li>I implement the design system across genre-worlds</li>
+          <li>I design the database/schema and data relationships</li>
+          <li>I write the application logic connecting the frontend to Supabase</li>
+          <li>I implement every screen and component on the frontend</li>
+          <li>I build the third-party integrations (YouTube; Razorpay in Phase 2)</li>
+          <li>I wire up authentication and accounts (Phase 2)</li>
+          <li>I build the commerce flows: product, cart, checkout, orders (Phase 2)</li>
+          <li>I write the payment and order-state logic (Phase 2)</li>
+          <li>I build responsive behavior across breakpoints</li>
+          <li>I test across devices, flows, data, and integrations</li>
+          <li>I configure deployment and deliver to production</li>
         </ul>
       </div>
     </div>
@@ -595,9 +595,9 @@ td.deliverables-col{color:var(--muted);}
 
   <!-- WHAT THE FEE COVERS -->
   <div class="prose">
-    <h2>What the development fee covers</h2>
-    <p>The quoted development fees are for the design and implementation of the application, not for the underlying third-party services. Vercel, Supabase, Razorpay, and YouTube are infrastructure — the same infrastructure nearly any comparable product would sit on. The development work is in designing the architecture around those services: implementing the experience and, in Phase 2, commerce flows described above, connecting genre and content data — and later product, order, and payment data — to the interface, handling application and payment state, testing the complete experience across devices and flows, and deploying a functioning production system.</p>
-    <p>The cost is therefore not set by the number of pages or by the retail price of the software services being used. It reflects the systems being designed and implemented in each phase, and the responsibility for delivering them as a working product — including the testing and fixes that happen before and after launch.</p>
+    <h2>What my development fee covers</h2>
+    <p>My quoted development fees are for designing and implementing the application, not for the underlying third-party services. Vercel, Supabase, Razorpay, and YouTube are infrastructure, the same infrastructure nearly any comparable product would sit on. My work is designing the architecture around those services: implementing the experience and, in Phase 2, the commerce flows described above, connecting genre and content data, and later product, order, and payment data, to the interface, handling application and payment state, testing the complete experience across devices and flows, and deploying a functioning production system.</p>
+    <p>The cost isn't set by the number of pages or by the retail price of the software services I'm using. It reflects the systems I'm designing and implementing in each phase, and my responsibility for delivering them as a working product, including the testing and fixes that happen before and after launch.</p>
   </div>
 
   <!-- PHASE SUMMARY -->
@@ -626,7 +626,7 @@ td.deliverables-col{color:var(--muted);}
     </div>
   </div>
 
-  <p class="footnote"><strong>Source:</strong> 10 Sept 2026 architecture review notes. Brand hierarchy (Omi's Club vs. Yass & Sass as parent) is still unresolved and out of scope for this document, pending the 12th Bangalore session.</p>
+  <p class="footnote"><strong>Source:</strong> my notes from the 10 Sept 2026 architecture review. I've left the brand hierarchy question (Omi's Club vs. Yass & Sass as parent) out of this document since it's still unresolved, pending our 12th Bangalore session.</p>
 </div>
 </body>
 </html>
