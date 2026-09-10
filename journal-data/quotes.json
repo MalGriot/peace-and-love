@@ -1,0 +1,72 @@
+[
+  {
+    "id": "q-create-work-return",
+    "text": "Create work that people return to years later.",
+    "source": "about.html — Personality section",
+    "type": "quote",
+    "tags": ["craft", "purpose", "music", "poetry"]
+  },
+  {
+    "id": "q-waves-of-life",
+    "text": "Just beyond the surface flow the waves of life. Behind the scenes beats a human heart with a hundred stories.",
+    "source": "index.html — About teaser",
+    "type": "line",
+    "tags": ["reflection", "identity", "about"]
+  },
+  {
+    "id": "q-language-limits",
+    "text": "How language limits me when senses would explicitly expose my inner vision. Fathomless fantasies and emergent epiphanies for those who still read between the lines.",
+    "source": "index.html — Poetry teaser",
+    "type": "poem-fragment",
+    "tags": ["poetry", "language", "vision"]
+  },
+  {
+    "id": "q-entertainers",
+    "text": "There are singers, and then there are ENTERTAINERS… You need a showman that will bring the heat and get the crowd moving. Guaranteed.",
+    "source": "index.html — Live Sets teaser",
+    "type": "line",
+    "tags": ["live", "performance", "energy"]
+  },
+  {
+    "id": "q-talking-mannequin",
+    "text": "Charismatic, quick-witted, sultry, and soulful. Your attendees don't want a talking mannequin. You need a host that does the most!",
+    "source": "index.html — Hosting teaser",
+    "type": "line",
+    "tags": ["hosting", "personality", "playful"]
+  },
+  {
+    "id": "q-presence-first",
+    "text": "Presence first, character follows.",
+    "source": "index.html — Acting teaser",
+    "type": "line",
+    "tags": ["acting", "craft"]
+  },
+  {
+    "id": "q-straight-feedback",
+    "text": "No patience for managed, softened feedback. Wants it straight, the same way he wants the work itself.",
+    "source": "about.html — Personality section",
+    "type": "quote",
+    "tags": ["work ethic", "honesty", "craft"]
+  },
+  {
+    "id": "q-pause-before-verse",
+    "text": "The pause before a verse does as much work as the verse itself.",
+    "source": "about.html — Personality section",
+    "type": "quote",
+    "tags": ["performance", "music", "stillness"]
+  },
+  {
+    "id": "q-words-move-first",
+    "text": "Words that move first.",
+    "source": "poetry.html — hero title",
+    "type": "line",
+    "tags": ["poetry", "language"]
+  },
+  {
+    "id": "q-one-continuous-instrument",
+    "text": "Singer, songwriter, poet, live looper, MC/host, voice actor, treated as one continuous instrument rather than separate careers.",
+    "source": "about.html — Origins section",
+    "type": "line",
+    "tags": ["identity", "craft", "voice"]
+  }
+]

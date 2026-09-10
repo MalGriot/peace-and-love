@@ -1,9 +1,13 @@
 // Shared chrome: injects nav + footer + chat widget markup so satellite pages
 // stay in sync without a server-side include. Call renderChrome('music'|'wellness'|'contact').
-function renderChrome(active) {
+// `base` is a relative path prefix (e.g. '../../') for pages nested away from
+// the site root, such as journal/<slug>/index.html — every root-relative
+// asset/page link below is prefixed with it so nested pages still resolve.
+function renderChrome(active, base) {
+  base = base || '';
   const links = [];
   const linkHtml = links
-    .map(([href, label, key]) => `<a href="${href}"${key === active ? ' class="is-active"' : ''}>${label}</a>`)
+    .map(([href, label, key]) => `<a href="${base}${href}"${key === active ? ' class="is-active"' : ''}>${label}</a>`)
     .join('');
 
   // Full site map for the staggered-menu nav panel, every page, in accordion order.
@@ -19,11 +23,12 @@ function renderChrome(active) {
     ['about.html', 'About', 'about'],
     ['press.html', 'Press', 'press'],
     ['contact.html', 'Contact', 'contact'],
+    ['journal/index.html', 'Journal', 'journal'],
   ];
   const menuItemHtml = menuItems
     .map(([href, label, key], i) => `
       <li class="sm-panel-itemWrap">
-        <a class="sm-panel-item${key === active ? ' is-active' : ''}" href="${href}" style="--sm-delay:${(i * 0.045).toFixed(3)}s">
+        <a class="sm-panel-item${key === active ? ' is-active' : ''}" href="${base}${href}" style="--sm-delay:${(i * 0.045).toFixed(3)}s">
           <span class="sm-panel-itemLabel">${label}</span>
         </a>
       </li>`)
@@ -32,7 +37,7 @@ function renderChrome(active) {
   const navHtml = `
     <div class="staggered-menu-wrapper">
       <header class="staggered-menu-header">
-        <a href="index.html" class="sm-logo"><img src="img/brand/nav-mark-gold.png" alt="" class="sm-logo-img" width="22" height="22">Mal Griot</a>
+        <a href="${base}index.html" class="sm-logo"><img src="${base}img/brand/nav-mark-gold.png" alt="" class="sm-logo-img" width="22" height="22">Mal Griot</a>
         <button type="button" class="sm-toggle" aria-label="Open menu" aria-expanded="false">
           <span class="sm-toggle-text">Menu</span>
           <span class="sm-icon" aria-hidden="true">
@@ -98,7 +103,7 @@ function renderChrome(active) {
   const playerSlot = document.getElementById('chrome-player');
   if (navSlot) navSlot.outerHTML = navHtml;
   if (footerSlot) footerSlot.outerHTML = footerHtml;
-  if (chatSlot) chatSlot.outerHTML = chatWidgetHtml();
+  if (chatSlot) chatSlot.outerHTML = chatWidgetHtml(base);
 
   // The mini-player only shows by default on pages with their own New Album
   // listening stage (Voice, the Music/discography page), and on Poetry and
@@ -122,7 +127,8 @@ function renderChrome(active) {
 // page and directly by index.html (which has no nav/footer, so it doesn't
 // call renderChrome() at all). All interactive behavior lives in chat.js's
 // initChat(), wired up from this file's DOMContentLoaded listener below.
-function chatWidgetHtml() {
+function chatWidgetHtml(base) {
+  base = base || '';
   return `
     <div class="chat-widget" id="chat">
       <div class="tour-card chat-widget__tour" id="chatTour">
@@ -138,7 +144,7 @@ function chatWidgetHtml() {
       </button>
       <div class="chat-widget__panel">
         <div class="chat-widget__header">
-          <img class="chat-widget__avatar" src="img/about.jpg" alt="Mal Griot">
+          <img class="chat-widget__avatar" src="${base}img/about.jpg" alt="Mal Griot">
           <div>
             <p class="chat-widget__title">Mal</p>
             <p class="chat-widget__status" id="chatStatus">
@@ -1145,8 +1151,12 @@ function initAnimatedFavicon() {
   canvas.height = size;
   const ctx = canvas.getContext('2d');
 
+  // Derive the same relative base the page's own <link rel="icon"> already
+  // uses (e.g. '../../' from journal/<slug>/), rather than assuming root —
+  // nested pages like the Journal's would otherwise 404 this asset.
+  const iconBase = link.getAttribute('href').replace(/img\/brand\/favicon\.ico$/, '');
   const mark = new Image();
-  mark.src = 'img/brand/favicon-256.png';
+  mark.src = iconBase + 'img/brand/favicon-256.png';
 
   let angle = 0;
   let lastDraw = 0;

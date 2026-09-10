@@ -1,0 +1,39 @@
+You're refreshing the "Currently On Repeat" / "What's Shaping The Sound" playlist widget on about.html in this repo, with Mal Griot's current Spotify Discover Weekly tracks. Discover Weekly refreshes every Monday.
+
+CONTEXT: this widget plays audio via YouTube through the site's shared mini-player (window.griotMiniPlayer, defined in shared.js) - the same mechanism the playlist on poetry.html uses. There is NO Spotify player surface and NO visible YouTube chrome anywhere in this widget - do not reintroduce either. Your job is ONLY to refresh which 25-30 tracks are listed and which YouTube video each row points to. Do not touch the JS logic in about.html (the <script> block right before </body> that wires row clicks to the shared YouTube player) or anything in shared.js - that mechanism is already built and working; leave it alone completely.
+
+You have normal internet access here (this runs on Mal's own machine, not a sandboxed environment) - use plain curl.
+
+1. Fetch the playlist embed page (Spotify's official public embed HTML, meant for third-party embedding - no login/API key needed):
+   curl -s 'https://open.spotify.com/embed/playlist/37i9dQZEVXcPwexv89o7IX'
+   It contains a `<script id="__NEXT_DATA__" type="application/json">...</script>` tag. Parse that JSON. The track list is at `props.pageProps.state.data.entity.trackList` - an array of ~30 items, each with `title` (track name) and `subtitle` (artist name(s), comma-separated). You only need title + artist(s) from this step.
+
+2. For each track, resolve a YouTube video ID by fetching YouTube's public search results page (also just a normal public page, no login/API key) with a realistic desktop User-Agent header, e.g.:
+   curl -s -A 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36' 'https://www.youtube.com/results?search_query=<urlencoded title + first artist>'
+   The response HTML contains a `var ytInitialData = {...};` assignment - extract and parse that JSON object. Walk `contents.twoColumnSearchResultsRenderer.primaryContents.sectionListRenderer.contents[].itemSectionRenderer.contents[]` and collect every entry with a `videoRenderer` key, reading `videoRenderer.videoId`, `videoRenderer.title.runs[].text` (joined), and `videoRenderer.ownerText.runs[0].text` (channel name). Prefer the first result whose channel name contains the first artist's name (case-insensitive substring match, e.g. artist "Nick Hakim" matches channel "Nick Hakim" or "Nick Hakim - Topic"); otherwise take the first videoRenderer result. Add a small delay (300-500ms) between requests. If a track's search doesn't parse (no ytInitialData or no videoRenderer results), skip that track and mention it in your final summary rather than guessing.
+
+3. Use python3 (stdlib json/re/urllib) or node, whichever is available, for fetching/parsing. Write a throwaway script under this repo's scripts/ or a temp dir if that's easier than inline one-liners - don't leave throwaway scratch files committed to the repo.
+
+4. Open about.html and find `<div class="ab-discover__list">...</div>` (inside `<section class="ab-discover reveal">`). Replace ALL existing rows inside that div with freshly generated rows, one per resolved track, in the same order as the embed's trackList (minus any skipped in step 2), using exactly this shape (release__year zero-padded starting at 01):
+
+<div class="release reveal" data-yt="YTID" data-title="TITLE" data-artist="ARTISTS" tabindex="0" role="button" aria-label="Play TITLE | ARTISTS on YouTube">
+  <span class="release__year">NN</span>
+  <div class="release__main">
+    <div class="release__art-stage"><img class="release__art" src="https://img.youtube.com/vi/YTID/mqdefault.jpg" alt="TITLE | ARTISTS"></div>
+    <div>
+      <h3 class="release__title">TITLE</h3>
+      <span class="release__credits">ARTISTS</span>
+    </div>
+  </div>
+  <span class="release__play">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+  </span>
+</div>
+
+HTML-escape title/artist text (&, <, >, ") in both the data-* attributes and the visible text/alt. Album art always comes from the YouTube thumbnail URL pattern above, never Spotify. Do not change anything else in about.html - not the CSS, not the JS <script> block, not any other section of the page. Do not touch any other file in the repo, even if `git status` shows unrelated files already modified (that's Mal's own pre-existing in-progress work - leave it alone completely).
+
+5. Sanity-check your edit: confirm the file is still valid HTML (matching tags), the ab-discover__list div still opens and closes correctly, and you didn't duplicate or drop the closing </div></div></section> after the list. Diff the file before committing.
+
+6. Stage ONLY about.html (`git add about.html` - never `git add -A`, never `git add .`), commit with message "Refresh Discover Weekly playlist on about.html", and push to `origin main`. If the push is rejected (diverged from remote), do NOT force-push - leave the local commit as-is and report the conflict instead.
+
+7. Finish with a short plain-text summary: how many tracks were updated, how many (if any) were skipped, and whether anything looked off.

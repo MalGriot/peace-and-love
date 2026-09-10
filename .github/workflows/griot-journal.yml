@@ -1,0 +1,45 @@
+name: GRIOT Journal — weekly entry
+
+# Fires every Monday at 06:00 UTC (matches journal-data/config.json's
+# publish.day/hour_utc — update both together if you change the schedule).
+# Also runnable by hand from the Actions tab for testing.
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: griot-journal
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate this week's entry
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/journal/generate.mjs
+
+      - name: Commit and push
+        run: |
+          git config user.name "griot-journal-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add journal/ journal-data/ sitemap.xml
+          if git diff --cached --quiet; then
+            echo "Nothing to publish this week."
+          else
+            git commit -m "Journal: weekly entry $(date -u +%Y-%m-%d)"
+            git push
+          fi

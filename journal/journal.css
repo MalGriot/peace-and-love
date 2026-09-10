@@ -1,0 +1,95 @@
+/* GRIOT Journal — shares shared.css tokens (ink/paper/brass/gold, display +
+   body fonts) but its own quieter, archival layout: more negative space,
+   a single reading column, imagery treated like it's pinned into a notebook
+   rather than art-directed hero photography. */
+
+.jr-body { background: var(--ink); }
+
+.jr-hero{
+  padding:150px clamp(20px,6vw,64px) 40px;
+  max-width:640px;margin:0 auto;text-align:left;
+}
+.jr-eyebrow{
+  display:inline-block;font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--brass);font-family:var(--font-body);font-weight:600;margin-bottom:14px;
+}
+.jr-hero__title{
+  font-family:var(--font-display);font-weight:400;font-size:clamp(36px,5.5vw,58px);margin:0 0 18px;
+  color:var(--paper);
+}
+.jr-hero__desc{font-size:15px;line-height:1.75;color:var(--paper-dim);max-width:52ch;margin:0}
+
+.jr-archive{
+  max-width:760px;margin:0 auto;padding:0 clamp(20px,6vw,64px) 120px;
+  display:flex;flex-direction:column;gap:2px;
+}
+.jr-arc__item{
+  display:grid;grid-template-columns:96px 1fr;gap:20px;align-items:start;
+  padding:26px 4px;border-top:1px solid rgba(239,230,216,.1);
+  text-decoration:none;color:inherit;transition:opacity .25s ease;
+}
+.jr-archive .jr-arc__item:last-child{border-bottom:1px solid rgba(239,230,216,.1)}
+.jr-arc__item:hover{opacity:.82}
+.jr-arc__img{width:96px;height:96px;object-fit:cover;border-radius:6px;display:block;background:rgba(239,230,216,.05)}
+.jr-arc__img--none{background:rgba(239,230,216,.04)}
+.jr-arc__date{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--paper-faint);margin-bottom:6px}
+.jr-arc__title{font-family:var(--font-display);font-weight:400;font-size:19px;margin:0 0 6px;color:var(--paper)}
+.jr-arc__excerpt{font-size:13.5px;line-height:1.6;color:var(--paper-dim);margin:0;max-width:60ch}
+.jr-arc__empty{color:var(--paper-dim);font-size:14px;padding:40px 0}
+
+@media (max-width:560px){
+  .jr-arc__item{grid-template-columns:64px 1fr;gap:14px}
+  .jr-arc__img{width:64px;height:64px}
+}
+
+/* ---- individual entry ---- */
+.jr-entry{max-width:600px;margin:0 auto;padding:150px clamp(20px,6vw,64px) 60px}
+.jr-entry__head{margin-bottom:30px}
+
+.jr-photo{margin:0 0 32px}
+.jr-photo img{width:100%;border-radius:8px;display:block;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+
+.jr-quote{
+  margin:0 0 32px;padding:0 0 0 20px;border-left:2px solid var(--brass);
+}
+.jr-quote p{
+  font-family:var(--font-display);font-weight:400;font-size:clamp(19px,2.6vw,24px);
+  line-height:1.5;margin:0 0 10px;color:var(--paper);font-style:italic;
+}
+.jr-quote cite{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-faint);font-style:normal}
+
+.jr-reflection p{font-size:15.5px;line-height:1.85;color:var(--paper-dim);margin:0 0 18px}
+
+.jr-album{
+  display:flex;gap:16px;align-items:center;margin:36px 0;
+  padding:18px;border:1px solid rgba(239,230,216,.1);border-radius:12px;background:rgba(239,230,216,.02);
+}
+.jr-album__art{width:72px;height:72px;object-fit:cover;border-radius:6px;flex:none}
+.jr-album__eyebrow{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);margin-bottom:4px}
+.jr-album__meta h3{font-family:var(--font-display);font-weight:400;font-size:17px;margin:0 0 6px;color:var(--paper)}
+.jr-album__meta p{font-size:13px;line-height:1.6;color:var(--paper-dim);margin:0 0 8px}
+.jr-album__link{font-size:12.5px;color:var(--gold);text-decoration:none}
+.jr-album__link:hover{text-decoration:underline}
+
+.jr-song{margin:0 0 24px}
+.jr-song__eyebrow{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);margin-bottom:4px}
+.jr-song__title{font-size:14.5px;color:var(--paper);margin:0}
+.jr-song__artist{color:var(--paper-dim)}
+
+.jr-ig, .jr-pin{font-size:13px;color:var(--paper-dim);margin:0 0 18px}
+.jr-ig a, .jr-pin a{color:var(--gold);text-decoration:none}
+.jr-ig a:hover, .jr-pin a:hover{text-decoration:underline}
+.jr-pin__src{color:var(--paper-faint)}
+
+.jr-links{font-size:13px;color:var(--paper-dim);margin:36px 0 0;padding-top:20px;border-top:1px solid rgba(239,230,216,.08)}
+.jr-links a{color:var(--paper);text-decoration:none}
+.jr-links a:hover{color:var(--brass)}
+
+.jr-prevnext{
+  display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+  margin-top:50px;padding-top:20px;border-top:1px solid rgba(239,230,216,.08);
+  font-size:12.5px;
+}
+.jr-prevnext a{color:var(--paper-dim);text-decoration:none}
+.jr-prevnext a:hover{color:var(--gold)}
+.jr-prevnext__archive{color:var(--brass) !important;text-transform:uppercase;letter-spacing:.08em;font-size:11px}

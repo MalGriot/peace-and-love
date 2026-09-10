@@ -1,0 +1,50 @@
+{
+  "site": {
+    "base_url": "https://malgriot.github.io/peace-and-love/",
+    "author": "Mal Griot",
+    "default_og_image": "img/og/share-black.png"
+  },
+  "publish": {
+    "day": "Monday",
+    "hour_utc": 6,
+    "note": "Matches the cron in .github/workflows/griot-journal.yml — update both if you change this."
+  },
+  "location": {
+    "city": "Bangalore",
+    "region": "Karnataka",
+    "country": "India",
+    "country_code": "IN",
+    "lat": 12.9716,
+    "lon": 77.5946,
+    "note": "Used only for structured data / geo meta tags, never rendered as visible page text. Update when Mal's base city changes."
+  },
+  "writing": {
+    "min_words": 100,
+    "max_words": 300,
+    "banned_phrases": [
+      "journey", "dive into", "unlock", "in today's world", "a testament to",
+      "explore the intersection", "embark", "powerful reminder", "delve into",
+      "in the world of", "game-changer", "at the end of the day", "unleash"
+    ]
+  },
+  "repetition": {
+    "min_gap_before_photo_reuse": 6,
+    "min_gap_before_quote_reuse": 8,
+    "min_gap_before_album_reuse": 5,
+    "min_gap_before_song_reuse": 4,
+    "recent_theme_window": 4
+  },
+  "internal_links": {
+    "poetry": { "url": "poetry.html", "label": "Poetry" },
+    "music": { "url": "releases.html", "label": "Releases" },
+    "release": { "url": "releases.html", "label": "Releases" },
+    "live": { "url": "live-sets.html", "label": "Live Sets" },
+    "performance": { "url": "live-sets.html", "label": "Live Sets" },
+    "hosting": { "url": "hosting.html", "label": "Hosting" },
+    "acting": { "url": "acting.html", "label": "Acting" },
+    "voiceover": { "url": "voiceover.html", "label": "Voice Over" },
+    "wellness": { "url": "wellness.html", "label": "Wellness" },
+    "about": { "url": "about.html", "label": "About" },
+    "contact": { "url": "contact.html", "label": "Contact" }
+  }
+}

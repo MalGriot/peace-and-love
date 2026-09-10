@@ -12,7 +12,7 @@ For bookings, collaborations, or press inquiries, use the contact page.
 - [Releases](https://malgriot.github.io/peace-and-love/releases.html): Discography - albums, EPs, and singles.
 - [Live Sets](https://malgriot.github.io/peace-and-love/live-sets.html): Booking a live performance.
 - [Hosting](https://malgriot.github.io/peace-and-love/hosting.html): MC and event hosting work.
-- [Poetry](https://malgriot.github.io/peace-and-love/poetry.html): Spoken-word poetry, clips, audio, and the book.
+- [Poetry](https://malgriot.github.io/peace-and-love/poetry.html): Spoken-word poetry, clips, audio, and the poetry collection "f a l l i n g under where."
 - [Acting](https://malgriot.github.io/peace-and-love/acting.html): On-camera and character acting reel, casting info.
 - [Voice Over](https://malgriot.github.io/peace-and-love/voiceover.html): Audiobook narration and character voice work.
 - [Wellness](https://malgriot.github.io/peace-and-love/wellness.html): Sound baths, guided meditation, and soundscapes.
