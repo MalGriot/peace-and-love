@@ -49,7 +49,7 @@ body{
 .page{
   max-width:760px;
   margin:0 auto;
-  padding:64px 24px 96px;
+  padding:64px 24px 112px;
 }
 
 .eyebrow{
@@ -82,9 +82,21 @@ h1{
 .subtitle{
   color:var(--muted);
   font-size:1rem;
-  max-width:56ch;
+  max-width:58ch;
   line-height:1.55;
-  margin:0 0 40px;
+  margin:0 0 28px;
+}
+
+.thesis{
+  font-size:0.98rem;
+  font-weight:600;
+  line-height:1.5;
+  padding:14px 18px;
+  margin:0 0 44px;
+  border-left:2px solid transparent;
+  border-image:linear-gradient(180deg,var(--accent-a),var(--accent-b)) 1;
+  background:var(--surface);
+  border-radius:0 8px 8px 0;
 }
 
 .summary{
@@ -95,7 +107,7 @@ h1{
   border:1px solid var(--line);
   border-radius:10px;
   overflow:hidden;
-  margin-bottom:48px;
+  margin-bottom:56px;
 }
 .summary-cell{
   background:var(--surface);
@@ -121,40 +133,68 @@ h1{
   color:var(--muted);
 }
 
+.phase-head{
+  display:flex;
+  align-items:baseline;
+  gap:12px;
+  margin:64px 0 8px;
+}
+.phase-head:first-of-type{margin-top:0;}
+.phase-head h2{
+  font-family:"Unbounded",system-ui,sans-serif;
+  font-weight:600;
+  font-size:1.4rem;
+  margin:0;
+}
+.phase-head .phase-amount{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:0.85rem;
+  color:var(--muted);
+  font-variant-numeric:tabular-nums;
+}
+.phase-intro{
+  color:var(--muted);
+  font-size:0.92rem;
+  line-height:1.55;
+  max-width:60ch;
+  margin:0 0 32px;
+}
+
 section.group{
-  margin-bottom:44px;
+  margin-bottom:40px;
 }
 .group-head{
   display:flex;
   align-items:baseline;
   gap:12px;
-  margin-bottom:16px;
+  margin-bottom:6px;
   padding-bottom:10px;
   border-bottom:1px solid var(--line);
 }
-.group-head h2{
+.group-head h3{
   font-family:"Unbounded",system-ui,sans-serif;
   font-weight:500;
-  font-size:1.05rem;
+  font-size:1.02rem;
   margin:0;
 }
-.group-head .count{
-  font-family:"IBM Plex Mono",monospace;
-  font-size:0.75rem;
+.group-note{
   color:var(--muted);
+  font-size:0.85rem;
+  line-height:1.55;
+  margin:10px 0 14px;
 }
 
 .item{
   display:flex;
   gap:16px;
-  padding:14px 0;
+  padding:12px 0;
   border-bottom:1px solid var(--line-soft);
 }
 .item:last-child{border-bottom:none;}
 .item-main{flex:1;min-width:0;}
 .item-title{
   font-weight:600;
-  font-size:0.96rem;
+  font-size:0.94rem;
   margin:0 0 3px;
 }
 .item-desc{
@@ -163,19 +203,105 @@ section.group{
   line-height:1.5;
   margin:0;
 }
-.tag{
-  flex:none;
+
+.prose{
+  margin:56px 0;
+  padding-top:32px;
+  border-top:1px solid var(--line);
+}
+.prose h2{
+  font-family:"Unbounded",system-ui,sans-serif;
+  font-weight:600;
+  font-size:1.25rem;
+  margin:0 0 16px;
+}
+.prose p{
+  font-size:0.94rem;
+  line-height:1.65;
+  max-width:64ch;
+  margin:0 0 14px;
+  color:var(--ink);
+}
+.prose p:last-child{margin-bottom:0;}
+
+.cols{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:28px;
+  margin-top:24px;
+}
+.col h4{
   font-family:"IBM Plex Mono",monospace;
-  font-size:0.66rem;
-  letter-spacing:0.06em;
+  font-size:0.7rem;
+  letter-spacing:0.08em;
   text-transform:uppercase;
-  padding:4px 8px;
-  border-radius:5px;
-  height:fit-content;
+  color:var(--muted);
+  margin:0 0 12px;
+}
+.col ul{
+  margin:0;
+  padding:0;
+  list-style:none;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.col li{
+  font-size:0.87rem;
+  line-height:1.5;
+  padding-left:14px;
+  position:relative;
+}
+.col li::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0.55em;
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:var(--muted);
+}
+.col.infra li::before{background:linear-gradient(135deg,var(--accent-a),var(--accent-b));}
+.col li strong{font-weight:600;}
+
+.table-wrap{
+  overflow-x:auto;
+  margin-top:24px;
+  border:1px solid var(--line);
+  border-radius:10px;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:0.86rem;
+  min-width:520px;
+}
+thead th{
+  text-align:left;
+  font-family:"IBM Plex Mono",monospace;
+  font-size:0.68rem;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+  font-weight:500;
+  padding:12px 16px;
+  background:var(--surface);
+  border-bottom:1px solid var(--line);
+}
+tbody td{
+  padding:12px 16px;
+  border-bottom:1px solid var(--line-soft);
+  vertical-align:top;
+  line-height:1.5;
+}
+tbody tr:last-child td{border-bottom:none;}
+td.phase-col{
+  font-weight:600;
   white-space:nowrap;
 }
-.tag.p1{background:var(--tag-p1-bg);color:var(--tag-p1-ink);}
-.tag.p2{background:var(--tag-p2-bg);color:var(--tag-p2-ink);}
+td.system-col{color:var(--ink);}
+td.deliverables-col{color:var(--muted);}
 
 .footnote{
   margin-top:56px;
@@ -187,152 +313,320 @@ section.group{
 }
 .footnote strong{color:var(--ink);}
 
-@media (max-width:520px){
+@media (max-width:640px){
   .summary{grid-template-columns:1fr;}
+  .cols{grid-template-columns:1fr;}
 }
 </style>
 </head>
 <body>
 <div class="page">
   <div class="eyebrow"><span class="dot"></span>Yass & Sass / Omi's Club — build spec &nbsp;·&nbsp; <a href="index.html">all YNS docs</a></div>
-  <h1>Itemized tech deliverables</h1>
-  <p class="subtitle">Everything implied by the 10 Sept architecture review, broken out by integrations, APIs, database, deployment, and features — for pricing this against the studio's quote before the 12th Bangalore session.</p>
+  <h1>Technical build specification</h1>
+  <p class="subtitle">What each phase covers, how the underlying systems are structured, and how the design and implementation work relates to the infrastructure the site runs on.</p>
+
+  <p class="thesis">The infrastructure is inexpensive. The implementation isn't.</p>
 
   <div class="summary">
     <div class="summary-cell">
-      <span class="k">Studio quote — Phase 1</span>
+      <span class="k">Phase 1</span>
       <span class="v">₹75,000</span>
-      <span class="v note">Landing / genre worlds / design system</span>
+      <span class="v note">Landing, genre worlds, design system</span>
     </div>
     <div class="summary-cell">
-      <span class="k">Studio quote — Phase 2</span>
+      <span class="k">Phase 2</span>
       <span class="v">₹1,25,000</span>
-      <span class="v note">Shop build, Razorpay + profiles</span>
+      <span class="v note">Commerce system, Razorpay, accounts</span>
     </div>
     <div class="summary-cell">
-      <span class="k">Hosting cost, launch</span>
-      <span class="v">₹0</span>
-      <span class="v note">Vercel + Supabase free tier</span>
+      <span class="k">Total</span>
+      <span class="v">₹2,00,000</span>
+      <span class="v note">Both phases, one build</span>
     </div>
   </div>
 
+  <!-- PHASE 1 -->
+  <div class="phase-head"><h2>Phase 1 — Community launch</h2><span class="phase-amount">₹75,000</span></div>
+  <p class="phase-intro">Builds and ships the landing experience, the three genre worlds, the community content within them, and the foundation the site runs on. No commerce in this phase.</p>
+
   <section class="group">
-    <div class="group-head"><h2>Integrations</h2><span class="count">04</span></div>
+    <div class="group-head"><h3>Experience architecture</h3></div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Razorpay checkout</p><p class="item-desc">Payment gateway for the shop — cards, UPI, wallets. Needed only once retail opens.</p></div>
-      <span class="tag p2">Phase 2</span>
+      <div class="item-main"><p class="item-title">"What's your vibe?" entry</p><p class="item-desc">Blank landing prompt — no retail or product content is shown until a genre is chosen.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">YouTube media embeds</p><p class="item-desc">Audio/video sourced from YouTube rather than self-hosted, to keep page weight down. Ad-skip workaround already scoped.</p></div>
-      <span class="tag p1">Phase 1</span>
+      <div class="item-main"><p class="item-title">Three genre pathways</p><p class="item-desc">Psychedelic, house/disco, and techno — each a distinct route into its own world, not a filter applied to one shared page.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Supabase Auth</p><p class="item-desc">Sign-in for shopper profiles and order history — provider-level, not a custom build.</p></div>
-      <span class="tag p2">Phase 2</span>
+      <div class="item-main"><p class="item-title">Genre-specific worlds</p><p class="item-desc">Each pathway leads to a retail-facing world with its own visual treatment and content, built on one shared design system.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Cross-nav between brands</p><p class="item-desc">Omi's Club (yasandsass.in/omisclub) and the parent Yass & Sass site link and share nav without merging domains.</p></div>
-      <span class="tag p1">Phase 1</span>
+      <div class="item-main"><p class="item-title">Retail / community relationship</p><p class="item-desc">Community content — DJs, angels, etiquette, safety — is reachable from inside each genre-world rather than living as a separate top-level section.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Omi's Club cross-navigation</p><p class="item-desc">Omi's Club lives at yasandsass.in/omisclub as its own branded subpath, cross-linked with the genre-worlds — one domain, two brand presentations, shared navigation.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Responsive behavior</p><p class="item-desc">The entry flow, genre routing, and every genre-world are built for phone, tablet, and desktop, not designed for one and adapted after.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Information architecture</p><p class="item-desc">Defines how a visitor moves from an unbranded entry point through a genre choice into a fully-styled world and back out to community content and Omi's Club — a structure the routing and navigation are built against.</p></div>
     </div>
   </section>
 
   <section class="group">
-    <div class="group-head"><h2>APIs</h2><span class="count">04</span></div>
+    <div class="group-head"><h3>Design system implementation</h3></div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Vibe → genre-world routing</p><p class="item-desc">Serves the 3-option ('psychedelic', 'house/disco', 'techno') landing choice into its matching retail world.</p></div>
-      <span class="tag p1">Phase 1</span>
+      <div class="item-main"><p class="item-title">Typography and spacing rules</p><p class="item-desc">Applied consistently across the landing, genre worlds, and community sections rather than set per page.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Community content API</p><p class="item-desc">DJs, angels, etiquette, and safety content per genre-world, editable without a redeploy.</p></div>
-      <span class="tag p1">Phase 1</span>
+      <div class="item-main"><p class="item-title">Reusable UI components</p><p class="item-desc">Navigation, cards, section layouts, and buttons built once and shared across all three genre worlds.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Product catalog API</p><p class="item-desc">Listings, variants, and stock for the clothing line, scoped per genre-world.</p></div>
-      <span class="tag p2">Phase 2</span>
+      <div class="item-main"><p class="item-title">Genre-specific visual treatments</p><p class="item-desc">Each world carries its own mood within the shared system, distinguishing psychedelic, house/disco, and techno without three separate design languages.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Orders & profile API</p><p class="item-desc">Cart, order history, and saved profile details tied to Supabase Auth.</p></div>
-      <span class="tag p2">Phase 2</span>
-    </div>
-  </section>
-
-  <section class="group">
-    <div class="group-head"><h2>Database</h2><span class="count">04</span></div>
-    <div class="item">
-      <div class="item-main"><p class="item-title">Supabase (Postgres) project</p><p class="item-desc">Single free-tier project through community launch; upgrade tier when retail goes live.</p></div>
-      <span class="tag p1">Phase 1</span>
+      <div class="item-main"><p class="item-title">Navigation and interaction states</p><p class="item-desc">Hover, focus, active, and menu open/closed states defined once and reused everywhere.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Genre & content tables</p><p class="item-desc">Genre taxonomy, community posts, DJ bios, event/safety copy — all queryable by genre-world.</p></div>
-      <span class="tag p1">Phase 1</span>
+      <div class="item-main"><p class="item-title">Responsive components</p><p class="item-desc">The same components adapt across breakpoints, rather than shipping separate mobile and desktop markup.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Catalog & order tables</p><p class="item-desc">Products, variants, inventory counts, orders, and line items — all settled through the Yass & Sass entity for clean tax and finance.</p></div>
-      <span class="tag p2">Phase 2</span>
+      <div class="item-main"><p class="item-title">Black/white base with iridescent landing shine</p><p class="item-desc">The agreed visual direction, implemented as a moving iridescent effect confined to the landing background — a built interaction, not a static asset.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Profile tables</p><p class="item-desc">Shopper profile fields linked 1:1 to Supabase Auth users.</p></div>
-      <span class="tag p2">Phase 2</span>
+      <div class="item-main"><p class="item-title">Genre-cue imagery on vibe selection</p><p class="item-desc">Small pop-up visuals per genre alongside the word-led selection — not a blank text list, not a busy photo grid.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Video-based clothing presentation</p><p class="item-desc">Clothing shown as video rather than static photography across the genre-worlds — a presentation decision that touches both the design system and the media pipeline below.</p></div>
     </div>
   </section>
 
   <section class="group">
-    <div class="group-head"><h2>Deployment</h2><span class="count">04</span></div>
+    <div class="group-head"><h3>Content / data architecture</h3></div>
+    <p class="group-note">What the application needs to represent: genres, the DJs/angels/etiquette/safety content tied to each one, and — from Phase 2 — the products associated with each genre. Genre and community content is stored as data in Supabase rather than hardcoded into page markup, so it can be updated by editing rows directly in the database, without a code deploy. This is a data model, not a content-management interface — there's no separate admin screen; edits happen in Supabase itself. Page structure, navigation, and design-system components remain frontend code.</p>
     <div class="item">
-      <div class="item-main"><p class="item-title">Vercel hosting, free tier</p><p class="item-desc">Start free; upgrade only once the shop is live and traffic justifies it.</p></div>
-      <span class="tag p1">Phase 1</span>
+      <div class="item-main"><p class="item-title">Genre records</p><p class="item-desc">The three genres as structured entries, not hardcoded strings scattered across pages.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Git-based CI/CD</p><p class="item-desc">Push-to-deploy from the repo, no manual release step.</p></div>
-      <span class="tag p1">Phase 1</span>
+      <div class="item-main"><p class="item-title">Community content per genre</p><p class="item-desc">DJ bios, angels, etiquette, and safety information, each related to the genre-world it belongs to.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Domain & subpage routing</p><p class="item-desc">yasandsass.in root with /omisclub as a distinctly branded subpage, not a separate domain.</p></div>
-      <span class="tag p1">Phase 1</span>
-    </div>
-    <div class="item">
-      <div class="item-main"><p class="item-title">Staging environment</p><p class="item-desc">Separate env/config for the shop build so Razorpay integration is tested before it touches real orders.</p></div>
-      <span class="tag p2">Phase 2</span>
+      <div class="item-main"><p class="item-title">Genre-to-content relationships</p><p class="item-desc">Modeled in the schema so each world's page only retrieves and displays what's relevant to it.</p></div>
     </div>
   </section>
 
   <section class="group">
-    <div class="group-head"><h2>Features</h2><span class="count">08</span></div>
+    <div class="group-head"><h3>Media implementation</h3></div>
     <div class="item">
-      <div class="item-main"><p class="item-title">'What's your vibe?' entry</p><p class="item-desc">Blank landing page, 3 genre options, no retail visible until a vibe is chosen.</p></div>
-      <span class="tag p1">Phase 1</span>
+      <div class="item-main"><p class="item-title">YouTube-sourced audio/video</p><p class="item-desc">Used instead of self-hosted media to keep page weight and hosting cost down.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Genre selection cards</p><p class="item-desc">Word-led, with a small pop-up image per vibe — not blank text, not a busy grid.</p></div>
-      <span class="tag p1">Phase 1</span>
+      <div class="item-main"><p class="item-title">Context-aware playback strategy</p><p class="item-desc">Ambient background audio and featured content are embedded and loaded differently, rather than using one generic embed everywhere.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Iridescent landing shine</p><p class="item-desc">Black/white base; a moving iridescent (not fluorescent) shine confined to the landing background only.</p></div>
-      <span class="tag p1">Phase 1</span>
+      <div class="item-main"><p class="item-title">Video-based clothing loading</p><p class="item-desc">Video is heavier than static images; genre-world pages need their own loading approach so they stay responsive with video product presentation in place.</p></div>
     </div>
     <div class="item">
-      <div class="item-main"><p class="item-title">Genre-world retail pages</p><p class="item-desc">Each vibe routes to its own retail page, sharing one design system.</p></div>
-      <span class="tag p1">Phase 1</span>
-    </div>
-    <div class="item">
-      <div class="item-main"><p class="item-title">Community sections</p><p class="item-desc">DJs, angels, etiquette, and safety content, reachable from within each genre-world.</p></div>
-      <span class="tag p1">Phase 1</span>
-    </div>
-    <div class="item">
-      <div class="item-main"><p class="item-title">Clothing shown as video</p><p class="item-desc">Product presentation is motion, not static photography, across every genre-world.</p></div>
-      <span class="tag p2">Phase 2</span>
-    </div>
-    <div class="item">
-      <div class="item-main"><p class="item-title">Cart & Razorpay checkout</p><p class="item-desc">Full purchase flow once products are curated and ready to ship.</p></div>
-      <span class="tag p2">Phase 2</span>
-    </div>
-    <div class="item">
-      <div class="item-main"><p class="item-title">Shopper profiles</p><p class="item-desc">Saved details and order history behind Supabase Auth sign-in.</p></div>
-      <span class="tag p2">Phase 2</span>
+      <div class="item-main"><p class="item-title">Pre-roll mute window</p><p class="item-desc">An already-scoped workaround that mutes YouTube's pre-roll ad audio on embedded playlists for a fixed window, then unmutes for real content. It does not detect or block ads — it's a narrow playback fix, not a general ad-blocking system.</p></div>
     </div>
   </section>
 
-  <p class="footnote"><strong>Source:</strong> 10 Sept 2026 architecture review notes. Brand hierarchy (Omi's Club vs. Yass & Sass as parent) is still unresolved and not itemized here — pending the 12th Bangalore session.</p>
+  <section class="group">
+    <div class="group-head"><h3>Application foundation</h3></div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Supabase project setup</p><p class="item-desc">Schema design for genres and community content, table relationships, and initial Postgres configuration.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Vercel project setup</p><p class="item-desc">Environment variables, build configuration, and git-based deployment, so pushes to the repository publish automatically.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Domain and subpath routing</p><p class="item-desc">yasandsass.in serves the main site; /omisclub is a routed subpath with its own branding, not a separate domain or a separate deploy.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">No customer auth in this phase</p><p class="item-desc">Authentication is not part of Phase 1 — it begins in Phase 2, alongside the shop.</p></div>
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="group-head"><h3>QA / delivery</h3></div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Responsive testing</p><p class="item-desc">Phone, tablet, and desktop, across the entry flow, all three genre-worlds, and community sections.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Navigation / user-flow testing</p><p class="item-desc">Vibe selection → genre-world → community content → cross-nav into Omi's Club, and back.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Content / data testing</p><p class="item-desc">Each genre-world correctly retrieves and displays only its own DJs, events, and safety content.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Deployment testing</p><p class="item-desc">Verified against the actual Vercel + Supabase configuration, not just local development.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Launch readiness</p><p class="item-desc">Fixes from testing applied, and sign-off that the Phase 1 site is ready to show or launch.</p></div>
+    </div>
+  </section>
+
+  <!-- PHASE 2 -->
+  <div class="phase-head"><h2>Phase 2 — Commerce launch</h2><span class="phase-amount">₹1,25,000</span></div>
+  <p class="phase-intro">Adds the retail layer once product is ready to ship: catalog, cart, checkout, payment, accounts, and orders — built on top of the Phase 1 foundation.</p>
+
+  <section class="group">
+    <div class="group-head"><h3>Product system</h3></div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Products and variants</p><p class="item-desc">Size/color as applicable, with stock counts per variant.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Genre relationships</p><p class="item-desc">Each product is associated with a genre-world, so it appears in the correct retail context.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Product media</p><p class="item-desc">Video presentation, per the agreed clothing-as-video direction.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Product state</p><p class="item-desc">In stock, out of stock, or hidden, reflected in what's shown to a shopper.</p></div>
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="group-head"><h3>Shopping flow</h3></div>
+    <p class="group-note">Product discovery within a genre-world → product detail → variant selection → cart → quantity/state management → checkout → payment → confirmation. This is the flow being built; anything beyond it — wishlists, reviews, recommendations — is out of scope unless separately agreed.</p>
+  </section>
+
+  <section class="group">
+    <div class="group-head"><h3>Payment integration</h3></div>
+    <p class="group-note">Razorpay handles the payment transaction itself. The development work is everything around it.</p>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Checkout initiation</p><p class="item-desc">Moving a cart into a payable checkout session.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Payment handling and verification</p><p class="item-desc">Handling the return from Razorpay and verifying the payment server-side, rather than trusting the client.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Success / failure states</p><p class="item-desc">Shopper-facing outcomes for both a confirmed and a declined or interrupted payment.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Order creation tied to verified payment</p><p class="item-desc">An order exists once payment is confirmed — not on cart submission alone.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Test/staging and production configuration</p><p class="item-desc">Separate Razorpay configuration so the payment flow is exercised before it touches real transactions.</p></div>
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="group-head"><h3>Customer accounts</h3></div>
+    <p class="group-note">Supabase Authentication provides sign-in. The development work is wiring it into the shop.</p>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Authenticated vs. anonymous state</p><p class="item-desc">The shop behaves correctly whether or not a shopper is signed in.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Customer profile</p><p class="item-desc">Profile fields scoped to the signed-in user.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Order history</p><p class="item-desc">Gated behind sign-in, scoped to that customer's own orders.</p></div>
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="group-head"><h3>Order system</h3></div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Orders and line items</p><p class="item-desc">Each order records what was bought, tied to the customer who bought it.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Payment and inventory relationship</p><p class="item-desc">A completed order reflects both a confirmed payment and a stock deduction.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Order state</p><p class="item-desc">Scoped to what the Phase 2 shop needs (e.g. paid, fulfilled) — not a full order-management back office.</p></div>
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="group-head"><h3>Production / QA</h3></div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Staging environment</p><p class="item-desc">The full purchase flow, including Razorpay, exercised before it's live.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Production deployment</p><p class="item-desc">Once staging is signed off.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Integration testing</p><p class="item-desc">Product, cart, checkout, payment, and order creation tested together, not only in isolation.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Payment testing</p><p class="item-desc">Successful, failed, and declined payments, and the resulting order and shopper-facing states for each.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-main"><p class="item-title">Error handling and launch support</p><p class="item-desc">Interrupted or failed payments handled gracefully; support through the shop's launch.</p></div>
+    </div>
+  </section>
+
+  <!-- INFRASTRUCTURE VS IMPLEMENTATION -->
+  <div class="prose">
+    <h2>Infrastructure vs. implementation</h2>
+    <p>The services below are separate from the development fee. They're the platforms the application is built on and, in some cases, carry their own ongoing or per-transaction cost — set by those providers, not by this project.</p>
+    <div class="cols">
+      <div class="col infra">
+        <h4>Infrastructure</h4>
+        <ul>
+          <li><strong>Vercel</strong> — hosting/deployment platform. The initial build runs on its free tier.</li>
+          <li><strong>Supabase</strong> — database, auth, and backend services. The initial build runs on its free tier; as traffic and, later, commerce volume grow, this typically moves to a paid tier, priced by Supabase and scaled to the site's own usage — separate from this quote.</li>
+          <li><strong>Razorpay</strong> — payment infrastructure, with a per-transaction fee set by Razorpay.</li>
+          <li><strong>YouTube</strong> — external media hosting for audio/video.</li>
+          <li><strong>Domain</strong> — the existing yasandsass.in registration.</li>
+        </ul>
+      </div>
+      <div class="col">
+        <h4>Implementation</h4>
+        <ul>
+          <li>Information architecture and experience design</li>
+          <li>Design system implementation across genre-worlds</li>
+          <li>Database/schema design and data relationships</li>
+          <li>Application logic connecting the frontend to Supabase</li>
+          <li>Frontend implementation of every screen and component</li>
+          <li>Third-party integrations (YouTube; Razorpay in Phase 2)</li>
+          <li>Authentication and account wiring (Phase 2)</li>
+          <li>Commerce flows — product, cart, checkout, orders (Phase 2)</li>
+          <li>Payment and order-state logic (Phase 2)</li>
+          <li>Responsive behavior across breakpoints</li>
+          <li>Testing across devices, flows, data, and integrations</li>
+          <li>Deployment configuration and production delivery</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHAT THE FEE COVERS -->
+  <div class="prose">
+    <h2>What the development fee covers</h2>
+    <p>The quoted development fees are for the design and implementation of the application, not for the underlying third-party services. Vercel, Supabase, Razorpay, and YouTube are infrastructure — the same infrastructure nearly any comparable product would sit on. The development work is in designing the architecture around those services: implementing the experience and, in Phase 2, commerce flows described above, connecting genre and content data — and later product, order, and payment data — to the interface, handling application and payment state, testing the complete experience across devices and flows, and deploying a functioning production system.</p>
+    <p>The cost is therefore not set by the number of pages or by the retail price of the software services being used. It reflects the systems being designed and implemented in each phase, and the responsibility for delivering them as a working product — including the testing and fixes that happen before and after launch.</p>
+  </div>
+
+  <!-- PHASE SUMMARY -->
+  <div class="prose">
+    <h2>Phase summary</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Phase</th><th>System</th><th>Key deliverables</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="phase-col">Phase 1</td><td class="system-col">Experience architecture</td><td class="deliverables-col">Vibe entry, 3 genre pathways, genre-worlds, Omi's Club cross-nav</td></tr>
+          <tr><td class="phase-col">Phase 1</td><td class="system-col">Design system</td><td class="deliverables-col">Typography/spacing, reusable components, genre treatments, iridescent landing effect</td></tr>
+          <tr><td class="phase-col">Phase 1</td><td class="system-col">Content / data architecture</td><td class="deliverables-col">Genre and community data model in Supabase</td></tr>
+          <tr><td class="phase-col">Phase 1</td><td class="system-col">Media implementation</td><td class="deliverables-col">YouTube-sourced audio/video, clothing-as-video presentation</td></tr>
+          <tr><td class="phase-col">Phase 1</td><td class="system-col">Application foundation</td><td class="deliverables-col">Supabase + Vercel setup, domain/subpath routing, git-based deploy</td></tr>
+          <tr><td class="phase-col">Phase 1</td><td class="system-col">Deployment / QA</td><td class="deliverables-col">Responsive, navigation, content, and deployment testing</td></tr>
+          <tr><td class="phase-col">Phase 2</td><td class="system-col">Product / catalog system</td><td class="deliverables-col">Products, variants, inventory, genre relationships</td></tr>
+          <tr><td class="phase-col">Phase 2</td><td class="system-col">Cart / checkout</td><td class="deliverables-col">Full shopping flow, product discovery through confirmation</td></tr>
+          <tr><td class="phase-col">Phase 2</td><td class="system-col">Payment integration</td><td class="deliverables-col">Razorpay checkout, server-side verification, order creation</td></tr>
+          <tr><td class="phase-col">Phase 2</td><td class="system-col">Customer accounts</td><td class="deliverables-col">Supabase Auth, profile, order history</td></tr>
+          <tr><td class="phase-col">Phase 2</td><td class="system-col">Orders / inventory</td><td class="deliverables-col">Order records, line items, payment and inventory state</td></tr>
+          <tr><td class="phase-col">Phase 2</td><td class="system-col">Production / QA</td><td class="deliverables-col">Staging, integration and payment testing, launch support</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <p class="footnote"><strong>Source:</strong> 10 Sept 2026 architecture review notes. Brand hierarchy (Omi's Club vs. Yass & Sass as parent) is still unresolved and out of scope for this document, pending the 12th Bangalore session.</p>
 </div>
 </body>
 </html>
