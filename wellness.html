@@ -112,6 +112,85 @@
     #gate{display:none}
   }
 
+  /* ================= 01b. RESONANCE ================= */
+  /* The site's one immersive experience, in the same "quiet room" language
+     as the gate above: a single breathing pool of light, minimal type, no
+     imagery. #resonance-room is the fullscreen listening state, revealed
+     only once BEGIN starts playback (see initResonance() below);
+     body.resonance-active locks scroll while it's open, mirroring
+     body.gate-lock. */
+  .wl-resonance{
+    position:relative;min-height:100vh;
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    background:#050508;overflow:hidden;
+    padding:clamp(60px,10vh,120px) clamp(20px,6vw,64px);
+  }
+  .wl-resonance__glow{
+    position:absolute;left:50%;top:50%;translate:-50% -50%;
+    width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;
+    background:radial-gradient(closest-side, rgba(86,98,182,.4), rgba(56,64,132,.14) 45%, rgba(56,64,132,0) 72%);
+    filter:blur(46px);
+    animation:wl-resonance-breathe 9s ease-in-out infinite;
+  }
+  @keyframes wl-resonance-breathe{0%,100%{transform:scale(.85);opacity:.7}50%{transform:scale(1.08);opacity:1}}
+  @media (prefers-reduced-motion: reduce){ .wl-resonance__glow,.wl-resonance__pulse{animation:none} }
+
+  .wl-resonance__intro{position:relative;z-index:1;max-width:560px;display:flex;flex-direction:column;align-items:center}
+  .wl-resonance__lede{
+    font-family:var(--font-display);font-weight:400;color:var(--paper-fixed);
+    font-size:clamp(20px,3vw,28px);line-height:1.4;margin:4px 0 18px;
+  }
+  .wl-resonance__desc{font-size:15px;line-height:1.8;color:var(--paper-fixed-dim);margin:0 0 18px;max-width:42ch}
+  .wl-resonance__begin{
+    margin-top:18px;padding:16px 46px;border-radius:999px;
+    border:1px solid rgba(239,230,216,.34);background:transparent;color:var(--paper-fixed);
+    font-family:var(--font-body);font-size:12px;letter-spacing:.24em;text-transform:uppercase;
+    cursor:pointer;transition:border-color .3s ease,background .3s ease,color .3s ease;
+  }
+  .wl-resonance__begin:hover{border-color:var(--brass);color:var(--brass)}
+  .wl-resonance--pending .wl-resonance__begin{opacity:.4;cursor:not-allowed}
+
+  /* the listening room: fullscreen immersive overlay, revealed on BEGIN */
+  .wl-resonance__room{
+    position:fixed;inset:0;z-index:600;background:#050508;
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;pointer-events:none;transition:opacity 1.4s ease;
+  }
+  .wl-resonance__room.is-open{opacity:1;pointer-events:auto}
+  .wl-resonance__pulse{
+    position:absolute;left:50%;top:50%;translate:-50% -50%;
+    width:50vmax;height:50vmax;border-radius:50%;pointer-events:none;
+    background:radial-gradient(closest-side, rgba(86,98,182,.32), rgba(56,64,132,.1) 45%, rgba(56,64,132,0) 72%);
+    filter:blur(50px);
+    animation:wl-resonance-breathe 11s ease-in-out infinite;
+  }
+  #resonance-player{position:absolute;width:2px;height:2px;opacity:0;pointer-events:none;overflow:hidden}
+  .wl-resonance__controls{
+    position:relative;z-index:1;display:flex;align-items:center;gap:22px;
+    opacity:.5;transition:opacity .4s ease;
+  }
+  .wl-resonance__room:hover .wl-resonance__controls,
+  .wl-resonance__room:focus-within .wl-resonance__controls{opacity:1}
+  .wl-resonance__ctrl{
+    width:46px;height:46px;border-radius:999px;border:1px solid rgba(239,230,216,.3);
+    background:transparent;color:var(--paper-fixed);display:flex;align-items:center;justify-content:center;
+    cursor:pointer;transition:border-color .25s ease;
+  }
+  .wl-resonance__ctrl:hover{border-color:var(--brass)}
+  .wl-resonance__ctrl svg{width:14px;height:14px;display:block}
+  .wl-resonance__ctrl .wl-icon-pause{display:none}
+  .wl-resonance__room.is-playing .wl-icon-play{display:none}
+  .wl-resonance__room.is-playing .wl-icon-pause{display:block}
+  .wl-resonance__time{font-size:10.5px;letter-spacing:.08em;color:var(--paper-fixed-faint);font-variant-numeric:tabular-nums;min-width:96px;text-align:center}
+  .wl-resonance__volume input[type=range]{width:90px;accent-color:var(--brass)}
+  .wl-resonance__exit{
+    border:none;background:transparent;color:var(--paper-fixed-faint);
+    font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;padding:8px 4px;
+  }
+  .wl-resonance__exit:hover{color:var(--paper-fixed)}
+
+  body.resonance-active{overflow:hidden;height:100vh}
+
   /* ================= shared section scaffolding ================= */
   .wl-section{position:relative;padding:clamp(80px,12vh,140px) clamp(20px,5vw,64px)}
   .wl-eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--brass);display:block;margin-bottom:18px}
@@ -338,6 +417,34 @@
   </div>
   <button class="gate__skip" id="gate-skip" type="button">Skip →</button>
 </div>
+
+<!-- 01b. RESONANCE: the site's one immersive sonic experience -->
+<section class="wl-resonance" id="resonance" aria-label="Resonance, a guided deep listening journey">
+  <div class="wl-resonance__glow" aria-hidden="true"></div>
+  <div class="wl-resonance__intro">
+    <span class="wl-eyebrow reveal">Resonance</span>
+    <p class="wl-resonance__lede reveal">A guided deep listening journey.</p>
+    <p class="wl-resonance__desc reveal">A 40-minute passage through sound and silence. From the intensity of the city into rain, wind, fire, water, and earth.</p>
+    <p class="wl-resonance__desc reveal">Nothing to achieve. Nothing to understand.<br>Just listen.</p>
+    <button class="wl-resonance__begin reveal" id="resonance-begin" type="button">Begin</button>
+  </div>
+
+  <div class="wl-resonance__room" id="resonance-room" aria-hidden="true">
+    <div class="wl-resonance__pulse" aria-hidden="true"></div>
+    <div id="resonance-player"></div>
+    <div class="wl-resonance__controls">
+      <button class="wl-resonance__ctrl" id="resonance-playpause" type="button" aria-label="Pause">
+        <svg class="wl-icon-play" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5v11l10-5.5z"/></svg>
+        <svg class="wl-icon-pause" viewBox="0 0 16 16" fill="currentColor"><rect x="3" y="2.5" width="3.4" height="11"/><rect x="9.6" y="2.5" width="3.4" height="11"/></svg>
+      </button>
+      <span class="wl-resonance__time" id="resonance-time">00:00 / 40:00</span>
+      <div class="wl-resonance__volume">
+        <input type="range" id="resonance-volume" min="0" max="100" value="80" aria-label="Volume">
+      </div>
+      <button class="wl-resonance__exit" id="resonance-exit" type="button" aria-label="Exit the listening room">Exit</button>
+    </div>
+  </div>
+</section>
 
 <!-- 02. hero -->
 <section class="wl-hero">
@@ -591,9 +698,22 @@ window.addEventListener('pageshow', function(){
   if (!gate) return;
 
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var seen = sessionStorage.getItem('wellnessGateSeen');
   var lines = gate.querySelectorAll('.gate__line');
   var timers = [];
+
+  // Returning visitors are re-shown the gate once it's stale: either 12
+  // hours have passed since they last saw it, or the calendar day has
+  // rolled over (so an 11pm visit still gets the gate again just after
+  // midnight, well short of the 12-hour mark). localStorage (not
+  // sessionStorage) so this persists across tabs/browser restarts.
+  var lastSeenAt = Number(localStorage.getItem('wellnessGateSeenAt')) || 0;
+  var seen = false;
+  if (lastSeenAt) {
+    var now = Date.now();
+    var hoursElapsed = (now - lastSeenAt) / 36e5;
+    var dayChanged = new Date(now).toDateString() !== new Date(lastSeenAt).toDateString();
+    seen = hoursElapsed < 12 && !dayChanged;
+  }
 
   function setLine(n) {
     lines.forEach(function (l) {
@@ -609,7 +729,7 @@ window.addEventListener('pageshow', function(){
     gate.classList.add('is-hidden');
     document.body.classList.remove('gate-lock');
     document.body.classList.add('gate-revealing');
-    sessionStorage.setItem('wellnessGateSeen', '1');
+    localStorage.setItem('wellnessGateSeenAt', String(Date.now()));
     setTimeout(function () { gate.style.display = 'none'; }, 1300);
   }
 
@@ -639,6 +759,117 @@ window.addEventListener('pageshow', function(){
   at(15800, dismiss);
 
   skip.addEventListener('click', dismiss);
+})();
+
+// ---------- 01b. RESONANCE ----------
+// The site's one immersive experience: BEGIN starts the existing RESONANCE
+// YouTube upload (audio-only content on a blank video) via the YouTube
+// IFrame API, kept visually hidden behind a MAL GRIOT-designed listening
+// room (see .wl-resonance__room above) instead of a visible player frame.
+(function initResonance() {
+  // Configuration: the existing RESONANCE YouTube upload.
+  // https://youtu.be/TkzUAxOLXXM
+  var RESONANCE_YOUTUBE_ID = 'TkzUAxOLXXM';
+
+  var section = document.getElementById('resonance');
+  var beginBtn = document.getElementById('resonance-begin');
+  var room = document.getElementById('resonance-room');
+  var playPauseBtn = document.getElementById('resonance-playpause');
+  var timeEl = document.getElementById('resonance-time');
+  var volumeInput = document.getElementById('resonance-volume');
+  var exitBtn = document.getElementById('resonance-exit');
+  if (!section || !beginBtn || !room) return;
+
+  if (!RESONANCE_YOUTUBE_ID) {
+    section.classList.add('wl-resonance--pending');
+    beginBtn.disabled = true;
+    beginBtn.setAttribute('aria-disabled', 'true');
+    return;
+  }
+
+  var player = null;
+  var ticker = null;
+
+  function fmt(sec) {
+    sec = Math.max(0, Math.floor(sec || 0));
+    var m = Math.floor(sec / 60), s = sec % 60;
+    return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+  }
+
+  function tick() {
+    if (!player || typeof player.getCurrentTime !== 'function') return;
+    timeEl.textContent = fmt(player.getCurrentTime()) + ' / ' + fmt(player.getDuration());
+  }
+
+  function startTicker() { if (!ticker) ticker = setInterval(tick, 500); }
+  function stopTicker() { if (ticker) { clearInterval(ticker); ticker = null; } }
+
+  function openRoom() {
+    room.classList.add('is-open');
+    room.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('resonance-active');
+    window.dispatchEvent(new CustomEvent('griot:pause-mini-player'));
+  }
+
+  function closeRoom() {
+    room.classList.remove('is-open', 'is-playing');
+    room.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('resonance-active');
+    stopTicker();
+    if (player && typeof player.pauseVideo === 'function') player.pauseVideo();
+  }
+
+  function createPlayer() {
+    player = new YT.Player('resonance-player', {
+      videoId: RESONANCE_YOUTUBE_ID,
+      playerVars: { autoplay: 1, controls: 0, disablekb: 1, modestbranding: 1, rel: 0 },
+      events: {
+        onReady: function (e) {
+          e.target.setVolume(Number(volumeInput.value));
+          e.target.playVideo();
+        },
+        onStateChange: function (e) {
+          var playing = e.data === YT.PlayerState.PLAYING;
+          room.classList.toggle('is-playing', playing);
+          if (playing) startTicker(); else stopTicker();
+        }
+      }
+    });
+  }
+
+  function begin() {
+    openRoom();
+    if (player) {
+      player.playVideo();
+    } else if (window.YT && window.YT.Player) {
+      createPlayer();
+    } else {
+      var prevReady = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = function () {
+        if (typeof prevReady === 'function') prevReady();
+        createPlayer();
+      };
+      if (!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
+        var tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        document.head.appendChild(tag);
+      }
+    }
+  }
+
+  beginBtn.addEventListener('click', begin);
+
+  playPauseBtn.addEventListener('click', function () {
+    if (!player || typeof player.getPlayerState !== 'function') return;
+    if (player.getPlayerState() === YT.PlayerState.PLAYING) player.pauseVideo();
+    else player.playVideo();
+  });
+
+  volumeInput.addEventListener('input', function () {
+    if (player && typeof player.setVolume === 'function') player.setVolume(Number(volumeInput.value));
+  });
+
+  exitBtn.addEventListener('click', closeRoom);
 })();
 
 // ---------- 03. custom audio players ----------
