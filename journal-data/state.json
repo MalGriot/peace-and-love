@@ -4,12 +4,20 @@
       "p-theater-bow": {
         "count": 1,
         "lastEntryIndex": 0
+      },
+      "p-sofar-bombay": {
+        "count": 1,
+        "lastEntryIndex": 1
       }
     },
     "quotes": {
       "q-waves-of-life": {
         "count": 1,
         "lastEntryIndex": 0
+      },
+      "q-presence-first": {
+        "count": 1,
+        "lastEntryIndex": 1
       }
     },
     "albums": {
@@ -32,7 +40,11 @@
       "reflection",
       "identity",
       "about"
+    ],
+    [
+      "acting",
+      "craft"
     ]
   ],
-  "entry_count": 1
+  "entry_count": 2
 }
