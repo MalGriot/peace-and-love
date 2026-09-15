@@ -211,27 +211,6 @@
 .po-cta--ghost{background:transparent;color:var(--paper);border:1px solid rgba(239,230,216,.32);padding:14px 25px;border-radius:2px}
 .po-cta--ghost:hover{border-color:var(--gold);color:var(--gold);background:rgba(224,178,106,.06)}
 
-/* ---------- 2. The practice ---------- */
-.po-practice{text-align:center;max-width:var(--po-mid);margin:0 auto}
-.po-practice__head{
-  font-family:var(--font-display);font-weight:400;line-height:1.16;
-  font-size:clamp(26px,4.2vw,46px);color:var(--paper);margin:0 0 26px;
-}
-.po-practice__head span{display:block}
-.po-practice__body{font-size:clamp(15px,1.4vw,18px);line-height:1.75;color:var(--paper-dim);max-width:54ch;margin:0 auto}
-
-/* ---------- 2a. Pull-quote: an isolated line lifted from the hero copy,
-   set oversized as the hinge between the artist's introduction and the
-   poems themselves - a moment of discovery, not another stacked block. */
-.po-pullquote{max-width:920px;margin:0 auto;text-align:center}
-.po-pullquote::before{
-  content:"";display:block;width:40px;height:1px;background:var(--brass);margin:0 auto clamp(24px,4vw,36px);
-}
-.po-pullquote__text{
-  font-family:var(--font-display);font-weight:400;font-style:italic;color:var(--paper);
-  font-size:clamp(24px,4.6vw,52px);line-height:1.28;letter-spacing:-.01em;margin:0;
-}
-
 /* ---------- 3. Clips & audio: react-bits Flowing Menu (flowing-menu.css/
    .js), retitled for poems: hover a row and a gold band sweeps in from the
    edge the cursor entered on, with the title scrolling across it beside a
@@ -533,15 +512,6 @@
       <a href="#listen" class="po-cta po-cta--ghost">Hear the pieces</a>
     </div>
   </div>
-</section>
-
-<section class="po-section po-section--tight po-practice">
-  <h2 class="po-practice__head"><span>Not a poet who also performs.</span><span>A performer built from poems.</span></h2>
-  <p class="po-practice__body">Every live set draws from this same well: the pause before a verse, a phrase turned mid-song, a room read and answered in real time. Booking Mal for a wedding, a listening room, a brand activation? This is the raw material underneath all of it. See it in <a href="live-sets.html" class="po-cta" style="font-size:inherit;text-transform:none;letter-spacing:normal;border-bottom-width:1px">Live Sets</a>.</p>
-</section>
-
-<section class="po-section po-section--tight po-pullquote reveal">
-  <p class="po-pullquote__text">&ldquo;This is where the rest of the work starts.&rdquo;</p>
 </section>
 
 <section class="po-section po-section--roomy po-listen" id="listen">
