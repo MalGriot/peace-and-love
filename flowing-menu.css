@@ -23,6 +23,30 @@
 }
 .po-flow__meta{display:flex;align-items:center;gap:16px;flex:none}
 .po-flow__type{font-family:var(--font-body);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass)}
+
+/* Idle-animating waveform bars - signals "this one plays sound" at a
+   glance, before the user ever hovers. Bar heights/delays are hand-set
+   for an organic (non-metronomic) wave shape rather than a uniform eq. */
+.po-flow__wave{display:flex;align-items:center;justify-content:center;gap:3px;height:26px;flex:none}
+.po-flow__wave i{
+  width:3px;border-radius:2px;background:var(--brass);flex:none;
+  animation:po-flow-wave 1.4s ease-in-out infinite;
+  transition:background .2s;
+}
+.po-flow__wave i:nth-child(1){height:35%;animation-delay:-1.1s}
+.po-flow__wave i:nth-child(2){height:70%;animation-delay:-.4s}
+.po-flow__wave i:nth-child(3){height:100%;animation-delay:-.9s}
+.po-flow__wave i:nth-child(4){height:55%;animation-delay:-.2s}
+.po-flow__wave i:nth-child(5){height:85%;animation-delay:-1.3s}
+.po-flow__wave i:nth-child(6){height:45%;animation-delay:-.6s}
+.po-flow__wave i:nth-child(7){height:65%;animation-delay:-1.5s}
+@keyframes po-flow-wave{0%,100%{height:20%}50%{height:100%}}
+.po-flow__item:hover .po-flow__wave i,
+.po-flow__item.is-open .po-flow__wave i{background:var(--gold)}
+@media (prefers-reduced-motion:reduce){
+  .po-flow__wave i{animation:none;height:55%!important}
+}
+
 .po-flow__play{
   width:38px;height:38px;border-radius:999px;border:1px solid rgba(239,230,216,.25);
   display:flex;align-items:center;justify-content:center;color:var(--paper-fixed);flex:none;
@@ -50,4 +74,6 @@
   .po-flow__link{padding:0 18px}
   .po-flow__meta{gap:10px}
   .po-flow__type{display:none}
+  .po-flow__wave{height:20px;gap:2px}
+  .po-flow__wave i{width:2px}
 }
