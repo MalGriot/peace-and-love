@@ -18,6 +18,10 @@
       "q-presence-first": {
         "count": 1,
         "lastEntryIndex": 1
+      },
+      "q-entertainers": {
+        "count": 1,
+        "lastEntryIndex": 2
       }
     },
     "albums": {
@@ -44,7 +48,12 @@
     [
       "acting",
       "craft"
+    ],
+    [
+      "live",
+      "performance",
+      "energy"
     ]
   ],
-  "entry_count": 2
+  "entry_count": 3
 }
