@@ -8,6 +8,10 @@
       "p-sofar-bombay": {
         "count": 1,
         "lastEntryIndex": 1
+      },
+      "p-outdoor-headscarf": {
+        "count": 1,
+        "lastEntryIndex": 3
       }
     },
     "quotes": {
@@ -22,6 +26,10 @@
       "q-entertainers": {
         "count": 1,
         "lastEntryIndex": 2
+      },
+      "q-create-work-return": {
+        "count": 1,
+        "lastEntryIndex": 3
       }
     },
     "albums": {
@@ -53,7 +61,13 @@
       "live",
       "performance",
       "energy"
+    ],
+    [
+      "craft",
+      "purpose",
+      "music",
+      "poetry"
     ]
   ],
-  "entry_count": 3
+  "entry_count": 4
 }

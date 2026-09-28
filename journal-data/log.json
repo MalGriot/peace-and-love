@@ -64,5 +64,27 @@
       "energy"
     ],
     "status": "published"
+  },
+  {
+    "id": "2026-09-28-create-work-that-people",
+    "slug": "2026-09-28-create-work-that-people",
+    "date": "2026-09-28",
+    "url": "https://malgriot.github.io/peace-and-love/journal/2026-09-28-create-work-that-people/",
+    "title": "Create work that people return to years later.",
+    "excerpt": "A frame from the archive this week, nothing staged about it. Some weeks the work speaks for itself.",
+    "photo": "img/IMG_20240610_002936.jpg",
+    "quote_id": "q-create-work-return",
+    "album_id": null,
+    "song": null,
+    "instagram_id": null,
+    "pinterest_id": null,
+    "location": "Bangalore, India",
+    "tags": [
+      "craft",
+      "purpose",
+      "music",
+      "poetry"
+    ],
+    "status": "published"
   }
 ]
