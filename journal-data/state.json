@@ -30,12 +30,20 @@
       "q-create-work-return": {
         "count": 1,
         "lastEntryIndex": 3
+      },
+      "q-pause-before-verse": {
+        "count": 1,
+        "lastEntryIndex": 4
       }
     },
     "albums": {
       "periodyssius": {
         "count": 1,
         "lastEntryIndex": 0
+      },
+      "i-tried-it": {
+        "count": 1,
+        "lastEntryIndex": 4
       }
     },
     "songs": {
@@ -48,11 +56,6 @@
     "pinterest": {}
   },
   "recent_themes": [
-    [
-      "reflection",
-      "identity",
-      "about"
-    ],
     [
       "acting",
       "craft"
@@ -67,7 +70,12 @@
       "purpose",
       "music",
       "poetry"
+    ],
+    [
+      "performance",
+      "music",
+      "stillness"
     ]
   ],
-  "entry_count": 4
+  "entry_count": 5
 }

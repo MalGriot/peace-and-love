@@ -86,5 +86,26 @@
       "poetry"
     ],
     "status": "published"
+  },
+  {
+    "id": "2026-10-05-the-pause-before-a",
+    "slug": "2026-10-05-the-pause-before-a",
+    "date": "2026-10-05",
+    "url": "https://malgriot.github.io/peace-and-love/journal/2026-10-05-the-pause-before-a/",
+    "title": "The pause before a verse does as much work as the verse itself.",
+    "excerpt": "Back to \"I Tried It\" (2025) for a minute — still holds up. Some weeks the work speaks for itself.",
+    "photo": null,
+    "quote_id": "q-pause-before-verse",
+    "album_id": "i-tried-it",
+    "song": null,
+    "instagram_id": null,
+    "pinterest_id": null,
+    "location": "Bangalore, India",
+    "tags": [
+      "performance",
+      "music",
+      "stillness"
+    ],
+    "status": "published"
   }
 ]
