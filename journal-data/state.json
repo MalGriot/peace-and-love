@@ -34,6 +34,10 @@
       "q-pause-before-verse": {
         "count": 1,
         "lastEntryIndex": 4
+      },
+      "q-straight-feedback": {
+        "count": 1,
+        "lastEntryIndex": 5
       }
     },
     "albums": {
@@ -57,10 +61,6 @@
   },
   "recent_themes": [
     [
-      "acting",
-      "craft"
-    ],
-    [
       "live",
       "performance",
       "energy"
@@ -75,7 +75,12 @@
       "performance",
       "music",
       "stillness"
+    ],
+    [
+      "work ethic",
+      "honesty",
+      "craft"
     ]
   ],
-  "entry_count": 5
+  "entry_count": 6
 }
