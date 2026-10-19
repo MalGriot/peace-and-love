@@ -12,6 +12,10 @@
       "p-outdoor-headscarf": {
         "count": 1,
         "lastEntryIndex": 3
+      },
+      "p-face-paint": {
+        "count": 1,
+        "lastEntryIndex": 6
       }
     },
     "quotes": {
@@ -38,6 +42,10 @@
       "q-straight-feedback": {
         "count": 1,
         "lastEntryIndex": 5
+      },
+      "q-one-continuous-instrument": {
+        "count": 1,
+        "lastEntryIndex": 6
       }
     },
     "albums": {
@@ -61,11 +69,6 @@
   },
   "recent_themes": [
     [
-      "live",
-      "performance",
-      "energy"
-    ],
-    [
       "craft",
       "purpose",
       "music",
@@ -80,7 +83,12 @@
       "work ethic",
       "honesty",
       "craft"
+    ],
+    [
+      "identity",
+      "craft",
+      "voice"
     ]
   ],
-  "entry_count": 6
+  "entry_count": 7
 }
