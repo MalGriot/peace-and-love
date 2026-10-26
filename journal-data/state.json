@@ -46,6 +46,10 @@
       "q-one-continuous-instrument": {
         "count": 1,
         "lastEntryIndex": 6
+      },
+      "q-language-limits": {
+        "count": 1,
+        "lastEntryIndex": 7
       }
     },
     "albums": {
@@ -56,6 +60,10 @@
       "i-tried-it": {
         "count": 1,
         "lastEntryIndex": 4
+      },
+      "call-of-the-jungle": {
+        "count": 1,
+        "lastEntryIndex": 7
       }
     },
     "songs": {
@@ -68,12 +76,6 @@
     "pinterest": {}
   },
   "recent_themes": [
-    [
-      "craft",
-      "purpose",
-      "music",
-      "poetry"
-    ],
     [
       "performance",
       "music",
@@ -88,7 +90,12 @@
       "identity",
       "craft",
       "voice"
+    ],
+    [
+      "poetry",
+      "language",
+      "vision"
     ]
   ],
-  "entry_count": 7
+  "entry_count": 8
 }
