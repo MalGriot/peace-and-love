@@ -48,8 +48,8 @@
         "lastEntryIndex": 4
       },
       "q-straight-feedback": {
-        "count": 1,
-        "lastEntryIndex": 5
+        "count": 2,
+        "lastEntryIndex": 10
       },
       "q-one-continuous-instrument": {
         "count": 1,
@@ -93,11 +93,6 @@
   },
   "recent_themes": [
     [
-      "identity",
-      "craft",
-      "voice"
-    ],
-    [
       "poetry",
       "language",
       "vision"
@@ -110,7 +105,12 @@
     [
       "poetry",
       "language"
+    ],
+    [
+      "work ethic",
+      "honesty",
+      "craft"
     ]
   ],
-  "entry_count": 10
+  "entry_count": 11
 }
